@@ -3,6 +3,7 @@
 (
 PS1="$"
 basedir="$(cd "$1" && pwd -P)"
+build="$2"
 workdir="$basedir/work"
 gpgsign="$(git config commit.gpgsign || echo "false")"
 echo "Rebuilding Forked projects.... "
@@ -55,35 +56,37 @@ function enableCommitSigningIfNeeded {
     fi
 }
 
-# Move into spigot dir
-cd "$workdir/Spigot"
-basedir=$(pwd)
-# Apply Spigot
-(
-	applyPatch ../Bukkit Spigot-API HEAD &&
-	applyPatch ../CraftBukkit Spigot-Server patched
-) || (
-	echo "Failed to apply Spigot Patches"
-    enableCommitSigningIfNeeded
-	exit 1
-) || exit 1
-# Move out of Spigot
-basedir="$1"
-cd "$basedir"
+if [[ ${build} == "spigot" ]] ; then
+    # Move into spigot dir
+    cd "$workdir/Spigot"
+    basedir=$(pwd)
+    # Apply Spigot
+    (
+        applyPatch ../Bukkit Spigot-API HEAD &&
+        applyPatch ../CraftBukkit Spigot-Server patched
+    ) || (
+        echo "Failed to apply Spigot Patches"
+        enableCommitSigningIfNeeded
+        exit 1
+    ) || exit 1
+    # Move out of Spigot
+    basedir="$1"
+    cd "$basedir"
+elif [[ ${build} == "paper" ]] ; then
+    echo "Importing MC Dev"
 
-echo "Importing MC Dev"
+    ./scripts/importmcdev.sh "$basedir" >/dev/null 2>&1
 
-./scripts/importmcdev.sh "$basedir" >/dev/null 2>&1
-
-# Apply paper
-cd "$basedir"
-(
-	applyPatch "work/Spigot/Spigot-API" Paper-API HEAD &&
-	applyPatch "work/Spigot/Spigot-Server" Paper-Server HEAD
-    enableCommitSigningIfNeeded
-) || (
-	echo "Failed to apply Paper Patches"
-    enableCommitSigningIfNeeded
-	exit 1
-) || exit 1
+    # Apply paper
+    cd "$basedir"
+    (
+        applyPatch "work/Spigot/Spigot-API" Paper-API HEAD &&
+        applyPatch "work/Spigot/Spigot-Server" Paper-Server HEAD
+        enableCommitSigningIfNeeded
+    ) || (
+        echo "Failed to apply Paper Patches"
+        enableCommitSigningIfNeeded
+        exit 1
+    ) || exit 1
+fi
 )

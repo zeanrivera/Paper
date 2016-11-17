@@ -4,7 +4,15 @@
 set -e
 basedir="$(cd "$1" && pwd -P)"
 
-(git submodule update --init && ./scripts/remap.sh "$basedir" && ./scripts/decompile.sh "$basedir" && ./scripts/init.sh "$basedir" && ./scripts/applyPatches.sh "$basedir") || (
+(
+    git submodule update --init && \
+    ./scripts/remap.sh "$basedir" && \
+    ./scripts/decompile.sh "$basedir" && \
+    ./scripts/init.sh "$basedir" && \
+    ./scripts/applyPatches.sh "$basedir" "spigot" && \
+    ./scripts/buildSpigot.sh "$basedir" && \
+    ./scripts/applyPatches.sh "$basedir" "paper"
+) || (
 	echo "Failed to build Paper"
 	exit 1
 ) || exit 1
