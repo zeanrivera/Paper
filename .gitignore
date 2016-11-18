@@ -23,16 +23,17 @@ bin/
 dist/
 manifest.mf
 
-work/1.*
-work/BuildData
-work/Bukkit
-work/CraftBukkit
-work/Paperclip
-work/Spigot
+work/1.*/
+work/BuildData/
+work/Bukkit/
+work/CraftBukkit/
+work/Paperclip/
+work/Spigot/
 work/Spigot-Server
 work/Spigot-API
 work/*.jar
-work/test-server
+work/test-server/
+work/MCP/
 
 # Mac filesystem dust
 .DS_Store/

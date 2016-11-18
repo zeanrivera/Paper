@@ -11,6 +11,7 @@ basedir="$(cd "$1" && pwd -P)"
     ./scripts/init.sh "$basedir" && \
     ./scripts/applyPatches.sh "$basedir" "spigot" && \
     ./scripts/buildSpigot.sh "$basedir" && \
+    ./scripts/remapSpigot.sh "$basedir" && \
     ./scripts/applyPatches.sh "$basedir" "paper"
 ) || (
 	echo "Failed to build Paper"
