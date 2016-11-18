@@ -13,7 +13,7 @@ decompiledir="$mcpdir/decompile"
 
 # TODO: Move this to a properties file or something similar
 mappingschannel="snapshot"
-mappingsid="20161117"
+mappingsid="20161118"
 
 spigotsrg="$mappingsdir/spigot2mcp.srg"
 obfsrg="$mappingsdir/spigot2obf.srg"
