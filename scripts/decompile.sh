@@ -6,14 +6,24 @@ PS1="$"
 basedir="$(cd "$1" && pwd -P)"
 workdir="$basedir/work"
 minecraftversion=$(cat "$workdir/BuildData/info.json"  | grep minecraftVersion | cut -d '"' -f 4)
-decompiledir="$workdir/$minecraftversion"
+
+decompiledir="$2"
+if [[ -z ${decompiledir} ]] ; then
+    decompiledir="$workdir/$minecraftversion"
+fi
+
+sourcejar="$3"
+if [[ -z ${sourcejar} ]] ; then
+    sourcejar="$decompiledir/$minecraftversion-mapped.jar"
+fi
+
 classdir="$decompiledir/classes"
 
 echo "Extracting NMS classes..."
 if [ ! -d "$classdir" ]; then
     mkdir -p "$classdir"
     cd "$classdir"
-    jar xf "$decompiledir/$minecraftversion-mapped.jar" net/minecraft/server
+    jar xf "$sourcejar" net/minecraft
     if [ "$?" != "0" ]; then
         cd "$basedir"
         echo "Failed to extract NMS classes."
