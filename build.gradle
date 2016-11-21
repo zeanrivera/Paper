@@ -1,0 +1,32 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.destroystokyo.papergradle:PaperGradle:1.0-SNAPSHOT"
+    }
+}
+
+apply plugin: "java"
+apply plugin: "com.destroystokyo.papergradle"
+
+group "com.destroystokyo.paper"
+version "1.11-R0.1-SNAPSHOT"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+minecraft {
+    version = "1.11"
+    mappings = "snapshot_20161119"
+
+    projects {
+        paperServer {
+            genMcpPatches = false
+            applyMcpPatches = false
+            s2sKeepImports = true
+        }
+    }
+}

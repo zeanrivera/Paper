@@ -10,13 +10,13 @@ spigotname="spigot-$minecraftversion-R0.1-SNAPSHOT"
 spigotpath="$workdir/Spigot/Spigot-Server/target/$spigotname.jar"
 mappingsdir="$mcpdir/mappings"
 decompiledir="$mcpdir/decompile"
+remapdir="$mcpdir/remap"
 
 # TODO: Move this to a properties file or something similar
 mappingschannel="snapshot"
 mappingsid="20161118"
 
-spigotsrg="$mappingsdir/spigot2mcp.srg"
-obfsrg="$mappingsdir/spigot2obf.srg"
+spigotsrg="$mappingsdir/spigot2srg.srg"
 zipname="mappings.zip"
 
 echo "Copying Spigot jar"
@@ -39,7 +39,7 @@ cp "$spigotpath" "$mcpdir/$spigotname.jar"
 
 (
     cd ${mcpdir}
-    echo "Remapping Spigot to MCP"
+    echo "Remapping Spigot to SRG"
     java -jar "$workdir/BuildData/bin/SpecialSource.jar" map -i "$spigotname.jar" -m "$spigotsrg" -o "$spigotname-mapped.jar" 1>/dev/null
     if [[ "$?" != "0" ]] ; then
         echo "Failed remapping Spigot to MCP"
@@ -48,11 +48,22 @@ cp "$spigotpath" "$mcpdir/$spigotname.jar"
 )
 
 (
-    echo "Decompiling MCP remapped Spigot jar"
+    echo "Decompiling SRG remapped Spigot jar"
     rm -rf ${decompiledir}
+    mkdir -p ${decompiledir}
     ${basedir}/scripts/decompile.sh "$basedir" "$decompiledir" "$mcpdir/$spigotname-mapped.jar"
 )
 
-# TODO remap parameters & cleanup MCP code
+echo "Remapping parameter names to SRG"
+rm -rf ${remapdir}
+mkdir -p ${remapdir}
+java -jar ${workdir}/PaperTool.jar remapParams "$mappingsdir" "$decompiledir" "$remapdir"
+
+(
+    echo "Remapping decompiled Spigot to MCP"
+    java -jar ${workdir}/PaperTool.jar remapSources "$mappingsdir" "$decompiledir"
+)
+
+# TODO cleanup MCP code
 
 )

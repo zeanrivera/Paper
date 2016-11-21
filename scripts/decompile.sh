@@ -17,6 +17,8 @@ if [[ -z ${sourcejar} ]] ; then
     sourcejar="$decompiledir/$minecraftversion-mapped.jar"
 fi
 
+justextract="$4"
+
 classdir="$decompiledir/classes"
 
 echo "Extracting NMS classes..."
@@ -29,6 +31,10 @@ if [ ! -d "$classdir" ]; then
         echo "Failed to extract NMS classes."
         exit 1
     fi
+fi
+
+if [[ ! -z "$justextract" ]] ; then
+    exit 0
 fi
 
 echo "Decompiling classes..."
