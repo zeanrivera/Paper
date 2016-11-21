@@ -23,7 +23,7 @@ minecraft {
     mappings = "snapshot_20161119"
 
     projects {
-        paperServer {
+        'Paper-Server' {
             genMcpPatches = false
             applyMcpPatches = false
             s2sKeepImports = true
