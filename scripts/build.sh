@@ -11,13 +11,13 @@ basedir="$(cd "$1" && pwd -P)"
     ./scripts/init.sh "$basedir" && \
     ./scripts/applyPatches.sh "$basedir" "spigot" && \
     ./scripts/buildSpigot.sh "$basedir" && \
-    ./scripts/remapSpigot.sh "$basedir" && \
+    ./gradlew setupProject && \
     ./scripts/applyPatches.sh "$basedir" "paper"
 ) || (
 	echo "Failed to build Paper"
 	exit 1
 ) || exit 1
 if [ "$2" == "--jar" ]; then
-	mvn clean install && ./scripts/paperclip.sh "$basedir"
+    ./gradlew build && ./scripts/paperclip.sh "$basedir"
 fi
 )

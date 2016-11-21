@@ -10,7 +10,7 @@ echo "Building Spigot"
 cd "$workdir/Spigot"
 
 sed -i.bak '/<relocations>/,/<\/relocations>/d' Spigot-Server/pom.xml
-mvn clean package
+mvn clean install
 rm Spigot-Server/pom.xml
 mv Spigot-Server/pom.xml.bak Spigot-Server/pom.xml
 )

@@ -14,27 +14,37 @@ function applyPatch {
     target=$2
     branch=$3
 
-    cd "$basedir/$what"
-    git fetch
-    git branch -f upstream "$branch" >/dev/null
+    if [[ "$what" != "none" ]] ; then
+        cd "$basedir/$what"
+        git fetch
+        git branch -f upstream "$branch" >/dev/null
 
-    cd "$basedir"
-    if [ ! -d  "$basedir/$target" ]; then
-        git clone "$what" "$target"
+        cd "$basedir"
+        if [ ! -d  "$basedir/$target" ]; then
+            git clone "$what" "$target"
+        fi
+
+        cd "$basedir/$target"
+
+        echo "Resetting $target to $what_name..."
+        git remote rm upstream > /dev/null 2>&1
+        git remote add upstream "$basedir/$what" >/dev/null 2>&1
+        git checkout master 2>/dev/null || git checkout -b master
+        git fetch upstream >/dev/null 2>&1
+        git reset --hard upstream/upstream
+    else
+        cd "$basedir/$target"
+
+        what_name=$4
+
+        git init
+        git checkout -b master
     fi
-    cd "$basedir/$target"
 
     # Disable GPG signing before AM, slows things down and doesn't play nicely.
     # There is also zero rational or logical reason to do so for these sub-repo AMs.
     # Calm down kids, it's re-enabled (if needed) immediately after, pass or fail.
     git config commit.gpgsign false
-
-    echo "Resetting $target to $what_name..."
-    git remote rm upstream > /dev/null 2>&1
-    git remote add upstream "$basedir/$what" >/dev/null 2>&1
-    git checkout master 2>/dev/null || git checkout -b master
-    git fetch upstream >/dev/null 2>&1
-    git reset --hard upstream/upstream
 
     echo "  Applying patches to $target..."
 
@@ -81,7 +91,7 @@ elif [[ ${build} == "paper" ]] ; then
     cd "$basedir"
     (
         applyPatch "work/Spigot/Spigot-API" Paper-API HEAD &&
-        applyPatch "work/Spigot/Spigot-Server" Paper-Server HEAD
+        applyPatch "none" Paper-Server HEAD "Spigot-Server" &&
         enableCommitSigningIfNeeded
     ) || (
         echo "Failed to apply Paper Patches"
