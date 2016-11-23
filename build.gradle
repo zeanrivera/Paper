@@ -2,10 +2,16 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
+        repositories {
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+        }
     }
 
     dependencies {
         classpath "com.destroystokyo.papergradle:PaperGradle:1.0-SNAPSHOT"
+        classpath "gradle.plugin.net.minecrell:gitpatcher:0.8.1"
     }
 }
 
@@ -21,6 +27,20 @@ targetCompatibility = 1.8
 minecraft {
     version = "1.11"
     mappings = "snapshot_20161119"
+
+    spigotBuildFile = "work/spigotBuild.gradle"
+    spigotSettingsFile = "work/spigotSettings.gradle"
+    spigotApiBuildFile = "work/spigotApiBuild.gradle"
+    spigotServerBuildFile = "work/spigotServerBuild.gradle"
+
+    spigotDir = "work/Spigot"
+    spigotApiDir = "work/Spigot/Spigot-API"
+    spigotServerDir = "work/Spigot/Spigot-Server"
+
+    spigotFinalName = "spigot.jar"
+
+    classMappings = "work/BuildData/mappings/bukkit-1.11-cl.csrg"
+    memberMappings = "work/BuildData/mappings/bukkit-1.11-members.csrg"
 
     projects {
         'Paper-Server' {

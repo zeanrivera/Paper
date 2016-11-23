@@ -1,0 +1,2 @@
+rootProject.name = "spigot-parent"
+include "Spigot-API", "Spigot-Server"
