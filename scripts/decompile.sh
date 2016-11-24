@@ -33,10 +33,6 @@ if [ ! -d "$classdir" ]; then
     fi
 fi
 
-if [[ ! -z "$justextract" ]] ; then
-    exit 0
-fi
-
 echo "Decompiling classes..."
 if [ ! -d "$decompiledir/net/minecraft/server" ]; then
     cd "$basedir"

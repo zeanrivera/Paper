@@ -28,19 +28,28 @@ minecraft {
     version = "1.11"
     mappings = "snapshot_20161119"
 
-    spigotBuildFile = "work/spigotBuild.gradle"
-    spigotSettingsFile = "work/spigotSettings.gradle"
-    spigotApiBuildFile = "work/spigotApiBuild.gradle"
-    spigotServerBuildFile = "work/spigotServerBuild.gradle"
+    craftBukkit {
+        workDir = "work"
+        patchDir = "work/CraftBukkit/nms-patches"
+        mappingsDir = "work/BuildData/mappings"
+        buildDataInfo = "work/BuildData/info.json"
+        fernFlowerJar = "work/BuildData/bin/fernflower.jar"
+        specialSource = "work/BuildData/bin/SpecialSource.jar"
+        specialSource2 = "work/BuildData/bin/SpecialSource-2.jar"
+    }
 
-    spigotDir = "work/Spigot"
-    spigotApiDir = "work/Spigot/Spigot-API"
-    spigotServerDir = "work/Spigot/Spigot-Server"
+    spigot {
+        buildFile = "work/spigotBuild.gradle"
+        settingsFile = "work/spigotSettings.gradle"
+        apiBuildFile = "work/spigotApiBuild.gradle"
+        serverBuildFile = "work/spigotServerBuild.gradle"
 
-    spigotFinalName = "spigot.jar"
+        dir = "work/Spigot"
+        apiDir = "work/Spigot/Spigot-API"
+        serverDir = "work/Spigot/Spigot-Server"
 
-    classMappings = "work/BuildData/mappings/bukkit-1.11-cl.csrg"
-    memberMappings = "work/BuildData/mappings/bukkit-1.11-members.csrg"
+        finalName = "spigot.jar"
+    }
 
     projects {
         'Paper-Server' {
