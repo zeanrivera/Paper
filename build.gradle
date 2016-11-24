@@ -30,7 +30,9 @@ minecraft {
 
     craftBukkit {
         workDir = "work"
+        craftBukkitDir = "work/CraftBukkit"
         patchDir = "work/CraftBukkit/nms-patches"
+        sourceDir = "work/CraftBukkit/src/main/java"
         mappingsDir = "work/BuildData/mappings"
         buildDataInfo = "work/BuildData/info.json"
         fernFlowerJar = "work/BuildData/bin/fernflower.jar"
@@ -44,9 +46,12 @@ minecraft {
         apiBuildFile = "work/spigotApiBuild.gradle"
         serverBuildFile = "work/spigotServerBuild.gradle"
 
-        dir = "work/Spigot"
-        apiDir = "work/Spigot/Spigot-API"
-        serverDir = "work/Spigot/Spigot-Server"
+        spigotDir = "work/Spigot"
+        spigotApiDir = "work/Spigot/Spigot-API"
+        spigotServerDir = "work/Spigot/Spigot-Server"
+
+        bukkitPatchDir = "work/Spigot/Bukkit-Patches"
+        craftBukkitPatchDir = "work/Spigot/CraftBukkit-Patches"
 
         finalName = "spigot.jar"
     }
