@@ -58,6 +58,12 @@ minecraft {
         finalName = "spigot.jar"
     }
 
+    paper {
+        spigotApiPatchDir = "Spigot-API-Patches"
+        spigotServerPatchDir = "Spigot-Server-Patches"
+        paperApiDir = "Paper-API"
+    }
+
     projects {
         'Paper-Server' {
             genMcpPatches = false
