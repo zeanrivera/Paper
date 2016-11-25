@@ -26,13 +26,15 @@ targetCompatibility = 1.8
 
 minecraft {
     version = "1.11"
-    mappings = "snapshot_20161119"
+    mappings = "snapshot_20161124"
 
     craftBukkit {
         workDir = "work"
+        bukkitDir = "work/Bukkit"
         craftBukkitDir = "work/CraftBukkit"
         patchDir = "work/CraftBukkit/nms-patches"
         sourceDir = "work/CraftBukkit/src/main/java"
+        buildDataDir = "work/BuildData"
         mappingsDir = "work/BuildData/mappings"
         buildDataInfo = "work/BuildData/info.json"
         fernFlowerJar = "work/BuildData/bin/fernflower.jar"
