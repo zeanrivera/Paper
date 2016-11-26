@@ -6,9 +6,6 @@ buildscript {
             maven {
                 url "https://plugins.gradle.org/m2/"
             }
-            maven {
-                url "https://nexus.demonwav.com/content/repositories/snapshots/"
-            }
         }
     }
 
