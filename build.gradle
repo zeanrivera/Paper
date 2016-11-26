@@ -6,6 +6,9 @@ buildscript {
             maven {
                 url "https://plugins.gradle.org/m2/"
             }
+            maven {
+                url "http://files.minecraftforge.net/maven"
+            }
         }
     }
 
