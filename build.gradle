@@ -10,7 +10,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.destroystokyo.papergradle:PaperGradle:1.0-SNAPSHOT"
+        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:1.0-SNAPSHOT"
         classpath "gradle.plugin.net.minecrell:gitpatcher:0.8.1"
     }
 }
