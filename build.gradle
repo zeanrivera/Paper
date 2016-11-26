@@ -6,6 +6,9 @@ buildscript {
             maven {
                 url "https://plugins.gradle.org/m2/"
             }
+            maven {
+                url "https://nexus.demonwav.com/content/repositories/snapshots/"
+            }
         }
     }
 
@@ -62,13 +65,7 @@ minecraft {
         spigotApiPatchDir = "Spigot-API-Patches"
         spigotServerPatchDir = "Spigot-Server-Patches"
         paperApiDir = "Paper-API"
-    }
-
-    projects {
-        'Paper-Server' {
-            genMcpPatches = false
-            applyMcpPatches = false
-            s2sKeepImports = true
-        }
+        paperServerDir = "Paper-Server"
+        cleanDir = "work/MCP"
     }
 }

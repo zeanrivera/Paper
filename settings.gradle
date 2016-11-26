@@ -1,1 +1,3 @@
 rootProject.name = 'paper'
+
+include "Paper-API", "Paper-Server"
