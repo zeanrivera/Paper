@@ -1,4 +1,4 @@
-From 20ed74784a4fee6e7dcd3cc08e54aea44699d6cf Mon Sep 17 00:00:00 2001
+From d703ffba66871e4ebf80f9715df0e6df1084bd27 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 27 Nov 2016 08:01:04 -0600
 Subject: [PATCH] Setup Gradle config
@@ -6,16 +6,29 @@ Subject: [PATCH] Setup Gradle config
 
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
-index 0000000..6f86c79
+index 0000000..d517961
 --- /dev/null
 +++ b/build.gradle
-@@ -0,0 +1,33 @@
+@@ -0,0 +1,46 @@
++repositories {
++    maven {
++        name "minecraft"
++        url "https://libraries.minecraft.net/"
++    }
++}
++
 +dependencies {
 +    compile project(":Paper-API")
 +    compile "net.sf.jopt-simple:jopt-simple:4.9"
 +    compile "jline:jline:2.12.1"
 +    compile "org.xerial:sqlite-jdbc:3.15.1"
 +    compile "mysql:mysql-connector-java:5.1.39"
++
++    // Minecraft deps
++    compile "org.apache.logging.log4j:log4j-api:2.0-beta9"
++    compile "org.apache.logging.log4j:log4j-core:2.0-beta9"
++    compile "io.netty:netty-all:4.0.23.Final"
++    compile "com.mojang:authlib:1.5.22"
 +
 +    testCompile "junit:junit:4.12"
 +    testCompile "org.hamcrest:hamcrest-library:1.3"
