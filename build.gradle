@@ -54,8 +54,8 @@ subprojects {
 }
 
 minecraft {
-    version = "1.11"
-    mappings = "snapshot_20161124"
+    version = project.mcVersion
+    mappings = project.mappingsVersion
 
     craftBukkit {
         workDir = "work"
