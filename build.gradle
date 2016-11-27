@@ -13,7 +13,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.destroystokyo.papergradle:PaperGradle:1.0.2"
+        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:1.0.2"
         classpath "gradle.plugin.net.minecrell:gitpatcher:0.8.1"
     }
 }
