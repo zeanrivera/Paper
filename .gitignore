@@ -49,10 +49,10 @@ work/MCP/
 
 # other stuff
 
-Paper-Server
-Paper-API
-PaperSpigot-Server
-PaperSpigot-API
+Paper-Server/
+Paper-API/
+PaperSpigot-Server/
+PaperSpigot-API/
 Paperclip.jar
 paperclip.jar
 paperclip-*.jar

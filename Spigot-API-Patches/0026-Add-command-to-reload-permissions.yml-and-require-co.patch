@@ -1,4 +1,4 @@
-From 72e6b053e69f99ec47de74886e42b95776a23ede Mon Sep 17 00:00:00 2001
+From 479d8353fd3da215664d8cbea8bcb390be464f0c Mon Sep 17 00:00:00 2001
 From: William <admin@domnian.com>
 Date: Fri, 18 Mar 2016 03:28:07 -0400
 Subject: [PATCH] Add command to reload permissions.yml and require confirm to
