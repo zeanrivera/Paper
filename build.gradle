@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         jcenter()
         mavenCentral()
         repositories {
@@ -13,7 +14,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:1.0.3"
+        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:1.0.4"
         classpath "gradle.plugin.net.minecrell:gitpatcher:0.8.1"
         classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
