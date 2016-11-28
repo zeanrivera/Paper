@@ -1,4 +1,4 @@
-From 8995c78b68e6cea9529b8993f98a048b8e8a5648 Mon Sep 17 00:00:00 2001
+From afc3e7a5e1eb2cafa619c9873bba295a28bfa32f Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Mon, 29 Feb 2016 17:50:31 -0600
 Subject: [PATCH] Entity Origin API

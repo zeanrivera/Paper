@@ -1,0 +1,1165 @@
+From 04ccdc45644ecd0216e4cf7eefd86d9b4bb7c89b Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Mon, 28 Nov 2016 04:50:23 -0600
+Subject: [PATCH] Fix decompile errors and MCP name clashes
+
+
+diff --git a/src/main/java/net/minecraft/block/BlockSilverfish$a$1.java b/src/main/java/net/minecraft/block/BlockSilverfish$a$1.java
+deleted file mode 100644
+index 7a716ac..0000000
+--- a/src/main/java/net/minecraft/block/BlockSilverfish$a$1.java
++++ /dev/null
+@@ -1,13 +0,0 @@
+-package net.minecraft.block;
+-
+-import net.minecraft.block.state.IBlockState;
+-import net.minecraft.init.Blocks;
+-
+-enum BlockSilverfish$a$1 {
+-    BlockSilverfish$a$1(int p_i28_3_, String p_i28_4_) {
+-    }
+-
+-    public IBlockState getModelBlock() {
+-        return Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.STONE);
+-    }
+-}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/block/BlockSilverfish$a$2.java b/src/main/java/net/minecraft/block/BlockSilverfish$a$2.java
+deleted file mode 100644
+index 9573893..0000000
+--- a/src/main/java/net/minecraft/block/BlockSilverfish$a$2.java
++++ /dev/null
+@@ -1,13 +0,0 @@
+-package net.minecraft.block;
+-
+-import net.minecraft.block.state.IBlockState;
+-import net.minecraft.init.Blocks;
+-
+-enum BlockSilverfish$a$2 {
+-    BlockSilverfish$a$2(int p_i29_3_, String p_i29_4_, String p_i29_5_) {
+-    }
+-
+-    public IBlockState getModelBlock() {
+-        return Blocks.COBBLESTONE.getDefaultState();
+-    }
+-}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/block/BlockSilverfish$a$3.java b/src/main/java/net/minecraft/block/BlockSilverfish$a$3.java
+deleted file mode 100644
+index df73690..0000000
+--- a/src/main/java/net/minecraft/block/BlockSilverfish$a$3.java
++++ /dev/null
+@@ -1,13 +0,0 @@
+-package net.minecraft.block;
+-
+-import net.minecraft.block.state.IBlockState;
+-import net.minecraft.init.Blocks;
+-
+-enum BlockSilverfish$a$3 {
+-    BlockSilverfish$a$3(int p_i30_3_, String p_i30_4_, String p_i30_5_) {
+-    }
+-
+-    public IBlockState getModelBlock() {
+-        return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT);
+-    }
+-}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/block/BlockSilverfish$a$4.java b/src/main/java/net/minecraft/block/BlockSilverfish$a$4.java
+deleted file mode 100644
+index 4318f80..0000000
+--- a/src/main/java/net/minecraft/block/BlockSilverfish$a$4.java
++++ /dev/null
+@@ -1,13 +0,0 @@
+-package net.minecraft.block;
+-
+-import net.minecraft.block.state.IBlockState;
+-import net.minecraft.init.Blocks;
+-
+-enum BlockSilverfish$a$4 {
+-    BlockSilverfish$a$4(int p_i31_3_, String p_i31_4_, String p_i31_5_) {
+-    }
+-
+-    public IBlockState getModelBlock() {
+-        return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY);
+-    }
+-}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/block/BlockSilverfish$a$5.java b/src/main/java/net/minecraft/block/BlockSilverfish$a$5.java
+deleted file mode 100644
+index 12ee4a4..0000000
+--- a/src/main/java/net/minecraft/block/BlockSilverfish$a$5.java
++++ /dev/null
+@@ -1,13 +0,0 @@
+-package net.minecraft.block;
+-
+-import net.minecraft.block.state.IBlockState;
+-import net.minecraft.init.Blocks;
+-
+-enum BlockSilverfish$a$5 {
+-    BlockSilverfish$a$5(int p_i32_3_, String p_i32_4_, String p_i32_5_) {
+-    }
+-
+-    public IBlockState getModelBlock() {
+-        return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CRACKED);
+-    }
+-}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/block/BlockSilverfish$a$6.java b/src/main/java/net/minecraft/block/BlockSilverfish$a$6.java
+deleted file mode 100644
+index e972b5c..0000000
+--- a/src/main/java/net/minecraft/block/BlockSilverfish$a$6.java
++++ /dev/null
+@@ -1,13 +0,0 @@
+-package net.minecraft.block;
+-
+-import net.minecraft.block.state.IBlockState;
+-import net.minecraft.init.Blocks;
+-
+-enum BlockSilverfish$a$6 {
+-    BlockSilverfish$a$6(int p_i33_3_, String p_i33_4_, String p_i33_5_) {
+-    }
+-
+-    public IBlockState getModelBlock() {
+-        return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+-    }
+-}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/command/CommandExecuteAt.java b/src/main/java/net/minecraft/command/CommandExecuteAt.java
+index 07ef0cc..4799f94 100644
+--- a/src/main/java/net/minecraft/command/CommandExecuteAt.java
++++ b/src/main/java/net/minecraft/command/CommandExecuteAt.java
+@@ -80,7 +80,7 @@ public class CommandExecuteAt extends CommandBase {
+             }
+ 
+             String s = buildString(args, b0);
+-            class 1ProxyListener implements ICommandSender {
++            class ProxyListener implements ICommandSender { // Paper decompile fix
+                 private final ICommandSender base = sender;
+ 
+                 /**
+@@ -160,7 +160,7 @@ public class CommandExecuteAt extends CommandBase {
+                     return entity.getServer();
+                 }
+             }
+-            ICommandSender icommandsender1 = new 1ProxyListener();
++            ICommandSender icommandsender1 = new ProxyListener(); // Paper decompile fix
+             ICommandManager icommandmanager = server.getCommandManager();
+ 
+             try {
+@@ -174,8 +174,8 @@ public class CommandExecuteAt extends CommandBase {
+                         commandsender = server.remoteConsole;
+                     } else if (icommandsender instanceof CommandBlockBaseLogic) {
+                         commandsender = ((CommandBlockBaseLogic)icommandsender).sender;
+-                    } else if (icommandsender instanceof 1ProxyListener) {
+-                        icommandsender = ((1ProxyListener)icommandsender).base;
++                    } else if (icommandsender instanceof ProxyListener) { // Paper decompile fix
++                        icommandsender = ((ProxyListener)icommandsender).base; // Paper decompile fix
+                     } else if (VanillaCommandWrapper.lastSender != null) {
+                         commandsender = VanillaCommandWrapper.lastSender;
+                     } else {
+@@ -216,4 +216,4 @@ public class CommandExecuteAt extends CommandBase {
+     public int compareTo(ICommand o) {
+         return this.compareTo(o);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+index d94f476..3d45750 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+@@ -253,7 +253,7 @@ public class EntityFishHook extends Entity {
+         }
+ 
+         Entity entity = null;
+-        List list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D));
++        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D)); // Paper List -> List<Entity>
+         double d0 = 0.0D;
+ 
+         for (Entity entity1 : list) {
+@@ -517,4 +517,4 @@ public class EntityFishHook extends Entity {
+         HOOKED_IN_ENTITY,
+         BOBBING;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/nbt/NBTTagIntArray.java b/src/main/java/net/minecraft/nbt/NBTTagIntArray.java
+index c8dfb3f..b6b1a6b 100644
+--- a/src/main/java/net/minecraft/nbt/NBTTagIntArray.java
++++ b/src/main/java/net/minecraft/nbt/NBTTagIntArray.java
+@@ -78,10 +78,11 @@ public class NBTTagIntArray extends NBTBase {
+         return this.intArray;
+     }
+ 
+-    /**
+-     * Creates a clone of the tag.
+-     */
+-    public NBTBase copy() {
+-        return this.copy();
+-    }
+-}
+\ No newline at end of file
++    // Paper remove duplicate method
++//    /**
++//     * Creates a clone of the tag.
++//     */
++//    public NBTBase copy() {
++//        return this.copy();
++//    }
++}
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index 8eee2f8..a4756cc 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -802,33 +802,33 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+         }
+ 
+         this.justTeleported = true;
+-        double d0 = set.contains(SPacketPlayerPosLook.EnumFlags.X) ? this.playerEntity.posX : 0.0D;
+-        double d1 = set.contains(SPacketPlayerPosLook.EnumFlags.Y) ? this.playerEntity.posY : 0.0D;
+-        double d2 = set.contains(SPacketPlayerPosLook.EnumFlags.Z) ? this.playerEntity.posZ : 0.0D;
+-        this.targetPos = new Vec3d(d0 + d0, d1 + d1, d2 + d2);
+-        float f = f;
+-        float f1 = f1;
++        double d3 = set.contains(SPacketPlayerPosLook.EnumFlags.X) ? this.playerEntity.posX : 0.0D; // Paper parameter name clash
++        double d4 = set.contains(SPacketPlayerPosLook.EnumFlags.Y) ? this.playerEntity.posY : 0.0D; // Paper parameter name clash
++        double d5 = set.contains(SPacketPlayerPosLook.EnumFlags.Z) ? this.playerEntity.posZ : 0.0D; // Paper parameter name clash
++        this.targetPos = new Vec3d(d0 + d3, d1 + d4, d2 + d5);
++        float f2 = f; // Paper parameter name clash
++        float f3 = f1; // Paper parameter name clash
+ 
+         if (set.contains(SPacketPlayerPosLook.EnumFlags.Y_ROT)) {
+-            f = f + this.playerEntity.rotationYaw;
++            f2 = f + this.playerEntity.rotationYaw;
+         }
+ 
+         if (set.contains(SPacketPlayerPosLook.EnumFlags.X_ROT)) {
+-            f1 = f1 + this.playerEntity.rotationPitch;
++            f3 = f1 + this.playerEntity.rotationPitch;
+         }
+ 
+         this.lastPosX = this.targetPos.xCoord;
+         this.lastPosY = this.targetPos.yCoord;
+         this.lastPosZ = this.targetPos.zCoord;
+-        this.lastYaw = f;
+-        this.lastPitch = f1;
++        this.lastYaw = f2;
++        this.lastPitch = f3;
+ 
+         if (++this.teleportId == Integer.MAX_VALUE) {
+             this.teleportId = 0;
+         }
+ 
+         this.lastPositionUpdate = this.networkTickCount;
+-        this.playerEntity.setPositionAndRotation(this.targetPos.xCoord, this.targetPos.yCoord, this.targetPos.zCoord, f, f1);
++        this.playerEntity.setPositionAndRotation(this.targetPos.xCoord, this.targetPos.yCoord, this.targetPos.zCoord, f2, f3);
+         this.playerEntity.connection.sendPacket(new SPacketPlayerPosLook(d0, d1, d2, f, f1, set, this.teleportId));
+     }
+ 
+@@ -1174,7 +1174,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+ 
+         if (!this.playerEntity.isDead && this.playerEntity.getChatVisibility() != EntityPlayer.EnumChatVisibility.HIDDEN) {
+             this.playerEntity.markPlayerActive();
+-            final String s1 = packetIn.getMessage();
++            String s1 = packetIn.getMessage(); // Paper remove final
+             s1 = StringUtils.normalizeSpace(s1);
+ 
+             for (int i = 0; i < s1.length(); ++i) {
+@@ -1213,9 +1213,12 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+             } else if (s1.isEmpty()) {
+                 LOGGER.warn(this.playerEntity.getName() + " tried to send an empty message");
+             } else if (this.getPlayer().isConversing()) {
++                // Paper start - add temporary final variable for s1
++                final String finalS1 = s1;
+                 this.serverController.processQueue.add(new Waitable() {
+                     protected Object evaluate() {
+-                        NetHandlerPlayServer.this.getPlayer().acceptConversationInput(s1);
++                        NetHandlerPlayServer.this.getPlayer().acceptConversationInput(finalS1);
++                // Paper end
+                         return null;
+                     }
+                 });
+@@ -2544,4 +2547,4 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+     public final boolean isDisconnected() {
+         return !this.playerEntity.joining && !this.netManager.isChannelOpen();
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/network/NetworkManager.java b/src/main/java/net/minecraft/network/NetworkManager.java
+index eb943a6..2644d0e 100644
+--- a/src/main/java/net/minecraft/network/NetworkManager.java
++++ b/src/main/java/net/minecraft/network/NetworkManager.java
+@@ -125,13 +125,14 @@ public class NetworkManager extends SimpleChannelInboundHandler < Packet<? >> {
+         LOGGER.debug((Object)throwable);
+         this.closeChannel(textcomponenttranslation);
+ 
+-        if (MinecraftServer.getServer().isDebuggingEnabled()) {
++        if (MinecraftServer.getServerCB().isDebuggingEnabled()) { // Paper MCP name conflict
+             throwable.printStackTrace();
+         }
+     }
+ 
+-    protected void channelRead0(ChannelHandlerContext param1, Packet<?> param2) throws Exception {
+-    }
++    // Paper remove duplicate method
++//    protected void channelRead0(ChannelHandlerContext param1, Packet<?> param2) throws Exception {
++//    }
+ 
+     /**
+      * Sets the NetHandler for this NetworkManager, no checks are made if this handler is suitable for the particular
+@@ -374,4 +375,4 @@ public class NetworkManager extends SimpleChannelInboundHandler < Packet<? >> {
+                 this.futureListeners = inFutureListeners;
+             }
+         }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/profiler/Profiler.java b/src/main/java/net/minecraft/profiler/Profiler.java
+index e0ab50a..2bfbe6d 100644
+--- a/src/main/java/net/minecraft/profiler/Profiler.java
++++ b/src/main/java/net/minecraft/profiler/Profiler.java
+@@ -39,20 +39,17 @@ public class Profiler {
+     }
+ 
+     public static final class Result implements Comparable<Profiler.Result> {
+-            public double usePercentage;
+-            public double totalUsePercentage;
+-            public String profilerName;
+-
+-            public Result(String profilerName, double usePercentage, double totalUsePercentage) {
+-                this.profilerName = profilerName;
+-                this.usePercentage = usePercentage;
+-                this.totalUsePercentage = totalUsePercentage;
+-            }
+-
+-            public int compareTo(Profiler.Result param1) {
+-            }
++        public double usePercentage;
++        public double totalUsePercentage;
++        public String profilerName;
++
++        public Result(String profilerName, double usePercentage, double totalUsePercentage) {
++            this.profilerName = profilerName;
++            this.usePercentage = usePercentage;
++            this.totalUsePercentage = totalUsePercentage;
++        }
+ 
+-            public int compareTo(Profiler.Result param1) {
+-            }
++        public int compareTo(Profiler.Result param1) {
+         }
+-}
+\ No newline at end of file
++    }
++}
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index a635e22..b3c52ca 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -183,7 +183,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+     protected final Queue < FutureTask<? >> futureTaskQueue = new ConcurrentLinkedQueue();
+     private Thread serverThread;
+     private long currentTime = getCurrentTimeMillis();
+-    public List<WorldServer> worlds = new ArrayList();
++    public List<WorldServer> worldsList = new ArrayList();
+     public CraftServer server;
+     public OptionSet options;
+     public ConsoleCommandSender console;
+@@ -376,7 +376,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+                 }
+ 
+                 worldinfo1.checkName(s1);
+-                worldserver = (WorldServer)(new WorldServerMulti(this, isavehandler1, b0, (WorldServer)this.worlds.get(0), this.theProfiler, worldinfo1, Environment.getEnvironment(b0), chunkgenerator)).init();
++                worldserver = (WorldServer)(new WorldServerMulti(this, isavehandler1, b0, (WorldServer)this.worldsList.get(0), this.theProfiler, worldinfo1, Environment.getEnvironment(b0), chunkgenerator)).init(); // Paper MCP name clash
+             }
+ 
+             this.server.getPluginManager().callEvent(new WorldInitEvent(worldserver.getWorld()));
+@@ -386,8 +386,8 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+                 worldserver.getWorldInfo().setGameType(this.getGameType());
+             }
+ 
+-            this.worlds.add(worldserver);
+-            this.getPlayerList().setPlayerManager((WorldServer[])this.worlds.toArray(new WorldServer[this.worlds.size()]));
++            this.worldsList.add(worldserver); // Paper MCP name clash
++            this.getPlayerList().setPlayerManager((WorldServer[])this.worldsList.toArray(new WorldServer[this.worldsList.size()])); // Paper MCP name clash x2
+         }
+ 
+         this.playerList.setPlayerManager(this.worlds);
+@@ -404,8 +404,8 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+         this.setUserMessage("menu.generatingTerrain");
+         boolean flag4 = false;
+ 
+-        for (int j = 0; j < this.worlds.size(); ++j) {
+-            WorldServer worldserver = (WorldServer)this.worlds.get(j);
++        for (int j = 0; j < this.worldsList.size(); ++j) { // Paper MCP name clash
++            WorldServer worldserver = (WorldServer)this.worldsList.get(j);
+             LOG.info("Preparing start region for level " + j + " (Seed: " + worldserver.getSeed() + ")");
+ 
+             if (worldserver.getWorld().getKeepSpawnInMemory()) {
+@@ -499,8 +499,8 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+         WorldServer[] aworldserver = this.worlds;
+         int i = aworldserver.length;
+ 
+-        for (int j = 0; j < this.worlds.size(); ++j) {
+-            WorldServer worldserver = (WorldServer)this.worlds.get(j);
++        for (int j = 0; j < this.worldsList.size(); ++j) { // Paper MCP name clash
++            WorldServer worldserver = (WorldServer)this.worldsList.get(j); // Paper MCP name clash
+ 
+             if (worldserver != null) {
+                 if (!isSilent) {
+@@ -825,9 +825,9 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+ 
+         SpigotTimings.timeUpdateTimer.stopTiming();
+ 
+-        for (int k = 0; k < this.worlds.size(); ++k) {
++        for (int k = 0; k < this.worldsList.size(); ++k) { // Paper MCP name clash
+             long i1 = System.nanoTime();
+-            WorldServer worldserver = (WorldServer)this.worlds.get(k);
++            WorldServer worldserver = (WorldServer)this.worldsList.get(k); // Paper MCP name clash
+             this.theProfiler.startSection(worldserver.getWorldInfo().getWorldName());
+             this.theProfiler.startSection("tick");
+ 
+@@ -970,7 +970,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+             }
+         }
+ 
+-        return (WorldServer)this.worlds.get(0);
++        return (WorldServer)this.worldsList.get(0); // Paper MCP name clash
+     }
+ 
+     /**
+@@ -1053,9 +1053,11 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+                 public String call() throws Exception {
+                     return MinecraftServer.this.playerList.getCurrentPlayerCount() + " / " + MinecraftServer.this.playerList.getMaxPlayers() + "; " + MinecraftServer.this.playerList.getPlayers();
+                 }
+-                public Object call() throws Exception {
+-                    return this.call();
+-                }
++                // Paper start - comment out duplicate method
++//                public Object call() throws Exception {
++//                    return this.call();
++//                }
++                // Paper end
+             });
+         }
+ 
+@@ -1144,10 +1146,10 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+     }
+ 
+     public void setDifficultyForAllWorlds(EnumDifficulty difficulty) {
+-        int i = this.worlds.size();
++        int i = this.worldsList.size(); // Paper MCP name clash
+ 
+         for (int j = 0; j < i; ++j) {
+-            WorldServer worldserver = (WorldServer)this.worlds.get(j);
++            WorldServer worldserver = (WorldServer)this.worldsList.get(j); // Paper MCP name clash
+ 
+             if (worldserver != null) {
+                 if (worldserver.getWorldInfo().isHardcoreModeEnabled()) {
+@@ -1220,8 +1222,8 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+         int i = 0;
+ 
+         if (this.worlds != null) {
+-            for (int j = 0; j < this.worlds.size(); ++j) {
+-                WorldServer worldserver = (WorldServer)this.worlds.get(j);
++            for (int j = 0; j < this.worldsList.size(); ++j) { // Paper MCP name clash
++                WorldServer worldserver = (WorldServer)this.worldsList.get(j); // Paper MCP name clash
+ 
+                 if (worldserver != null) {
+                     WorldInfo worldinfo = worldserver.getWorldInfo();
+@@ -1348,8 +1350,8 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+      * Sets the game type for all worlds.
+      */
+     public void setGameType(GameType gameMode) {
+-        for (int i = 0; i < this.worlds.size(); ++i) {
+-            ((WorldServer)this.worlds.get(i)).getWorldInfo().setGameType(gameMode);
++        for (int i = 0; i < this.worldsList.size(); ++i) { // Paper MCP name clash
++            ((WorldServer)this.worldsList.get(i)).getWorldInfo().setGameType(gameMode); // Paper MCP name clash
+         }
+     }
+ 
+@@ -1399,7 +1401,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+      * the overworld
+      */
+     public World getEntityWorld() {
+-        return (World)this.worlds.get(0);
++        return (World)this.worldsList.get(0); // Paper MCP name clash
+     }
+ 
+     /**
+@@ -1486,8 +1488,8 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+         WorldServer[] aworldserver = this.worlds;
+         int i = aworldserver.length;
+ 
+-        for (int j = 0; j < this.worlds.size(); ++j) {
+-            WorldServer worldserver = (WorldServer)this.worlds.get(j);
++        for (int j = 0; j < this.worldsList.size(); ++j) { // Paper MCP name clash
++            WorldServer worldserver = (WorldServer)this.worldsList.get(j); // Paper MCP name clash
+ 
+             if (worldserver != null) {
+                 Entity entity = worldserver.getEntityFromUuid(uuid);
+@@ -1505,7 +1507,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+      * Returns true if the command sender should be sent feedback about executed commands
+      */
+     public boolean sendCommandFeedback() {
+-        return ((WorldServer)this.worlds.get(0)).getGameRules().getBoolean("sendCommandFeedback");
++        return ((WorldServer)this.worldsList.get(0)).getGameRules().getBoolean("sendCommandFeedback"); // Paper MCP name clash
+     }
+ 
+     public void setCommandStat(CommandResultStats.Type type, int amount) {
+@@ -1572,7 +1574,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+     }
+ 
+     @Deprecated
+-    public static MinecraftServer getServer() {
++    public static MinecraftServer getServerCB() { // Paper MCP name clash
+         return Bukkit.getServer() instanceof CraftServer ? ((CraftServer)Bukkit.getServer()).getServer() : null;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index c2b5b00..1b551f2 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -768,11 +768,12 @@ public class DedicatedServer extends MinecraftServer implements IServer {
+         }
+     }
+ 
+-    public PlayerList getPlayerList() {
+-        return this.getPlayerList();
+-    }
++    // Paper remove duplicate method
++//    public PlayerList getPlayerList() {
++//        return this.getPlayerList();
++//    }
+ 
+     public PropertyManager getPropertyManager() {
+         return this.settings;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/server/management/UserList.java b/src/main/java/net/minecraft/server/management/UserList.java
+index 0ec82e1..eba948a 100644
+--- a/src/main/java/net/minecraft/server/management/UserList.java
++++ b/src/main/java/net/minecraft/server/management/UserList.java
+@@ -142,9 +142,10 @@ public class UserList<K, V extends UserListEntry<K>> {
+         return new UserListEntry((Object)null, entryData);
+     }
+ 
+-    protected Map<String, V> getValues() {
+-        return this.values;
+-    }
++    // Paper remove duplicate method
++//    protected Map<String, V> getValues() {
++//        return this.values;
++//    }
+ 
+     public void writeChanges() throws IOException {
+         Collection collection = this.values.values();
+@@ -160,7 +161,7 @@ public class UserList<K, V extends UserListEntry<K>> {
+     }
+ 
+     public void readSavedFile() throws IOException, FileNotFoundException {
+-        Collection collection = null;
++        Collection<UserListEntry> collection = null; // Paper Collection to Collection<UserListEntry>
+         BufferedReader bufferedreader = null;
+ 
+         try {
+@@ -182,7 +183,7 @@ public class UserList<K, V extends UserListEntry<K>> {
+ 
+             for (UserListEntry userlistentry : collection) {
+                 if (userlistentry.getValue() != null) {
+-                    this.values.put(this.getObjectKey(userlistentry.getValue()), userlistentry);
++                    this.values.put(this.getObjectKey((K) userlistentry.getValue()), (V) userlistentry); // Paper cast to K, and cast to V
+                 }
+             }
+         }
+@@ -198,14 +199,8 @@ public class UserList<K, V extends UserListEntry<K>> {
+         public UserListEntry<K> deserialize(JsonElement param1, Type param2, JsonDeserializationContext param3) throws JsonParseException {
+         }
+ 
+-        public JsonElement serialize(UserListEntry<K> param1, Type param2, JsonSerializationContext param3) {
+-        }
+-
+-        public UserListEntry<K> deserialize(JsonElement param1, Type param2, JsonDeserializationContext param3) throws JsonParseException {
+-        }
+-
+         Serializer(Object p_i96_2_) {
+             this();
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java b/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java
+index f2942fe..31ff261 100644
+--- a/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java
++++ b/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java
+@@ -47,11 +47,11 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
+             this.networkManager.closeChannel(EXIT_MESSAGE);
+         } else {
+             this.handled = true;
+-            final Object[] aobject = this.server.getPlayerList().playerEntityList.toArray();
+-            class 1ServerListPingEvent extends ServerListPingEvent {
++            final Object[] players = this.server.getPlayerList().playerEntityList.toArray(); // Paper aobject -> players
++            class ServerListPingEvent extends org.bukkit.event.server.ServerListPingEvent { // Paper fix decompile error
+                 CraftIconCache icon;
+ 
+-                _ServerListPingEvent() {
++                ServerListPingEvent() { // Paper fix decompile error
+                     super(((InetSocketAddress)NetHandlerStatusServer.this.networkManager.getRemoteAddress()).getAddress(), NetHandlerStatusServer.this.server.getMOTD(), NetHandlerStatusServer.this.server.getPlayerList().getMaxPlayers());
+                     this.icon = NetHandlerStatusServer.this.server.server.getServerIcon();
+                 }
+@@ -73,14 +73,14 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
+                             if (this.player != null) {
+                                 return true;
+                             } else {
+-                                Object[] aobject = aobject;
+-                                int i = aobject.length;
++                                Object[] currentPlayers = players; // Paper aobject -> currentPlayers
++//                                int i = aobject.length; // Paper remove
+ 
+-                                for (int j = this.i; j < i; ++j) {
+-                                    EntityPlayerMP entityplayermp = (EntityPlayerMP)aobject[j];
++                                for (int length = currentPlayers.length, i = this.i; i < length; ++i) { // Paper j -> i, add length
++                                    EntityPlayerMP entityplayermp = (EntityPlayerMP)currentPlayers[i]; // Paper aobject -> currentPlayers, j -> i
+ 
+                                     if (entityplayermp != null) {
+-                                        this.i = j + 1;
++                                        this.i = i + 1; // Paper j -> i
+                                         this.player = entityplayermp;
+                                         return true;
+                                     }
+@@ -100,11 +100,11 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
+                             }
+                         }
+                         public void remove() {
+-                            Object[] aobject = aobject;
++                            Object[] currentPlayers = players; // Paper aobject -> currentPlayers and...aobject -> players
+                             int i = this.ret;
+ 
+-                            if (i >= 0 && aobject[i] != null) {
+-                                aobject[i] = null;
++                            if (i >= 0 && currentPlayers[i] != null) { // Paper aobject -> currentPlayers
++                                currentPlayers[i] = null; // Paper aobject -> currentPlayers
+                             } else {
+                                 throw new IllegalStateException();
+                             }
+@@ -112,11 +112,11 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
+                     };
+                 }
+             }
+-            1ServerListPingEvent nethandlerstatusserver$1serverlistpingevent = new 1ServerListPingEvent();
++            ServerListPingEvent nethandlerstatusserver$1serverlistpingevent = new ServerListPingEvent(); // Paper fix decompile error
+             this.server.server.getPluginManager().callEvent(nethandlerstatusserver$1serverlistpingevent);
+-            List<GameProfile> list = new ArrayList(aobject.length);
++            List<GameProfile> list = new ArrayList(players.length); // Paper aobject -> players
+ 
+-            for (Object object : aobject) {
++            for (Object object : players) { // Paper aobject -> players
+                 if (object != null) {
+                     list.add(((EntityPlayerMP)object).getGameProfile());
+                 }
+@@ -144,4 +144,4 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
+         this.networkManager.sendPacket(new SPacketPong(packetIn.getClientTime()));
+         this.networkManager.closeChannel(EXIT_MESSAGE);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/tileentity/CommandBlockBaseLogic.java b/src/main/java/net/minecraft/tileentity/CommandBlockBaseLogic.java
+index a1dd8e6..5a12430 100644
+--- a/src/main/java/net/minecraft/tileentity/CommandBlockBaseLogic.java
++++ b/src/main/java/net/minecraft/tileentity/CommandBlockBaseLogic.java
+@@ -183,15 +183,17 @@ public abstract class CommandBlockBaseLogic implements ICommandSender {
+         }
+     }
+ 
+-    public static int executeCommand(ICommandSender sender, CommandSender bSender, String command) throws CommandException {
++    public static int executeCommand(ICommandSender sender, CommandSender bSender, String commandString) throws CommandException { // Paper parameter name clash
+         SimpleCommandMap simplecommandmap = sender.getEntityWorld().getServer().getCommandMap();
+         Joiner joiner = Joiner.on(" ");
+ 
+-        if (command.startsWith("/")) {
+-            command = command.substring(1);
++        // Paper start - parameter name clash
++        if (commandString.startsWith("/")) {
++            commandString = commandString.substring(1);
+         }
++        // Paper end
+ 
+-        String[] astring = command.split(" ");
++        String[] astring = commandString.split(" ");
+         ArrayList<String[]> arraylist = new ArrayList();
+         String s = astring[0];
+ 
+@@ -211,27 +213,29 @@ public abstract class CommandBlockBaseLogic implements ICommandSender {
+             }
+ 
+             if (command instanceof VanillaCommandWrapper) {
+-                command = command.trim();
++                commandString = commandString.trim(); // Paper parameter name clash
+ 
+-                if (command.startsWith("/")) {
+-                    command = command.substring(1);
++                // Paper start - parameter name clash
++                if (commandString.startsWith("/")) {
++                    commandString = commandString.substring(1);
+                 }
++                // Paper end
+ 
+-                String[] astring1 = command.split(" ");
++                String[] astring1 = commandString.split(" "); // Paper parameter name clash
+                 astring1 = VanillaCommandWrapper.dropFirstArgument(astring1);
+                 return !((VanillaCommandWrapper)command).testPermission(bSender) ? 0 : ((VanillaCommandWrapper)command).dispatchVanillaCommand(bSender, sender, astring1);
+             } else if (simplecommandmap.getCommand(astring[0]) == null) {
+                 return 0;
+             } else {
+                 arraylist.add(astring);
+-                WorldServer[] aworldserver = MinecraftServer.getServer().worlds;
+-                MinecraftServer minecraftserver = MinecraftServer.getServer();
+-                minecraftserver.worlds = new WorldServer[minecraftserver.worlds.size()];
++                WorldServer[] aworldserver = MinecraftServer.getServerCB().worlds; // Paper MCP name clash
++                MinecraftServer minecraftserver = MinecraftServer.getServerCB(); // Paper MCP name clash
++                minecraftserver.worlds = new WorldServer[minecraftserver.worldsList.size()]; // Paper MCP name clash
+                 minecraftserver.worlds[0] = (WorldServer)sender.getEntityWorld();
+                 int i = 0;
+ 
+                 for (int j = 1; j < minecraftserver.worlds.length; ++j) {
+-                    WorldServer worldserver = (WorldServer)minecraftserver.worlds.get(i++);
++                    WorldServer worldserver = (WorldServer)minecraftserver.worldsList.get(i++); // Paper MCP name clash
+ 
+                     if (minecraftserver.worlds[0] == worldserver) {
+                         --j;
+@@ -256,24 +260,24 @@ public abstract class CommandBlockBaseLogic implements ICommandSender {
+                         }
+                     }
+                 } finally {
+-                    MinecraftServer.getServer().worlds = aworldserver;
++                    MinecraftServer.getServerCB().worlds = aworldserver; // Paper MCP name clash
+                 }
+ 
+                 int completed = 0;
+ 
+-                for (int i = 0; i < arraylist.size(); ++i) {
++                for (int loop = 0; loop < arraylist.size(); ++loop) { // Paper parameter name clash, i -> loop
+                     try {
+                         if (simplecommandmap.dispatch(bSender, joiner.join(Arrays.asList((Object[])arraylist.get(i))))) {
+                             ++completed;
+                         }
+                     } catch (Throwable throwable) {
+                         if (sender.getCommandSenderEntity() instanceof EntityMinecartCommandBlock) {
+-                            MinecraftServer.getServer().server.getLogger().log(Level.WARNING, String.format("MinecartCommandBlock at (%d,%d,%d) failed to handle command", new Object[] {Integer.valueOf(sender.getPosition().getX()), Integer.valueOf(sender.getPosition().getY()), Integer.valueOf(sender.getPosition().getZ())}), throwable);
++                            MinecraftServer.getServerCB().server.getLogger().log(Level.WARNING, String.format("MinecartCommandBlock at (%d,%d,%d) failed to handle command", new Object[] {Integer.valueOf(sender.getPosition().getX()), Integer.valueOf(sender.getPosition().getY()), Integer.valueOf(sender.getPosition().getZ())}), throwable); // Paper MCP name clash
+                         } else if (sender instanceof CommandBlockBaseLogic) {
+                             CommandBlockBaseLogic commandblockbaselogic = (CommandBlockBaseLogic)sender;
+-                            MinecraftServer.getServer().server.getLogger().log(Level.WARNING, String.format("CommandBlock at (%d,%d,%d) failed to handle command", new Object[] {Integer.valueOf(commandblockbaselogic.getPosition().getX()), Integer.valueOf(commandblockbaselogic.getPosition().getY()), Integer.valueOf(commandblockbaselogic.getPosition().getZ())}), throwable);
++                            MinecraftServer.getServerCB().server.getLogger().log(Level.WARNING, String.format("CommandBlock at (%d,%d,%d) failed to handle command", new Object[] {Integer.valueOf(commandblockbaselogic.getPosition().getX()), Integer.valueOf(commandblockbaselogic.getPosition().getY()), Integer.valueOf(commandblockbaselogic.getPosition().getZ())}), throwable); // Paper MCP name clash
+                         } else {
+-                            MinecraftServer.getServer().server.getLogger().log(Level.WARNING, String.format("Unknown CommandBlock failed to handle command", new Object[0]), throwable);
++                            MinecraftServer.getServerCB().server.getLogger().log(Level.WARNING, String.format("Unknown CommandBlock failed to handle command", new Object[0]), throwable); // Paper MCP name clash
+                         }
+                     }
+                 }
+@@ -371,4 +375,4 @@ public abstract class CommandBlockBaseLogic implements ICommandSender {
+     public CommandResultStats getCommandResultStats() {
+         return this.resultStats;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
+index aff2b42..fca3173 100644
+--- a/src/main/java/net/minecraft/world/WorldServer.java
++++ b/src/main/java/net/minecraft/world/WorldServer.java
+@@ -338,12 +338,12 @@ public class WorldServer extends World implements IThreadListener {
+ 
+     @Nullable
+     public Biome.SpawnListEntry getSpawnListEntryForTypeAt(EnumCreatureType creatureType, BlockPos pos) {
+-        List list = this.getChunkProvider().getPossibleCreatures(creatureType, pos);
++        List list = this.getChunkProviderServer().getPossibleCreatures(creatureType, pos); // Paper getChunkProvider -> getChunkProviderServer
+         return list != null && !list.isEmpty() ? (Biome.SpawnListEntry)WeightedRandom.getRandomItem(this.rand, list) : null;
+     }
+ 
+     public boolean canCreatureTypeSpawnHere(EnumCreatureType creatureType, Biome.SpawnListEntry spawnListEntry, BlockPos pos) {
+-        List list = this.getChunkProvider().getPossibleCreatures(creatureType, pos);
++        List list = this.getChunkProviderServer().getPossibleCreatures(creatureType, pos); // Paper getChunkProvider -> getChunkProviderServer
+         return list != null && !list.isEmpty() ? list.contains(spawnListEntry) : false;
+     }
+ 
+@@ -427,7 +427,7 @@ public class WorldServer extends World implements IThreadListener {
+     }
+ 
+     public boolean isChunkLoaded(int x, int z, boolean allowEmpty) {
+-        return this.getChunkProvider().chunkExists(x, z);
++        return this.getChunkProviderServer().chunkExists(x, z); // Paper getChunkProvider -> getChunkProviderServer
+     }
+ 
+     protected void playerCheckLight() {
+@@ -864,9 +864,10 @@ public class WorldServer extends World implements IThreadListener {
+     public List<TileEntity> a(int i, int j, int k, int l, int i1, int j1) {
+         ArrayList arraylist = Lists.newArrayList();
+ 
+-        for (int i = i >> 4; i <= l - 1 >> 4; ++i) {
+-            for (int j = k >> 4; j <= j1 - 1 >> 4; ++j) {
+-                Chunk chunk = this.getChunkFromChunkCoords(i, j);
++        // Paper start - parameter name clash, i -> chunkX and j  -> chunkZ
++        for (int chunkX = i >> 4; chunkX <= l - 1 >> 4; ++chunkX) {
++            for (int chunkZ = k >> 4; chunkZ <= j1 - 1 >> 4; ++chunkZ) {
++                Chunk chunk = this.getChunkFromChunkCoords(chunkX, chunkZ);
+ 
+                 if (chunk != null) {
+                     for (Object object : chunk.chunkTileEntityMap.values()) {
+@@ -1017,7 +1018,7 @@ public class WorldServer extends World implements IThreadListener {
+      * Saves all chunks to disk while updating progress bar.
+      */
+     public void saveAllChunks(boolean p_73044_1_, @Nullable IProgressUpdate progressCallback) throws MinecraftException {
+-        ChunkProviderServer chunkproviderserver = this.getChunkProvider();
++        ChunkProviderServer chunkproviderserver = this.getChunkProviderServer(); // Paper getChunkProvider -> getChunkProviderServer
+ 
+         if (chunkproviderserver.canSave()) {
+             Bukkit.getPluginManager().callEvent(new WorldSaveEvent(this.getWorld()));
+@@ -1046,7 +1047,7 @@ public class WorldServer extends World implements IThreadListener {
+      * saves chunk data - currently only called during execution of the Save All command
+      */
+     public void saveChunkData() {
+-        ChunkProviderServer chunkproviderserver = this.getChunkProvider();
++        ChunkProviderServer chunkproviderserver = this.getChunkProviderServer(); // Paper getChunkProvider -> getChunkProviderServer
+ 
+         if (chunkproviderserver.canSave()) {
+             chunkproviderserver.saveExtraData();
+@@ -1171,10 +1172,8 @@ public class WorldServer extends World implements IThreadListener {
+         this.getEntityTracker().sendToTrackingAndSelf(entityIn, new SPacketEntityStatus(entityIn, state));
+     }
+ 
+-    /**
+-     * gets the world's chunk provider
+-     */
+-    public ChunkProviderServer getChunkProvider() {
++    // Paper remove incorrect javadocs
++    public ChunkProviderServer getChunkProviderServer() { // Paper getChunkProvider -> getChunkProviderServer
+         return (ChunkProviderServer)super.getChunkProvider();
+     }
+ 
+@@ -1306,8 +1305,9 @@ public class WorldServer extends World implements IThreadListener {
+     public void sendParticles(EntityPlayerMP sender, EnumParticleTypes enumparticle, boolean flag, double d0, double d1, double d2, int i, double d3, double d4, double d5, double d6, int... aint) {
+         SPacketParticles spacketparticles = new SPacketParticles(enumparticle, flag, (float)d0, (float)d1, (float)d2, (float)d3, (float)d4, (float)d5, (float)d6, i, aint);
+ 
+-        for (int i = 0; i < this.playerEntities.size(); ++i) {
+-            EntityPlayerMP entityplayermp = (EntityPlayerMP)this.playerEntities.get(i);
++        // Paper start - i -> j
++        for (int j = 0; j < this.playerEntities.size(); ++j) {
++            EntityPlayerMP entityplayermp = (EntityPlayerMP)this.playerEntities.get(j);
+ 
+             if (sender == null || entityplayermp.getBukkitEntity().canSee(sender.getBukkitEntity())) {
+                 BlockPos blockpos = entityplayermp.getPosition();
+@@ -1315,6 +1315,7 @@ public class WorldServer extends World implements IThreadListener {
+                 this.sendPacketWithinDistance(entityplayermp, flag, d0, d1, d2, spacketparticles);
+             }
+         }
++        // Paper end
+     }
+ 
+     public void spawnParticle(EntityPlayerMP player, EnumParticleTypes particle, boolean longDistance, double x, double y, double z, int count, double xOffset, double yOffset, double zOffset, double speed, int... arguments) {
+@@ -1346,7 +1347,7 @@ public class WorldServer extends World implements IThreadListener {
+ 
+     @Nullable
+     public BlockPos findNearestStructure(String p_190528_1_, BlockPos p_190528_2_, boolean p_190528_3_) {
+-        return this.getChunkProvider().getStrongholdGen(this, p_190528_1_, p_190528_2_, p_190528_3_);
++        return this.getChunkProviderServer().getStrongholdGen(this, p_190528_1_, p_190528_2_, p_190528_3_); // Paper getChunkProvider -> getChunkProviderServer
+     }
+ 
+     /**
+@@ -1364,4 +1365,4 @@ public class WorldServer extends World implements IThreadListener {
+                 this();
+             }
+         }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 51edce7..f8aec9f 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -681,8 +681,8 @@ public final class CraftServer implements Server {
+         PropertyManager propertymanager = new PropertyManager(this.console.options);
+         ((DedicatedServer)this.console).settings = propertymanager;
+         boolean flag = propertymanager.getBooleanProperty("spawn-animals", this.console.getCanSpawnAnimals());
+-        boolean flag1 = propertymanager.getBooleanProperty("spawn-monsters", ((WorldServer)this.console.worlds.get(0)).getDifficulty() != EnumDifficulty.PEACEFUL);
+-        EnumDifficulty enumdifficulty = EnumDifficulty.getDifficultyEnum(propertymanager.getIntProperty("difficulty", ((WorldServer)this.console.worlds.get(0)).getDifficulty().ordinal()));
++        boolean flag1 = propertymanager.getBooleanProperty("spawn-monsters", ((WorldServer)this.console.worldsList.get(0)).getDifficulty() != EnumDifficulty.PEACEFUL); // Paper MCP name clash
++        EnumDifficulty enumdifficulty = EnumDifficulty.getDifficultyEnum(propertymanager.getIntProperty("difficulty", ((WorldServer)this.console.worldsList.get(0)).getDifficulty().ordinal())); // Paper MCP name clash
+         this.online.value = propertymanager.getBooleanProperty("online-mode", this.console.isServerInOnlineMode());
+         this.console.setCanSpawnAnimals(propertymanager.getBooleanProperty("spawn-animals", this.console.getCanSpawnAnimals()));
+         this.console.setAllowPvp(propertymanager.getBooleanProperty("pvp", this.console.isPVPEnabled()));
+@@ -791,7 +791,7 @@ public final class CraftServer implements Server {
+             }
+         }
+ 
+-        Map<String, Map<String, Object>> map;
++        Map<String, Map<String, Object>> map = null; // Paper initialize map to null
+         label40: {
+             try {
+                 map = (Map)this.yaml.load(fileinputstream);
+@@ -891,7 +891,7 @@ public final class CraftServer implements Server {
+                 });
+             }
+ 
+-            int i = 10 + this.console.worlds.size();
++            int i = 10 + this.console.worldsList.size(); // Paper MCP name clash
+             boolean flag1 = false;
+ 
+             while (true) {
+@@ -935,9 +935,9 @@ public final class CraftServer implements Server {
+                 worldserver1.addEventListener(new ServerWorldEventHandler(this.console, worldserver1));
+                 worldserver1.worldInfo.setDifficulty(EnumDifficulty.EASY);
+                 worldserver1.setAllowedSpawnTypes(true, true);
+-                this.console.worlds.add(worldserver1);
++                this.console.worldsList.add(worldserver1); // Paper MCP name clash
+                 this.pluginManager.callEvent(new WorldInitEvent(worldserver1.getWorld()));
+-                System.out.print("Preparing start region for level " + (this.console.worlds.size() - 1) + " (Seed: " + worldserver1.getSeed() + ")");
++                System.out.print("Preparing start region for level " + (this.console.worldsList.size() - 1) + " (Seed: " + worldserver1.getSeed() + ")"); // Paper MCP name clash
+ 
+                 if (worldserver1.getWorld().getKeepSpawnInMemory()) {
+                     short short1 = 196;
+@@ -980,7 +980,7 @@ public final class CraftServer implements Server {
+         } else {
+             WorldServer worldserver = ((CraftWorld)world).getHandle();
+ 
+-            if (!this.console.worlds.contains(worldserver)) {
++            if (!this.console.worldsList.contains(worldserver)) { // Paper MCP name clash
+                 return false;
+             } else if (worldserver.dimension <= 1) {
+                 return false;
+@@ -1003,7 +1003,7 @@ public final class CraftServer implements Server {
+                     }
+ 
+                     this.worlds.remove(world.getName().toLowerCase(Locale.ENGLISH));
+-                    this.console.worlds.remove(this.console.worlds.indexOf(worldserver));
++                    this.console.worldsList.remove(this.console.worldsList.indexOf(worldserver)); // Paper MCP name clash
+                     File file1 = world.getWorldFolder().getAbsoluteFile();
+ 
+                     synchronized (RegionFileCache.class) {
+@@ -1247,7 +1247,7 @@ public final class CraftServer implements Server {
+ 
+     @Deprecated
+     public CraftMapView getMap(short id) {
+-        MapStorage mapstorage = ((WorldServer)this.console.worlds.get(0)).mapStorage;
++        MapStorage mapstorage = ((WorldServer)this.console.worldsList.get(0)).mapStorage; // Paper MCP name clash
+         MapData mapdata = (MapData)mapstorage.getOrLoadData(MapData.class, "map_" + id);
+         return mapdata == null ? null : mapdata.mapView;
+     }
+@@ -1286,7 +1286,7 @@ public final class CraftServer implements Server {
+         if (offlineplayer == null) {
+             GameProfile gameprofile = null;
+ 
+-            if (MinecraftServer.getServer().isServerInOnlineMode() || SpigotConfig.bungee) {
++            if (MinecraftServer.getServerCB().isServerInOnlineMode() || SpigotConfig.bungee) { // Paper MCP name clash
+                 gameprofile = this.console.getPlayerProfileCache().getGameProfileForUsername(name);
+             }
+ 
+@@ -1392,7 +1392,7 @@ public final class CraftServer implements Server {
+     }
+ 
+     public GameMode getDefaultGameMode() {
+-        return GameMode.getByValue(((WorldServer)this.console.worlds.get(0)).getWorldInfo().getGameType().getID());
++        return GameMode.getByValue(((WorldServer)this.console.worldsList.get(0)).getWorldInfo().getGameType().getID()); // Paper MCP name clash
+     }
+ 
+     public void setDefaultGameMode(GameMode mode) {
+@@ -1432,7 +1432,7 @@ public final class CraftServer implements Server {
+     }
+ 
+     public OfflinePlayer[] getOfflinePlayers() {
+-        SaveHandler savehandler = (SaveHandler)((WorldServer)this.console.worlds.get(0)).getSaveHandler();
++        SaveHandler savehandler = (SaveHandler)((WorldServer)this.console.worldsList.get(0)).getSaveHandler(); // Paper MCP name clash
+         String[] astring = savehandler.getPlayerDir().list(new DatFileFilter());
+         Set<OfflinePlayer> set = new HashSet();
+ 
+@@ -1573,9 +1573,9 @@ public final class CraftServer implements Server {
+         PlayerChatTabCompleteEvent playerchattabcompleteevent = new PlayerChatTabCompleteEvent(player, message, list);
+         String s = playerchattabcompleteevent.getLastToken();
+ 
+-        for (Player player : this.getOnlinePlayers()) {
+-            if (player.canSee(player) && StringUtil.startsWithIgnoreCase(player.getName(), s)) {
+-                list.add(player.getName());
++        for (Player p : this.getOnlinePlayers()) { // Paper player -> p
++            if (player.canSee(p) && StringUtil.startsWithIgnoreCase(p.getName(), s)) {
++                list.add(p.getName());
+             }
+         }
+ 
+@@ -1678,4 +1678,4 @@ public final class CraftServer implements Server {
+             this.value = true;
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index fd78a0a..9baf7f1 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -125,7 +125,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     private double health = 20.0D;
+     private boolean scaledHealth = false;
+     private double healthScale = 20.0D;
+-    private final Spigot spigot = new Spigot() {
++    private final Player.Spigot spigot = new Player.Spigot() { // Paper fix decompile error
+         public InetSocketAddress getRawAddress() {
+             return (InetSocketAddress)CraftPlayer.this.getHandle().connection.netManager.getRawAddress();
+         }
+@@ -531,7 +531,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         }
+     }
+ 
+-    public boolean teleport(Location location, TeleportCause cause) {
++    // Paper start - location -> to
++    public boolean teleport(Location to, TeleportCause cause) {
+         EntityPlayerMP entityplayermp = this.getHandle();
+ 
+         if (this.getHealth() != 0.0D && !entityplayermp.isDead) {
+@@ -540,17 +541,17 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+             } else if (entityplayermp.isBeingRidden()) {
+                 return false;
+             } else {
+-                Location location = this.getLocation();
+-                PlayerTeleportEvent playerteleportevent = new PlayerTeleportEvent(this, location, location, cause);
++                Location from = this.getLocation(); // Paper parameter name clash, location -> from
++                PlayerTeleportEvent playerteleportevent = new PlayerTeleportEvent(this, from, to, cause);
+                 this.server.getPluginManager().callEvent(playerteleportevent);
+ 
+                 if (playerteleportevent.isCancelled()) {
+                     return false;
+                 } else {
+                     entityplayermp.dismountRidingEntity();
+-                    location = playerteleportevent.getFrom();
+-                    Location to = playerteleportevent.getTo();
+-                    WorldServer worldserver = ((CraftWorld)location.getWorld()).getHandle();
++                    from = playerteleportevent.getFrom();
++                    to = playerteleportevent.getTo();
++                    WorldServer worldserver = ((CraftWorld)from.getWorld()).getHandle();
+                     WorldServer worldserver1 = ((CraftWorld)to.getWorld()).getHandle();
+ 
+                     if (this.getHandle().openContainer != this.getHandle().inventoryContainer) {
+@@ -570,6 +571,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+             return false;
+         }
+     }
++    // Paper end
+ 
+     public void setSneaking(boolean sneak) {
+         this.getHandle().setSneaking(sneak);
+@@ -623,10 +625,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     public void removeAchievement(Achievement achievement) {
+         Validate.notNull(achievement, "Achievement cannot be null");
+ 
+-        for (Achievement achievement : Achievement.values()) {
+-            if (achievement.getParent() == achievement && this.hasAchievement(achievement)) {
+-                this.removeAchievement(achievement);
+-            }
++        for (Achievement achieve : Achievement.values()) { // Paper start - parameter name clash
++            if (achieve.getParent() == achievement && this.hasAchievement(achieve)) {
++                this.removeAchievement(achieve);
++            } // Paper end
+         }
+ 
+         this.getHandle().getStatFile().unlockAchievement(this.getHandle(), CraftStatistic.getNMSAchievement(achievement), 0);
+@@ -1011,20 +1013,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         this.hasPlayedBefore = true;
+ 
+         if (nbttagcompound.hasKey("bukkit")) {
+-            NBTTagCompound nbttagcompound = nbttagcompound.getCompoundTag("bukkit");
++            // Paper start -parameter name clash, nbttagcompound -> data
++            NBTTagCompound data = nbttagcompound.getCompoundTag("bukkit");
+ 
+-            if (nbttagcompound.hasKey("firstPlayed")) {
+-                this.firstPlayed = nbttagcompound.getLong("firstPlayed");
+-                this.lastPlayed = nbttagcompound.getLong("lastPlayed");
++            if (data.hasKey("firstPlayed")) {
++                this.firstPlayed = data.getLong("firstPlayed");
++                this.lastPlayed = data.getLong("lastPlayed");
+             }
+ 
+             if (nbttagcompound.hasKey("newExp")) {
+                 EntityPlayerMP entityplayermp = this.getHandle();
+-                entityplayermp.newExp = nbttagcompound.getInteger("newExp");
+-                entityplayermp.newTotalExp = nbttagcompound.getInteger("newTotalExp");
+-                entityplayermp.newLevel = nbttagcompound.getInteger("newLevel");
+-                entityplayermp.expToDrop = nbttagcompound.getInteger("expToDrop");
+-                entityplayermp.keepLevel = nbttagcompound.getBoolean("keepLevel");
++                entityplayermp.newExp = data.getInteger("newExp");
++                entityplayermp.newTotalExp = data.getInteger("newTotalExp");
++                entityplayermp.newLevel = data.getInteger("newLevel");
++                entityplayermp.expToDrop = data.getInteger("expToDrop");
++                entityplayermp.keepLevel = data.getBoolean("keepLevel");
++            // Paper end
+             }
+         }
+     }
+@@ -1034,16 +1038,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+             nbttagcompound.setTag("bukkit", new NBTTagCompound());
+         }
+ 
+-        NBTTagCompound nbttagcompound = nbttagcompound.getCompoundTag("bukkit");
++        // Paper start - parameter name clash, nbttagcompound  -> data
++        NBTTagCompound data = nbttagcompound.getCompoundTag("bukkit");
+         EntityPlayerMP entityplayermp = this.getHandle();
+-        nbttagcompound.setInteger("newExp", entityplayermp.newExp);
+-        nbttagcompound.setInteger("newTotalExp", entityplayermp.newTotalExp);
+-        nbttagcompound.setInteger("newLevel", entityplayermp.newLevel);
+-        nbttagcompound.setInteger("expToDrop", entityplayermp.expToDrop);
+-        nbttagcompound.setBoolean("keepLevel", entityplayermp.keepLevel);
+-        nbttagcompound.setLong("firstPlayed", this.getFirstPlayed());
+-        nbttagcompound.setLong("lastPlayed", System.currentTimeMillis());
+-        nbttagcompound.setString("lastKnownName", entityplayermp.getName());
++        data.setInteger("newExp", entityplayermp.newExp);
++        data.setInteger("newTotalExp", entityplayermp.newTotalExp);
++        data.setInteger("newLevel", entityplayermp.newLevel);
++        data.setInteger("expToDrop", entityplayermp.expToDrop);
++        data.setBoolean("keepLevel", entityplayermp.keepLevel);
++        data.setLong("firstPlayed", this.getFirstPlayed());
++        data.setLong("lastPlayed", System.currentTimeMillis());
++        data.setString("lastKnownName", entityplayermp.getName());
++        // Paper end
+     }
+ 
+     public boolean beginConversation(Conversation conversation) {
+@@ -1402,7 +1408,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         }
+     }
+ 
+-    public Spigot spigot() {
++    public Player.Spigot spigot() { // Paper fix decompile error
+         return this.spigot;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/help/SimpleHelpMap.java b/src/main/java/org/bukkit/craftbukkit/help/SimpleHelpMap.java
+index 989d045..7157514 100644
+--- a/src/main/java/org/bukkit/craftbukkit/help/SimpleHelpMap.java
++++ b/src/main/java/org/bukkit/craftbukkit/help/SimpleHelpMap.java
+@@ -41,7 +41,7 @@ public class SimpleHelpMap implements HelpMap {
+         Predicate predicate = Predicates.not(Predicates.instanceOf(CommandAliasHelpTopic.class));
+ 
+         if (!this.yaml.commandTopicsInMasterIndex()) {
+-            predicate = Predicates.and(predicate, Predicates.<T>not(new SimpleHelpMap.IsCommandTopicPredicate()));
++            predicate = Predicates.and(predicate, Predicates.not(new SimpleHelpMap.IsCommandTopicPredicate())); // Paper remove <T>
+         }
+ 
+         this.defaultTopic = new IndexHelpTopic("Index", (String)null, (String)null, Collections2.filter(this.helpTopics.values(), predicate), "Use /help [n] to get page n of help.");
+@@ -197,4 +197,4 @@ public class SimpleHelpMap implements HelpMap {
+             return topic.getName().charAt(0) == 47;
+         }
+     }
+-}
+\ No newline at end of file
++}
+-- 
+2.10.2
+

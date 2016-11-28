@@ -1,4 +1,4 @@
-From 7aed966dd04fd9b17b78e1d089435acd12e619bc Mon Sep 17 00:00:00 2001
+From 8d4e13038056fa3bc7b2953ed72b22479cf37200 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Mon, 29 Feb 2016 18:05:37 -0600
 Subject: [PATCH] Add player view distance API

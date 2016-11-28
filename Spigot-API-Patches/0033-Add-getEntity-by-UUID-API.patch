@@ -1,4 +1,4 @@
-From 14095532c9c2f654cd3f09d0cfdb9940bda5e730 Mon Sep 17 00:00:00 2001
+From ec5a19c05d273a6d559b6895db709d7bdf5ceea4 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Wed, 30 Mar 2016 01:19:51 -0500
 Subject: [PATCH] Add getEntity by UUID API
