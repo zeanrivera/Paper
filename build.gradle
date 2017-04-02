@@ -97,5 +97,6 @@ minecraft {
         accessTransformers = "paper.cfg"
         mcpRewrites = "mcp-rewrites.txt"
         preMapSrg = "paper.srg"
+        removeList = "remove-list.txt"
     }
 }
