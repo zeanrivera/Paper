@@ -1,0 +1,26 @@
+# Paper MCP renames
+#
+# We use some different MCP names for our dev environment because the MCP names
+# sometimes clash with the CraftBukkit added variable names. We use SRG names
+# after the reobf task, so these names can be changed to whatever we want -
+# they only affect the dev environment.
+
+# The format of this file is simple:
+# <srg_name>,<new_name>
+# And for reference, the old mcp name is appended to the end of the line after a comment (#)
+# Though that isn't required
+
+# Fields
+
+field_71305_c,mcpWorlds # worlds
+field_82862_h,mcpPlayer # player
+field_82855_n,mcpPlayer # player
+
+# Methods
+
+func_184102_h,getMcpServer # getServer
+func_75815_a,loadMcpChunk # loadChunk
+
+# Params
+
+

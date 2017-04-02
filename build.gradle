@@ -14,7 +14,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:1.0.5"
+        classpath "com.destroystokyo.papergradle:PaperGradle:1.0.5"
         classpath "gradle.plugin.net.minecrell:gitpatcher:0.8.1"
         classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
@@ -95,5 +95,7 @@ minecraft {
         paperServerDir = "Paper-Server"
         cleanDir = "work/MCP"
         accessTransformers = "paper.cfg"
+        mcpRewrites = "mcp-rewrites.txt"
+        preMapSrg = "paper.srg"
     }
 }
