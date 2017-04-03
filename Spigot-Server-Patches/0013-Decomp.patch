@@ -1,0 +1,168 @@
+From 0c8474ace211b32272d407ea66e0ea679e1ab63e Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Mon, 3 Apr 2017 00:57:21 -0500
+Subject: [PATCH] Decomp
+
+
+diff --git a/src/main/java/net/minecraft/world/WorldEntitySpawner.java b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
+index 3176e1d..4b984ee 100644
+--- a/src/main/java/net/minecraft/world/WorldEntitySpawner.java
++++ b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
+@@ -32,7 +32,12 @@ public final class WorldEntitySpawner {
+     private int getEntityCount(WorldServer server, Class oClass) {
+         int i = 0;
+ 
+-        for (Long coord : this.eligibleChunksForSpawning) {
++        // Paper - fix decompile start
++        Iterator<Long> it = this.eligibleChunksForSpawning.iterator();
++//        for (Long coord : this.eligibleChunksForSpawning) {
++        while (it.hasNext()) {
++            Long coord = it.next();
++            // Paper - fix decompile end
+             int x = LongHash.msw(coord.longValue());
+             int z = LongHash.lsw(coord.longValue());
+ 
+@@ -283,4 +288,4 @@ public final class WorldEntitySpawner {
+             }
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/world/storage/SaveHandler.java b/src/main/java/net/minecraft/world/storage/SaveHandler.java
+index cc086f7..596ceaa 100644
+--- a/src/main/java/net/minecraft/world/storage/SaveHandler.java
++++ b/src/main/java/net/minecraft/world/storage/SaveHandler.java
+@@ -223,11 +223,11 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
+ 
+         if (nbttagcompound != null) {
+             if (player instanceof EntityPlayerMP) {
+-                CraftPlayer player = (CraftPlayer)player.getBukkitEntity();
++                CraftPlayer bukkitPlayer = (CraftPlayer)player.getBukkitEntity(); // Paper - fix decompile
+                 long modified = (new File(this.playersDirectory, player.getUniqueID().toString() + ".dat")).lastModified();
+ 
+-                if (modified < player.getFirstPlayed()) {
+-                    player.setFirstPlayed(modified);
++                if (modified < bukkitPlayer.getFirstPlayed()) { // Paper - fix decompile
++                    bukkitPlayer.setFirstPlayed(modified); // Paper - fix decompile
+                 }
+             }
+ 
+@@ -348,4 +348,4 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
+     public File getPlayerDir() {
+         return this.playersDirectory;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/world/storage/WorldInfo.java b/src/main/java/net/minecraft/world/storage/WorldInfo.java
+index 7038eb0..d6a802f 100644
+--- a/src/main/java/net/minecraft/world/storage/WorldInfo.java
++++ b/src/main/java/net/minecraft/world/storage/WorldInfo.java
+@@ -1,6 +1,7 @@
+ package net.minecraft.world.storage;
+ 
+ import com.google.common.collect.Maps;
++import java.util.List;
+ import java.util.Map;
+ import java.util.Map.Entry;
+ import javax.annotation.Nullable;
+@@ -755,7 +756,7 @@ public class WorldInfo {
+         this.difficulty = newDifficulty;
+         SPacketServerDifficulty packet = new SPacketServerDifficulty(this.getDifficulty(), this.isDifficultyLocked());
+ 
+-        for (EntityPlayerMP player : this.world.playerEntities) {
++        for (EntityPlayerMP player : (List<EntityPlayerMP>) (List) this.world.playerEntities) { // Paper - fix decompile
+             player.connection.sendPacket(packet);
+         }
+     }
+@@ -874,4 +875,4 @@ public class WorldInfo {
+             this.levelName = name;
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/world/storage/loot/LootPool.java b/src/main/java/net/minecraft/world/storage/loot/LootPool.java
+index 54a7078..7763554 100644
+--- a/src/main/java/net/minecraft/world/storage/loot/LootPool.java
++++ b/src/main/java/net/minecraft/world/storage/loot/LootPool.java
+@@ -39,7 +39,7 @@ public class LootPool {
+      * with items with higher weights being more probable.
+      */
+     protected void createLootRoll(Collection<ItemStack> stacks, Random rand, LootContext context) {
+-        ArrayList var4 = Lists.newArrayList();
++        ArrayList<LootEntry> var4 = Lists.newArrayList(); // Paper - fix decompile
+         int var5 = 0;
+ 
+         for (LootEntry var9 : this.lootEntries) {
+@@ -106,4 +106,4 @@ public class LootPool {
+             return var4;
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/world/storage/loot/LootTable.java b/src/main/java/net/minecraft/world/storage/loot/LootTable.java
+index 168354a..c52c1ab 100644
+--- a/src/main/java/net/minecraft/world/storage/loot/LootTable.java
++++ b/src/main/java/net/minecraft/world/storage/loot/LootTable.java
+@@ -47,7 +47,7 @@ public class LootTable {
+     }
+ 
+     public void fillInventory(IInventory inventory, Random rand, LootContext context) {
+-        List var4 = this.generateLootForPools(rand, context);
++        List<ItemStack> var4 = this.generateLootForPools(rand, context); // Paper - fix decompile
+         List var5 = this.getEmptySlotsRandomized(inventory, rand);
+         this.shuffleItems(var4, var5.size(), rand);
+ 
+@@ -133,4 +133,4 @@ public class LootTable {
+             return var4;
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java
+index d93f27c..3735fcf 100644
+--- a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java
++++ b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java
+@@ -57,7 +57,7 @@ public class EntityHasProperty implements LootCondition {
+         }
+ 
+         public EntityHasProperty deserialize(JsonObject json, JsonDeserializationContext context) {
+-            Set var3 = JsonUtils.getJsonObject(json, "properties").entrySet();
++            Set<Entry<String, JsonElement>> var3 = JsonUtils.getJsonObject(json, "properties").entrySet(); // Paper - fix decompile
+             EntityProperty[] var4 = new EntityProperty[var3.size()];
+             int var5 = 0;
+ 
+@@ -68,4 +68,4 @@ public class EntityHasProperty implements LootCondition {
+             return new EntityHasProperty(var4, (LootContext.EntityTarget)JsonUtils.deserializeClass(json, "entity", context, LootContext.EntityTarget.class));
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java
+index bbb8366..0a9c5d4 100644
+--- a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java
++++ b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java
+@@ -74,7 +74,7 @@ public class EntityHasScore implements LootCondition {
+         }
+ 
+         public EntityHasScore deserialize(JsonObject json, JsonDeserializationContext context) {
+-            Set var3 = JsonUtils.getJsonObject(json, "scores").entrySet();
++            Set<Entry<String, JsonElement>> var3 = JsonUtils.getJsonObject(json, "scores").entrySet(); // Paper - fix decompile
+             LinkedHashMap var4 = Maps.newLinkedHashMap();
+ 
+             for (Entry var6 : var3) {
+@@ -84,4 +84,4 @@ public class EntityHasScore implements LootCondition {
+             return new EntityHasScore(var4, (LootContext.EntityTarget)JsonUtils.deserializeClass(json, "entity", context, LootContext.EntityTarget.class));
+         }
+     }
+-}
+\ No newline at end of file
++}
+-- 
+2.12.1
+

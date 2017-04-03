@@ -1,0 +1,415 @@
+From 0db22954604562c9dc79650d091fe560cf26afbb Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Sun, 2 Apr 2017 23:37:59 -0500
+Subject: [PATCH] Decomp
+
+
+diff --git a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
+index 242a7e2..ffe3563 100644
+--- a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
++++ b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
+@@ -117,7 +117,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+                 }
+             }
+         } else if (i >= 0 && (i == 0 || this.isBlocked(worldIn, pos.down(), iblockdata2))) {
+-            Set set = this.getPossibleFlowDirections(worldIn, pos);
++            Set<EnumFacing> set = this.getPossibleFlowDirections(worldIn, pos); // Paper - fix decompile
+             int k = i + b0;
+ 
+             if (i >= 8) {
+@@ -254,4 +254,4 @@ public class BlockDynamicLiquid extends BlockLiquid {
+             worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/command/CommandFill.java b/src/main/java/net/minecraft/command/CommandFill.java
+index 6ee2094..ecc8338 100644
+--- a/src/main/java/net/minecraft/command/CommandFill.java
++++ b/src/main/java/net/minecraft/command/CommandFill.java
+@@ -89,7 +89,7 @@ public class CommandFill extends CommandBase {
+                     }
+                 }
+ 
+-                ArrayList var25 = Lists.newArrayList();
++                ArrayList<BlockPos> var25 = Lists.newArrayList(); // Paper - fix decompile
+                 var10 = 0;
+ 
+                 for (int var15 = var8.getZ(); var15 <= var9.getZ(); ++var15) {
+@@ -171,4 +171,4 @@ public class CommandFill extends CommandBase {
+     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+         return args.length > 0 && args.length <= 3 ? getTabCompletionCoordinate(args, 0, pos) : (args.length > 3 && args.length <= 6 ? getTabCompletionCoordinate(args, 3, pos) : (args.length == 7 ? getListOfStringsMatchingLastWord(args, Block.REGISTRY.getKeys()) : (args.length == 9 ? getListOfStringsMatchingLastWord(args, new String[] {"replace", "destroy", "keep", "hollow", "outline"}): (args.length == 10 && "replace".equals(args[8]) ? getListOfStringsMatchingLastWord(args, Block.REGISTRY.getKeys()) : Collections.<String>emptyList()))));
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java b/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java
+index ce8c8b9..b7510c2 100644
+--- a/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java
++++ b/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java
+@@ -282,7 +282,7 @@ public class EntityAreaEffectCloud extends Entity {
+                     }
+                 }
+ 
+-                ArrayList arraylist = Lists.newArrayList();
++                ArrayList<PotionEffect> arraylist = Lists.newArrayList(); // Paper - fix decompile
+ 
+                 for (PotionEffect mobeffect : this.potion.getEffects()) {
+                     arraylist.add(new PotionEffect(mobeffect.getPotion(), mobeffect.getDuration() / 4, mobeffect.getAmplifier(), mobeffect.getIsAmbient(), mobeffect.doesShowParticles()));
+@@ -481,4 +481,4 @@ public class EntityAreaEffectCloud extends Entity {
+     public EnumPushReaction getPushReaction() {
+         return EnumPushReaction.IGNORE;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/EntityLeashKnot.java b/src/main/java/net/minecraft/entity/EntityLeashKnot.java
+index d4e43e5..a4a8208 100644
+--- a/src/main/java/net/minecraft/entity/EntityLeashKnot.java
++++ b/src/main/java/net/minecraft/entity/EntityLeashKnot.java
+@@ -99,7 +99,7 @@ public class EntityLeashKnot extends EntityHanging {
+         } else {
+             boolean flag = false;
+             double d0 = 7.0D;
+-            List list = this.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - 7.0D, this.posY - 7.0D, this.posZ - 7.0D, this.posX + 7.0D, this.posY + 7.0D, this.posZ + 7.0D));
++            List<EntityLiving> list = this.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - 7.0D, this.posY - 7.0D, this.posZ - 7.0D, this.posX + 7.0D, this.posY + 7.0D, this.posZ + 7.0D)); // Paper - fix decompile
+ 
+             for (EntityLiving entityinsentient : list) {
+                 if (entityinsentient.getLeashed() && entityinsentient.getLeashedToEntity() == player) {
+@@ -166,4 +166,4 @@ public class EntityLeashKnot extends EntityHanging {
+     public void playPlaceSound() {
+         this.playSound(SoundEvents.ENTITY_LEASHKNOT_PLACE, 1.0F, 1.0F);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/EntityTracker.java b/src/main/java/net/minecraft/entity/EntityTracker.java
+index 9ca2732..e25057f 100644
+--- a/src/main/java/net/minecraft/entity/EntityTracker.java
++++ b/src/main/java/net/minecraft/entity/EntityTracker.java
+@@ -142,7 +142,7 @@ public class EntityTracker {
+     /**
+      * Args : Entity, trackingRange, updateFrequency, sendVelocityUpdates
+      */
+-    public void track(Entity entityIn, final int trackingRange, int updateFrequency, boolean sendVelocityUpdates) {
++    public void track(Entity entityIn, int trackingRange, int updateFrequency, boolean sendVelocityUpdates) { // Paper - fix decompile
+         AsyncCatcher.catchOp("entity track");
+         trackingRange = TrackingRange.getEntityTrackingRange(entityIn, trackingRange);
+ 
+@@ -159,11 +159,12 @@ public class EntityTracker {
+             CrashReport crashreport = CrashReport.makeCrashReport(var11, "Adding entity to track");
+             CrashReportCategory crashreportsystemdetails = crashreport.makeCategory("Entity To Track");
+             crashreportsystemdetails.addCrashSection("Tracking range", trackingRange + " blocks");
++            final int trackingRangeFinal = trackingRange; // Paper - fix decompile
+             crashreportsystemdetails.setDetail("Update interval", new ICrashReportDetail() {
+                 public String call() throws Exception {
+-                    String s = "Once per " + trackingRange + " ticks";
++                    String s = "Once per " + trackingRangeFinal + " ticks"; // Paper - fix decompile
+ 
+-                    if (trackingRange == Integer.MAX_VALUE) {
++                    if (trackingRangeFinal == Integer.MAX_VALUE) { // Paper - fix decompile
+                         s = "Maximum (" + s + ")";
+                     }
+ 
+@@ -266,8 +267,8 @@ public class EntityTracker {
+      * has passengers
+      */
+     public void sendLeashedEntitiesInChunk(EntityPlayerMP player, Chunk chunkIn) {
+-        ArrayList arraylist = Lists.newArrayList();
+-        ArrayList arraylist1 = Lists.newArrayList();
++        ArrayList<Entity> arraylist = Lists.newArrayList(); // Paper - fix decompile
++        ArrayList<Entity> arraylist1 = Lists.newArrayList(); // Paper - fix decompile
+ 
+         for (EntityTrackerEntry entitytrackerentry : this.entries) {
+             Entity entity = entitytrackerentry.getTrackedEntity();
+@@ -305,4 +306,4 @@ public class EntityTracker {
+             entitytrackerentry.setMaxRange(this.maxTrackingDistanceThreshold);
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
+index 2619b38..157205a 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
+@@ -24,7 +24,7 @@ public class EntityAIFollowGolem extends EntityAIBase {
+         } else if (!this.theVillager.world.isDaytime()) {
+             return false;
+         } else {
+-            List var1 = this.theVillager.world.getEntitiesWithinAABB(EntityIronGolem.class, this.theVillager.getEntityBoundingBox().expand(6.0D, 2.0D, 6.0D));
++            List<EntityIronGolem> var1 = this.theVillager.world.getEntitiesWithinAABB(EntityIronGolem.class, this.theVillager.getEntityBoundingBox().expand(6.0D, 2.0D, 6.0D)); // Paper - fix decompile
+ 
+             if (var1.isEmpty()) {
+                 return false;
+@@ -81,4 +81,4 @@ public class EntityAIFollowGolem extends EntityAIBase {
+             this.theVillager.getNavigator().clearPathEntity();
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java b/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
+index da3227b..3e63e8d 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
+@@ -26,7 +26,7 @@ public class EntityAIPlay extends EntityAIBase {
+         } else if (this.villagerObj.getRNG().nextInt(400) != 0) {
+             return false;
+         } else {
+-            List var1 = this.villagerObj.world.getEntitiesWithinAABB(EntityVillager.class, this.villagerObj.getEntityBoundingBox().expand(6.0D, 3.0D, 6.0D));
++            List<EntityVillager> var1 = this.villagerObj.world.getEntitiesWithinAABB(EntityVillager.class, this.villagerObj.getEntityBoundingBox().expand(6.0D, 3.0D, 6.0D)); // Paper - fix decompile
+             double var2 = Double.MAX_VALUE;
+ 
+             for (EntityVillager var5 : var1) {
+@@ -98,4 +98,4 @@ public class EntityAIPlay extends EntityAIBase {
+             this.villagerObj.getNavigator().tryMoveToXYZ(var1.xCoord, var1.yCoord, var1.zCoord, this.speed);
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/boss/EntityDragon.java b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
+index 5691371..3971ef4 100644
+--- a/src/main/java/net/minecraft/entity/boss/EntityDragon.java
++++ b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
+@@ -407,7 +407,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
+         }
+ 
+         if (this.rand.nextInt(10) == 0) {
+-            List list = this.world.getEntitiesWithinAABB(EntityEnderCrystal.class, this.getEntityBoundingBox().expandXyz(32.0D));
++            List<EntityEnderCrystal> list = this.world.getEntitiesWithinAABB(EntityEnderCrystal.class, this.getEntityBoundingBox().expandXyz(32.0D)); // Paper - fix decompile
+             EntityEnderCrystal entityendercrystal = null;
+             double d0 = Double.MAX_VALUE;
+ 
+@@ -1042,4 +1042,4 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
+     public boolean isNonBoss() {
+         return false;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
+index 112c237..04e85f7 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
++++ b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
+@@ -187,7 +187,7 @@ public class EntityFallingBlock extends Entity {
+             int i = MathHelper.ceil(distance - 1.0F);
+ 
+             if (i > 0) {
+-                ArrayList arraylist = Lists.newArrayList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox()));
++                ArrayList<Entity> arraylist = Lists.newArrayList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox())); // Paper - fix decompile
+                 boolean flag = block == Blocks.ANVIL;
+                 DamageSource damagesource = flag ? DamageSource.ANVIL : DamageSource.FALLING_BLOCK;
+ 
+@@ -293,4 +293,4 @@ public class EntityFallingBlock extends Entity {
+     public boolean ignoreItemEntityData() {
+         return true;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/monster/EntityGolem.java b/src/main/java/net/minecraft/entity/monster/EntityGolem.java
+index f0acd79..112309b 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntityGolem.java
++++ b/src/main/java/net/minecraft/entity/monster/EntityGolem.java
+@@ -39,7 +39,7 @@ public abstract class EntityGolem extends EntityCreature implements IAnimals {
+     /**
+      * Determines if an entity can be despawned, used on idle far away entities
+      */
+-    protected boolean canDespawn() {
++    public boolean canDespawn() { // Paper - fix decompile
+         return false;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityWaterMob.java b/src/main/java/net/minecraft/entity/passive/EntityWaterMob.java
+index d0abec3..a4376ad 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityWaterMob.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityWaterMob.java
+@@ -38,7 +38,7 @@ public abstract class EntityWaterMob extends EntityLiving implements IAnimals {
+     /**
+      * Determines if an entity can be despawned, used on idle far away entities
+      */
+-    protected boolean canDespawn() {
++    public boolean canDespawn() { // Paper - fix decompile
+         return true;
+     }
+ 
+@@ -72,4 +72,4 @@ public abstract class EntityWaterMob extends EntityLiving implements IAnimals {
+     public boolean isPushedByWater() {
+         return false;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java b/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
+index 6e3a5ad..eb8432d 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
+@@ -108,10 +108,10 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
+     @Nullable
+     private Entity getHitEntity(Vec3d p_190538_1_, Vec3d p_190538_2_) {
+         Entity entity = null;
+-        List list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D));
++        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D));
+         double d0 = 0.0D;
+ 
+-        for (Entity entity1 : list) {
++        for (Entity entity1 : list) { // Paper - fix decompile
+             if (entity1 != this.owner) {
+                 AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expandXyz(0.30000001192092896D);
+                 RayTraceResult movingobjectposition = axisalignedbb.calculateIntercept(p_190538_1_, p_190538_2_);
+@@ -202,4 +202,4 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
+ 
+         this.ownerNbt = null;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityPotion.java b/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
+index f344d3b..859ab18 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
+@@ -7,6 +7,7 @@ import java.util.List;
+ import java.util.Map;
+ import javax.annotation.Nullable;
+ import net.minecraft.entity.EntityAreaEffectCloud;
++import net.minecraft.entity.EntityLiving;
+ import net.minecraft.entity.EntityLivingBase;
+ import net.minecraft.entity.monster.EntityBlaze;
+ import net.minecraft.entity.monster.EntityEnderman;
+@@ -134,7 +135,7 @@ public class EntityPotion extends EntityThrowable {
+ 
+     private void applyWater() {
+         AxisAlignedBB axisalignedbb = this.getEntityBoundingBox().expand(4.0D, 2.0D, 4.0D);
+-        List list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb, WATER_SENSITIVE);
++        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb, WATER_SENSITIVE); // Paper - fix decompile
+ 
+         if (!list.isEmpty()) {
+             for (EntityLivingBase entityliving : list) {
+@@ -149,7 +150,7 @@ public class EntityPotion extends EntityThrowable {
+ 
+     private void applySplash(RayTraceResult p_190543_1_, List<PotionEffect> p_190543_2_) {
+         AxisAlignedBB axisalignedbb = this.getEntityBoundingBox().expand(4.0D, 2.0D, 4.0D);
+-        List list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb);
++        List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb); // Paper - fix decompile
+         Map<LivingEntity, Double> affected = new HashMap();
+ 
+         if (!list1.isEmpty()) {
+@@ -286,4 +287,4 @@ public class EntityPotion extends EntityThrowable {
+     private static boolean isWaterSensitiveEntity(EntityLivingBase p_190544_0_) {
+         return p_190544_0_ instanceof EntityEnderman || p_190544_0_ instanceof EntityBlaze;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/item/ItemArmor.java b/src/main/java/net/minecraft/item/ItemArmor.java
+index 8a6c5ab..137fb01 100644
+--- a/src/main/java/net/minecraft/item/ItemArmor.java
++++ b/src/main/java/net/minecraft/item/ItemArmor.java
+@@ -61,7 +61,7 @@ public class ItemArmor extends Item {
+ 
+     public static ItemStack dispenseArmor(IBlockSource blockSource, ItemStack stack) {
+         BlockPos blockposition = blockSource.getBlockPos().offset((EnumFacing)blockSource.getBlockState().getValue(BlockDispenser.FACING));
+-        List list = blockSource.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(blockposition), Predicates.<T>and(EntitySelectors.NOT_SPECTATING, new EntitySelectors.ArmoredMob(stack)));
++        List list = blockSource.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(blockposition), Predicates.and(EntitySelectors.NOT_SPECTATING, new EntitySelectors.ArmoredMob(stack))); // Paper - fix decompile
+ 
+         if (list.isEmpty()) {
+             return ItemStack.EMPTY;
+@@ -305,4 +305,4 @@ public class ItemArmor extends Item {
+             return this.toughness;
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/item/ItemMap.java b/src/main/java/net/minecraft/item/ItemMap.java
+index 53c6798..812e9ab 100644
+--- a/src/main/java/net/minecraft/item/ItemMap.java
++++ b/src/main/java/net/minecraft/item/ItemMap.java
+@@ -171,7 +171,7 @@ public class ItemMap extends ItemMapBase {
+                                     b0 = 0;
+                                 }
+ 
+-                                MapColor materialmapcolor = (MapColor)Iterables.getFirst(Multisets.<T>copyHighestCountFirst(hashmultiset), MapColor.AIR);
++                                MapColor materialmapcolor = (MapColor)Iterables.getFirst(Multisets.copyHighestCountFirst(hashmultiset), MapColor.AIR); // Paper - fix decompile
+ 
+                                 if (materialmapcolor == MapColor.WATER) {
+                                     d2 = (double)k3 * 0.1D + (double)(k1 + l1 & 1) * 0.2D;
+@@ -376,4 +376,4 @@ public class ItemMap extends ItemMapBase {
+             Bukkit.getServer().getPluginManager().callEvent(event);
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java b/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java
+index 8f98c69..7c3b591 100644
+--- a/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java
++++ b/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java
+@@ -58,7 +58,7 @@ public class ShapelessRecipes implements IRecipe {
+      * Used to check if a recipe matches current crafting inventory
+      */
+     public boolean matches(InventoryCrafting inv, World worldIn) {
+-        ArrayList arraylist = Lists.newArrayList(this.recipeItems);
++        ArrayList<ItemStack> arraylist = Lists.newArrayList(this.recipeItems); // Paper - fix decompile
+ 
+         for (int i = 0; i < inv.getHeight(); ++i) {
+             for (int j = 0; j < inv.getWidth(); ++j) {
+@@ -102,4 +102,4 @@ public class ShapelessRecipes implements IRecipe {
+     public List<ItemStack> getIngredients() {
+         return Collections.<ItemStack>unmodifiableList(this.recipeItems);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/network/EnumConnectionState.java b/src/main/java/net/minecraft/network/EnumConnectionState.java
+index 1764de8..915a75f 100644
+--- a/src/main/java/net/minecraft/network/EnumConnectionState.java
++++ b/src/main/java/net/minecraft/network/EnumConnectionState.java
+@@ -313,7 +313,7 @@ public enum EnumConnectionState {
+             STATES_BY_ID[var4 - -1] = var3;
+ 
+             for (EnumPacketDirection var6 : var3.directionMaps.keySet()) {
+-                for (Class var8 : ((BiMap)var3.directionMaps.get(var6)).values()) {
++                for (Class var8 : ((BiMap<Integer, Class <? extends Packet<? >>>)var3.directionMaps.get(var6)).values()) { // Paper - fix decompile
+                     if (STATES_BY_CLASS.containsKey(var8) && STATES_BY_CLASS.get(var8) != var3) {
+                         throw new Error("Packet " + var8 + " is already assigned to protocol " + STATES_BY_CLASS.get(var8) + " - can\'t reassign to " + var3);
+                     }
+@@ -329,4 +329,4 @@ public enum EnumConnectionState {
+             }
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java
+index b646327..9fee82a 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java
+@@ -7,7 +7,7 @@ import org.bukkit.entity.LightningStrike;
+ import org.bukkit.entity.LightningStrike.Spigot;
+ 
+ public class CraftLightningStrike extends CraftEntity implements LightningStrike {
+-    private final Spigot spigot = new Spigot() {
++    private final LightningStrike.Spigot spigot = new LightningStrike.Spigot() { // Paper - fix decompile
+         public boolean isSilent() {
+             return CraftLightningStrike.this.getHandle().isSilent;
+         }
+@@ -33,7 +33,7 @@ public class CraftLightningStrike extends CraftEntity implements LightningStrike
+         return EntityType.LIGHTNING;
+     }
+ 
+-    public Spigot spigot() {
++    public LightningStrike.Spigot spigot() { // Paper - fix decompile
+         return this.spigot;
+     }
+-}
+\ No newline at end of file
++}
+-- 
+2.12.1
+

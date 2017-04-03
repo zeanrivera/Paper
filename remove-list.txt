@@ -4,3 +4,4 @@ net/minecraft/server/BlockMonsterEggs$a$3.class
 net/minecraft/server/BlockMonsterEggs$a$4.class
 net/minecraft/server/BlockMonsterEggs$a$5.class
 net/minecraft/server/BlockMonsterEggs$a$6.class
+net/minecraft/server/EntityEnderman$b$1.class

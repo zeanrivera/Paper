@@ -1,0 +1,38 @@
+From b105332d8a3704a383c262b09213e2f896148bc5 Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Sun, 2 Apr 2017 23:48:40 -0500
+Subject: [PATCH] Decomp
+
+
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 4ce0c3c..20e5c7f 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -2576,7 +2576,7 @@ public abstract class World implements IBlockAccess {
+         ArrayList arraylist = Lists.newArrayList();
+ 
+         for (Entity entity : this.loadedEntityList) {
+-            if (entityType.isAssignableFrom(entity.getClass()) && filter.apply(entity)) {
++            if (entityType.isAssignableFrom(entity.getClass()) && filter.apply((T) entity)) { // Paper - fix decompile
+                 arraylist.add(entity);
+             }
+         }
+@@ -2588,7 +2588,7 @@ public abstract class World implements IBlockAccess {
+         ArrayList arraylist = Lists.newArrayList();
+ 
+         for (Entity entity : this.playerEntities) {
+-            if (playerType.isAssignableFrom(entity.getClass()) && filter.apply(entity)) {
++            if (playerType.isAssignableFrom(entity.getClass()) && filter.apply((T) entity)) {  // Paper - fix decompile
+                 arraylist.add(entity);
+             }
+         }
+@@ -3299,4 +3299,4 @@ public abstract class World implements IBlockAccess {
+     public BlockPos findNearestStructure(String p_190528_1_, BlockPos p_190528_2_, boolean p_190528_3_) {
+         return null;
+     }
+-}
+\ No newline at end of file
++}
+-- 
+2.12.1
+

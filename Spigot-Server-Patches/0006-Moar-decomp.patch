@@ -1,0 +1,188 @@
+From 41f796b4ee6bc774fa4920d8e664ed20c316f969 Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Sun, 2 Apr 2017 23:27:19 -0500
+Subject: [PATCH] Moar decomp
+
+
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
+index 5fd3676..b90387d 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
+@@ -22,7 +22,7 @@ public class EntityAIFollowParent extends EntityAIBase {
+         if (this.childAnimal.getGrowingAge() >= 0) {
+             return false;
+         } else {
+-            List var1 = this.childAnimal.world.getEntitiesWithinAABB(this.childAnimal.getClass(), this.childAnimal.getEntityBoundingBox().expand(8.0D, 4.0D, 8.0D));
++            List<EntityAnimal> var1 = this.childAnimal.world.getEntitiesWithinAABB(this.childAnimal.getClass(), this.childAnimal.getEntityBoundingBox().expand(8.0D, 4.0D, 8.0D)); // Paper - fix decompile
+             EntityAnimal var2 = null;
+             double var3 = Double.MAX_VALUE;
+ 
+@@ -85,4 +85,4 @@ public class EntityAIFollowParent extends EntityAIBase {
+             this.childAnimal.getNavigator().tryMoveToEntityLiving(this.parentAnimal, this.moveSpeed);
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
+index 710c5d8..0ba9e00 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
+@@ -70,7 +70,7 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
+                 return true;
+             }
+         } else {
+-            this.targetEntity = this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double)this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<EntityPlayer, Double>() {
++            this.targetEntity = (T) this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double)this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<EntityPlayer, Double>() { // Paper - fix decompile
+                 @Nullable
+                 public Double apply(@Nullable EntityPlayer entityhuman) {
+                     ItemStack itemstack = entityhuman.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+@@ -92,7 +92,7 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
+                 public Double __clashing_apply(@Nullable EntityPlayer object) {
+                     return this.apply(object);
+                 }
+-            }, this.targetEntitySelector);
++            }, (Predicate<EntityPlayer>) this.targetEntitySelector); // Paper - fix decompile
+             return this.targetEntity != null;
+         }
+     }
+diff --git a/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java b/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
+index cff3485..7241572 100644
+--- a/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
++++ b/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
+@@ -73,7 +73,7 @@ public class EntityLightningBolt extends EntityWeatherEffect {
+             float pitch = 0.8F + this.rand.nextFloat() * 0.2F;
+             int viewDistance = ((WorldServer)this.world).getServer().getViewDistance() * 16;
+ 
+-            for (EntityPlayerMP player : this.world.playerEntities) {
++            for (EntityPlayerMP player : (List<EntityPlayerMP>) (List) this.world.playerEntities) { // Paper - fix decompile
+                 double deltaX = this.posX - player.posX;
+                 double deltaZ = this.posZ - player.posZ;
+                 double distanceSquared = deltaX * deltaX + deltaZ * deltaZ;
+@@ -140,4 +140,4 @@ public class EntityLightningBolt extends EntityWeatherEffect {
+      */
+     protected void writeEntityToNBT(NBTTagCompound compound) {
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/item/EntityArmorStand.java b/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
+index 455c58d..91433d4 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
++++ b/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
+@@ -408,10 +408,10 @@ public class EntityArmorStand extends EntityLivingBase {
+         if ((itemstack1.isEmpty() || (this.disabledSlots & 1 << p_184795_2_.getSlotIndex() + 8) == 0) && (!itemstack1.isEmpty() || (this.disabledSlots & 1 << p_184795_2_.getSlotIndex() + 16) == 0)) {
+             org.bukkit.inventory.ItemStack armorStandItem = CraftItemStack.asCraftMirror(itemstack1);
+             org.bukkit.inventory.ItemStack playerHeldItem = CraftItemStack.asCraftMirror(p_184795_3_);
+-            Player player = (Player)player.getBukkitEntity();
++            Player bukkitPlayer = (Player)player.getBukkitEntity(); // Paper - fix decompile
+             ArmorStand self = (ArmorStand)this.getBukkitEntity();
+             EquipmentSlot slot = CraftEquipmentSlot.getSlot(p_184795_2_);
+-            PlayerArmorStandManipulateEvent armorStandManipulateEvent = new PlayerArmorStandManipulateEvent(player, self, playerHeldItem, armorStandItem, slot);
++            PlayerArmorStandManipulateEvent armorStandManipulateEvent = new PlayerArmorStandManipulateEvent(bukkitPlayer, self, playerHeldItem, armorStandItem, slot); // Paper - fix decompile
+             this.world.getServer().getPluginManager().callEvent(armorStandManipulateEvent);
+ 
+             if (armorStandManipulateEvent.isCancelled()) {
+@@ -826,4 +826,4 @@ public class EntityArmorStand extends EntityLivingBase {
+     public boolean attackable() {
+         return false;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/monster/EntityMagmaCube.java b/src/main/java/net/minecraft/entity/monster/EntityMagmaCube.java
+index 2e83706..c6c1a8c 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntityMagmaCube.java
++++ b/src/main/java/net/minecraft/entity/monster/EntityMagmaCube.java
+@@ -41,7 +41,7 @@ public class EntityMagmaCube extends EntitySlime {
+         return this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this) && this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.world.containsAnyLiquid(this.getEntityBoundingBox());
+     }
+ 
+-    protected void setSlimeSize(int size, boolean p_70799_2_) {
++    public void setSlimeSize(int size, boolean p_70799_2_) { // Paper - fix decompile
+         super.setSlimeSize(size, p_70799_2_);
+         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue((double)(size * 3));
+     }
+@@ -129,4 +129,4 @@ public class EntityMagmaCube extends EntitySlime {
+     protected SoundEvent getJumpSound() {
+         return SoundEvents.ENTITY_MAGMACUBE_JUMP;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/monster/EntityWitch.java b/src/main/java/net/minecraft/entity/monster/EntityWitch.java
+index ae3661b..1b82e33 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntityWitch.java
++++ b/src/main/java/net/minecraft/entity/monster/EntityWitch.java
+@@ -115,7 +115,7 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
+                     this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
+ 
+                     if (var5.getItem() == Items.POTIONITEM) {
+-                        List var6 = PotionUtils.getEffectsFromStack(var5);
++                        List<PotionEffect> var6 = PotionUtils.getEffectsFromStack(var5); // Paper - fix decompile
+ 
+                         if (var6 != null) {
+                             for (PotionEffect var4 : var6) {
+@@ -211,4 +211,4 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
+     public float getEyeHeight() {
+         return 1.62F;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+index fa37ace..8f3586d 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -465,7 +465,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+     }
+ 
+     private void updateScorePoints(IScoreCriteria criteria, int points) {
+-        for (Score scoreboardscore : this.world.getServer().getScoreboardManager().getScoreboardScores(criteria, this.getName(), new ArrayList())) {
++        for (Score scoreboardscore : this.world.getServer().getScoreboardManager().getScoreboardScores(criteria, this.getName(), new ArrayList<>())) { // Paper - fix decompile
+             scoreboardscore.setScorePoints(points);
+         }
+     }
+@@ -558,7 +558,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+             this.closeScreen();
+             this.setSpectatingEntity(this);
+ 
+-            for (Score scoreboardscore : this.world.getServer().getScoreboardManager().getScoreboardScores(IScoreCriteria.DEATH_COUNT, this.getName(), new ArrayList())) {
++            for (Score scoreboardscore : this.world.getServer().getScoreboardManager().getScoreboardScores(IScoreCriteria.DEATH_COUNT, this.getName(), new ArrayList<>())) { // Paper - fix decompile
+                 scoreboardscore.incrementScore();
+             }
+ 
+@@ -1422,4 +1422,4 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+     public CraftPlayer getBukkitEntity() {
+         return (CraftPlayer)super.getBukkitEntity();
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
+index 66f941d..f563b18 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
+@@ -10,7 +10,7 @@ import org.bukkit.entity.Arrow.Spigot;
+ import org.bukkit.projectiles.ProjectileSource;
+ 
+ public class CraftArrow extends AbstractProjectile implements Arrow {
+-    private final Spigot spigot = new Spigot() {
++    private final Arrow.Spigot spigot = new Arrow.Spigot() { // Paper - fix decompile
+         public double getDamage() {
+             return CraftArrow.this.getHandle().getDamage();
+         }
+@@ -76,7 +76,7 @@ public class CraftArrow extends AbstractProjectile implements Arrow {
+         this.getHandle().shootingEntity = ((CraftLivingEntity)shooter).getHandle();
+     }
+ 
+-    public Spigot spigot() {
++    public Arrow.Spigot spigot() { // Paper - fix decompile
+         return this.spigot;
+     }
+-}
+\ No newline at end of file
++}
+-- 
+2.12.1
+

@@ -1,0 +1,593 @@
+From d3f83dca49de62d328274c54b165ae466e5361f8 Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Mon, 3 Apr 2017 01:38:05 -0500
+Subject: [PATCH] final decomp
+
+
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index a915e85..b081c20 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -325,7 +325,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+                 worlddata.checkName(worldNameIn);
+ 
+                 if (this.isDemo()) {
+-                    world = (WorldServer)(new DemoWorldServer(this, idatamanager, worlddata, dimension, this.theProfiler)).init();
++                    world = (WorldServer)(new DemoWorldServer(this, idatamanager, worlddata, dimension, this.theProfiler, Environment.getEnvironment(dimension), gen)).init(); // Paper - fix decompile
+                 } else {
+                     world = (WorldServer)(new WorldServer(this, idatamanager, worlddata, dimension, this.theProfiler, Environment.getEnvironment(dimension), gen)).init();
+                 }
+@@ -1575,4 +1575,4 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
+     public static MinecraftServer getServer() {
+         return Bukkit.getServer() instanceof CraftServer ? ((CraftServer)Bukkit.getServer()).getServer() : null;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/world/demo/DemoWorldServer.java b/src/main/java/net/minecraft/world/demo/DemoWorldServer.java
+index 7d054f5..9dc0acc 100644
+--- a/src/main/java/net/minecraft/world/demo/DemoWorldServer.java
++++ b/src/main/java/net/minecraft/world/demo/DemoWorldServer.java
+@@ -8,13 +8,15 @@ import net.minecraft.world.WorldSettings;
+ import net.minecraft.world.WorldType;
+ import net.minecraft.world.storage.ISaveHandler;
+ import net.minecraft.world.storage.WorldInfo;
++import org.bukkit.World;
++import org.bukkit.generator.ChunkGenerator;
+ 
+ public class DemoWorldServer extends WorldServer {
+     private static final long DEMO_WORLD_SEED = (long)"North Carolina".hashCode();
+     public static final WorldSettings DEMO_WORLD_SETTINGS = (new WorldSettings(DEMO_WORLD_SEED, GameType.SURVIVAL, true, false, WorldType.DEFAULT)).enableBonusChest();
+ 
+-    public DemoWorldServer(MinecraftServer server, ISaveHandler saveHandlerIn, WorldInfo worldInfoIn, int dimensionId, Profiler profilerIn) {
+-        super(server, saveHandlerIn, worldInfoIn, dimensionId, profilerIn);
++    public DemoWorldServer(MinecraftServer server, ISaveHandler saveHandlerIn, WorldInfo worldInfoIn, int dimensionId, Profiler profilerIn, World.Environment p_i75_6_, ChunkGenerator p_i75_7_) { // Paper - fix decompile
++        super(server, saveHandlerIn, worldInfoIn, dimensionId, profilerIn, p_i75_6_, p_i75_7_); // Paper - fix decompile
+         this.worldInfo.populateFromWorldSettings(DEMO_WORLD_SETTINGS);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index ca0b850..96181d4 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -8,6 +8,7 @@ import java.util.ArrayList;
+ import java.util.Collection;
+ import java.util.Collections;
+ import java.util.HashSet;
++import java.util.Iterator;
+ import java.util.List;
+ import java.util.Random;
+ import java.util.Set;
+@@ -17,17 +18,97 @@ import net.minecraft.block.BlockLeaves;
+ import net.minecraft.block.BlockOldLeaf;
+ import net.minecraft.block.BlockOldLog;
+ import net.minecraft.block.BlockPlanks;
++import net.minecraft.block.BlockRedstoneDiode;
+ import net.minecraft.block.state.IBlockState;
++import net.minecraft.entity.EntityAreaEffectCloud;
++import net.minecraft.entity.EntityHanging;
++import net.minecraft.entity.EntityLeashKnot;
+ import net.minecraft.entity.EntityLiving;
+ import net.minecraft.entity.IEntityLivingData;
++import net.minecraft.entity.boss.EntityDragon;
++import net.minecraft.entity.boss.EntityWither;
+ import net.minecraft.entity.effect.EntityLightningBolt;
++import net.minecraft.entity.item.EntityArmorStand;
++import net.minecraft.entity.item.EntityBoat;
++import net.minecraft.entity.item.EntityEnderCrystal;
++import net.minecraft.entity.item.EntityEnderEye;
++import net.minecraft.entity.item.EntityEnderPearl;
++import net.minecraft.entity.item.EntityExpBottle;
+ import net.minecraft.entity.item.EntityFallingBlock;
++import net.minecraft.entity.item.EntityFireworkRocket;
+ import net.minecraft.entity.item.EntityItem;
++import net.minecraft.entity.item.EntityItemFrame;
++import net.minecraft.entity.item.EntityMinecartChest;
++import net.minecraft.entity.item.EntityMinecartCommandBlock;
++import net.minecraft.entity.item.EntityMinecartEmpty;
++import net.minecraft.entity.item.EntityMinecartFurnace;
++import net.minecraft.entity.item.EntityMinecartHopper;
++import net.minecraft.entity.item.EntityMinecartMobSpawner;
++import net.minecraft.entity.item.EntityMinecartTNT;
++import net.minecraft.entity.item.EntityPainting;
++import net.minecraft.entity.item.EntityTNTPrimed;
++import net.minecraft.entity.item.EntityXPOrb;
++import net.minecraft.entity.monster.EntityBlaze;
++import net.minecraft.entity.monster.EntityCaveSpider;
++import net.minecraft.entity.monster.EntityCreeper;
++import net.minecraft.entity.monster.EntityElderGuardian;
++import net.minecraft.entity.monster.EntityEnderman;
++import net.minecraft.entity.monster.EntityEndermite;
++import net.minecraft.entity.monster.EntityEvoker;
++import net.minecraft.entity.monster.EntityGhast;
++import net.minecraft.entity.monster.EntityGiantZombie;
++import net.minecraft.entity.monster.EntityGuardian;
++import net.minecraft.entity.monster.EntityHusk;
++import net.minecraft.entity.monster.EntityIronGolem;
++import net.minecraft.entity.monster.EntityMagmaCube;
++import net.minecraft.entity.monster.EntityPigZombie;
++import net.minecraft.entity.monster.EntityPolarBear;
++import net.minecraft.entity.monster.EntityShulker;
++import net.minecraft.entity.monster.EntitySilverfish;
++import net.minecraft.entity.monster.EntitySkeleton;
++import net.minecraft.entity.monster.EntitySlime;
++import net.minecraft.entity.monster.EntitySnowman;
++import net.minecraft.entity.monster.EntitySpider;
++import net.minecraft.entity.monster.EntityStray;
++import net.minecraft.entity.monster.EntityVex;
++import net.minecraft.entity.monster.EntityVindicator;
++import net.minecraft.entity.monster.EntityWitch;
++import net.minecraft.entity.monster.EntityWitherSkeleton;
++import net.minecraft.entity.monster.EntityZombie;
++import net.minecraft.entity.monster.EntityZombieVillager;
++import net.minecraft.entity.passive.EntityBat;
++import net.minecraft.entity.passive.EntityChicken;
++import net.minecraft.entity.passive.EntityCow;
++import net.minecraft.entity.passive.EntityDonkey;
++import net.minecraft.entity.passive.EntityHorse;
++import net.minecraft.entity.passive.EntityLlama;
++import net.minecraft.entity.passive.EntityMooshroom;
++import net.minecraft.entity.passive.EntityMule;
++import net.minecraft.entity.passive.EntityOcelot;
++import net.minecraft.entity.passive.EntityPig;
++import net.minecraft.entity.passive.EntityRabbit;
++import net.minecraft.entity.passive.EntitySheep;
++import net.minecraft.entity.passive.EntitySkeletonHorse;
++import net.minecraft.entity.passive.EntitySquid;
++import net.minecraft.entity.passive.EntityVillager;
++import net.minecraft.entity.passive.EntityWolf;
++import net.minecraft.entity.passive.EntityZombieHorse;
+ import net.minecraft.entity.player.EntityPlayer;
+ import net.minecraft.entity.player.EntityPlayerMP;
+ import net.minecraft.entity.projectile.EntityArrow;
++import net.minecraft.entity.projectile.EntityDragonFireball;
++import net.minecraft.entity.projectile.EntityEgg;
++import net.minecraft.entity.projectile.EntityEvokerFangs;
++import net.minecraft.entity.projectile.EntityFireball;
++import net.minecraft.entity.projectile.EntityLargeFireball;
++import net.minecraft.entity.projectile.EntityLlamaSpit;
++import net.minecraft.entity.projectile.EntityPotion;
++import net.minecraft.entity.projectile.EntityShulkerBullet;
++import net.minecraft.entity.projectile.EntitySmallFireball;
++import net.minecraft.entity.projectile.EntitySnowball;
+ import net.minecraft.entity.projectile.EntitySpectralArrow;
+ import net.minecraft.entity.projectile.EntityTippedArrow;
++import net.minecraft.entity.projectile.EntityWitherSkull;
+ import net.minecraft.init.Blocks;
+ import net.minecraft.network.Packet;
+ import net.minecraft.network.play.server.SPacketCustomSound;
+@@ -36,6 +117,7 @@ import net.minecraft.network.play.server.SPacketParticles;
+ import net.minecraft.network.play.server.SPacketTimeUpdate;
+ import net.minecraft.server.management.PlayerChunkMapEntry;
+ import net.minecraft.tileentity.TileEntity;
++import net.minecraft.util.EnumFacing;
+ import net.minecraft.util.EnumParticleTypes;
+ import net.minecraft.util.IProgressUpdate;
+ import net.minecraft.util.math.AxisAlignedBB;
+@@ -83,6 +165,7 @@ import org.bukkit.World.Environment;
+ import org.bukkit.World.Spigot;
+ import org.bukkit.block.Biome;
+ import org.bukkit.block.Block;
++import org.bukkit.block.BlockFace;
+ import org.bukkit.block.BlockState;
+ import org.bukkit.craftbukkit.block.CraftBlock;
+ import org.bukkit.craftbukkit.block.CraftBlockState;
+@@ -93,17 +176,103 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
+ import org.bukkit.craftbukkit.metadata.BlockMetadataStore;
+ import org.bukkit.craftbukkit.potion.CraftPotionUtil;
+ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
++import org.bukkit.entity.AbstractHorse;
++import org.bukkit.entity.Ambient;
++import org.bukkit.entity.AreaEffectCloud;
++import org.bukkit.entity.ArmorStand;
+ import org.bukkit.entity.Arrow;
++import org.bukkit.entity.Bat;
++import org.bukkit.entity.Blaze;
++import org.bukkit.entity.Boat;
++import org.bukkit.entity.CaveSpider;
++import org.bukkit.entity.ChestedHorse;
++import org.bukkit.entity.Chicken;
++import org.bukkit.entity.ComplexLivingEntity;
++import org.bukkit.entity.Cow;
++import org.bukkit.entity.Creeper;
++import org.bukkit.entity.Donkey;
++import org.bukkit.entity.DragonFireball;
++import org.bukkit.entity.Egg;
++import org.bukkit.entity.ElderGuardian;
++import org.bukkit.entity.EnderCrystal;
++import org.bukkit.entity.EnderDragon;
++import org.bukkit.entity.EnderPearl;
++import org.bukkit.entity.EnderSignal;
++import org.bukkit.entity.Enderman;
++import org.bukkit.entity.Endermite;
+ import org.bukkit.entity.Entity;
+ import org.bukkit.entity.EntityType;
++import org.bukkit.entity.Evoker;
++import org.bukkit.entity.EvokerFangs;
++import org.bukkit.entity.ExperienceOrb;
+ import org.bukkit.entity.FallingBlock;
++import org.bukkit.entity.Fireball;
++import org.bukkit.entity.Firework;
++import org.bukkit.entity.Ghast;
++import org.bukkit.entity.Giant;
++import org.bukkit.entity.Golem;
++import org.bukkit.entity.Guardian;
++import org.bukkit.entity.Hanging;
+ import org.bukkit.entity.HumanEntity;
++import org.bukkit.entity.Husk;
++import org.bukkit.entity.IronGolem;
+ import org.bukkit.entity.Item;
++import org.bukkit.entity.ItemFrame;
++import org.bukkit.entity.LeashHitch;
+ import org.bukkit.entity.LightningStrike;
++import org.bukkit.entity.LingeringPotion;
+ import org.bukkit.entity.LivingEntity;
++import org.bukkit.entity.Llama;
++import org.bukkit.entity.LlamaSpit;
++import org.bukkit.entity.MagmaCube;
++import org.bukkit.entity.Minecart;
++import org.bukkit.entity.Mule;
++import org.bukkit.entity.MushroomCow;
++import org.bukkit.entity.Ocelot;
++import org.bukkit.entity.Painting;
++import org.bukkit.entity.Pig;
++import org.bukkit.entity.PigZombie;
+ import org.bukkit.entity.Player;
++import org.bukkit.entity.PolarBear;
++import org.bukkit.entity.Projectile;
++import org.bukkit.entity.Rabbit;
++import org.bukkit.entity.Sheep;
++import org.bukkit.entity.Shulker;
++import org.bukkit.entity.ShulkerBullet;
++import org.bukkit.entity.Silverfish;
++import org.bukkit.entity.Skeleton;
++import org.bukkit.entity.SkeletonHorse;
++import org.bukkit.entity.Slime;
++import org.bukkit.entity.SmallFireball;
++import org.bukkit.entity.Snowball;
++import org.bukkit.entity.Snowman;
+ import org.bukkit.entity.SpectralArrow;
++import org.bukkit.entity.Spider;
++import org.bukkit.entity.Squid;
++import org.bukkit.entity.Stray;
++import org.bukkit.entity.TNTPrimed;
++import org.bukkit.entity.Tameable;
++import org.bukkit.entity.ThrownExpBottle;
++import org.bukkit.entity.ThrownPotion;
+ import org.bukkit.entity.TippedArrow;
++import org.bukkit.entity.Vex;
++import org.bukkit.entity.Villager;
++import org.bukkit.entity.Vindicator;
++import org.bukkit.entity.Weather;
++import org.bukkit.entity.Witch;
++import org.bukkit.entity.Wither;
++import org.bukkit.entity.WitherSkeleton;
++import org.bukkit.entity.WitherSkull;
++import org.bukkit.entity.Wolf;
++import org.bukkit.entity.Zombie;
++import org.bukkit.entity.ZombieHorse;
++import org.bukkit.entity.ZombieVillager;
++import org.bukkit.entity.minecart.CommandMinecart;
++import org.bukkit.entity.minecart.ExplosiveMinecart;
++import org.bukkit.entity.minecart.HopperMinecart;
++import org.bukkit.entity.minecart.PoweredMinecart;
++import org.bukkit.entity.minecart.SpawnerMinecart;
++import org.bukkit.entity.minecart.StorageMinecart;
+ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+ import org.bukkit.event.world.SpawnChangeEvent;
+ import org.bukkit.generator.BlockPopulator;
+@@ -964,8 +1133,308 @@ public class CraftWorld implements World {
+         return this.spawnFallingBlock(location, Material.getMaterial(blockId), blockData);
+     }
+ 
+-    public net.minecraft.entity.Entity createEntity(Location param1, Class <? extends Entity > param2) throws IllegalArgumentException {
++    // Paper - fix decompile start
++    // FF doesn't even decompile this method at all, so we just patch the whole thing back in :\
++    public net.minecraft.entity.Entity createEntity(Location location, Class <? extends Entity> clazz) throws IllegalArgumentException {
++        if (location == null || clazz == null) {
++            throw new IllegalArgumentException("Location or entity class cannot be null");
++        }
++
++        net.minecraft.entity.Entity entity = null;
++
++        double x = location.getX();
++        double y = location.getY();
++        double z = location.getZ();
++        float pitch = location.getPitch();
++        float yaw = location.getYaw();
++
++        // order is important for some of these
++        if (Boat.class.isAssignableFrom(clazz)) {
++            entity = new EntityBoat(world, x, y, z);
++            entity.setLocationAndAngles(x, y, z, yaw, pitch);
++        } else if (FallingBlock.class.isAssignableFrom(clazz)) {
++            entity = new EntityFallingBlock(world, x, y, z, world.getBlockState(new BlockPos(x, y, z)));
++        } else if (Projectile.class.isAssignableFrom(clazz)) {
++            if (Snowball.class.isAssignableFrom(clazz)) {
++                entity = new EntitySnowball(world, x, y, z);
++            } else if (Egg.class.isAssignableFrom(clazz)) {
++                entity = new EntityEgg(world, x, y, z);
++            } else if (Arrow.class.isAssignableFrom(clazz)) {
++                if (TippedArrow.class.isAssignableFrom(clazz)) {
++                    entity = new EntityTippedArrow(world);
++                    ((EntityTippedArrow) entity).setType(CraftPotionUtil.fromBukkit(new PotionData(PotionType.WATER, false, false)));
++                } else if (SpectralArrow.class.isAssignableFrom(clazz)) {
++                    entity = new EntitySpectralArrow(world);
++                } else {
++                    entity = new EntityTippedArrow(world);
++                }
++                entity.setLocationAndAngles(x, y, z, 0, 0);
++            } else if (ThrownExpBottle.class.isAssignableFrom(clazz)) {
++                entity = new EntityExpBottle(world);
++                entity.setLocationAndAngles(x, y, z, 0, 0);
++            } else if (EnderPearl.class.isAssignableFrom(clazz)) {
++                entity = new EntityEnderPearl(world);
++                entity.setLocationAndAngles(x, y, z, 0, 0);
++            } else if (ThrownPotion.class.isAssignableFrom(clazz)) {
++                if (LingeringPotion.class.isAssignableFrom(clazz)) {
++                    entity = new EntityPotion(world, x, y, z, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.LINGERING_POTION, 1)));
++                } else {
++                    entity = new EntityPotion(world, x, y, z, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.SPLASH_POTION, 1)));
++                }
++            } else if (Fireball.class.isAssignableFrom(clazz)) {
++                if (SmallFireball.class.isAssignableFrom(clazz)) {
++                    entity = new EntitySmallFireball(world);
++                } else if (WitherSkull.class.isAssignableFrom(clazz)) {
++                    entity = new EntityWitherSkull(world);
++                } else if (DragonFireball.class.isAssignableFrom(clazz)) {
++                    entity = new EntityDragonFireball(world);
++                } else {
++                    entity = new EntityLargeFireball(world);
++                }
++                entity.setLocationAndAngles(x, y, z, yaw, pitch);
++                Vector direction = location.getDirection().multiply(10);
++                ((EntityFireball) entity).setDirection(direction.getX(), direction.getY(), direction.getZ());
++            } else if (ShulkerBullet.class.isAssignableFrom(clazz)) {
++                entity = new EntityShulkerBullet(world);
++                entity.setLocationAndAngles(x, y, z, yaw, pitch);
++            } else if (LlamaSpit.class.isAssignableFrom(clazz)) {
++                entity = new EntityLlamaSpit(world);
++                entity.setLocationAndAngles(x, y, z, yaw, pitch);
++            }
++        } else if (Minecart.class.isAssignableFrom(clazz)) {
++            if (PoweredMinecart.class.isAssignableFrom(clazz)) {
++                entity = new EntityMinecartFurnace(world, x, y, z);
++            } else if (StorageMinecart.class.isAssignableFrom(clazz)) {
++                entity = new EntityMinecartChest(world, x, y, z);
++            } else if (ExplosiveMinecart.class.isAssignableFrom(clazz)) {
++                entity = new EntityMinecartTNT(world, x, y, z);
++            } else if (HopperMinecart.class.isAssignableFrom(clazz)) {
++                entity = new EntityMinecartHopper(world, x, y, z);
++            } else if (SpawnerMinecart.class.isAssignableFrom(clazz)) {
++                entity = new EntityMinecartMobSpawner(world, x, y, z);
++            } else if (CommandMinecart.class.isAssignableFrom(clazz)) {
++                entity = new EntityMinecartCommandBlock(world, x, y, z);
++            } else { // Default to rideable minecart for pre-rideable compatibility
++                entity = new EntityMinecartEmpty(world, x, y, z);
++            }
++        } else if (EnderSignal.class.isAssignableFrom(clazz)) {
++            entity = new EntityEnderEye(world, x, y, z);
++        } else if (EnderCrystal.class.isAssignableFrom(clazz)) {
++            entity = new EntityEnderCrystal(world);
++            entity.setLocationAndAngles(x, y, z, 0, 0);
++        } else if (LivingEntity.class.isAssignableFrom(clazz)) {
++            if (Chicken.class.isAssignableFrom(clazz)) {
++                entity = new EntityChicken(world);
++            } else if (Cow.class.isAssignableFrom(clazz)) {
++                if (MushroomCow.class.isAssignableFrom(clazz)) {
++                    entity = new EntityMooshroom(world);
++                } else {
++                    entity = new EntityCow(world);
++                }
++            } else if (Golem.class.isAssignableFrom(clazz)) {
++                if (Snowman.class.isAssignableFrom(clazz)) {
++                    entity = new EntitySnowman(world);
++                } else if (IronGolem.class.isAssignableFrom(clazz)) {
++                    entity = new EntityIronGolem(world);
++                } else if (Shulker.class.isAssignableFrom(clazz)) {
++                    entity = new EntityShulker(world);
++                }
++            } else if (Creeper.class.isAssignableFrom(clazz)) {
++                entity = new EntityCreeper(world);
++            } else if (Ghast.class.isAssignableFrom(clazz)) {
++                entity = new EntityGhast(world);
++            } else if (Pig.class.isAssignableFrom(clazz)) {
++                entity = new EntityPig(world);
++            } else if (Player.class.isAssignableFrom(clazz)) {
++                // need a net server handler for this one
++            } else if (Sheep.class.isAssignableFrom(clazz)) {
++                entity = new EntitySheep(world);
++            } else if (AbstractHorse.class.isAssignableFrom(clazz)) {
++                if (ChestedHorse.class.isAssignableFrom(clazz)) {
++                    if (Donkey.class.isAssignableFrom(clazz)) {
++                        entity = new EntityDonkey(world);
++                    } else if (Mule.class.isAssignableFrom(clazz)) {
++                        entity = new EntityMule(world);
++                    } else if (Llama.class.isAssignableFrom(clazz)) {
++                        entity = new EntityLlama(world);
++                    }
++                } else if (SkeletonHorse.class.isAssignableFrom(clazz)) {
++                    entity = new EntitySkeletonHorse(world);
++                } else if (ZombieHorse.class.isAssignableFrom(clazz)) {
++                    entity = new EntityZombieHorse(world);
++                } else {
++                    entity = new EntityHorse(world);
++                }
++            } else if (Skeleton.class.isAssignableFrom(clazz)) {
++                if (Stray.class.isAssignableFrom(clazz)){
++                    entity = new EntityStray(world);
++                } else if (WitherSkeleton.class.isAssignableFrom(clazz)) {
++                    entity = new EntityWitherSkeleton(world);
++                } else {
++                    entity = new EntitySkeleton(world);
++                }
++            } else if (Slime.class.isAssignableFrom(clazz)) {
++                if (MagmaCube.class.isAssignableFrom(clazz)) {
++                    entity = new EntityMagmaCube(world);
++                } else {
++                    entity = new EntitySlime(world);
++                }
++            } else if (Spider.class.isAssignableFrom(clazz)) {
++                if (CaveSpider.class.isAssignableFrom(clazz)) {
++                    entity = new EntityCaveSpider(world);
++                } else {
++                    entity = new EntitySpider(world);
++                }
++            } else if (Squid.class.isAssignableFrom(clazz)) {
++                entity = new EntitySquid(world);
++            } else if (Tameable.class.isAssignableFrom(clazz)) {
++                if (Wolf.class.isAssignableFrom(clazz)) {
++                    entity = new EntityWolf(world);
++                } else if (Ocelot.class.isAssignableFrom(clazz)) {
++                    entity = new EntityOcelot(world);
++                }
++            } else if (PigZombie.class.isAssignableFrom(clazz)) {
++                entity = new EntityPigZombie(world);
++            } else if (Zombie.class.isAssignableFrom(clazz)) {
++                if (Husk.class.isAssignableFrom(clazz)) {
++                    entity = new EntityHusk(world);
++                } else if (ZombieVillager.class.isAssignableFrom(clazz)) {
++                    entity = new EntityZombieVillager(world);
++                } else {
++                    entity = new EntityZombie(world);
++                }
++            } else if (Giant.class.isAssignableFrom(clazz)) {
++                entity = new EntityGiantZombie(world);
++            } else if (Silverfish.class.isAssignableFrom(clazz)) {
++                entity = new EntitySilverfish(world);
++            } else if (Enderman.class.isAssignableFrom(clazz)) {
++                entity = new EntityEnderman(world);
++            } else if (Blaze.class.isAssignableFrom(clazz)) {
++                entity = new EntityBlaze(world);
++            } else if (Villager.class.isAssignableFrom(clazz)) {
++                entity = new EntityVillager(world);
++            } else if (Witch.class.isAssignableFrom(clazz)) {
++                entity = new EntityWitch(world);
++            } else if (Wither.class.isAssignableFrom(clazz)) {
++                entity = new EntityWither(world);
++            } else if (ComplexLivingEntity.class.isAssignableFrom(clazz)) {
++                if (EnderDragon.class.isAssignableFrom(clazz)) {
++                    entity = new EntityDragon(world);
++                }
++            } else if (Ambient.class.isAssignableFrom(clazz)) {
++                if (Bat.class.isAssignableFrom(clazz)) {
++                    entity = new EntityBat(world);
++                }
++            } else if (Rabbit.class.isAssignableFrom(clazz)) {
++                entity = new EntityRabbit(world);
++            } else if (Endermite.class.isAssignableFrom(clazz)) {
++                entity = new EntityEndermite(world);
++            } else if (Guardian.class.isAssignableFrom(clazz)) {
++                if (ElderGuardian.class.isAssignableFrom(clazz)){
++                    entity = new EntityElderGuardian(world);
++                } else {
++                    entity = new EntityGuardian(world);
++                }
++            } else if (ArmorStand.class.isAssignableFrom(clazz)) {
++                entity = new EntityArmorStand(world, x, y, z);
++            } else if (PolarBear.class.isAssignableFrom(clazz)) {
++                entity = new EntityPolarBear(world);
++            } else if (Evoker.class.isAssignableFrom(clazz)) {
++                entity = new EntityEvoker(world);
++            } else if (Vex.class.isAssignableFrom(clazz)) {
++                entity = new EntityVex(world);
++            } else if (Vindicator.class.isAssignableFrom(clazz)) {
++                entity = new EntityVindicator(world);
++            }
++
++            if (entity != null) {
++                entity.setPositionAndRotation(x, y, z, yaw, pitch);
++            }
++        } else if (Hanging.class.isAssignableFrom(clazz)) {
++            Block block = getBlockAt(location);
++            BlockFace face = BlockFace.SELF;
++
++            int width = 16; // 1 full block, also painting smallest size.
++            int height = 16; // 1 full block, also painting smallest size.
++
++            if (ItemFrame.class.isAssignableFrom(clazz)) {
++                width = 12;
++                height = 12;
++            } else if (LeashHitch.class.isAssignableFrom(clazz)) {
++                width = 9;
++                height = 9;
++            }
++
++            BlockFace[] faces = new BlockFace[]{BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
++            final BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
++            for (BlockFace dir : faces) {
++                net.minecraft.block.Block nmsBlock = CraftMagicNumbers.getBlock(block.getRelative(dir));
++                if (nmsBlock.getDefaultState().getMaterial().isSolid() || BlockRedstoneDiode.isDiode(nmsBlock.getDefaultState())) {
++                    boolean taken = false;
++                    AxisAlignedBB bb = EntityHanging.calculateBoundingBox(null, pos, CraftBlock.blockFaceToNotch(dir).opposite(), width, height);
++                    List<net.minecraft.entity.Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, bb);
++                    for (Iterator<net.minecraft.entity.Entity> it = list.iterator(); !taken && it.hasNext();) {
++                        net.minecraft.entity.Entity e = it.next();
++                        if (e instanceof EntityHanging) {
++                            taken = true; // Hanging entities do not like hanging entities which intersect them.
++                        }
++                    }
++
++                    if (!taken) {
++                        face = dir;
++                        break;
++                    }
++                }
++            }
++
++            if (LeashHitch.class.isAssignableFrom(clazz)) {
++                entity = new EntityLeashKnot(world, new BlockPos((int) x, (int) y, (int) z));
++                entity.forceSpawn = true;
++            } else {
++                // No valid face found
++                Preconditions.checkArgument(face != BlockFace.SELF, "Cannot spawn hanging entity for %s at %s (no free face)", clazz.getName(), location);
++
++                EnumFacing dir = CraftBlock.blockFaceToNotch(face).opposite();
++                if (Painting.class.isAssignableFrom(clazz)) {
++                    entity = new EntityPainting(world, new BlockPos((int) x, (int) y, (int) z), dir);
++                } else if (ItemFrame.class.isAssignableFrom(clazz)) {
++                    entity = new EntityItemFrame(world, new BlockPos((int) x, (int) y, (int) z), dir);
++                }
++            }
++
++            if (entity != null && !((EntityHanging) entity).onValidSurface()) {
++                throw new IllegalArgumentException("Cannot spawn hanging entity for " + clazz.getName() + " at " + location);
++            }
++        } else if (TNTPrimed.class.isAssignableFrom(clazz)) {
++            entity = new EntityTNTPrimed(world, x, y, z, null);
++        } else if (ExperienceOrb.class.isAssignableFrom(clazz)) {
++            entity = new EntityXPOrb(world, x, y, z, 0);
++        } else if (Weather.class.isAssignableFrom(clazz)) {
++            // not sure what this can do
++            if (LightningStrike.class.isAssignableFrom(clazz)) {
++                entity = new EntityLightningBolt(world, x, y, z, false);
++                // what is this, I don't even
++            }
++        } else if (Firework.class.isAssignableFrom(clazz)) {
++            entity = new EntityFireworkRocket(world, x, y, z, net.minecraft.item.ItemStack.EMPTY);
++        } else if (AreaEffectCloud.class.isAssignableFrom(clazz)) {
++            entity = new EntityAreaEffectCloud(world, x, y, z);
++        } else if (EvokerFangs.class.isAssignableFrom(clazz)) {
++            entity = new EntityEvokerFangs(world, x, y, z, (float) Math.toRadians(yaw), 0, null);
++        }
++
++        if (entity != null) {
++            // Spigot start
++            if (entity instanceof EntityOcelot) {
++                ((EntityOcelot) entity).spawnBonus = false;
++            }
++            // Spigot end
++            return entity;
++        }
++
++        throw new IllegalArgumentException("Cannot spawn an entity for " + clazz.getName());
+     }
++    // Paper - fix decompile end
+ 
+     public <T extends Entity> T addEntity(net.minecraft.entity.Entity entity, SpawnReason reason) throws IllegalArgumentException {
+         Preconditions.checkArgument(entity != null, "Cannot spawn null entity");
+-- 
+2.12.1
+

@@ -1,0 +1,48 @@
+From cb75f435c500541085c62133b2766844a863d855 Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Mon, 3 Apr 2017 02:40:25 -0500
+Subject: [PATCH] Last changes to get it to compile
+
+
+diff --git a/src/main/java/net/minecraft/block/BlockSapling.java b/src/main/java/net/minecraft/block/BlockSapling.java
+index 86f7b7f..a0d80fa 100644
+--- a/src/main/java/net/minecraft/block/BlockSapling.java
++++ b/src/main/java/net/minecraft/block/BlockSapling.java
+@@ -62,7 +62,7 @@ public class BlockSapling extends BlockBush implements IGrowable {
+                 worldIn.captureTreeGeneration = false;
+ 
+                 if (worldIn.capturedBlockStates.size() > 0) {
+-                    TreeType treeType = treeType;
++                    TreeType treeType = BlockSapling.treeType; // Paper - fix decompile
+                     treeType = null;
+                     Location location = new Location(worldIn.getWorld(), (double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
+                     List<BlockState> blocks = (List)worldIn.capturedBlockStates.clone();
+@@ -261,4 +261,4 @@ public class BlockSapling extends BlockBush implements IGrowable {
+     protected BlockStateContainer createBlockState() {
+         return new BlockStateContainer(this, new IProperty[] {TYPE, STAGE});
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/spigotmc/SneakyThrow.java b/src/main/java/org/spigotmc/SneakyThrow.java
+index 15a88b5..b6c227a 100644
+--- a/src/main/java/org/spigotmc/SneakyThrow.java
++++ b/src/main/java/org/spigotmc/SneakyThrow.java
+@@ -2,10 +2,10 @@ package org.spigotmc;
+ 
+ public class SneakyThrow {
+     public static void sneaky(Throwable t) {
+-        throw(RuntimeException)superSneaky(t);
++        throw SneakyThrow.<RuntimeException>superSneaky(t); // Paper - fix decompile
+     }
+ 
+     private static <T extends Throwable> T superSneaky(Throwable t) throws T {
+-        throw t;
++        throw (T) t; // Paper - fix decompile
+     }
+-}
+\ No newline at end of file
++}
+-- 
+2.12.1
+

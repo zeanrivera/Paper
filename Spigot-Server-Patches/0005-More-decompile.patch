@@ -1,0 +1,89 @@
+From 42ff4b3a41c342372eb6ac206c22f13d7698e4d7 Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Sun, 2 Apr 2017 23:18:59 -0500
+Subject: [PATCH] More decompile
+
+
+diff --git a/src/main/java/net/minecraft/block/properties/PropertyEnum.java b/src/main/java/net/minecraft/block/properties/PropertyEnum.java
+index eeaf3eb..e9b423c 100644
+--- a/src/main/java/net/minecraft/block/properties/PropertyEnum.java
++++ b/src/main/java/net/minecraft/block/properties/PropertyEnum.java
+@@ -26,7 +26,7 @@ public class PropertyEnum<T extends Enum<T> & IStringSerializable> extends Prope
+                 throw new IllegalArgumentException("Multiple values have the same name \'" + var6 + "\'");
+             }
+ 
+-            this.nameToValue.put(var6, var5);
++            this.nameToValue.put(var6, (T) var5); // Paper - fix decompile
+         }
+     }
+ 
+@@ -87,4 +87,4 @@ public class PropertyEnum<T extends Enum<T> & IStringSerializable> extends Prope
+     public static <T extends Enum<T> & IStringSerializable> PropertyEnum<T> create(String name, Class<T> clazz, Collection<T> values) {
+         return new PropertyEnum(name, clazz, values);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/command/CommandHandler.java b/src/main/java/net/minecraft/command/CommandHandler.java
+index 8cd8d28..d5336cb 100644
+--- a/src/main/java/net/minecraft/command/CommandHandler.java
++++ b/src/main/java/net/minecraft/command/CommandHandler.java
+@@ -53,7 +53,7 @@ public abstract class CommandHandler implements ICommandManager {
+                 sender.sendMessage(var15);
+             } else if (var5.checkPermission(this.getServer(), sender)) {
+                 if (var7 > -1) {
+-                    List var16 = EntitySelector.matchEntities(sender, var3[var7], Entity.class);
++                    List<Entity> var16 = EntitySelector.matchEntities(sender, var3[var7], Entity.class); // Paper - fix decompile
+                     String var9 = var3[var7];
+                     sender.setCommandStat(CommandResultStats.Type.AFFECTED_ENTITIES, var16.size());
+ 
+@@ -202,4 +202,4 @@ public abstract class CommandHandler implements ICommandManager {
+             return -1;
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
+index 1176659..710c5d8 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
+@@ -66,7 +66,7 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
+                 return false;
+             } else {
+                 Collections.sort(list, this.theNearestAttackableTargetSorter);
+-                this.targetEntity = (EntityLivingBase)list.get(0);
++                this.targetEntity = (T)list.get(0); // Paper - fix decompile
+                 return true;
+             }
+         } else {
+@@ -126,4 +126,4 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
+             return this.compare(object, object1);
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index ae8762d..3501d83 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -768,11 +768,13 @@ public class DedicatedServer extends MinecraftServer implements IServer {
+         }
+     }
+ 
++    /* // Paper - fix decompile
+     public PlayerList getPlayerList() {
+         return this.getPlayerList();
+     }
++    // Paper - fix decompile */
+ 
+     public PropertyManager getPropertyManager() {
+         return this.settings;
+     }
+-}
+\ No newline at end of file
++}
+-- 
+2.12.1
+

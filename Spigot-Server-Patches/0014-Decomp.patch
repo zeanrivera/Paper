@@ -1,0 +1,403 @@
+From 9653db210048dc193c25153d2677c51a784a0a50 Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Mon, 3 Apr 2017 01:12:29 -0500
+Subject: [PATCH] Decomp
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java b/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
+index fd72e1c..699f9fd 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
+@@ -129,7 +129,7 @@ public class CraftStatistic {
+     }
+ 
+     static {
+-        ImmutableMap<String, Achievement> specialCases = ImmutableMap.builder().put("achievement.buildWorkBench", Achievement.BUILD_WORKBENCH).put("achievement.diamonds", Achievement.GET_DIAMONDS).put("achievement.portal", Achievement.NETHER_PORTAL).put("achievement.ghast", Achievement.GHAST_RETURN).put("achievement.theEnd", Achievement.END_PORTAL).put("achievement.theEnd2", Achievement.THE_END).put("achievement.blazeRod", Achievement.GET_BLAZE_ROD).put("achievement.potion", Achievement.BREW_POTION).build();
++        ImmutableMap<String, Achievement> specialCases = ImmutableMap.<String, Achievement>builder().put("achievement.buildWorkBench", Achievement.BUILD_WORKBENCH).put("achievement.diamonds", Achievement.GET_DIAMONDS).put("achievement.portal", Achievement.NETHER_PORTAL).put("achievement.ghast", Achievement.GHAST_RETURN).put("achievement.theEnd", Achievement.END_PORTAL).put("achievement.theEnd2", Achievement.THE_END).put("achievement.blazeRod", Achievement.GET_BLAZE_ROD).put("achievement.potion", Achievement.BREW_POTION).build(); // Paper - fix decompile
+         Builder<String, Statistic> statisticBuilder = ImmutableBiMap.<String, Statistic>builder();
+         Builder<String, Achievement> achievementBuilder = ImmutableBiMap.<String, Achievement>builder();
+ 
+@@ -151,4 +151,4 @@ public class CraftStatistic {
+         statistics = statisticBuilder.build();
+         achievements = achievementBuilder.build();
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index f27e7d3..ca0b850 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -489,18 +489,18 @@ public class CraftWorld implements World {
+                 gen = new WorldGenMegaJungle(true, 10, 20, iblockdata1, iblockdata2);
+                 break;
+             case SMALL_JUNGLE:
+-                IBlockState iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
+-                IBlockState iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
++                iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE); // Paper - fix decompile
++                iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)); // Paper - fix decompile
+                 gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, false);
+                 break;
+             case COCOA_TREE:
+-                IBlockState iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
+-                IBlockState iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
++                iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE); // Paper - fix decompile
++                iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)); // Paper - fix decompile
+                 gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, true);
+                 break;
+             case JUNGLE_BUSH:
+-                IBlockState iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
+-                IBlockState iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
++                iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE); // Paper - fix decompile
++                iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)); // Paper - fix decompile
+                 gen = new WorldGenShrub(iblockdata1, iblockdata2);
+                 break;
+             case RED_MUSHROOM:
+@@ -756,7 +756,7 @@ public class CraftWorld implements World {
+ 
+     @Deprecated
+     public <T extends Entity> Collection<T> getEntitiesByClass(Class<T>... classes) {
+-        return this.getEntitiesByClasses(classes);
++        return (Collection<T>) this.getEntitiesByClasses(classes); // Paper - fix decompile
+     }
+ 
+     public <T extends Entity> Collection<T> getEntitiesByClass(Class<T> clazz) {
+@@ -770,7 +770,7 @@ public class CraftWorld implements World {
+                     Class<?> bukkitClass = bukkitEntity.getClass();
+ 
+                     if (clazz.isAssignableFrom(bukkitClass)) {
+-                        list.add(bukkitEntity);
++                        list.add((T) bukkitEntity); // Paper - fix decompile
+                     }
+                 }
+             }
+@@ -1277,4 +1277,4 @@ public class CraftWorld implements World {
+     public Spigot spigot() {
+         return this.spigot;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
+index 1b56735..5de7561 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
+@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
+ 
+ public final class CraftItemFactory implements ItemFactory {
+     static final Color DEFAULT_LEATHER_COLOR = Color.fromRGB(10511680);
+-    static final Collection<String> KNOWN_NBT_ATTRIBUTE_NAMES = ImmutableSet.builder().add("generic.armor").add("generic.armorToughness").add("generic.attackDamage").add("generic.followRange").add("generic.knockbackResistance").add("generic.maxHealth").add("generic.movementSpeed").add("generic.attackSpeed").add("generic.luck").add("horse.jumpStrength").add("zombie.spawnReinforcements").build();
++    static final Collection<String> KNOWN_NBT_ATTRIBUTE_NAMES = ImmutableSet.<String>builder().add("generic.armor").add("generic.armorToughness").add("generic.attackDamage").add("generic.followRange").add("generic.knockbackResistance").add("generic.maxHealth").add("generic.movementSpeed").add("generic.attackSpeed").add("generic.luck").add("horse.jumpStrength").add("zombie.spawnReinforcements").build(); // Paper - fix decompile
+     private static final CraftItemFactory instance = new CraftItemFactory();
+ 
+     public boolean isApplicable(ItemMeta meta, ItemStack itemstack) {
+@@ -153,4 +153,4 @@ public final class CraftItemFactory implements ItemFactory {
+     static {
+         ConfigurationSerialization.registerClass(CraftMetaItem.SerializableMeta.class);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
+index 7c8304b..9e09903 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
+@@ -195,9 +195,9 @@ class CraftMetaItem implements ItemMeta, Repairable {
+                                     while (true) {
+                                         while (true) {
+                                             if (!i.hasNext()) {
+-                                                for (int i = 0; i < nbttaglist.tagCount(); ++i) {
+-                                                    if (nbttaglist.getCompoundTagAt(i) instanceof NBTTagCompound) {
+-                                                        nbtTagCompound = nbttaglist.getCompoundTagAt(i);
++                                                for (int j = 0; j < nbttaglist.tagCount(); ++j) { // Paper - fix decompile
++                                                    if (nbttaglist.getCompoundTagAt(j) instanceof NBTTagCompound) { // Paper - fix decompile
++                                                        nbtTagCompound = nbttaglist.getCompoundTagAt(j); // Paper - fix decompile
+ 
+                                                         if (nbtTagCompound.hasKey(ATTRIBUTES_UUID_HIGH.NBT, 99) && nbtTagCompound.hasKey(ATTRIBUTES_UUID_LOW.NBT, 99) && nbtTagCompound.getTag(ATTRIBUTES_IDENTIFIER.NBT) instanceof NBTTagString && CraftItemFactory.KNOWN_NBT_ATTRIBUTE_NAMES.contains(nbtTagCompound.getString(ATTRIBUTES_IDENTIFIER.NBT)) && nbtTagCompound.getTag(ATTRIBUTES_NAME.NBT) instanceof NBTTagString && !nbtTagCompound.getString(ATTRIBUTES_NAME.NBT).isEmpty() && nbtTagCompound.hasKey(ATTRIBUTES_VALUE.NBT, 99) && nbtTagCompound.hasKey(ATTRIBUTES_TYPE.NBT, 99) && nbtTagCompound.getInteger(ATTRIBUTES_TYPE.NBT) >= 0 && nbtTagCompound.getInteger(ATTRIBUTES_TYPE.NBT) <= 2) {
+                                                             if (save == null) {
+@@ -837,7 +837,7 @@ class CraftMetaItem implements ItemMeta, Repairable {
+     @SerializableAs("ItemMeta")
+     public static class SerializableMeta implements ConfigurationSerializable {
+         static final String TYPE_FIELD = "meta-type";
+-        static final ImmutableMap < Class <? extends CraftMetaItem > , String > classMap = ImmutableMap.builder().put(CraftMetaBanner.class, "BANNER").put(CraftMetaBlockState.class, "TILE_ENTITY").put(CraftMetaBook.class, "BOOK").put(CraftMetaBookSigned.class, "BOOK_SIGNED").put(CraftMetaSkull.class, "SKULL").put(CraftMetaLeatherArmor.class, "LEATHER_ARMOR").put(CraftMetaMap.class, "MAP").put(CraftMetaPotion.class, "POTION").put(CraftMetaEnchantedBook.class, "ENCHANTED").put(CraftMetaFirework.class, "FIREWORK").put(CraftMetaCharge.class, "FIREWORK_EFFECT").put(CraftMetaItem.class, "UNSPECIFIC").build();
++        static final ImmutableMap < Class <? extends CraftMetaItem > , String > classMap = ImmutableMap.<Class <? extends CraftMetaItem > , String>builder().put(CraftMetaBanner.class, "BANNER").put(CraftMetaBlockState.class, "TILE_ENTITY").put(CraftMetaBook.class, "BOOK").put(CraftMetaBookSigned.class, "BOOK_SIGNED").put(CraftMetaSkull.class, "SKULL").put(CraftMetaLeatherArmor.class, "LEATHER_ARMOR").put(CraftMetaMap.class, "MAP").put(CraftMetaPotion.class, "POTION").put(CraftMetaEnchantedBook.class, "ENCHANTED").put(CraftMetaFirework.class, "FIREWORK").put(CraftMetaCharge.class, "FIREWORK_EFFECT").put(CraftMetaItem.class, "UNSPECIFIC").build(); // Paper - fix decompile
+         static final ImmutableMap < String, Constructor <? extends CraftMetaItem >> constructorMap;
+ 
+         public static ItemMeta deserialize(Map<String, Object> map) throws Throwable {
+@@ -906,4 +906,4 @@ class CraftMetaItem implements ItemMeta, Repairable {
+             constructorMap = classConstructorBuilder.build();
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/InventoryWrapper.java b/src/main/java/org/bukkit/craftbukkit/inventory/InventoryWrapper.java
+index bcc9dda..9b4c3c2 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/InventoryWrapper.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/InventoryWrapper.java
+@@ -198,6 +198,6 @@ public class InventoryWrapper implements IInventory {
+     }
+ 
+     public boolean isEmpty() {
+-        return Iterables.any(this.inventory, Predicates.<T>notNull());
++        return Iterables.any(this.inventory, Predicates.notNull()); // Paper - fix decompile
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java b/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
+index cf85282..88408a6 100644
+--- a/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
++++ b/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
+@@ -102,7 +102,7 @@ public final class CraftMapView implements MapView {
+         } else {
+             this.renderers.remove(renderer);
+ 
+-            for (Entry<CraftPlayer, CraftMapCanvas> entry : ((Map)this.canvases.get(renderer)).entrySet()) {
++            for (Entry<CraftPlayer, CraftMapCanvas> entry : (this.canvases.get(renderer)).entrySet()) { // Paper - fix decompile
+                 for (int x = 0; x < 128; ++x) {
+                     for (int y = 0; y < 128; ++y) {
+                         ((CraftMapCanvas)entry.getValue()).setPixel(x, y, (byte) - 1);
+@@ -176,4 +176,4 @@ public final class CraftMapView implements MapView {
+     public void setUnlimitedTracking(boolean unlimited) {
+         this.worldMap.unlimitedTracking = unlimited;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
+index f3f4322..73f8dec 100644
+--- a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
++++ b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
+@@ -10,9 +10,9 @@ import org.bukkit.potion.PotionEffectType;
+ import org.bukkit.potion.PotionType;
+ 
+ public class CraftPotionUtil {
+-    private static final BiMap<PotionType, String> regular = ImmutableBiMap.builder().put(PotionType.UNCRAFTABLE, "empty").put(PotionType.WATER, "water").put(PotionType.MUNDANE, "mundane").put(PotionType.THICK, "thick").put(PotionType.AWKWARD, "awkward").put(PotionType.NIGHT_VISION, "night_vision").put(PotionType.INVISIBILITY, "invisibility").put(PotionType.JUMP, "leaping").put(PotionType.FIRE_RESISTANCE, "fire_resistance").put(PotionType.SPEED, "swiftness").put(PotionType.SLOWNESS, "slowness").put(PotionType.WATER_BREATHING, "water_breathing").put(PotionType.INSTANT_HEAL, "healing").put(PotionType.INSTANT_DAMAGE, "harming").put(PotionType.POISON, "poison").put(PotionType.REGEN, "regeneration").put(PotionType.STRENGTH, "strength").put(PotionType.WEAKNESS, "weakness").put(PotionType.LUCK, "luck").build();
+-    private static final BiMap<PotionType, String> upgradeable = ImmutableBiMap.builder().put(PotionType.JUMP, "strong_leaping").put(PotionType.SPEED, "strong_swiftness").put(PotionType.INSTANT_HEAL, "strong_healing").put(PotionType.INSTANT_DAMAGE, "strong_harming").put(PotionType.POISON, "strong_poison").put(PotionType.REGEN, "strong_regeneration").put(PotionType.STRENGTH, "strong_strength").build();
+-    private static final BiMap<PotionType, String> extendable = ImmutableBiMap.builder().put(PotionType.NIGHT_VISION, "long_night_vision").put(PotionType.INVISIBILITY, "long_invisibility").put(PotionType.JUMP, "long_leaping").put(PotionType.FIRE_RESISTANCE, "long_fire_resistance").put(PotionType.SPEED, "long_swiftness").put(PotionType.SLOWNESS, "long_slowness").put(PotionType.WATER_BREATHING, "long_water_breathing").put(PotionType.POISON, "long_poison").put(PotionType.REGEN, "long_regeneration").put(PotionType.STRENGTH, "long_strength").put(PotionType.WEAKNESS, "long_weakness").build();
++    private static final BiMap<PotionType, String> regular = ImmutableBiMap.<PotionType, String>builder().put(PotionType.UNCRAFTABLE, "empty").put(PotionType.WATER, "water").put(PotionType.MUNDANE, "mundane").put(PotionType.THICK, "thick").put(PotionType.AWKWARD, "awkward").put(PotionType.NIGHT_VISION, "night_vision").put(PotionType.INVISIBILITY, "invisibility").put(PotionType.JUMP, "leaping").put(PotionType.FIRE_RESISTANCE, "fire_resistance").put(PotionType.SPEED, "swiftness").put(PotionType.SLOWNESS, "slowness").put(PotionType.WATER_BREATHING, "water_breathing").put(PotionType.INSTANT_HEAL, "healing").put(PotionType.INSTANT_DAMAGE, "harming").put(PotionType.POISON, "poison").put(PotionType.REGEN, "regeneration").put(PotionType.STRENGTH, "strength").put(PotionType.WEAKNESS, "weakness").put(PotionType.LUCK, "luck").build(); // Paper - fix decompile
++    private static final BiMap<PotionType, String> upgradeable = ImmutableBiMap.<PotionType, String>builder().put(PotionType.JUMP, "strong_leaping").put(PotionType.SPEED, "strong_swiftness").put(PotionType.INSTANT_HEAL, "strong_healing").put(PotionType.INSTANT_DAMAGE, "strong_harming").put(PotionType.POISON, "strong_poison").put(PotionType.REGEN, "strong_regeneration").put(PotionType.STRENGTH, "strong_strength").build(); // Paper - fix decompile
++    private static final BiMap<PotionType, String> extendable = ImmutableBiMap.<PotionType, String>builder().put(PotionType.NIGHT_VISION, "long_night_vision").put(PotionType.INVISIBILITY, "long_invisibility").put(PotionType.JUMP, "long_leaping").put(PotionType.FIRE_RESISTANCE, "long_fire_resistance").put(PotionType.SPEED, "long_swiftness").put(PotionType.SLOWNESS, "long_slowness").put(PotionType.WATER_BREATHING, "long_water_breathing").put(PotionType.POISON, "long_poison").put(PotionType.REGEN, "long_regeneration").put(PotionType.STRENGTH, "long_strength").put(PotionType.WEAKNESS, "long_weakness").build(); // Paper - fix decompile
+ 
+     public static String fromBukkit(PotionData data) {
+         String type;
+@@ -73,4 +73,4 @@ public class CraftPotionUtil {
+         PotionEffectType typeV = PotionEffectType.getById(Potion.getIdFromPotion(mobEffect));
+         return typeV.equals(type);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java b/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
+index 052d37a..af05caa 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
+@@ -111,7 +111,13 @@ public final class AsynchronousExecutor<P, T, C, E extends Throwable> {
+         Queue<AsynchronousExecutor<P, T, C, E>.Task> finished = this.finished;
+ 
+         while (!finished.isEmpty()) {
+-            ((AsynchronousExecutor.Task)finished.poll()).finish();
++            // Paper - fix decompile start
++            try {
++                ((Task)finished.poll()).finish();
++            } catch (Throwable throwable) {
++                throw (E) throwable;
++            }
++            // Paper - fix decompile end
+         }
+     }
+ 
+@@ -215,7 +221,7 @@ public final class AsynchronousExecutor<P, T, C, E extends Throwable> {
+             try {
+                 this.object = AsynchronousExecutor.this.provider.callStage1(this.parameter);
+             } catch (Throwable var2) {
+-                this.t = var2;
++                this.t = (E) var2; // Paper - fix decompile
+             }
+         }
+ 
+@@ -223,7 +229,7 @@ public final class AsynchronousExecutor<P, T, C, E extends Throwable> {
+             this.initSync();
+ 
+             if (this.callbacks.isEmpty()) {
+-                this.callbacks.add(this);
++                this.callbacks.add((C) this); // Paper - fix decompile
+             }
+ 
+             this.finish();
+@@ -277,4 +283,4 @@ public final class AsynchronousExecutor<P, T, C, E extends Throwable> {
+             }
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java b/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java
+index 0e26ca2..38ea919 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java
+@@ -87,7 +87,7 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
+         if (innerKeys == null) {
+             this.keys[index] = innerKeys = new long[8];
+             Arrays.fill(innerKeys, Long.MIN_VALUE);
+-            this.values[index] = innerValues = (Object[])(new Object[8]);
++            this.values[index] = innerValues = (V[])(new Object[8]); // Paper - fix decompile
+             innerKeys[0] = key;
+             innerValues[0] = value;
+             ++this.size;
+@@ -113,8 +113,8 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
+             long[] var10;
+             this.keys[index] = var10 = Arrays.copyOf(innerKeys, i << 1);
+             Arrays.fill(var10, i, var10.length, Long.MIN_VALUE);
+-            Object[] var12;
+-            this.values[index] = var12 = Arrays.copyOf(innerValues, i << 1);
++            Object[] var12 = Arrays.copyOf(innerValues, i << 1); // Paper - fix decompile
++            this.values[index] = (V[]) var12; // Paper - fix decompile
+             var10[i] = key;
+             var12[i] = value;
+             ++this.size;
+@@ -155,7 +155,7 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
+ 
+     public void putAll(Map <? extends Long, ? extends V > map) {
+         for (java.util.Map.Entry entry : map.entrySet()) {
+-            this.put(((Long)entry.getKey()).longValue(), entry.getValue());
++            this.put(((Long)entry.getKey()).longValue(), (V) entry.getValue()); // Paper - fix decompile
+         }
+     }
+ 
+@@ -206,7 +206,7 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
+ 
+     private void initialize() {
+         this.keys = new long[4096][];
+-        this.values = (Object[][])(new Object[4096][]);
++        this.values = (V[][])(new Object[4096][]); // Paper - fix decompile
+     }
+ 
+     private long keyIndex(long key) {
+@@ -239,7 +239,7 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
+ 
+         while (true) {
+             long key = inputStream.readLong();
+-            V value = inputStream.readObject();
++            V value = (V) inputStream.readObject(); // Paper - fix decompile
+ 
+             if (key == Long.MIN_VALUE && value == null) {
+                 return;
+@@ -329,7 +329,7 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
+         }
+ 
+         public boolean contains(Object value) {
+-            return LongObjectHashMap.this.containsValue(value);
++            return LongObjectHashMap.this.containsValue((V) value); // Paper - fix decompile
+         }
+ 
+         public Iterator<V> iterator() {
+@@ -402,4 +402,4 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
+             }
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/UnsafeList.java b/src/main/java/org/bukkit/craftbukkit/util/UnsafeList.java
+index ab46a3f..40354cd 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/UnsafeList.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/UnsafeList.java
+@@ -54,7 +54,7 @@ public class UnsafeList<E> extends AbstractList<E> implements List<E>, RandomAcc
+ 
+     public E set(int index, E element) {
+         this.rangeCheck(index);
+-        E old = this.data[index];
++        E old = (E) this.data[index]; // Paper - fix decompile
+         this.data[index] = element;
+         return old;
+     }
+@@ -74,7 +74,7 @@ public class UnsafeList<E> extends AbstractList<E> implements List<E>, RandomAcc
+ 
+     public E remove(int index) {
+         this.rangeCheck(index);
+-        E old = this.data[index];
++        E old = (E) this.data[index]; // Paper - fix decompile
+         int movedCount = this.size - index - 1;
+ 
+         if (movedCount > 0) {
+@@ -271,4 +271,4 @@ public class UnsafeList<E> extends AbstractList<E> implements List<E>, RandomAcc
+             }
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/WeakCollection.java b/src/main/java/org/bukkit/craftbukkit/util/WeakCollection.java
+index 56b478a..bc02346 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/WeakCollection.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/WeakCollection.java
+@@ -90,7 +90,7 @@ public final class WeakCollection<T> implements Collection<T> {
+                 if (!this.hasNext()) {
+                     throw new NoSuchElementException("No more elements");
+                 } else {
+-                    T value = this.value;
++                    T value = (T) this.value; // Paper - fix decompile
+                     this.value = WeakCollection.NO_VALUE;
+                     return value;
+                 }
+@@ -178,4 +178,4 @@ public final class WeakCollection<T> implements Collection<T> {
+ 
+         return collection;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
+index c050327..ecf780a 100644
+--- a/src/main/java/org/spigotmc/ActivationRange.java
++++ b/src/main/java/org/spigotmc/ActivationRange.java
+@@ -76,7 +76,7 @@ public class ActivationRange {
+     }
+ 
+     private static void activateChunkEntities(Chunk chunk) {
+-        List[] var1 = chunk.entityLists;
++        List<Entity>[] var1 = chunk.entityLists; // Paper - fix decompile
+         int var2 = var1.length;
+ 
+         for (int var3 = 0; var3 < var2; ++var3) {
+@@ -194,4 +194,4 @@ public class ActivationRange {
+             return true;
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
+index a25000c..3b2896e 100644
+--- a/src/main/java/org/spigotmc/SpigotConfig.java
++++ b/src/main/java/org/spigotmc/SpigotConfig.java
+@@ -250,7 +250,7 @@ public class SpigotConfig {
+     }
+ 
+     private static void spamExclusions() {
+-        spamExclusions = getList("commands.spam-exclusions", Arrays.<T>asList(new String[] {"/skill"}));
++        spamExclusions = getList("commands.spam-exclusions", Arrays.asList(new String[] {"/skill"})); // Paper - fix decompile
+     }
+ 
+     private static void silentCommandBlocks() {
+@@ -267,7 +267,7 @@ public class SpigotConfig {
+             config.set("replace-commands", (Object)null);
+         }
+ 
+-        replaceCommands = new HashSet(getList("commands.replace-commands", Arrays.<T>asList(new String[] {"setblock", "summon", "testforblock", "tellraw"})));
++        replaceCommands = new HashSet(getList("commands.replace-commands", Arrays.asList(new String[] {"setblock", "summon", "testforblock", "tellraw"}))); // Paper - fix decompile
+     }
+ 
+     private static void userCacheCap() {
+@@ -319,4 +319,4 @@ public class SpigotConfig {
+     private static void itemDirtyTicks() {
+         itemDirtyTicks = getInt("settings.item-dirty-ticks", 20);
+     }
+-}
+\ No newline at end of file
++}
+-- 
+2.12.1
+

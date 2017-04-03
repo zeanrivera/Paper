@@ -1,0 +1,22 @@
+From 65c1670177d37f1b03c75b21118b3eaa2314cdb5 Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Mon, 3 Apr 2017 02:58:41 -0500
+Subject: [PATCH] Set AtomicIntegerFieldUpdater properly
+
+
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index 325c0fa..dcac639 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -190,7 +190,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+      * 200
+      */
+     private volatile int chatSpamThresholdCount;
+-    private static final AtomicIntegerFieldUpdater chatSpamField = AtomicIntegerFieldUpdater.newUpdater(NetHandlerPlayServer.class, "chatThrottle");
++    private static final AtomicIntegerFieldUpdater chatSpamField = AtomicIntegerFieldUpdater.newUpdater(NetHandlerPlayServer.class, "chatSpamThresholdCount");
+     private int itemDropThreshold;
+     private final IntHashMap<Short> pendingTransactions = new IntHashMap();
+     private double firstGoodX;
+-- 
+2.12.1
+

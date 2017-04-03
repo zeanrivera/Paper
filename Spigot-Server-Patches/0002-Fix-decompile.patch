@@ -1,0 +1,156 @@
+From 2b2130c508dda25853f1395738e091e596fed8f7 Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Sun, 2 Apr 2017 22:52:10 -0500
+Subject: [PATCH] Fix decompile
+
+
+diff --git a/src/main/java/net/minecraft/block/state/BlockStateContainer.java b/src/main/java/net/minecraft/block/state/BlockStateContainer.java
+index 55ce62d..325133b 100644
+--- a/src/main/java/net/minecraft/block/state/BlockStateContainer.java
++++ b/src/main/java/net/minecraft/block/state/BlockStateContainer.java
+@@ -65,7 +65,7 @@ public class BlockStateContainer {
+ 
+         this.properties = ImmutableSortedMap. < String, IProperty<? >> copyOf(var3);
+         LinkedHashMap var11 = Maps.newLinkedHashMap();
+-        ArrayList var12 = Lists.newArrayList();
++        ArrayList<BlockStateContainer.StateImplementation> var12 = Lists.newArrayList(); // Paper - fix decompile
+ 
+         for (List var8 : Cartesian.cartesianProduct(this.getAllowedValues())) {
+             Map var9 = MapPopulator.createMap(this.properties.values(), var8);
+@@ -88,7 +88,7 @@ public class BlockStateContainer {
+             throw new IllegalArgumentException("Block: " + block.getClass() + " has invalidly named property: " + var2);
+         } else {
+             for (Comparable var4 : property.getAllowedValues()) {
+-                String var5 = property.getName(var4);
++                String var5 = property.getName((T) var4); // Paper - fix decompile
+ 
+                 if (!NAME_PATTERN.matcher(var5).matches()) {
+                     throw new IllegalArgumentException("Block: " + block.getClass() + " has property: " + var2 + " with invalidly named value: " + var5);
+@@ -204,7 +204,7 @@ public class BlockStateContainer {
+ 
+                 while (var3.hasNext()) {
+                     Entry var4 = (Entry)var3.next();
+-                    IProperty var5 = (IProperty)var4.getKey();
++                    IProperty<?> var5 = (IProperty)var4.getKey(); // Paper - fix decompile
+ 
+                     for (Comparable var7 : var5.getAllowedValues()) {
+                         if (var7 != var4.getValue()) {
+@@ -369,4 +369,4 @@ public class BlockStateContainer {
+             return this.block.causesSuffocation(this);
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/command/CommandBase.java b/src/main/java/net/minecraft/command/CommandBase.java
+index ceef074..5dae113 100644
+--- a/src/main/java/net/minecraft/command/CommandBase.java
++++ b/src/main/java/net/minecraft/command/CommandBase.java
+@@ -461,7 +461,7 @@ public abstract class CommandBase implements ICommand {
+             }
+         } catch (RuntimeException var7) {
+             try {
+-                Map var2 = getBlockStatePropertyValueMap(p_190794_0_, p_190794_1_);
++                Map<IProperty<?>, Comparable<?>> var2 = getBlockStatePropertyValueMap(p_190794_0_, p_190794_1_); // Paper - fix decompile
+                 IBlockState var3 = p_190794_0_.getDefaultState();
+ 
+                 for (Entry var5 : var2.entrySet()) {
+@@ -489,7 +489,7 @@ public abstract class CommandBase implements ICommand {
+                     }
+                 };
+             } catch (RuntimeException var3) {
+-                final Map var2 = getBlockStatePropertyValueMap(p_190791_0_, p_190791_1_);
++                final Map<IProperty<?>, Comparable<?>> var2 = getBlockStatePropertyValueMap(p_190791_0_, p_190791_1_); // Paper - fix decompile
+                 return new Predicate<IBlockState>() {
+                     public boolean apply(@Nullable IBlockState var1) {
+                         if (var1 != null && p_190791_0_ == var1.getBlock()) {
+@@ -740,4 +740,4 @@ public abstract class CommandBase implements ICommand {
+             return this.isRelative;
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+index 0bfea5d..e4b67c4 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+@@ -253,7 +253,7 @@ public class EntityFishHook extends Entity {
+         }
+ 
+         Entity entity = null;
+-        List list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D));
++        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D)); // Paper - fix decompile
+         double d0 = 0.0D;
+ 
+         for (Entity entity1 : list) {
+@@ -517,4 +517,4 @@ public class EntityFishHook extends Entity {
+         HOOKED_IN_ENTITY,
+         BOBBING;
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index 2020f79..325c0fa 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -745,11 +745,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+     public void setPlayerLocation(double x, double y, double z, float yaw, float pitch, Set<SPacketPlayerPosLook.EnumFlags> relativeSet) {
+         Player player = this.getPlayer();
+         Location from = player.getLocation();
++        /* // Paper - fix decompile start
+         double x = x;
+         double y = y;
+         double z = z;
+         float yaw = yaw;
+         float pitch = pitch;
++        // Paper - fix decompile end */
+ 
+         if (relativeSet.contains(SPacketPlayerPosLook.EnumFlags.X)) {
+             x = x + from.getX();
+@@ -1174,7 +1176,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+ 
+         if (!this.playerEntity.isDead && this.playerEntity.getChatVisibility() != EntityPlayer.EnumChatVisibility.HIDDEN) {
+             this.playerEntity.markPlayerActive();
+-            final String s = packetIn.getMessage();
++            String s = packetIn.getMessage(); // Paper - fix decompile
+             s = StringUtils.normalizeSpace(s);
+ 
+             for (int i = 0; i < s.length(); ++i) {
+@@ -1213,9 +1215,10 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+             } else if (s.isEmpty()) {
+                 LOGGER.warn(this.playerEntity.getName() + " tried to send an empty message");
+             } else if (this.getPlayer().isConversing()) {
++                final String message = s; // Paper - fix decompile
+                 this.serverController.processQueue.add(new Waitable() {
+                     protected Object evaluate() {
+-                        NetHandlerPlayServer.this.getPlayer().acceptConversationInput(s);
++                        NetHandlerPlayServer.this.getPlayer().acceptConversationInput(message); // Paper - fix decompile
+                         return null;
+                     }
+                 });
+@@ -2380,11 +2383,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+                             this.playerEntity.world.setBlockState(blockposition, iblockdata.withProperty(BlockCommandBlock.FACING, enumdirection).withProperty(BlockCommandBlock.CONDITIONAL, Boolean.valueOf(flag2)), 2);
+                             break;
+                         case AUTO:
+-                            IBlockState iblockdata = Blocks.REPEATING_COMMAND_BLOCK.getDefaultState();
++                            iblockdata = Blocks.REPEATING_COMMAND_BLOCK.getDefaultState(); // Paper - fix decompile
+                             this.playerEntity.world.setBlockState(blockposition, iblockdata.withProperty(BlockCommandBlock.FACING, enumdirection).withProperty(BlockCommandBlock.CONDITIONAL, Boolean.valueOf(flag2)), 2);
+                             break;
+                         case REDSTONE:
+-                            IBlockState iblockdata = Blocks.COMMAND_BLOCK.getDefaultState();
++                            iblockdata = Blocks.COMMAND_BLOCK.getDefaultState(); // Paper - fix decompile
+                             this.playerEntity.world.setBlockState(blockposition, iblockdata.withProperty(BlockCommandBlock.FACING, enumdirection).withProperty(BlockCommandBlock.CONDITIONAL, Boolean.valueOf(flag2)), 2);
+                     }
+ 
+@@ -2544,4 +2547,4 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+     public final boolean isDisconnected() {
+         return !this.playerEntity.joining && !this.netManager.isChannelOpen();
+     }
+-}
+\ No newline at end of file
++}
+-- 
+2.12.1
+

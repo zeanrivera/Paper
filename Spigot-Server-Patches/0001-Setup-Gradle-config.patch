@@ -1,12 +1,19 @@
-From 52f2b783097ba1b4c2721579df18cd249e6e7b64 Mon Sep 17 00:00:00 2001
+From 463e7e2714fe1edb1beb4cf529d5a4ba7ea47b4d Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 27 Nov 2016 08:01:04 -0600
 Subject: [PATCH] Setup Gradle config
 
 
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..567609b
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1 @@
++build/
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
-index 0000000..d517961
+index 0000000..69d5499
 --- /dev/null
 +++ b/build.gradle
 @@ -0,0 +1,46 @@
@@ -28,7 +35,7 @@ index 0000000..d517961
 +    compile "org.apache.logging.log4j:log4j-api:2.0-beta9"
 +    compile "org.apache.logging.log4j:log4j-core:2.0-beta9"
 +    compile "io.netty:netty-all:4.0.23.Final"
-+    compile "com.mojang:authlib:1.5.22"
++    compile "com.mojang:authlib:1.5.24"
 +
 +    testCompile "junit:junit:4.12"
 +    testCompile "org.hamcrest:hamcrest-library:1.3"
@@ -64,5 +71,5 @@ index 0000000..5f7e198
 @@ -0,0 +1 @@
 +artifactId = paper
 -- 
-2.10.2
+2.12.1
 
