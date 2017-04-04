@@ -1,12 +1,8 @@
 buildscript {
     repositories {
-        mavenLocal()
         jcenter()
         mavenCentral()
         repositories {
-            maven {
-                url "https://plugins.gradle.org/m2/"
-            }
             maven {
                 url "http://files.minecraftforge.net/maven"
             }
@@ -14,13 +10,13 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.destroystokyo.papergradle:PaperGradle:1.0.5"
-        classpath "gradle.plugin.net.minecrell:gitpatcher:0.8.1"
         classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
 }
 
-apply plugin: "com.destroystokyo.papergradle"
+plugins {
+    id "com.destroystokyo.papergradle" version "1.0.6"
+}
 
 group groupId
 version paperVersion
