@@ -1,11 +1,11 @@
-From 9653db210048dc193c25153d2677c51a784a0a50 Mon Sep 17 00:00:00 2001
+From 6248a8e9ebc689c84039950ae98239ffdc1bf6d1 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Mon, 3 Apr 2017 01:12:29 -0500
 Subject: [PATCH] Decomp
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java b/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
-index fd72e1c..699f9fd 100644
+index 7c51f42..699f9fd 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftStatistic.java
 @@ -129,7 +129,7 @@ public class CraftStatistic {
@@ -17,15 +17,8 @@ index fd72e1c..699f9fd 100644
          Builder<String, Statistic> statisticBuilder = ImmutableBiMap.<String, Statistic>builder();
          Builder<String, Achievement> achievementBuilder = ImmutableBiMap.<String, Achievement>builder();
  
-@@ -151,4 +151,4 @@ public class CraftStatistic {
-         statistics = statisticBuilder.build();
-         achievements = achievementBuilder.build();
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index f27e7d3..ca0b850 100644
+index 2ab583d..ca0b850 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -489,18 +489,18 @@ public class CraftWorld implements World {
@@ -71,15 +64,8 @@ index f27e7d3..ca0b850 100644
                      }
                  }
              }
-@@ -1277,4 +1277,4 @@ public class CraftWorld implements World {
-     public Spigot spigot() {
-         return this.spigot;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
-index 1b56735..5de7561 100644
+index 8329fb0..5de7561 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
 @@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
@@ -91,15 +77,8 @@ index 1b56735..5de7561 100644
      private static final CraftItemFactory instance = new CraftItemFactory();
  
      public boolean isApplicable(ItemMeta meta, ItemStack itemstack) {
-@@ -153,4 +153,4 @@ public final class CraftItemFactory implements ItemFactory {
-     static {
-         ConfigurationSerialization.registerClass(CraftMetaItem.SerializableMeta.class);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
-index 7c8304b..9e09903 100644
+index bfa0b74..9e09903 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 @@ -195,9 +195,9 @@ class CraftMetaItem implements ItemMeta, Repairable {
@@ -124,15 +103,8 @@ index 7c8304b..9e09903 100644
          static final ImmutableMap < String, Constructor <? extends CraftMetaItem >> constructorMap;
  
          public static ItemMeta deserialize(Map<String, Object> map) throws Throwable {
-@@ -906,4 +906,4 @@ class CraftMetaItem implements ItemMeta, Repairable {
-             constructorMap = classConstructorBuilder.build();
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/InventoryWrapper.java b/src/main/java/org/bukkit/craftbukkit/inventory/InventoryWrapper.java
-index bcc9dda..9b4c3c2 100644
+index 80f9b54..9b4c3c2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/InventoryWrapper.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/InventoryWrapper.java
 @@ -198,6 +198,6 @@ public class InventoryWrapper implements IInventory {
@@ -142,11 +114,9 @@ index bcc9dda..9b4c3c2 100644
 -        return Iterables.any(this.inventory, Predicates.<T>notNull());
 +        return Iterables.any(this.inventory, Predicates.notNull()); // Paper - fix decompile
      }
--}
-\ No newline at end of file
-+}
+ }
 diff --git a/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java b/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
-index cf85282..88408a6 100644
+index 0cae17e..88408a6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
 +++ b/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
 @@ -102,7 +102,7 @@ public final class CraftMapView implements MapView {
@@ -158,15 +128,8 @@ index cf85282..88408a6 100644
                  for (int x = 0; x < 128; ++x) {
                      for (int y = 0; y < 128; ++y) {
                          ((CraftMapCanvas)entry.getValue()).setPixel(x, y, (byte) - 1);
-@@ -176,4 +176,4 @@ public final class CraftMapView implements MapView {
-     public void setUnlimitedTracking(boolean unlimited) {
-         this.worldMap.unlimitedTracking = unlimited;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
-index f3f4322..73f8dec 100644
+index 9cb05cc..73f8dec 100644
 --- a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
 +++ b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
 @@ -10,9 +10,9 @@ import org.bukkit.potion.PotionEffectType;
@@ -182,15 +145,8 @@ index f3f4322..73f8dec 100644
  
      public static String fromBukkit(PotionData data) {
          String type;
-@@ -73,4 +73,4 @@ public class CraftPotionUtil {
-         PotionEffectType typeV = PotionEffectType.getById(Potion.getIdFromPotion(mobEffect));
-         return typeV.equals(type);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java b/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
-index 052d37a..af05caa 100644
+index 473e20a..af05caa 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
 @@ -111,7 +111,13 @@ public final class AsynchronousExecutor<P, T, C, E extends Throwable> {
@@ -226,15 +182,8 @@ index 052d37a..af05caa 100644
              }
  
              this.finish();
-@@ -277,4 +283,4 @@ public final class AsynchronousExecutor<P, T, C, E extends Throwable> {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java b/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java
-index 0e26ca2..38ea919 100644
+index 8192758..38ea919 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java
 @@ -87,7 +87,7 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
@@ -293,15 +242,8 @@ index 0e26ca2..38ea919 100644
          }
  
          public Iterator<V> iterator() {
-@@ -402,4 +402,4 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/UnsafeList.java b/src/main/java/org/bukkit/craftbukkit/util/UnsafeList.java
-index ab46a3f..40354cd 100644
+index d592f0b..40354cd 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/UnsafeList.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/UnsafeList.java
 @@ -54,7 +54,7 @@ public class UnsafeList<E> extends AbstractList<E> implements List<E>, RandomAcc
@@ -322,15 +264,8 @@ index ab46a3f..40354cd 100644
          int movedCount = this.size - index - 1;
  
          if (movedCount > 0) {
-@@ -271,4 +271,4 @@ public class UnsafeList<E> extends AbstractList<E> implements List<E>, RandomAcc
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/WeakCollection.java b/src/main/java/org/bukkit/craftbukkit/util/WeakCollection.java
-index 56b478a..bc02346 100644
+index 98f140d..bc02346 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/WeakCollection.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/WeakCollection.java
 @@ -90,7 +90,7 @@ public final class WeakCollection<T> implements Collection<T> {
@@ -342,15 +277,8 @@ index 56b478a..bc02346 100644
                      this.value = WeakCollection.NO_VALUE;
                      return value;
                  }
-@@ -178,4 +178,4 @@ public final class WeakCollection<T> implements Collection<T> {
- 
-         return collection;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
-index c050327..ecf780a 100644
+index a9c4de8..ecf780a 100644
 --- a/src/main/java/org/spigotmc/ActivationRange.java
 +++ b/src/main/java/org/spigotmc/ActivationRange.java
 @@ -76,7 +76,7 @@ public class ActivationRange {
@@ -362,15 +290,8 @@ index c050327..ecf780a 100644
          int var2 = var1.length;
  
          for (int var3 = 0; var3 < var2; ++var3) {
-@@ -194,4 +194,4 @@ public class ActivationRange {
-             return true;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
-index a25000c..3b2896e 100644
+index 17beb7c..3b2896e 100644
 --- a/src/main/java/org/spigotmc/SpigotConfig.java
 +++ b/src/main/java/org/spigotmc/SpigotConfig.java
 @@ -250,7 +250,7 @@ public class SpigotConfig {
@@ -391,13 +312,6 @@ index a25000c..3b2896e 100644
      }
  
      private static void userCacheCap() {
-@@ -319,4 +319,4 @@ public class SpigotConfig {
-     private static void itemDirtyTicks() {
-         itemDirtyTicks = getInt("settings.item-dirty-ticks", 20);
-     }
--}
-\ No newline at end of file
-+}
 -- 
 2.12.1
 

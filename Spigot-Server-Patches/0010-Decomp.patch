@@ -1,11 +1,11 @@
-From 43cbe861f3355e0b591422603359e907e7b94f3e Mon Sep 17 00:00:00 2001
+From a520a73306e46982d95cfa84eb667f53c0fea017 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Mon, 3 Apr 2017 00:18:59 -0500
 Subject: [PATCH] Decomp
 
 
 diff --git a/src/main/java/net/minecraft/block/BlockSponge.java b/src/main/java/net/minecraft/block/BlockSponge.java
-index f538965..7a8f66b 100644
+index 16a581a..7a8f66b 100644
 --- a/src/main/java/net/minecraft/block/BlockSponge.java
 +++ b/src/main/java/net/minecraft/block/BlockSponge.java
 @@ -66,7 +66,7 @@ public class BlockSponge extends Block {
@@ -17,15 +17,8 @@ index f538965..7a8f66b 100644
          var3.add(new Tuple(pos, Integer.valueOf(0)));
          int var5 = 0;
  
-@@ -118,4 +118,4 @@ public class BlockSponge extends Block {
-     protected BlockStateContainer createBlockState() {
-         return new BlockStateContainer(this, new IProperty[] {WET});
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/block/BlockTripWire.java b/src/main/java/net/minecraft/block/BlockTripWire.java
-index f7d03ed..f38bf79 100644
+index 7926624..f38bf79 100644
 --- a/src/main/java/net/minecraft/block/BlockTripWire.java
 +++ b/src/main/java/net/minecraft/block/BlockTripWire.java
 @@ -152,7 +152,7 @@ public class BlockTripWire extends Block {
@@ -37,15 +30,8 @@ index f7d03ed..f38bf79 100644
  
          if (!list.isEmpty()) {
              for (Entity entity : list) {
-@@ -293,4 +293,4 @@ public class BlockTripWire extends Block {
-     protected BlockStateContainer createBlockState() {
-         return new BlockStateContainer(this, new IProperty[] {POWERED, ATTACHED, DISARMED, NORTH, EAST, WEST, SOUTH});
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/command/server/CommandAchievement.java b/src/main/java/net/minecraft/command/server/CommandAchievement.java
-index 4b46b7b..13d70aa 100644
+index 75b1e82..13d70aa 100644
 --- a/src/main/java/net/minecraft/command/server/CommandAchievement.java
 +++ b/src/main/java/net/minecraft/command/server/CommandAchievement.java
 @@ -79,7 +79,7 @@ public class CommandAchievement extends CommandBase {
@@ -72,15 +58,8 @@ index 4b46b7b..13d70aa 100644
  
                                  for (Achievement var12 : var17) {
                                      Achievement var13 = var12;
-@@ -164,4 +164,4 @@ public class CommandAchievement extends CommandBase {
-     public boolean isUsernameIndex(String[] args, int index) {
-         return index == 2;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/command/server/CommandScoreboard.java b/src/main/java/net/minecraft/command/server/CommandScoreboard.java
-index 8481280..e004a45 100644
+index 39adad4..e004a45 100644
 --- a/src/main/java/net/minecraft/command/server/CommandScoreboard.java
 +++ b/src/main/java/net/minecraft/command/server/CommandScoreboard.java
 @@ -238,7 +238,7 @@ public class CommandScoreboard extends CommandBase {
@@ -146,15 +125,8 @@ index 8481280..e004a45 100644
          ArrayList var3 = Lists.newArrayList();
  
          for (ScoreObjective var5 : var2) {
-@@ -1138,4 +1138,4 @@ public class CommandScoreboard extends CommandBase {
-     public boolean isUsernameIndex(String[] args, int index) {
-         return !"players".equalsIgnoreCase(args[0]) ? ("teams".equalsIgnoreCase(args[0]) ? index == 2 : false) : (args.length > 1 && "operation".equalsIgnoreCase(args[1]) ? index == 2 || index == 5 : index == 2);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-index 0517f28..c0bbe47 100644
+index c841f7b..c0bbe47 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 @@ -182,35 +182,35 @@ final class CraftTeam extends CraftScoreboardComponent implements Team {
@@ -202,13 +174,6 @@ index 0517f28..c0bbe47 100644
          switch (visibility) {
              case ALWAYS:
                  return NameTagVisibility.ALWAYS;
-@@ -249,4 +249,4 @@ final class CraftTeam extends CraftScoreboardComponent implements Team {
-             return this.team == other.team || this.team != null && this.team.equals(other.team);
-         }
-     }
--}
-\ No newline at end of file
-+}
 -- 
 2.12.1
 

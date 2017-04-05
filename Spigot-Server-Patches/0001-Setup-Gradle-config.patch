@@ -1,4 +1,4 @@
-From 463e7e2714fe1edb1beb4cf529d5a4ba7ea47b4d Mon Sep 17 00:00:00 2001
+From e523a4b6c84dcec00f7583b27d6f2d39d341767b Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 27 Nov 2016 08:01:04 -0600
 Subject: [PATCH] Setup Gradle config
@@ -13,10 +13,10 @@ index 0000000..567609b
 +build/
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
-index 0000000..69d5499
+index 0000000..9858351
 --- /dev/null
 +++ b/build.gradle
-@@ -0,0 +1,46 @@
+@@ -0,0 +1,51 @@
 +repositories {
 +    maven {
 +        name "minecraft"
@@ -53,9 +53,14 @@ index 0000000..69d5499
 +}
 +
 +shadowJar {
-+    baseName = "paper"
-+    classifier = null
-+    version = paperVersion
++    baseName = "Paper-Server"
++    version = null
++
++    dependencies {
++        exclude(dependency {
++            it.moduleGroup == "junit" || it.moduleGroup == "org.hamcrest"
++        })
++    }
 +
 +    relocate "jline", "org.bukkit.craftbukkit.libs.jline"
 +    relocate "org.ibex", "org.bukkit.craftbukkit.libs.org.ibex"

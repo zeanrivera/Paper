@@ -1,11 +1,11 @@
-From 0714877bb8548d5e2dfa2300c17927e79c8f27b2 Mon Sep 17 00:00:00 2001
+From e520d553b565684f18ff2ca825da7ade9f392907 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 2 Apr 2017 22:59:12 -0500
 Subject: [PATCH] More decompile issues fixed
 
 
 diff --git a/src/main/java/net/minecraft/crash/CrashReport.java b/src/main/java/net/minecraft/crash/CrashReport.java
-index 4deee59..0685d2f 100644
+index d498670..0685d2f 100644
 --- a/src/main/java/net/minecraft/crash/CrashReport.java
 +++ b/src/main/java/net/minecraft/crash/CrashReport.java
 @@ -95,7 +95,7 @@ public class CrashReport {
@@ -26,15 +26,8 @@ index 4deee59..0685d2f 100644
      }
  
      /**
-@@ -343,4 +343,4 @@ public class CrashReport {
- 
-         return crashreport;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityAnimal.java b/src/main/java/net/minecraft/entity/passive/EntityAnimal.java
-index a53114e..f3d8109 100644
+index 1becccc..f3d8109 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityAnimal.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityAnimal.java
 @@ -102,7 +102,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
@@ -46,15 +39,8 @@ index a53114e..f3d8109 100644
          return false;
      }
  
-@@ -178,4 +178,4 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals {
-     public boolean canMateWith(EntityAnimal otherAnimal) {
-         return otherAnimal == this ? false : (otherAnimal.getClass() != this.getClass() ? false : this.isInLove() && otherAnimal.isInLove());
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityChicken.java b/src/main/java/net/minecraft/entity/passive/EntityChicken.java
-index aae3459..80de0e1 100644
+index 78f456f..80de0e1 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityChicken.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityChicken.java
 @@ -178,7 +178,7 @@ public class EntityChicken extends EntityAnimal {
@@ -74,12 +60,10 @@ index aae3459..80de0e1 100644
      public EntityAgeable createChild(EntityAgeable ageable) {
          return this.createChild(ageable);
      }
--}
-\ No newline at end of file
 +    // Paper - fix decompile end */
-+}
+ }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityCow.java b/src/main/java/net/minecraft/entity/passive/EntityCow.java
-index 79fc58b..0e721ae 100644
+index 1ac86d3..0e721ae 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityCow.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityCow.java
 @@ -120,7 +120,9 @@ public class EntityCow extends EntityAnimal {
@@ -90,12 +74,10 @@ index 79fc58b..0e721ae 100644
      public EntityAgeable createChild(EntityAgeable ageable) {
          return this.createChild(ageable);
      }
--}
-\ No newline at end of file
 +    // Paper - fix decompile end */
-+}
+ }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java b/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java
-index a01ebae..7ee8f9d 100644
+index 1a87a69..7ee8f9d 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java
 @@ -88,6 +88,7 @@ public class EntityMooshroom extends EntityCow {
@@ -110,12 +92,10 @@ index a01ebae..7ee8f9d 100644
      public EntityAgeable createChild(EntityAgeable ageable) {
          return this.createChild(ageable);
      }
--}
-\ No newline at end of file
 +    // Paper - fix decompile end */
-+}
+ }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityOcelot.java b/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
-index 570a4a1..dc37736 100644
+index a61d249..dc37736 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
 @@ -100,7 +100,7 @@ public class EntityOcelot extends EntityTameable {
@@ -135,12 +115,10 @@ index 570a4a1..dc37736 100644
      public EntityAgeable createChild(EntityAgeable ageable) {
          return this.createChild(ageable);
      }
--}
-\ No newline at end of file
 +    // Paper - fix decompile end */
-+}
+ }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityPig.java b/src/main/java/net/minecraft/entity/passive/EntityPig.java
-index 6cd3ef7..0ba1dc7 100644
+index b286ce3..0ba1dc7 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityPig.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityPig.java
 @@ -305,7 +305,9 @@ public class EntityPig extends EntityAnimal {
@@ -151,12 +129,10 @@ index 6cd3ef7..0ba1dc7 100644
      public EntityAgeable createChild(EntityAgeable ageable) {
          return this.createChild(ageable);
      }
--}
-\ No newline at end of file
 +    // Paper - fix decompile end */
-+}
+ }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityRabbit.java b/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
-index fb597f6..df3e974 100644
+index 25e42dd..df3e974 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
 @@ -411,9 +411,11 @@ public class EntityRabbit extends EntityAnimal {
@@ -171,15 +147,8 @@ index fb597f6..df3e974 100644
  
      static class AIAvoidEntity<T extends Entity> extends EntityAIAvoidEntity<T> {
          private final EntityRabbit entityInstance;
-@@ -627,4 +629,4 @@ public class EntityRabbit extends EntityAnimal {
-             this.typeData = type;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/passive/EntitySheep.java b/src/main/java/net/minecraft/entity/passive/EntitySheep.java
-index 6a99091..136c2be 100644
+index 26823da..136c2be 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntitySheep.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntitySheep.java
 @@ -341,9 +341,11 @@ public class EntitySheep extends EntityAnimal {
@@ -194,15 +163,8 @@ index 6a99091..136c2be 100644
  
      static {
          DYE_TO_RGB.put(EnumDyeColor.WHITE, new float[] {1.0F, 1.0F, 1.0F});
-@@ -363,4 +365,4 @@ public class EntitySheep extends EntityAnimal {
-         DYE_TO_RGB.put(EnumDyeColor.RED, new float[] {0.6F, 0.2F, 0.2F});
-         DYE_TO_RGB.put(EnumDyeColor.BLACK, new float[] {0.1F, 0.1F, 0.1F});
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-index 0a510e2..14ac417 100644
+index b779e16..14ac417 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 @@ -357,7 +357,7 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
@@ -226,15 +188,8 @@ index 0a510e2..14ac417 100644
  
      static class EmeraldForItems implements EntityVillager.ITradeList {
          public Item buyingItem;
-@@ -1008,4 +1010,4 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityWolf.java b/src/main/java/net/minecraft/entity/passive/EntityWolf.java
-index 526a270..8c91529 100644
+index f8b74e2..8c91529 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityWolf.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityWolf.java
 @@ -491,9 +491,11 @@ public class EntityWolf extends EntityTameable {
@@ -249,15 +204,8 @@ index 526a270..8c91529 100644
  
      class AIAvoidEntity<T extends Entity> extends EntityAIAvoidEntity<T> {
          private final EntityWolf wolf;
-@@ -530,4 +532,4 @@ public class EntityWolf extends EntityTameable {
-             super.updateTask();
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/help/SimpleHelpMap.java b/src/main/java/org/bukkit/craftbukkit/help/SimpleHelpMap.java
-index 8c4e80f..42cbcc1 100644
+index 5546fb8..42cbcc1 100644
 --- a/src/main/java/org/bukkit/craftbukkit/help/SimpleHelpMap.java
 +++ b/src/main/java/org/bukkit/craftbukkit/help/SimpleHelpMap.java
 @@ -41,7 +41,7 @@ public class SimpleHelpMap implements HelpMap {
@@ -269,13 +217,6 @@ index 8c4e80f..42cbcc1 100644
          }
  
          this.defaultTopic = new IndexHelpTopic("Index", (String)null, (String)null, Collections2.filter(this.helpTopics.values(), indexFilter), "Use /help [n] to get page n of help.");
-@@ -197,4 +197,4 @@ public class SimpleHelpMap implements HelpMap {
-             return topic.getName().charAt(0) == 47;
-         }
-     }
--}
-\ No newline at end of file
-+}
 -- 
 2.12.1
 

@@ -1,11 +1,11 @@
-From 45518cfaba8334b6dd718f5312d7bd7643b8604f Mon Sep 17 00:00:00 2001
+From 13c2fc259f56f9dcd876cf82c3146edd0a46e49b Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Mon, 3 Apr 2017 00:28:20 -0500
 Subject: [PATCH] Decomp
 
 
 diff --git a/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java b/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java
-index 8bb7447..b92ec7e 100644
+index e56c037..b92ec7e 100644
 --- a/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java
 +++ b/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java
 @@ -47,7 +47,7 @@ public class SharedMonsterAttributes {
@@ -17,15 +17,8 @@ index 8bb7447..b92ec7e 100644
  
          if (collection != null && !collection.isEmpty()) {
              NBTTagList nbttaglist = new NBTTagList();
-@@ -125,4 +125,4 @@ public class SharedMonsterAttributes {
-             return null;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java b/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
-index 4591440..375cda1 100644
+index c13fcd3..375cda1 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
 @@ -20,7 +20,7 @@ public class EntityAILlamaFollowCaravan extends EntityAIBase {
@@ -37,15 +30,8 @@ index 4591440..375cda1 100644
              EntityLlama var2 = null;
              double var3 = Double.MAX_VALUE;
  
-@@ -128,4 +128,4 @@ public class EntityAILlamaFollowCaravan extends EntityAIBase {
-             return false;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
-index 96550d5..fcb5bfd 100644
+index 3aeb686..fcb5bfd 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
 @@ -83,7 +83,7 @@ public class EntityAIMate extends EntityAIBase {
@@ -57,15 +43,8 @@ index 96550d5..fcb5bfd 100644
          double d0 = Double.MAX_VALUE;
          EntityAnimal entityanimal = null;
  
-@@ -153,4 +153,4 @@ public class EntityAIMate extends EntityAIBase {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityCreeper.java b/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
-index 4b6b812..3254745 100644
+index 5ee552c..3254745 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
 @@ -281,7 +281,7 @@ public class EntityCreeper extends EntityMob {
@@ -77,15 +56,8 @@ index 4b6b812..3254745 100644
  
          if (!collection.isEmpty()) {
              EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
-@@ -317,4 +317,4 @@ public class EntityCreeper extends EntityMob {
-     public void incrementDroppedSkulls() {
-         ++this.droppedSkulls;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java b/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
-index 874ac29..8ab5be3 100644
+index 48d14c3..8ab5be3 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
 @@ -29,7 +29,7 @@ public class EntityElderGuardian extends EntityGuardian {
@@ -106,15 +78,8 @@ index 874ac29..8ab5be3 100644
                  public boolean apply(@Nullable EntityPlayerMP var1) {
                      return EntityElderGuardian.this.getDistanceSqToEntity(var1) < 2500.0D && var1.interactionManager.survivalOrAdventure();
                  }
-@@ -92,4 +92,4 @@ public class EntityElderGuardian extends EntityGuardian {
-             this.setHomePosAndDistance(new BlockPos(this), 16);
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityShulker.java b/src/main/java/net/minecraft/entity/monster/EntityShulker.java
-index e759626..3e157b4 100644
+index e422562..3e157b4 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityShulker.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityShulker.java
 @@ -161,9 +161,9 @@ public class EntityShulker extends EntityGolem implements IMob {
@@ -178,15 +143,8 @@ index e759626..3e157b4 100644
                          this.dataManager.set(PEEK_TICK, Byte.valueOf((byte)0));
                          this.setAttackTarget((EntityLivingBase)null);
                          return true;
-@@ -688,4 +688,4 @@ public class EntityShulker extends EntityGolem implements IMob {
-         public void updateRenderAngles() {
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java b/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java
-index 2c4df2c..b5cb1b6 100644
+index ab7f709..b5cb1b6 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java
 @@ -40,7 +40,7 @@ public class EntityTippedArrow extends EntityArrow {
@@ -198,15 +156,8 @@ index 2c4df2c..b5cb1b6 100644
  
              if (!list.isEmpty()) {
                  for (PotionEffect mobeffect : list) {
-@@ -197,4 +197,4 @@ public class EntityTippedArrow extends EntityArrow {
-             return itemstack;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/item/ItemMonsterPlacer.java b/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
-index 1eddedf..badb846 100644
+index 93106aa..badb846 100644
 --- a/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
 +++ b/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
 @@ -103,7 +103,7 @@ public class ItemMonsterPlacer extends Item {
@@ -218,15 +169,8 @@ index 1eddedf..badb846 100644
  
          if (list.isEmpty()) {
              return 0.0D;
-@@ -240,4 +240,4 @@ public class ItemMonsterPlacer extends Item {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java b/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
-index 14287b5..d077c33 100644
+index ea34e95..d077c33 100644
 --- a/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
 +++ b/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
 @@ -65,7 +65,7 @@ public class WalkNodeProcessor extends NodeProcessor {
@@ -247,15 +191,8 @@ index 14287b5..d077c33 100644
          PathNodeType var12 = PathNodeType.BLOCKED;
          double var13 = (double)entitylivingIn.width / 2.0D;
          BlockPos var15 = new BlockPos(entitylivingIn);
-@@ -364,4 +364,4 @@ public class WalkNodeProcessor extends NodeProcessor {
-         Material var8 = var6.getMaterial();
-         return var8 == Material.AIR ? PathNodeType.OPEN : (var7 != Blocks.TRAPDOOR && var7 != Blocks.IRON_TRAPDOOR && var7 != Blocks.WATERLILY ? (var7 == Blocks.FIRE ? PathNodeType.DAMAGE_FIRE : (var7 == Blocks.CACTUS ? PathNodeType.DAMAGE_CACTUS : (var7 instanceof BlockDoor && var8 == Material.WOOD && !((Boolean)var6.getValue(BlockDoor.OPEN)).booleanValue() ? PathNodeType.DOOR_WOOD_CLOSED : (var7 instanceof BlockDoor && var8 == Material.IRON && !((Boolean)var6.getValue(BlockDoor.OPEN)).booleanValue() ? PathNodeType.DOOR_IRON_CLOSED : (var7 instanceof BlockDoor && ((Boolean)var6.getValue(BlockDoor.OPEN)).booleanValue() ? PathNodeType.DOOR_OPEN : (var7 instanceof BlockRailBase ? PathNodeType.RAIL : (!(var7 instanceof BlockFence) && !(var7 instanceof BlockWall) && (!(var7 instanceof BlockFenceGate) || ((Boolean)var6.getValue(BlockFenceGate.OPEN)).booleanValue()) ? (var8 == Material.WATER ? PathNodeType.WATER : (var8 == Material.LAVA ? PathNodeType.LAVA : (var7.isPassable(p_189553_1_, var5) ? PathNodeType.OPEN : PathNodeType.BLOCKED))) : PathNodeType.FENCE))))))) : PathNodeType.TRAPDOOR);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
-index 79b9a90..1eb8d36 100644
+index 651ea73..1eb8d36 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerList.java
 @@ -440,7 +440,7 @@ public abstract class PlayerList {
@@ -267,15 +204,8 @@ index 79b9a90..1eb8d36 100644
  
          for (int i = 0; i < this.playerEntityList.size(); ++i) {
              EntityPlayerMP entityplayer = (EntityPlayerMP)this.playerEntityList.get(i);
-@@ -1196,4 +1196,4 @@ public abstract class PlayerList {
-     public boolean bypassesPlayerLimit(GameProfile profile) {
-         return false;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
-index 4d24631..e871e8a 100644
+index e8fbfb6..e871e8a 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
 @@ -217,7 +217,7 @@ public class PlayerProfileCache {
@@ -287,15 +217,8 @@ index 4d24631..e871e8a 100644
              this.usernameToProfileEntryMap.clear();
              this.uuidToProfileEntryMap.clear();
              this.gameProfiles.clear();
-@@ -373,4 +373,4 @@ public class PlayerProfileCache {
-             this();
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java b/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
-index 150fd79..bd805a3 100644
+index 2e3ad88..bd805a3 100644
 --- a/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
 +++ b/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
 @@ -43,7 +43,7 @@ public class PreYggdrasilConverter {
@@ -316,15 +239,8 @@ index 150fd79..bd805a3 100644
                  readFile(OLD_IPBAN_FILE, hashmap);
  
                  for (String s : hashmap.keySet()) {
-@@ -510,4 +510,4 @@ public class PreYggdrasilConverter {
-             this(p_i38_1_, p_i38_2_);
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/server/management/UserList.java b/src/main/java/net/minecraft/server/management/UserList.java
-index e14c332..58942af 100644
+index 133d00d..58942af 100644
 --- a/src/main/java/net/minecraft/server/management/UserList.java
 +++ b/src/main/java/net/minecraft/server/management/UserList.java
 @@ -160,7 +160,7 @@ public class UserList<K, V extends UserListEntry<K>> {
@@ -345,13 +261,6 @@ index e14c332..58942af 100644
                  }
              }
          }
-@@ -219,4 +219,4 @@ public class UserList<K, V extends UserListEntry<K>> {
-             this();
-         }
-     }
--}
-\ No newline at end of file
-+}
 -- 
 2.12.1
 

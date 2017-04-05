@@ -1,11 +1,11 @@
-From 41f796b4ee6bc774fa4920d8e664ed20c316f969 Mon Sep 17 00:00:00 2001
+From bac8130d291a246fc3f8ff8651a16c72c77f4049 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 2 Apr 2017 23:27:19 -0500
 Subject: [PATCH] Moar decomp
 
 
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
-index 5fd3676..b90387d 100644
+index 274762c..b90387d 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
 @@ -22,7 +22,7 @@ public class EntityAIFollowParent extends EntityAIBase {
@@ -17,13 +17,6 @@ index 5fd3676..b90387d 100644
              EntityAnimal var2 = null;
              double var3 = Double.MAX_VALUE;
  
-@@ -85,4 +85,4 @@ public class EntityAIFollowParent extends EntityAIBase {
-             this.childAnimal.getNavigator().tryMoveToEntityLiving(this.parentAnimal, this.moveSpeed);
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
 index 710c5d8..0ba9e00 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
@@ -47,7 +40,7 @@ index 710c5d8..0ba9e00 100644
          }
      }
 diff --git a/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java b/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
-index cff3485..7241572 100644
+index 373a9e1..7241572 100644
 --- a/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
 +++ b/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
 @@ -73,7 +73,7 @@ public class EntityLightningBolt extends EntityWeatherEffect {
@@ -59,15 +52,8 @@ index cff3485..7241572 100644
                  double deltaX = this.posX - player.posX;
                  double deltaZ = this.posZ - player.posZ;
                  double distanceSquared = deltaX * deltaX + deltaZ * deltaZ;
-@@ -140,4 +140,4 @@ public class EntityLightningBolt extends EntityWeatherEffect {
-      */
-     protected void writeEntityToNBT(NBTTagCompound compound) {
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/item/EntityArmorStand.java b/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
-index 455c58d..91433d4 100644
+index 3eca97a..91433d4 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
 @@ -408,10 +408,10 @@ public class EntityArmorStand extends EntityLivingBase {
@@ -83,15 +69,8 @@ index 455c58d..91433d4 100644
              this.world.getServer().getPluginManager().callEvent(armorStandManipulateEvent);
  
              if (armorStandManipulateEvent.isCancelled()) {
-@@ -826,4 +826,4 @@ public class EntityArmorStand extends EntityLivingBase {
-     public boolean attackable() {
-         return false;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityMagmaCube.java b/src/main/java/net/minecraft/entity/monster/EntityMagmaCube.java
-index 2e83706..c6c1a8c 100644
+index 4b994b8..c6c1a8c 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityMagmaCube.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityMagmaCube.java
 @@ -41,7 +41,7 @@ public class EntityMagmaCube extends EntitySlime {
@@ -103,15 +82,8 @@ index 2e83706..c6c1a8c 100644
          super.setSlimeSize(size, p_70799_2_);
          this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue((double)(size * 3));
      }
-@@ -129,4 +129,4 @@ public class EntityMagmaCube extends EntitySlime {
-     protected SoundEvent getJumpSound() {
-         return SoundEvents.ENTITY_MAGMACUBE_JUMP;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityWitch.java b/src/main/java/net/minecraft/entity/monster/EntityWitch.java
-index ae3661b..1b82e33 100644
+index 0853536..1b82e33 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityWitch.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityWitch.java
 @@ -115,7 +115,7 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
@@ -123,15 +95,8 @@ index ae3661b..1b82e33 100644
  
                          if (var6 != null) {
                              for (PotionEffect var4 : var6) {
-@@ -211,4 +211,4 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
-     public float getEyeHeight() {
-         return 1.62F;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-index fa37ace..8f3586d 100644
+index bab54f5..8f3586d 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 @@ -465,7 +465,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
@@ -152,15 +117,8 @@ index fa37ace..8f3586d 100644
                  scoreboardscore.incrementScore();
              }
  
-@@ -1422,4 +1422,4 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
-     public CraftPlayer getBukkitEntity() {
-         return (CraftPlayer)super.getBukkitEntity();
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
-index 66f941d..f563b18 100644
+index 3d43ed3..f563b18 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
 @@ -10,7 +10,7 @@ import org.bukkit.entity.Arrow.Spigot;
@@ -180,9 +138,7 @@ index 66f941d..f563b18 100644
 +    public Arrow.Spigot spigot() { // Paper - fix decompile
          return this.spigot;
      }
--}
-\ No newline at end of file
-+}
+ }
 -- 
 2.12.1
 

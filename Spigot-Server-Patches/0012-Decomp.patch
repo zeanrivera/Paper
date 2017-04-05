@@ -1,11 +1,11 @@
-From a1bd70171e228636af460c278d2ec621c732dec1 Mon Sep 17 00:00:00 2001
+From 258d9dd757f7edef7e9bca989085941ac61b070b Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Mon, 3 Apr 2017 00:47:02 -0500
 Subject: [PATCH] Decomp
 
 
 diff --git a/src/main/java/net/minecraft/stats/StatList.java b/src/main/java/net/minecraft/stats/StatList.java
-index 88aeb06..0cf4db1 100644
+index fa53d9e..0cf4db1 100644
 --- a/src/main/java/net/minecraft/stats/StatList.java
 +++ b/src/main/java/net/minecraft/stats/StatList.java
 @@ -138,7 +138,7 @@ public class StatList {
@@ -17,15 +17,8 @@ index 88aeb06..0cf4db1 100644
  
          for (IRecipe var2 : CraftingManager.getInstance().getRecipeList()) {
              ItemStack var3 = var2.getRecipeOutput();
-@@ -290,4 +290,4 @@ public class StatList {
-     public static StatBase getOneShotStat(String statName) {
-         return (StatBase)ID_TO_STAT_MAP.get(statName);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
-index b4cd711..ab9b216 100644
+index 7ab4432..ab9b216 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
 @@ -125,7 +125,7 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
@@ -37,15 +30,8 @@ index b4cd711..ab9b216 100644
          for (EntityPlayer entityhuman : list) {
              entityhuman.addPotionEffect(new net.minecraft.potion.PotionEffect(effects, i, b0, true, true));
          }
-@@ -463,4 +463,4 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
-             return this.colors;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/util/ClassInheritanceMultiMap.java b/src/main/java/net/minecraft/util/ClassInheritanceMultiMap.java
-index c945107..7f00bd1 100644
+index 1198711..7f00bd1 100644
 --- a/src/main/java/net/minecraft/util/ClassInheritanceMultiMap.java
 +++ b/src/main/java/net/minecraft/util/ClassInheritanceMultiMap.java
 @@ -32,7 +32,7 @@ public class ClassInheritanceMultiMap<T> extends AbstractSet<T> {
@@ -66,15 +52,8 @@ index c945107..7f00bd1 100644
          } else {
              list.add(value);
          }
-@@ -114,4 +114,4 @@ public class ClassInheritanceMultiMap<T> extends AbstractSet<T> {
-     public int size() {
-         return this.values.size();
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/util/EntitySelectors.java b/src/main/java/net/minecraft/util/EntitySelectors.java
-index 778d029..37c849a 100644
+index e61cdfb..37c849a 100644
 --- a/src/main/java/net/minecraft/util/EntitySelectors.java
 +++ b/src/main/java/net/minecraft/util/EntitySelectors.java
 @@ -70,7 +70,7 @@ public final class EntitySelectors {
@@ -86,15 +65,8 @@ index 778d029..37c849a 100644
      }
  
      public static Predicate<Entity> notRiding(final Entity p_191324_0_) {
-@@ -111,4 +111,4 @@ public final class EntitySelectors {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/util/IntHashMap.java b/src/main/java/net/minecraft/util/IntHashMap.java
-index 71b8822..3ddaf11 100644
+index 3f55d75..3ddaf11 100644
 --- a/src/main/java/net/minecraft/util/IntHashMap.java
 +++ b/src/main/java/net/minecraft/util/IntHashMap.java
 @@ -35,7 +35,7 @@ public class IntHashMap<V> {
@@ -106,15 +78,8 @@ index 71b8822..3ddaf11 100644
              }
          }
  
-@@ -244,4 +244,4 @@ public class IntHashMap<V> {
-             return this.getHash() + "=" + this.getValue();
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/util/IntIdentityHashBiMap.java b/src/main/java/net/minecraft/util/IntIdentityHashBiMap.java
-index 6dd41b2..02d3586 100644
+index 59cda26..02d3586 100644
 --- a/src/main/java/net/minecraft/util/IntIdentityHashBiMap.java
 +++ b/src/main/java/net/minecraft/util/IntIdentityHashBiMap.java
 @@ -57,15 +57,15 @@ public class IntIdentityHashBiMap<K> implements IObjectIntIterable<K> {
@@ -136,15 +101,8 @@ index 6dd41b2..02d3586 100644
              }
          }
      }
-@@ -148,4 +148,4 @@ public class IntIdentityHashBiMap<K> implements IObjectIntIterable<K> {
-     public int size() {
-         return this.mapSize;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/util/LowerStringMap.java b/src/main/java/net/minecraft/util/LowerStringMap.java
-index ef0cbeb..fb48b2c 100644
+index 059147f..fb48b2c 100644
 --- a/src/main/java/net/minecraft/util/LowerStringMap.java
 +++ b/src/main/java/net/minecraft/util/LowerStringMap.java
 @@ -40,7 +40,7 @@ public class LowerStringMap<V> implements Map<String, V> {
@@ -156,15 +114,8 @@ index ef0cbeb..fb48b2c 100644
          }
      }
  
-@@ -59,4 +59,4 @@ public class LowerStringMap<V> implements Map<String, V> {
-     public Set<Entry<String, V>> entrySet() {
-         return this.internalMap.entrySet();
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/util/MapPopulator.java b/src/main/java/net/minecraft/util/MapPopulator.java
-index 5cbae0f..e9fb7a0 100644
+index ed9db61..e9fb7a0 100644
 --- a/src/main/java/net/minecraft/util/MapPopulator.java
 +++ b/src/main/java/net/minecraft/util/MapPopulator.java
 @@ -17,7 +17,7 @@ public class MapPopulator {
@@ -176,15 +127,8 @@ index 5cbae0f..e9fb7a0 100644
          }
  
          if (var3.hasNext()) {
-@@ -26,4 +26,4 @@ public class MapPopulator {
-             return map;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/util/math/Cartesian.java b/src/main/java/net/minecraft/util/math/Cartesian.java
-index b480cfc..b406c24 100644
+index 7adc354..b406c24 100644
 --- a/src/main/java/net/minecraft/util/math/Cartesian.java
 +++ b/src/main/java/net/minecraft/util/math/Cartesian.java
 @@ -48,7 +48,7 @@ public class Cartesian {
@@ -196,15 +140,8 @@ index b480cfc..b406c24 100644
          }
      }
  
-@@ -147,4 +147,4 @@ public class Cartesian {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/biome/BiomeEndDecorator.java b/src/main/java/net/minecraft/world/biome/BiomeEndDecorator.java
-index c77d7c2..61c5a09 100644
+index 4f5285f..61c5a09 100644
 --- a/src/main/java/net/minecraft/world/biome/BiomeEndDecorator.java
 +++ b/src/main/java/net/minecraft/world/biome/BiomeEndDecorator.java
 @@ -42,7 +42,7 @@ public class BiomeEndDecorator extends BiomeDecorator {
@@ -216,15 +153,8 @@ index c77d7c2..61c5a09 100644
              Collections.shuffle(var2, new Random(var1.longValue()));
              WorldGenSpikes.EndSpike[] var3 = new WorldGenSpikes.EndSpike[10];
  
-@@ -59,4 +59,4 @@ public class BiomeEndDecorator extends BiomeDecorator {
-             return var3;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 308fc61..1d9707b 100644
+index 3ac8ada..1d9707b 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -896,8 +896,8 @@ public class Chunk {
@@ -238,15 +168,8 @@ index 308fc61..1d9707b 100644
                  }
              }
          }
-@@ -1353,4 +1353,4 @@ public class Chunk {
-         QUEUED,
-         CHECK;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-index 46e6f7d..9ebf906 100644
+index ff78738..9ebf906 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 @@ -322,7 +322,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
@@ -258,15 +181,8 @@ index 46e6f7d..9ebf906 100644
  
          if (list != null) {
              long k = worldIn.getTotalWorldTime();
-@@ -537,4 +537,4 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
-             return entity;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/end/DragonFightManager.java b/src/main/java/net/minecraft/world/end/DragonFightManager.java
-index b4cba8f..a489055 100644
+index 12215e3..a489055 100644
 --- a/src/main/java/net/minecraft/world/end/DragonFightManager.java
 +++ b/src/main/java/net/minecraft/world/end/DragonFightManager.java
 @@ -299,7 +299,7 @@ public class DragonFightManager {
@@ -278,15 +194,8 @@ index b4cba8f..a489055 100644
          var5.removeAll(var1);
  
          for (EntityPlayerMP var4 : var5) {
-@@ -472,4 +472,4 @@ public class DragonFightManager {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/gen/FlatGeneratorInfo.java b/src/main/java/net/minecraft/world/gen/FlatGeneratorInfo.java
-index 48d41e7..76d001e 100644
+index 8c3aa27..76d001e 100644
 --- a/src/main/java/net/minecraft/world/gen/FlatGeneratorInfo.java
 +++ b/src/main/java/net/minecraft/world/gen/FlatGeneratorInfo.java
 @@ -78,7 +78,7 @@ public class FlatGeneratorInfo {
@@ -298,15 +207,8 @@ index 48d41e7..76d001e 100644
  
                  if (!var5.isEmpty()) {
                      var1.append("(");
-@@ -264,4 +264,4 @@ public class FlatGeneratorInfo {
-         var0.getWorldFeatures().put("village", Maps.<String, String>newHashMap());
-         return var0;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/gen/layer/GenLayer.java b/src/main/java/net/minecraft/world/gen/layer/GenLayer.java
-index 97a2ac9..0bba611 100644
+index 07551fb..0bba611 100644
 --- a/src/main/java/net/minecraft/world/gen/layer/GenLayer.java
 +++ b/src/main/java/net/minecraft/world/gen/layer/GenLayer.java
 @@ -56,7 +56,7 @@ public abstract class GenLayer {
@@ -318,15 +220,8 @@ index 97a2ac9..0bba611 100644
          GenLayer var31 = GenLayerZoom.magnify(1000L, var30, 2);
          var31 = GenLayerZoom.magnify(1000L, var31, var6);
          GenLayerRiver var33 = new GenLayerRiver(1L, var31);
-@@ -179,4 +179,4 @@ public abstract class GenLayer {
-     protected int selectModeOrRandom(int p_151617_1_, int p_151617_2_, int p_151617_3_, int p_151617_4_) {
-         return p_151617_2_ == p_151617_3_ && p_151617_3_ == p_151617_4_ ? p_151617_2_ : (p_151617_1_ == p_151617_2_ && p_151617_1_ == p_151617_3_ ? p_151617_1_ : (p_151617_1_ == p_151617_2_ && p_151617_1_ == p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_3_ && p_151617_1_ == p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_2_ && p_151617_3_ != p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_3_ && p_151617_2_ != p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_4_ && p_151617_2_ != p_151617_3_ ? p_151617_1_ : (p_151617_2_ == p_151617_3_ && p_151617_1_ != p_151617_4_ ? p_151617_2_ : (p_151617_2_ == p_151617_4_ && p_151617_1_ != p_151617_3_ ? p_151617_2_ : (p_151617_3_ == p_151617_4_ && p_151617_1_ != p_151617_2_ ? p_151617_3_ : this.selectRandom(new int[] {p_151617_1_, p_151617_2_, p_151617_3_, p_151617_4_}))))))))));
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java b/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java
-index 7dbc0ad..ed61bda 100644
+index b6be521..ed61bda 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java
 @@ -393,7 +393,7 @@ public class ComponentScatteredFeaturePieces {
@@ -338,15 +233,8 @@ index 7dbc0ad..ed61bda 100644
  
                      for (Entry entry : map.entrySet()) {
                          if ("chest".equals(entry.getValue())) {
-@@ -767,4 +767,4 @@ public class ComponentScatteredFeaturePieces {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java b/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java
-index 9563b94..8d1933f 100644
+index c428477..8d1933f 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java
 @@ -60,7 +60,7 @@ public abstract class StructureComponentTemplate extends StructureComponent {
@@ -358,15 +246,8 @@ index 9563b94..8d1933f 100644
  
          for (Entry var6 : var4.entrySet()) {
              String var7 = (String)var6.getValue();
-@@ -134,4 +134,4 @@ public abstract class StructureComponentTemplate extends StructureComponent {
-         super.offset(x, y, z);
-         this.templatePosition = this.templatePosition.add(x, y, z);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java b/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
-index e957816..9a3d6a9 100644
+index e4ea7d9..9a3d6a9 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
 @@ -190,7 +190,7 @@ public class StructureEndCityPieces {
@@ -378,15 +259,8 @@ index e957816..9a3d6a9 100644
  
              if (p_191088_1_.generate(p_191088_0_, p_191088_2_, p_191088_3_, p_191088_4_, var7, p_191088_6_)) {
                  boolean var8 = false;
-@@ -289,4 +289,4 @@ public class StructureEndCityPieces {
- 
-         boolean generate(TemplateManager p_191086_1_, int p_191086_2_, StructureEndCityPieces.CityTemplate p_191086_3_, BlockPos p_191086_4_, List<StructureComponent> p_191086_5_, Random p_191086_6_);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java b/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
-index 0d4afab..81a09bd 100644
+index 39bc920..81a09bd 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
 @@ -615,7 +615,7 @@ public class StructureOceanMonumentPieces {
@@ -407,15 +281,8 @@ index 0d4afab..81a09bd 100644
  
              for (StructureOceanMonumentPieces.RoomDefinition var37 : var2) {
                  if (var37 != null) {
-@@ -1936,4 +1936,4 @@ public class StructureOceanMonumentPieces {
-             return new StructureOceanMonumentPieces.DoubleZRoom(p_175968_1_, var4, p_175968_3_);
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java b/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
-index 0f61c05..1e35d23 100644
+index ca7297e..1e35d23 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
 @@ -261,7 +261,7 @@ public class WoodlandMansionPieces {
@@ -427,15 +294,8 @@ index 0f61c05..1e35d23 100644
  
              for (int var4 = 0; var4 < var1.height; ++var4) {
                  for (int var5 = 0; var5 < var1.width; ++var5) {
-@@ -1046,4 +1046,4 @@ public class WoodlandMansionPieces {
-         private ThirdFloor() {
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/gen/structure/template/Template.java b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
-index 8fd12a0..b30073b 100644
+index 0d6fcd4..b30073b 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/template/Template.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
 @@ -109,7 +109,7 @@ public class Template {
@@ -447,13 +307,6 @@ index 8fd12a0..b30073b 100644
              public boolean apply(@Nullable Entity var1) {
                  return !(var1 instanceof EntityPlayer);
              }
-@@ -588,4 +588,4 @@ public class Template {
-             this.entityData = compoundIn;
-         }
-     }
--}
-\ No newline at end of file
-+}
 -- 
 2.12.1
 

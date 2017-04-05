@@ -1,11 +1,11 @@
-From 8eb843b661d5b7bdd7ea650546ed3a7b2f544179 Mon Sep 17 00:00:00 2001
+From 71f9f6f5a25717e0250fa0a881c99f3ca28ffb86 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Mon, 3 Apr 2017 00:05:04 -0500
 Subject: [PATCH] Decmop
 
 
 diff --git a/src/main/java/net/minecraft/block/BlockRedstoneWire.java b/src/main/java/net/minecraft/block/BlockRedstoneWire.java
-index 54a0bc1..c4b251e 100644
+index 3e03277..c4b251e 100644
 --- a/src/main/java/net/minecraft/block/BlockRedstoneWire.java
 +++ b/src/main/java/net/minecraft/block/BlockRedstoneWire.java
 @@ -131,7 +131,7 @@ public class BlockRedstoneWire extends Block {
@@ -17,15 +17,8 @@ index 54a0bc1..c4b251e 100644
          this.blocksNeedingUpdate.clear();
  
          for (BlockPos blockposition1 : arraylist) {
-@@ -453,4 +453,4 @@ public class BlockRedstoneWire extends Block {
-             return this.name;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/block/BlockStairs.java b/src/main/java/net/minecraft/block/BlockStairs.java
-index dd93a6e..f2b90d5 100644
+index 1e4196e..f2b90d5 100644
 --- a/src/main/java/net/minecraft/block/BlockStairs.java
 +++ b/src/main/java/net/minecraft/block/BlockStairs.java
 @@ -344,7 +344,7 @@ public class BlockStairs extends Block {
@@ -37,15 +30,8 @@ index dd93a6e..f2b90d5 100644
  
          for (AxisAlignedBB var8 : getCollisionBoxList(this.getActualState(blockState, worldIn, pos))) {
              var6.add(this.rayTrace(pos, start, end, var8));
-@@ -540,4 +540,4 @@ public class BlockStairs extends Block {
-             return this.name;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/command/CommandClone.java b/src/main/java/net/minecraft/command/CommandClone.java
-index 5bf33ae..8a971b4 100644
+index 5d04be4..8a971b4 100644
 --- a/src/main/java/net/minecraft/command/CommandClone.java
 +++ b/src/main/java/net/minecraft/command/CommandClone.java
 @@ -92,10 +92,10 @@ public class CommandClone extends CommandBase {
@@ -86,15 +72,8 @@ index 5bf33ae..8a971b4 100644
  
                              if (var40 != null) {
                                  for (NextTickListEntry var48 : var40) {
-@@ -225,4 +225,4 @@ public class CommandClone extends CommandBase {
-             this.nbt = compoundIn;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/command/CommandExecuteAt.java b/src/main/java/net/minecraft/command/CommandExecuteAt.java
-index 6c49d40..d32b990 100644
+index 985fbc5..d32b990 100644
 --- a/src/main/java/net/minecraft/command/CommandExecuteAt.java
 +++ b/src/main/java/net/minecraft/command/CommandExecuteAt.java
 @@ -164,30 +164,30 @@ public class CommandExecuteAt extends CommandBase {
@@ -136,15 +115,8 @@ index 6c49d40..d32b990 100644
  
                  if (i < 1) {
                      throw new CommandException("commands.execute.allInvocationsFailed", new Object[] {s});
-@@ -216,4 +216,4 @@ public class CommandExecuteAt extends CommandBase {
-     public int compareTo(ICommand o) {
-         return this.compareTo(o);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/command/CommandStats.java b/src/main/java/net/minecraft/command/CommandStats.java
-index d592cc7..1cf36b8 100644
+index 5d060cf..1cf36b8 100644
 --- a/src/main/java/net/minecraft/command/CommandStats.java
 +++ b/src/main/java/net/minecraft/command/CommandStats.java
 @@ -155,7 +155,7 @@ public class CommandStats extends CommandBase {
@@ -156,15 +128,8 @@ index d592cc7..1cf36b8 100644
          ArrayList var3 = Lists.newArrayList();
  
          for (ScoreObjective var5 : var2) {
-@@ -173,4 +173,4 @@ public class CommandStats extends CommandBase {
-     public boolean isUsernameIndex(String[] args, int index) {
-         return args.length > 0 && "entity".equals(args[0]) && index == 1;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/command/EntitySelector.java b/src/main/java/net/minecraft/command/EntitySelector.java
-index 0b6e4b7..9c02c2d 100644
+index b3eccca..9c02c2d 100644
 --- a/src/main/java/net/minecraft/command/EntitySelector.java
 +++ b/src/main/java/net/minecraft/command/EntitySelector.java
 @@ -94,7 +94,7 @@ public class EntitySelector {
@@ -331,15 +296,8 @@ index 0b6e4b7..9c02c2d 100644
          }
  
          if (var6 != 0) {
-@@ -613,4 +617,4 @@ public class EntitySelector {
-             return var1;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/command/server/CommandBanIp.java b/src/main/java/net/minecraft/command/server/CommandBanIp.java
-index e2fcac3..a137845 100644
+index 21429b6..a137845 100644
 --- a/src/main/java/net/minecraft/command/server/CommandBanIp.java
 +++ b/src/main/java/net/minecraft/command/server/CommandBanIp.java
 @@ -80,7 +80,7 @@ public class CommandBanIp extends CommandBase {
@@ -351,15 +309,8 @@ index e2fcac3..a137845 100644
          String[] var7 = new String[var6.size()];
          int var8 = 0;
  
-@@ -95,4 +95,4 @@ public class CommandBanIp extends CommandBase {
-             notifyCommandListener(sender, this, "commands.banip.success.players", new Object[] {ipAddress, joinNiceString(var7)});
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java b/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
-index 102947d..95a7829 100644
+index 1269ec3..95a7829 100644
 --- a/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
 +++ b/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
 @@ -179,7 +179,7 @@ public class EnchantmentHelper {
@@ -389,15 +340,8 @@ index 102947d..95a7829 100644
          boolean var5 = p_77504_1_.getItem() == Items.BOOK;
  
          if (var5) {
-@@ -465,4 +465,4 @@ public class EnchantmentHelper {
-             this.livingModifier += enchantmentIn.calcDamageByCreature(enchantmentLevel, this.entityLiving);
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java b/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
-index ffc758b..6bff5c3 100644
+index 7567c9d..6bff5c3 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
 @@ -55,7 +55,7 @@ public class EntityAIAvoidEntity<T extends Entity> extends EntityAIBase {
@@ -409,15 +353,8 @@ index ffc758b..6bff5c3 100644
              Vec3d var2 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.theEntity, 16, 7, new Vec3d(this.closestLivingEntity.posX, this.closestLivingEntity.posY, this.closestLivingEntity.posZ));
  
              if (var2 == null) {
-@@ -100,4 +100,4 @@ public class EntityAIAvoidEntity<T extends Entity> extends EntityAIBase {
-             this.theEntity.getNavigator().setSpeed(this.farSpeed);
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIEatGrass.java b/src/main/java/net/minecraft/entity/ai/EntityAIEatGrass.java
-index 364c65a..4cbddfd 100644
+index f1af2b0..4cbddfd 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIEatGrass.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIEatGrass.java
 @@ -14,7 +14,7 @@ import org.bukkit.Material;
@@ -429,15 +366,8 @@ index 364c65a..4cbddfd 100644
      /** The entity owner of this AITask */
      private final EntityLiving grassEaterEntity;
      /** The world the grass eater entity is eating from */
-@@ -99,4 +99,4 @@ public class EntityAIEatGrass extends EntityAIBase {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/boss/EntityWither.java b/src/main/java/net/minecraft/entity/boss/EntityWither.java
-index 75293d6..3285241 100644
+index fb47209..3285241 100644
 --- a/src/main/java/net/minecraft/entity/boss/EntityWither.java
 +++ b/src/main/java/net/minecraft/entity/boss/EntityWither.java
 @@ -307,7 +307,7 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
@@ -449,15 +379,8 @@ index 75293d6..3285241 100644
  
                          for (int i1 = 0; i1 < 10 && !list.isEmpty(); ++i1) {
                              EntityLivingBase entityliving = (EntityLivingBase)list.get(this.rand.nextInt(list.size()));
-@@ -624,4 +624,4 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
-             return EntityWither.this.getInvulTime() > 0;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityZombieVillager.java b/src/main/java/net/minecraft/entity/monster/EntityZombieVillager.java
-index fee410a..97f3280 100644
+index 9147e57..97f3280 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityZombieVillager.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityZombieVillager.java
 @@ -127,7 +127,7 @@ public class EntityZombieVillager extends EntityZombie {
@@ -469,15 +392,8 @@ index fee410a..97f3280 100644
          return !this.isConverting();
      }
  
-@@ -221,4 +221,4 @@ public class EntityZombieVillager extends EntityZombie {
-     protected ItemStack getSkullDrop() {
-         return ItemStack.EMPTY;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java b/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java
-index c74b652..53ad412 100644
+index 1a0dc3c..53ad412 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java
 @@ -33,7 +33,7 @@ public class EntityDragonFireball extends EntityFireball {
@@ -489,15 +405,8 @@ index c74b652..53ad412 100644
                  EntityAreaEffectCloud var3 = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
                  var3.setOwner(this.shootingEntity);
                  var3.setParticle(EnumParticleTypes.DRAGON_BREATH);
-@@ -81,4 +81,4 @@ public class EntityDragonFireball extends EntityFireball {
-     protected boolean isFireballFiery() {
-         return false;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/inventory/ContainerRepair.java b/src/main/java/net/minecraft/inventory/ContainerRepair.java
-index 28ede21..9de1d4c 100644
+index a12665d..9de1d4c 100644
 --- a/src/main/java/net/minecraft/inventory/ContainerRepair.java
 +++ b/src/main/java/net/minecraft/inventory/ContainerRepair.java
 @@ -148,7 +148,7 @@ public class ContainerRepair extends Container {
@@ -518,15 +427,8 @@ index 28ede21..9de1d4c 100644
  
                      for (Enchantment enchantment : map1.keySet()) {
                          if (enchantment != null) {
-@@ -395,4 +395,4 @@ public class ContainerRepair extends Container {
-             return this.bukkitEntity;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/network/NetworkManager.java b/src/main/java/net/minecraft/network/NetworkManager.java
-index 4ee5f7d..23eaa98 100644
+index 9fc0a0b..23eaa98 100644
 --- a/src/main/java/net/minecraft/network/NetworkManager.java
 +++ b/src/main/java/net/minecraft/network/NetworkManager.java
 @@ -130,7 +130,7 @@ public class NetworkManager extends SimpleChannelInboundHandler < Packet<? >> {
@@ -538,15 +440,8 @@ index 4ee5f7d..23eaa98 100644
          if (this.channel.isOpen()) {
              try {
                  packet.processPacket(this.packetListener);
-@@ -382,4 +382,4 @@ public class NetworkManager extends SimpleChannelInboundHandler < Packet<? >> {
-             this.futureListeners = inFutureListeners;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/profiler/Snooper.java b/src/main/java/net/minecraft/profiler/Snooper.java
-index 67109b6..54bad61 100644
+index a60a63c..54bad61 100644
 --- a/src/main/java/net/minecraft/profiler/Snooper.java
 +++ b/src/main/java/net/minecraft/profiler/Snooper.java
 @@ -88,7 +88,7 @@ public class Snooper {
@@ -558,15 +453,8 @@ index 67109b6..54bad61 100644
          int var3 = 0;
  
          for (String var5 : var2) {
-@@ -134,4 +134,4 @@ public class Snooper {
-     public long getMinecraftStartTimeMillis() {
-         return this.minecraftStartTimeMilis;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/scoreboard/Scoreboard.java b/src/main/java/net/minecraft/scoreboard/Scoreboard.java
-index f4b0366..be3237f 100644
+index 8276109..be3237f 100644
 --- a/src/main/java/net/minecraft/scoreboard/Scoreboard.java
 +++ b/src/main/java/net/minecraft/scoreboard/Scoreboard.java
 @@ -155,7 +155,7 @@ public class Scoreboard {
@@ -578,15 +466,8 @@ index f4b0366..be3237f 100644
          ArrayList var2 = Lists.newArrayList();
  
          for (Map var4 : var1) {
-@@ -414,4 +414,4 @@ public class Scoreboard {
-             this.removePlayerFromTeams(var2);
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/scoreboard/ServerScoreboard.java b/src/main/java/net/minecraft/scoreboard/ServerScoreboard.java
-index 8d95fd8..3ab1fc8 100644
+index 8d3b20d..3ab1fc8 100644
 --- a/src/main/java/net/minecraft/scoreboard/ServerScoreboard.java
 +++ b/src/main/java/net/minecraft/scoreboard/ServerScoreboard.java
 @@ -176,7 +176,7 @@ public class ServerScoreboard extends Scoreboard {
@@ -607,15 +488,8 @@ index 8d95fd8..3ab1fc8 100644
  
          for (EntityPlayerMP entityplayer : this.scoreboardMCServer.getPlayerList().getPlayers()) {
              if (entityplayer.getBukkitEntity().getScoreboard().getHandle() == this) {
-@@ -235,4 +235,4 @@ public class ServerScoreboard extends Scoreboard {
-             }
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/util/datafix/DataFixer.java b/src/main/java/net/minecraft/util/datafix/DataFixer.java
-index 592b2eb..a43c898 100644
+index b66b2b8..a43c898 100644
 --- a/src/main/java/net/minecraft/util/datafix/DataFixer.java
 +++ b/src/main/java/net/minecraft/util/datafix/DataFixer.java
 @@ -90,7 +90,7 @@ public class DataFixer implements IDataFixer {
@@ -627,13 +501,6 @@ index 592b2eb..a43c898 100644
  
          if (var3 == null) {
              var3 = Lists.newArrayList();
-@@ -99,4 +99,4 @@ public class DataFixer implements IDataFixer {
- 
-         return (List<V>)var3;
-     }
--}
-\ No newline at end of file
-+}
 -- 
 2.12.1
 

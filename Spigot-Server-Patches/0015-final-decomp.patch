@@ -1,11 +1,11 @@
-From d3f83dca49de62d328274c54b165ae466e5361f8 Mon Sep 17 00:00:00 2001
+From ba5301b728d521338a4720edb7ddc469b058ce68 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Mon, 3 Apr 2017 01:38:05 -0500
 Subject: [PATCH] final decomp
 
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index a915e85..b081c20 100644
+index 8aac3b4..b081c20 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -325,7 +325,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
@@ -17,15 +17,8 @@ index a915e85..b081c20 100644
                  } else {
                      world = (WorldServer)(new WorldServer(this, idatamanager, worlddata, dimension, this.theProfiler, Environment.getEnvironment(dimension), gen)).init();
                  }
-@@ -1575,4 +1575,4 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
-     public static MinecraftServer getServer() {
-         return Bukkit.getServer() instanceof CraftServer ? ((CraftServer)Bukkit.getServer()).getServer() : null;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/world/demo/DemoWorldServer.java b/src/main/java/net/minecraft/world/demo/DemoWorldServer.java
-index 7d054f5..9dc0acc 100644
+index 4342860..9dc0acc 100644
 --- a/src/main/java/net/minecraft/world/demo/DemoWorldServer.java
 +++ b/src/main/java/net/minecraft/world/demo/DemoWorldServer.java
 @@ -8,13 +8,15 @@ import net.minecraft.world.WorldSettings;
@@ -45,9 +38,7 @@ index 7d054f5..9dc0acc 100644
 +        super(server, saveHandlerIn, worldInfoIn, dimensionId, profilerIn, p_i75_6_, p_i75_7_); // Paper - fix decompile
          this.worldInfo.populateFromWorldSettings(DEMO_WORLD_SETTINGS);
      }
--}
-\ No newline at end of file
-+}
+ }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 index ca0b850..96181d4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java

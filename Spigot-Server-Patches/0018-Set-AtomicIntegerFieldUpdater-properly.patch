@@ -1,4 +1,4 @@
-From 65c1670177d37f1b03c75b21118b3eaa2314cdb5 Mon Sep 17 00:00:00 2001
+From 2bb0081ee2c9c47c7fbf80db705b8ddeba98e9a8 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Mon, 3 Apr 2017 02:58:41 -0500
 Subject: [PATCH] Set AtomicIntegerFieldUpdater properly

@@ -1,11 +1,11 @@
-From 2b2130c508dda25853f1395738e091e596fed8f7 Mon Sep 17 00:00:00 2001
+From 05b85584ec26e744a581f4cf86c3daff1df07764 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 2 Apr 2017 22:52:10 -0500
 Subject: [PATCH] Fix decompile
 
 
 diff --git a/src/main/java/net/minecraft/block/state/BlockStateContainer.java b/src/main/java/net/minecraft/block/state/BlockStateContainer.java
-index 55ce62d..325133b 100644
+index 4ff2bf8..325133b 100644
 --- a/src/main/java/net/minecraft/block/state/BlockStateContainer.java
 +++ b/src/main/java/net/minecraft/block/state/BlockStateContainer.java
 @@ -65,7 +65,7 @@ public class BlockStateContainer {
@@ -35,15 +35,8 @@ index 55ce62d..325133b 100644
  
                      for (Comparable var7 : var5.getAllowedValues()) {
                          if (var7 != var4.getValue()) {
-@@ -369,4 +369,4 @@ public class BlockStateContainer {
-             return this.block.causesSuffocation(this);
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/command/CommandBase.java b/src/main/java/net/minecraft/command/CommandBase.java
-index ceef074..5dae113 100644
+index 6c3dfd1..5dae113 100644
 --- a/src/main/java/net/minecraft/command/CommandBase.java
 +++ b/src/main/java/net/minecraft/command/CommandBase.java
 @@ -461,7 +461,7 @@ public abstract class CommandBase implements ICommand {
@@ -64,15 +57,8 @@ index ceef074..5dae113 100644
                  return new Predicate<IBlockState>() {
                      public boolean apply(@Nullable IBlockState var1) {
                          if (var1 != null && p_190791_0_ == var1.getBlock()) {
-@@ -740,4 +740,4 @@ public abstract class CommandBase implements ICommand {
-             return this.isRelative;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
-index 0bfea5d..e4b67c4 100644
+index b083eea..e4b67c4 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
 @@ -253,7 +253,7 @@ public class EntityFishHook extends Entity {
@@ -84,15 +70,8 @@ index 0bfea5d..e4b67c4 100644
          double d0 = 0.0D;
  
          for (Entity entity1 : list) {
-@@ -517,4 +517,4 @@ public class EntityFishHook extends Entity {
-         HOOKED_IN_ENTITY,
-         BOBBING;
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 2020f79..325c0fa 100644
+index c2ccdd2..325c0fa 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -745,11 +745,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
@@ -144,13 +123,6 @@ index 2020f79..325c0fa 100644
                              this.playerEntity.world.setBlockState(blockposition, iblockdata.withProperty(BlockCommandBlock.FACING, enumdirection).withProperty(BlockCommandBlock.CONDITIONAL, Boolean.valueOf(flag2)), 2);
                      }
  
-@@ -2544,4 +2547,4 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
-     public final boolean isDisconnected() {
-         return !this.playerEntity.joining && !this.netManager.isChannelOpen();
-     }
--}
-\ No newline at end of file
-+}
 -- 
 2.12.1
 

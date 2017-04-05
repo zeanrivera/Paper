@@ -1,11 +1,11 @@
-From 42ff4b3a41c342372eb6ac206c22f13d7698e4d7 Mon Sep 17 00:00:00 2001
+From 3de1d1ac681bea0bac2938332361b3b6f7846d37 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 2 Apr 2017 23:18:59 -0500
 Subject: [PATCH] More decompile
 
 
 diff --git a/src/main/java/net/minecraft/block/properties/PropertyEnum.java b/src/main/java/net/minecraft/block/properties/PropertyEnum.java
-index eeaf3eb..e9b423c 100644
+index 5fc0560..e9b423c 100644
 --- a/src/main/java/net/minecraft/block/properties/PropertyEnum.java
 +++ b/src/main/java/net/minecraft/block/properties/PropertyEnum.java
 @@ -26,7 +26,7 @@ public class PropertyEnum<T extends Enum<T> & IStringSerializable> extends Prope
@@ -17,15 +17,8 @@ index eeaf3eb..e9b423c 100644
          }
      }
  
-@@ -87,4 +87,4 @@ public class PropertyEnum<T extends Enum<T> & IStringSerializable> extends Prope
-     public static <T extends Enum<T> & IStringSerializable> PropertyEnum<T> create(String name, Class<T> clazz, Collection<T> values) {
-         return new PropertyEnum(name, clazz, values);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/command/CommandHandler.java b/src/main/java/net/minecraft/command/CommandHandler.java
-index 8cd8d28..d5336cb 100644
+index 92bb29c..d5336cb 100644
 --- a/src/main/java/net/minecraft/command/CommandHandler.java
 +++ b/src/main/java/net/minecraft/command/CommandHandler.java
 @@ -53,7 +53,7 @@ public abstract class CommandHandler implements ICommandManager {
@@ -37,15 +30,8 @@ index 8cd8d28..d5336cb 100644
                      String var9 = var3[var7];
                      sender.setCommandStat(CommandResultStats.Type.AFFECTED_ENTITIES, var16.size());
  
-@@ -202,4 +202,4 @@ public abstract class CommandHandler implements ICommandManager {
-             return -1;
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
-index 1176659..710c5d8 100644
+index 7e8de96..710c5d8 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
 @@ -66,7 +66,7 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
@@ -57,18 +43,11 @@ index 1176659..710c5d8 100644
                  return true;
              }
          } else {
-@@ -126,4 +126,4 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
-             return this.compare(object, object1);
-         }
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index ae8762d..3501d83 100644
+index 3659868..3501d83 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -768,11 +768,13 @@ public class DedicatedServer extends MinecraftServer implements IServer {
+@@ -768,9 +768,11 @@ public class DedicatedServer extends MinecraftServer implements IServer {
          }
      }
  
@@ -80,10 +59,6 @@ index ae8762d..3501d83 100644
  
      public PropertyManager getPropertyManager() {
          return this.settings;
-     }
--}
-\ No newline at end of file
-+}
 -- 
 2.12.1
 

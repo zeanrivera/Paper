@@ -1,11 +1,11 @@
-From b105332d8a3704a383c262b09213e2f896148bc5 Mon Sep 17 00:00:00 2001
+From c5d6cf718f7d838349c06c14f52af9ac7340ce44 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 2 Apr 2017 23:48:40 -0500
 Subject: [PATCH] Decomp
 
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 4ce0c3c..20e5c7f 100644
+index 7e2c001..20e5c7f 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -2576,7 +2576,7 @@ public abstract class World implements IBlockAccess {
@@ -26,13 +26,6 @@ index 4ce0c3c..20e5c7f 100644
                  arraylist.add(entity);
              }
          }
-@@ -3299,4 +3299,4 @@ public abstract class World implements IBlockAccess {
-     public BlockPos findNearestStructure(String p_190528_1_, BlockPos p_190528_2_, boolean p_190528_3_) {
-         return null;
-     }
--}
-\ No newline at end of file
-+}
 -- 
 2.12.1
 
