@@ -1,0 +1,175 @@
+From c65ca3d4c2f7a26e87c58501e69fb0ce793e86ae Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Tue, 4 Apr 2017 22:21:31 -0500
+Subject: [PATCH] Add yml configurations
+
+
+diff --git a/src/main/resources/configurations/bukkit.yml b/src/main/resources/configurations/bukkit.yml
+new file mode 100644
+index 0000000..8bbb835
+--- /dev/null
++++ b/src/main/resources/configurations/bukkit.yml
+@@ -0,0 +1,43 @@
++# This is the main configuration file for Bukkit.
++# As you can see, there's actually not that much to configure without any plugins.
++# For a reference for any variable inside this file, check out the Bukkit Wiki at
++# http://wiki.bukkit.org/Bukkit.yml
++# 
++# If you need help on this file, feel free to join us on irc or leave a message
++# on the forums asking for advice.
++# 
++# IRC: #spigot @ irc.spi.gt
++#    (If this means nothing to you, just go to http://www.spigotmc.org/pages/irc/ )
++# Forums: http://www.spigotmc.org/
++# Bug tracker: http://www.spigotmc.org/go/bugs
++
++
++settings:
++    allow-end: true
++    warn-on-overload: true
++    permissions-file: permissions.yml
++    update-folder: update
++    plugin-profiling: false
++    connection-throttle: 4000
++    query-plugins: true
++    deprecated-verbose: default
++    shutdown-message: Server closed
++spawn-limits:
++    monsters: 70
++    animals: 15
++    water-animals: 5
++    ambient: 15
++chunk-gc:
++    period-in-ticks: 600
++    load-threshold: 0
++ticks-per:
++    animal-spawns: 400
++    monster-spawns: 1
++    autosave: 6000
++aliases: now-in-commands.yml
++database:
++    username: bukkit
++    isolation: SERIALIZABLE
++    driver: org.sqlite.JDBC
++    password: walrus
++    url: jdbc:sqlite:{DIR}{NAME}.db
+diff --git a/src/main/resources/configurations/commands.yml b/src/main/resources/configurations/commands.yml
+new file mode 100644
+index 0000000..733307c
+--- /dev/null
++++ b/src/main/resources/configurations/commands.yml
+@@ -0,0 +1,16 @@
++# This is the commands configuration file for Bukkit.
++# For documentation on how to make use of this file, check out the Bukkit Wiki at
++# http://wiki.bukkit.org/Commands.yml
++# 
++# If you need help on this file, feel free to join us on irc or leave a message
++# on the forums asking for advice.
++# 
++# IRC: #spigot @ irc.spi.gt
++#    (If this means nothing to you, just go to http://www.spigotmc.org/pages/irc/ )
++# Forums: http://www.spigotmc.org/
++# Bug tracker: http://www.spigotmc.org/go/bugs
++
++command-block-overrides: []
++aliases:
++    icanhasbukkit:
++      - "version $1-"
+diff --git a/src/main/resources/configurations/help.yml b/src/main/resources/configurations/help.yml
+new file mode 100644
+index 0000000..15c3d07
+--- /dev/null
++++ b/src/main/resources/configurations/help.yml
+@@ -0,0 +1,55 @@
++# This is the help configuration file for Bukkit.
++# 
++# By default you do not need to modify this file. Help topics for all plugin commands are automatically provided by
++# or extracted from your installed plugins. You only need to modify this file if you wish to add new help pages to
++# your server or override the help pages of existing plugin commands.
++# 
++# This file is divided up into the following parts:
++# -- general-topics: lists admin defined help topics
++# -- index-topics:   lists admin defined index topics
++# -- amend-topics:   lists topic amendments to apply to existing help topics
++# -- ignore-plugins: lists any plugins that should be excluded from help
++# 
++# Examples are given below. When amending command topic, the string <text> will be replaced with the existing value
++# in the help topic. Color codes can be used in topic text. The color code character is & followed by 0-F.
++# ================================================================
++# 
++# Set this to true to list the individual command help topics in the master help.
++# command-topics-in-master-index: true
++# 
++# Each general topic will show up as a separate topic in the help index along with all the plugin command topics.
++# general-topics:
++#     Rules:
++#         shortText: Rules of the server
++#         fullText: |
++#             &61. Be kind to your fellow players.
++#             &B2. No griefing.
++#             &D3. No swearing.
++#         permission: topics.rules
++# 
++# Each index topic will show up as a separate sub-index in the help index along with all the plugin command topics.
++# To override the default help index (displayed when the user executes /help), name the index topic "Default".
++# index-topics:
++#     Ban Commands:
++#         shortText: Player banning commands
++#         preamble: Moderator - do not abuse these commands
++#         permission: op
++#         commands:
++#             - /ban
++#             - /ban-ip
++#             - /banlist
++# 
++# Topic amendments are used to change the content of automatically generated plugin command topics.
++# amended-topics:
++#     /stop:
++#         shortText: Stops the server cold....in its tracks!
++#         fullText: <text> - This kills the server.
++#         permission: you.dont.have
++# 
++# Any plugin in the ignored plugins list will be excluded from help. The name must match the name displayed by
++# the /plugins command. Ignore "Bukkit" to remove the standard bukkit commands from the index. Ignore "All"
++# to completely disable automatic help topic generation.
++# ignore-plugins:
++#    - PluginNameOne
++#    - PluginNameTwo
++#    - PluginNameThree
+diff --git a/src/main/resources/log4j2.xml b/src/main/resources/log4j2.xml
+new file mode 100644
+index 0000000..5cee8f0
+--- /dev/null
++++ b/src/main/resources/log4j2.xml
+@@ -0,0 +1,28 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<Configuration status="WARN" packages="com.mojang.util">
++    <Appenders>
++        <Console name="WINDOWS_COMPAT" target="SYSTEM_OUT"></Console>
++        <Queue name="TerminalConsole">
++            <PatternLayout pattern="[%d{HH:mm:ss} %level]: %msg%n" />
++        </Queue>
++        <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
++            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
++            <Policies>
++                <TimeBasedTriggeringPolicy />
++                <OnStartupTriggeringPolicy />
++            </Policies>
++            <DefaultRolloverStrategy max="1000"/>
++        </RollingRandomAccessFile>
++    </Appenders>
++    <Loggers>
++        <Root level="info">
++            <filters>
++                <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL" />
++            </filters>
++            <AppenderRef ref="WINDOWS_COMPAT" level="info"/>
++            <AppenderRef ref="File"/>
++            <AppenderRef ref="TerminalConsole" level="info"/>
++        </Root>
++    </Loggers>
++</Configuration>
++
+-- 
+2.12.1
+
