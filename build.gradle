@@ -90,9 +90,9 @@ minecraft {
         paperApiDir = "Paper-API"
         paperServerDir = "Paper-Server"
         cleanDir = "work/MCP"
-        accessTransformers = "paper.cfg"
-        mcpRewrites = "mcp-rewrites.txt"
-        preMapSrg = "paper.srg"
-        removeList = "remove-list.txt"
+        accessTransformers = "mcp/paper.cfg"
+        mcpRewrites = "mcp/mcp-rewrites.txt"
+        preMapSrg = "mcp/paper.srg"
+        removeList = "mcp/remove-list.txt"
     }
 }
