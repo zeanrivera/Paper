@@ -12,7 +12,7 @@ git am -3 $1 || (
 	(for i in $(find . -name \*.rej); do
         	base=$(echo "$i" | sed 's/.rej//g')
 		if [ -f "$i" ]; then
-        		sed -e 's/^diff a\/\(.*\) b\/\(.*\)[[:space:]].*rejected.*$/--- \1\n+++ \2/' -i $i && wiggle -v --replace "$base" "$i"
+        		sed -i -e 's/^diff a\/\(.*\) b\/\(.*\)[[:space:]].*rejected.*$/--- \1\n+++ \2/' $i && wiggle -v --replace "$base" "$i"
         		rm "$base.porig" "$i"
 		else
 			echo "No such file: $base"

@@ -1,4 +1,4 @@
-From 2902500d723cf936cc974c37000b24330a44954d Mon Sep 17 00:00:00 2001
+From d721057893c5776cdbe160c44f6319dd0147e2f7 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 24 Mar 2017 23:56:01 -0500
 Subject: [PATCH] Paper Metrics
@@ -15,16 +15,16 @@ decisions on behalf of the project.
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
 new file mode 100644
-index 000000000..585260697
+index 0000000..996f1d1
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/Metrics.java
 @@ -0,0 +1,985 @@
 +/*
 + * This is a modified version of the bStats-Metrics class, licensed under the GNU LGPL v3
-+ * 
++ *
 + * The original version of this file, as of the creation of this modified version, can be found here:
 + *     https://github.com/BtoBastian/bStats-Metrics/blob/94acfb0e97831d866b9e6a28d442a27e4862d954/bstats-bukkit/src/main/java/org/bstats/Metrics.java
-+ *     
++ *
 + * The license that accompanies that file, as of the creation of this modified version, can be found here:
 + *     https://github.com/BtoBastian/bStats-Metrics/blob/94acfb0e97831d866b9e6a28d442a27e4862d954/LICENSE
 + */
@@ -83,7 +83,7 @@ index 000000000..585260697
 +
 +    // A list with all custom charts
 +    private final List<CustomChart> charts = new ArrayList<>();
-+    
++
 +    // Executor for use in scheduling work and submitting data
 +    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 +
@@ -145,7 +145,7 @@ index 000000000..585260697
 +        executor.scheduleAtFixedRate(() -> {
 +                // Nevertheless we want our code to run in the main thread, so we have to use the MC scheduler
 +                // Don't be afraid! The connection to the bStats server is still async, only the stats collection is sync ;)
-+                MinecraftServer.getServer().postToMainThread(this::submitData);
++                MinecraftServer.getServer().addScheduledTask(this::submitData);
 +        }, 5, 30, TimeUnit.MINUTES);
 +        // Submit the data every 30 minutes, first time after 5 minutes to give other plugins enough time to start
 +        // WARNING: Changing the frequency has no effect but your plugin WILL be blocked/deleted!
@@ -1005,7 +1005,7 @@ index 000000000..585260697
 +
 +}
 diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-index 328ff012b..75d4048a9 100644
+index 328ff01..75d4048 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
 @@ -39,7 +39,8 @@ public class PaperConfig {
@@ -1030,25 +1030,25 @@ index 328ff012b..75d4048a9 100644
  
      static void readConfig(Class<?> clazz, Object instance) {
 diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
-index d386a876b..ba51303b2 100644
+index c02e6b8..c6c2271 100644
 --- a/src/main/java/org/spigotmc/SpigotConfig.java
 +++ b/src/main/java/org/spigotmc/SpigotConfig.java
-@@ -82,6 +82,7 @@ public class SpigotConfig
-             MinecraftServer.getServer().server.getCommandMap().register( entry.getKey(), "Spigot", entry.getValue() );
+@@ -94,6 +94,7 @@ public class SpigotConfig {
+             MinecraftServer.getServer().server.getCommandMap().register((String)entry.getKey(), "Spigot", (Command)entry.getValue());
          }
  
 +        /* // Paper - Replace with our own
-         if ( metrics == null )
-         {
-             try
-@@ -93,6 +94,7 @@ public class SpigotConfig
-                 Bukkit.getServer().getLogger().log( Level.SEVERE, "Could not start metrics service", ex );
+         if (metrics == null) {
+             try {
+                 metrics = new Metrics();
+@@ -102,6 +103,7 @@ public class SpigotConfig {
+                 Bukkit.getServer().getLogger().log(Level.SEVERE, (String)"Could not start metrics service", (Throwable)var2);
              }
          }
 +        */ // Paper end
      }
  
-     static void readConfig(Class<?> clazz, Object instance)
+     static void readConfig(Class<?> clazz, Object instance) {
 -- 
-2.12.1.windows.1
+2.8.2
 
