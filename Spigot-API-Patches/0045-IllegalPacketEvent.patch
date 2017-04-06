@@ -1,4 +1,4 @@
-From 12b7b461d56067fc97027e2944e6ad67dbacaf10 Mon Sep 17 00:00:00 2001
+From 39267ac0b06d3ee7967c30446ed043a3fc06c42b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 4 Dec 2016 01:19:14 -0500
 Subject: [PATCH] IllegalPacketEvent
@@ -9,7 +9,7 @@ Lets plugins change the kick message and if it should kick or not.
 
 diff --git a/src/main/java/com/destroystokyo/paper/event/player/IllegalPacketEvent.java b/src/main/java/com/destroystokyo/paper/event/player/IllegalPacketEvent.java
 new file mode 100644
-index 00000000..e11f74fc
+index 0000000..e11f74f
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/event/player/IllegalPacketEvent.java
 @@ -0,0 +1,63 @@
@@ -77,5 +77,5 @@ index 00000000..e11f74fc
 +    }
 +}
 -- 
-2.12.1
+2.9.3
 

@@ -1,4 +1,4 @@
-From 67995bac0a85f066f97334a374a0be8f15794b8a Mon Sep 17 00:00:00 2001
+From 1419e3a2f80a01da0b33d85c86e5f8c083b39caf Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Mon, 29 Feb 2016 17:22:34 -0600
 Subject: [PATCH] Player affects spawning API
@@ -30,5 +30,5 @@ index 517e69f8..2f80d248 100644
      public class Spigot extends Entity.Spigot
      {
 -- 
-2.12.1
+2.12.1.windows.1
 

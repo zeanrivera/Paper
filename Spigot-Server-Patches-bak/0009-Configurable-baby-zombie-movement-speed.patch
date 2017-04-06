@@ -1,14 +1,14 @@
-From 4913d3438af4ad594d6c8022d5e343ec0f03bcc7 Mon Sep 17 00:00:00 2001
+From 4f7e02a3e570583d2510848d700901e72de644c8 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 1 Mar 2016 13:09:16 -0600
 Subject: [PATCH] Configurable baby zombie movement speed
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 8d9c322..ae3d0e4 100644
+index 6228bc1f6..fe9e7b342 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -86,4 +86,10 @@ public class PaperWorldConfig {
+@@ -80,4 +80,10 @@ public class PaperWorldConfig {
          log("Max height for cactus growth " + cactusMaxHeight + ". Max height for reed growth " + reedMaxHeight);
  
      }
@@ -20,7 +20,7 @@ index 8d9c322..ae3d0e4 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/EntityZombie.java b/src/main/java/net/minecraft/server/EntityZombie.java
-index 497d559..897882c 100644
+index 497d5593c..897882c97 100644
 --- a/src/main/java/net/minecraft/server/EntityZombie.java
 +++ b/src/main/java/net/minecraft/server/EntityZombie.java
 @@ -16,7 +16,7 @@ public class EntityZombie extends EntityMonster {
@@ -45,5 +45,5 @@ index 497d559..897882c 100644
          }
  
 -- 
-2.10.2
+2.12.0.windows.1
 

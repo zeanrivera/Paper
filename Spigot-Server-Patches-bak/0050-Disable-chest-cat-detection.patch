@@ -1,14 +1,14 @@
-From e5e333c8fb98fadbd22786c882eb57256559d107 Mon Sep 17 00:00:00 2001
+From 1410382d853ba361a079502d38568f4eb55113de Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 3 Mar 2016 01:13:45 -0600
 Subject: [PATCH] Disable chest cat detection
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index b2b94b8..97265b9 100644
+index e6aae7317..6ce62827a 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -230,4 +230,9 @@ public class PaperWorldConfig {
+@@ -224,4 +224,9 @@ public class PaperWorldConfig {
      private void containerUpdateTickRate() {
          containerUpdateTickRate = getInt("container-update-tick-rate", 1);
      }
@@ -19,7 +19,7 @@ index b2b94b8..97265b9 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/BlockChest.java b/src/main/java/net/minecraft/server/BlockChest.java
-index d919d78..9d4c15f 100644
+index c75ed8a36..9c4d1c938 100644
 --- a/src/main/java/net/minecraft/server/BlockChest.java
 +++ b/src/main/java/net/minecraft/server/BlockChest.java
 @@ -399,6 +399,11 @@ public class BlockChest extends BlockTileEntity {
@@ -35,5 +35,5 @@ index d919d78..9d4c15f 100644
  
          EntityOcelot entityocelot;
 -- 
-2.10.2
+2.12.0.windows.1
 

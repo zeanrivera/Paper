@@ -1,14 +1,14 @@
-From b8fb8297e40abe3791a77426cbdb2a690e39801b Mon Sep 17 00:00:00 2001
+From 708e3b196dead7aa3871281f6922384c56c32257 Mon Sep 17 00:00:00 2001
 From: Sudzzy <originmc@outlook.com>
 Date: Wed, 2 Mar 2016 14:57:24 -0600
 Subject: [PATCH] Disable ice and snow
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index b52e5c5..a6afdd3 100644
+index a40d4887c..4fea4b359 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -215,4 +215,9 @@ public class PaperWorldConfig {
+@@ -209,4 +209,9 @@ public class PaperWorldConfig {
      private void disableThunder() {
          disableThunder = getBoolean("disable-thunder", false);
      }
@@ -19,10 +19,10 @@ index b52e5c5..a6afdd3 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
-index ca74db6..c84121c 100644
+index ce087eb7d..ac8dc5f2f 100644
 --- a/src/main/java/net/minecraft/server/WorldServer.java
 +++ b/src/main/java/net/minecraft/server/WorldServer.java
-@@ -450,7 +450,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
+@@ -451,7 +451,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                  }
  
                  this.methodProfiler.c("iceandsnow");
@@ -32,5 +32,5 @@ index ca74db6..c84121c 100644
                      l = this.l >> 2;
                      blockposition = this.p(new BlockPosition(j + (l & 15), 0, k + (l >> 8 & 15)));
 -- 
-2.10.2
+2.12.0.windows.1
 

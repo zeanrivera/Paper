@@ -1,11 +1,11 @@
-From 4ae31b52610780b8ea042468d9f7e92f9fe39aad Mon Sep 17 00:00:00 2001
+From 9ebcc2f689753eb2c2ec33864e05450f9cee2fa3 Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Wed, 2 Mar 2016 23:42:37 -0600
 Subject: [PATCH] Use UserCache for player heads
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
-index f07eb2f..18cc746 100644
+index f07eb2f75..18cc74639 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
 @@ -6,6 +6,7 @@ import net.minecraft.server.GameProfileSerializer;
@@ -31,5 +31,5 @@ index f07eb2f..18cc746 100644
              // Spigot end
          }
 -- 
-2.10.2
+2.12.0.windows.1
 

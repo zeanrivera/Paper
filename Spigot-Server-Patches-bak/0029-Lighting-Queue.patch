@@ -1,4 +1,4 @@
-From de8891c221aadfd9a15b896d964d0d41367c5c44 Mon Sep 17 00:00:00 2001
+From d13d53ab6bafe9851cb3a816ca64e42ab83d6d29 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Wed, 2 Mar 2016 00:52:31 -0600
 Subject: [PATCH] Lighting Queue
@@ -6,7 +6,7 @@ Subject: [PATCH] Lighting Queue
 This provides option to queue lighting updates to ensure they do not cause the server lag
 
 diff --git a/src/main/java/co/aikar/timings/WorldTimingsHandler.java b/src/main/java/co/aikar/timings/WorldTimingsHandler.java
-index e778911..f90f5bf 100644
+index e7789117b..f90f5bf84 100644
 --- a/src/main/java/co/aikar/timings/WorldTimingsHandler.java
 +++ b/src/main/java/co/aikar/timings/WorldTimingsHandler.java
 @@ -50,6 +50,8 @@ public class WorldTimingsHandler {
@@ -27,10 +27,10 @@ index e778911..f90f5bf 100644
      }
  }
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 2767ffb..f7a0c18 100644
+index e524a464f..fd606ee14 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -149,4 +149,10 @@ public class PaperWorldConfig {
+@@ -143,4 +143,10 @@ public class PaperWorldConfig {
          netherVoidTopDamage = getBoolean( "nether-ceiling-void-damage", false );
          log("Top of the nether void damage: " + netherVoidTopDamage);
      }
@@ -42,7 +42,7 @@ index 2767ffb..f7a0c18 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/Chunk.java b/src/main/java/net/minecraft/server/Chunk.java
-index 1c0108e..b80f951 100644
+index 1c0108ef1..b80f95159 100644
 --- a/src/main/java/net/minecraft/server/Chunk.java
 +++ b/src/main/java/net/minecraft/server/Chunk.java
 @@ -33,6 +33,7 @@ public class Chunk {
@@ -85,10 +85,10 @@ index 1c0108e..b80f951 100644
  
                  TileEntity tileentity;
 diff --git a/src/main/java/net/minecraft/server/ChunkProviderServer.java b/src/main/java/net/minecraft/server/ChunkProviderServer.java
-index 17d39bb..df3ce72 100644
+index 3ba489d4f..f7f2d12cf 100644
 --- a/src/main/java/net/minecraft/server/ChunkProviderServer.java
 +++ b/src/main/java/net/minecraft/server/ChunkProviderServer.java
-@@ -280,6 +280,7 @@ public class ChunkProviderServer implements IChunkProvider {
+@@ -295,6 +295,7 @@ public class ChunkProviderServer implements IChunkProvider {
              return false;
          }
          save = event.isSaveChunk();
@@ -97,35 +97,37 @@ index 17d39bb..df3ce72 100644
          // Update neighbor counts
          for (int x = -2; x < 3; x++) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 127d11c..2e72b8c 100644
+index 4476799d8..f953ef8e0 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -716,7 +716,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
- 
+@@ -721,7 +721,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
      protected void C() throws ExceptionWorldConflict { // CraftBukkit - added throws
          co.aikar.timings.TimingsManager.FULL_SERVER_TICK.startTiming(); // Paper
+         this.slackActivityAccountant.tickStarted(); // Spigot
 -        long i = System.nanoTime();
 +        long i = System.nanoTime(); long startTime = i; // Paper
  
          ++this.ticks;
          if (this.T) {
-@@ -774,6 +774,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
+@@ -782,6 +782,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
          this.methodProfiler.b();
  
          org.spigotmc.WatchdogThread.tick(); // Spigot
 +        PaperLightingQueue.processQueue(startTime); // Paper
+         this.slackActivityAccountant.tickEnded(tickNanos); // Spigot
          co.aikar.timings.TimingsManager.FULL_SERVER_TICK.stopTiming(); // Paper
      }
- 
 diff --git a/src/main/java/net/minecraft/server/PaperLightingQueue.java b/src/main/java/net/minecraft/server/PaperLightingQueue.java
 new file mode 100644
-index 0000000..2350fe3
+index 000000000..d8d3e1efd
 --- /dev/null
 +++ b/src/main/java/net/minecraft/server/PaperLightingQueue.java
-@@ -0,0 +1,98 @@
+@@ -0,0 +1,101 @@
 +package net.minecraft.server;
 +
 +import co.aikar.timings.Timing;
++import it.unimi.dsi.fastutil.objects.ObjectCollection;
++
 +import java.util.ArrayDeque;
 +
 +class PaperLightingQueue {
@@ -145,7 +147,8 @@ index 0000000..2350fe3
 +                continue;
 +            }
 +
-+            for (Chunk chunk : ((WorldServer) world).getChunkProviderServer().chunks.values()) {
++            ObjectCollection<Chunk> loadedChunks = ((WorldServer) world).getChunkProviderServer().chunks.values();
++            for (Chunk chunk : loadedChunks.toArray(new Chunk[loadedChunks.size()])) {
 +                if (chunk.lightingQueue.processQueue(startTime, maxTickTime)) {
 +                    break START;
 +                }
@@ -222,7 +225,7 @@ index 0000000..2350fe3
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
-index 20cc5ff..abe11ad 100644
+index 632d5c760..e6e85e7a8 100644
 --- a/src/main/java/net/minecraft/server/World.java
 +++ b/src/main/java/net/minecraft/server/World.java
 @@ -387,7 +387,7 @@ public abstract class World implements IBlockAccess {
@@ -235,5 +238,5 @@ index 20cc5ff..abe11ad 100644
                  }
  
 -- 
-2.10.2
+2.12.0.windows.1
 

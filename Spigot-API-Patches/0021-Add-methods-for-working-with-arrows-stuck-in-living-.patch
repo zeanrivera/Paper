@@ -1,11 +1,11 @@
-From 752fda66b88871fb5201099099cd3e00da187035 Mon Sep 17 00:00:00 2001
+From 60de5d41e3b77b68ec660c9ee8d800bf96d68f1a Mon Sep 17 00:00:00 2001
 From: mrapple <tony@oc.tc>
 Date: Sun, 25 Nov 2012 13:47:27 -0600
 Subject: [PATCH] Add methods for working with arrows stuck in living entities
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index a938b619..af3d1e57 100644
+index a938b61..af3d1e5 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
 @@ -428,4 +428,19 @@ public interface LivingEntity extends Attributable, Entity, Damageable, Projecti
@@ -29,5 +29,5 @@ index a938b619..af3d1e57 100644
 +    // Paper end
  }
 -- 
-2.12.1
+2.9.3
 

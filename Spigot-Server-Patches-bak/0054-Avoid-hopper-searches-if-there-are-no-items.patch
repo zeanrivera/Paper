@@ -1,4 +1,4 @@
-From 315637d90a175804eb0576eb881d06a37c81dacb Mon Sep 17 00:00:00 2001
+From b0c16e419f39727b2b51bc84b777dc9eb42a8131 Mon Sep 17 00:00:00 2001
 From: CullanP <cullanpage@gmail.com>
 Date: Thu, 3 Mar 2016 02:13:38 -0600
 Subject: [PATCH] Avoid hopper searches if there are no items
@@ -14,7 +14,7 @@ And since minecart hoppers are used _very_ rarely near we can avoid alot of sear
 Combined, this adds up a lot.
 
 diff --git a/src/main/java/net/minecraft/server/Chunk.java b/src/main/java/net/minecraft/server/Chunk.java
-index b80f951..e1fc4ea 100644
+index b80f95159..e1fc4ea6c 100644
 --- a/src/main/java/net/minecraft/server/Chunk.java
 +++ b/src/main/java/net/minecraft/server/Chunk.java
 @@ -47,6 +47,13 @@ public class Chunk {
@@ -95,5 +95,5 @@ index b80f951..e1fc4ea 100644
  
              while (iterator.hasNext()) {
 -- 
-2.10.2
+2.12.0.windows.1
 

@@ -1,11 +1,11 @@
-From dbee630e270d26dde9e2dffc746109edf79a8399 Mon Sep 17 00:00:00 2001
+From 5f8b7e68437558b9ef9cef0c95d81b9c23bba23e Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Mon, 29 Feb 2016 19:48:59 -0600
 Subject: [PATCH] Expose server CommandMap
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 3b16953a..07077ec4 100644
+index 3b16953..07077ec 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
 @@ -17,10 +17,7 @@ import org.bukkit.boss.BarColor;
@@ -39,7 +39,7 @@ index 3b16953a..07077ec4 100644
      {
          return server.spigot();
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index a4e68943..4463ab33 100644
+index a4e6894..4463ab3 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
 @@ -17,10 +17,7 @@ import org.bukkit.boss.BarColor;
@@ -70,5 +70,5 @@ index a4e68943..4463ab33 100644
       * @see UnsafeValues
       * @return the unsafe values instance
 -- 
-2.12.1
+2.9.3
 

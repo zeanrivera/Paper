@@ -1,14 +1,14 @@
-From 94a01cae0a4766334b1efdb05a4410a02a84a401 Mon Sep 17 00:00:00 2001
+From 4769d44f5b85ef49a3bbd628be4e7e2f86fa7521 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 1 Mar 2016 23:58:50 -0600
 Subject: [PATCH] Configurable top of nether void damage
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 06d1527..2767ffb 100644
+index 62e6830aa..e524a464f 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -143,4 +143,10 @@ public class PaperWorldConfig {
+@@ -137,4 +137,10 @@ public class PaperWorldConfig {
          waterOverLavaFlowSpeed = getInt("water-over-lava-flow-speed", 5);
          log("Water over lava flow speed: " + waterOverLavaFlowSpeed);
      }
@@ -20,10 +20,10 @@ index 06d1527..2767ffb 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 6766166..40398ca 100644
+index 313100aed..7feed2995 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
-@@ -390,9 +390,15 @@ public abstract class Entity implements ICommandListener {
+@@ -442,9 +442,15 @@ public abstract class Entity implements ICommandListener {
              this.fallDistance *= 0.5F;
          }
  
@@ -39,7 +39,7 @@ index 6766166..40398ca 100644
  
          if (!this.world.isClientSide) {
              this.setFlag(0, this.fireTicks > 0);
-@@ -402,6 +408,18 @@ public abstract class Entity implements ICommandListener {
+@@ -454,6 +460,18 @@ public abstract class Entity implements ICommandListener {
          this.world.methodProfiler.b();
      }
  
@@ -58,7 +58,7 @@ index 6766166..40398ca 100644
      protected void H() {
          if (this.portalCooldown > 0) {
              --this.portalCooldown;
-@@ -458,6 +476,7 @@ public abstract class Entity implements ICommandListener {
+@@ -510,6 +528,7 @@ public abstract class Entity implements ICommandListener {
          this.fireTicks = 0;
      }
  
@@ -67,10 +67,10 @@ index 6766166..40398ca 100644
          this.die();
      }
 diff --git a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
-index fdacb6d..ec75bab 100644
+index fd3337d3f..ca1faa41d 100644
 --- a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
 +++ b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
-@@ -206,9 +206,15 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
+@@ -204,9 +204,15 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
              this.setDamage(this.getDamage() - 1.0F);
          }
  
@@ -87,5 +87,5 @@ index fdacb6d..ec75bab 100644
          int i;
  
 -- 
-2.10.2
+2.12.0.windows.1
 

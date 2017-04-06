@@ -1,14 +1,14 @@
-From ea9f6345fab166ab7678c9e5212b78f2fc18618d Mon Sep 17 00:00:00 2001
+From fbb70839f7188d6096dff42ca1b3fdcf8c715f90 Mon Sep 17 00:00:00 2001
 From: Sudzzy <originmc@outlook.com>
 Date: Wed, 2 Mar 2016 14:48:03 -0600
 Subject: [PATCH] Disable explosion knockback
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index b5a106d..fcbf8a2 100644
+index a197af84f..2217f680c 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -205,4 +205,9 @@ public class PaperWorldConfig {
+@@ -199,4 +199,9 @@ public class PaperWorldConfig {
          lavaFlowSpeedNormal = getInt("lava-flow-speed.normal", 30);
          lavaFlowSpeedNether = getInt("lava-flow-speed.nether", 10);
      }
@@ -19,10 +19,10 @@ index b5a106d..fcbf8a2 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index 3267357..87a8a3e 100644
+index b22f81b12..e5fa1c3ba 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
-@@ -892,12 +892,14 @@ public abstract class EntityLiving extends Entity {
+@@ -893,12 +893,14 @@ public abstract class EntityLiving extends Entity {
                      }
                  }
  
@@ -37,7 +37,7 @@ index 3267357..87a8a3e 100644
                          this.world.broadcastEntityEffect(this, (byte) 2);
                      }
  
-@@ -921,6 +923,8 @@ public abstract class EntityLiving extends Entity {
+@@ -922,6 +924,8 @@ public abstract class EntityLiving extends Entity {
                      }
                  }
  
@@ -47,7 +47,7 @@ index 3267357..87a8a3e 100644
                      if (!this.d(damagesource)) {
                          SoundEffect soundeffect = this.bX();
 diff --git a/src/main/java/net/minecraft/server/Explosion.java b/src/main/java/net/minecraft/server/Explosion.java
-index 49fc95e..d7bc6a0 100644
+index 49fc95e35..d7bc6a0ed 100644
 --- a/src/main/java/net/minecraft/server/Explosion.java
 +++ b/src/main/java/net/minecraft/server/Explosion.java
 @@ -146,7 +146,7 @@ public class Explosion {
@@ -69,5 +69,5 @@ index 49fc95e..d7bc6a0 100644
                              }
                          }
 -- 
-2.10.2
+2.12.0.windows.1
 

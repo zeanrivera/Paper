@@ -1,4 +1,4 @@
-From 65c8b392d267976d2e7592777f581170493eb311 Mon Sep 17 00:00:00 2001
+From c2e8208e724845d130dbf63019835d6ea9088f3a Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 3 Mar 2016 02:02:07 -0600
 Subject: [PATCH] Optimize Pathfinding
@@ -7,7 +7,7 @@ Prevents pathfinding from spamming failures for things such as
 arrow attacks.
 
 diff --git a/src/main/java/net/minecraft/server/NavigationAbstract.java b/src/main/java/net/minecraft/server/NavigationAbstract.java
-index 4f28b88..43b2be5 100644
+index 4f28b8819..43b2be505 100644
 --- a/src/main/java/net/minecraft/server/NavigationAbstract.java
 +++ b/src/main/java/net/minecraft/server/NavigationAbstract.java
 @@ -118,10 +118,26 @@ public abstract class NavigationAbstract {
@@ -47,5 +47,5 @@ index 4f28b88..43b2be5 100644
      }
  
 -- 
-2.10.2
+2.12.0.windows.1
 

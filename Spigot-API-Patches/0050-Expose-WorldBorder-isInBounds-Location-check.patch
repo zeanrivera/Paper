@@ -1,11 +1,11 @@
-From e12a1bdf2f04bff7cd8d3d704d8cf13fc38449cc Mon Sep 17 00:00:00 2001
+From 46d45505e26080595aafad43dd6214213e49f54f Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 21 Jan 2017 17:03:10 -0600
 Subject: [PATCH] Expose WorldBorder#isInBounds(Location) check
 
 
 diff --git a/src/main/java/org/bukkit/WorldBorder.java b/src/main/java/org/bukkit/WorldBorder.java
-index 4dc18edc..41b7fae6 100644
+index 4dc18ed..41b7fae 100644
 --- a/src/main/java/org/bukkit/WorldBorder.java
 +++ b/src/main/java/org/bukkit/WorldBorder.java
 @@ -114,4 +114,18 @@ public interface WorldBorder {
@@ -28,5 +28,5 @@ index 4dc18edc..41b7fae6 100644
 +    // Paper end
  }
 -- 
-2.12.1
+2.9.3
 

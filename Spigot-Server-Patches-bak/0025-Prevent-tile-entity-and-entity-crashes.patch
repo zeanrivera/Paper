@@ -1,11 +1,11 @@
-From 7fbd0b2351a7a6e38cf85611cbcb5caa1fc5cbf0 Mon Sep 17 00:00:00 2001
+From 555c9dbf56471528d900454f8556dcc19c7af2e3 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 1 Mar 2016 23:52:34 -0600
 Subject: [PATCH] Prevent tile entity and entity crashes
 
 
 diff --git a/src/main/java/net/minecraft/server/TileEntity.java b/src/main/java/net/minecraft/server/TileEntity.java
-index 0f505ed..1f3e89b 100644
+index b3d3df4cf..d0c0371fc 100644
 --- a/src/main/java/net/minecraft/server/TileEntity.java
 +++ b/src/main/java/net/minecraft/server/TileEntity.java
 @@ -175,7 +175,12 @@ public abstract class TileEntity {
@@ -23,10 +23,10 @@ index 0f505ed..1f3e89b 100644
                  public String a() throws Exception {
                      int i = Block.getId(TileEntity.this.world.getType(TileEntity.this.position).getBlock());
 diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
-index 4db969b..20cc5ff 100644
+index 39919ab1c..632d5c760 100644
 --- a/src/main/java/net/minecraft/server/World.java
 +++ b/src/main/java/net/minecraft/server/World.java
-@@ -1467,10 +1467,12 @@ public abstract class World implements IBlockAccess {
+@@ -1446,10 +1446,12 @@ public abstract class World implements IBlockAccess {
                      entity.tickTimer.stopTiming(); // Paper
                  } catch (Throwable throwable1) {
                      entity.tickTimer.stopTiming();
@@ -43,7 +43,7 @@ index 4db969b..20cc5ff 100644
                  }
              }
  
-@@ -1533,10 +1535,13 @@ public abstract class World implements IBlockAccess {
+@@ -1512,10 +1514,13 @@ public abstract class World implements IBlockAccess {
                          ((ITickable) tileentity).F_();
                          this.methodProfiler.b();
                      } catch (Throwable throwable2) {
@@ -62,5 +62,5 @@ index 4db969b..20cc5ff 100644
                      // Spigot start
                      finally {
 -- 
-2.10.2
+2.12.0.windows.1
 

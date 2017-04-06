@@ -1,11 +1,11 @@
-From 7c1bea1b9cbf6b50b602acff55e284372294b058 Mon Sep 17 00:00:00 2001
+From e20b2ab5e6e8c3ce48744201e26165aff882eabf Mon Sep 17 00:00:00 2001
 From: BillyGalbreath <Blake.Galbreath@GMail.com>
 Date: Sat, 14 Jan 2017 16:15:20 -0600
 Subject: [PATCH] Add fromBottle flag to Experience Orbs
 
 
 diff --git a/src/main/java/org/bukkit/entity/ExperienceOrb.java b/src/main/java/org/bukkit/entity/ExperienceOrb.java
-index c286edfd..a94e3106 100644
+index c286edfd..bcb68fa7 100644
 --- a/src/main/java/org/bukkit/entity/ExperienceOrb.java
 +++ b/src/main/java/org/bukkit/entity/ExperienceOrb.java
 @@ -18,4 +18,9 @@ public interface ExperienceOrb extends Entity {
@@ -19,5 +19,5 @@ index c286edfd..a94e3106 100644
 +    public boolean isFromBottle();
  }
 -- 
-2.12.1
+2.11.0
 

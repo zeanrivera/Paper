@@ -1,4 +1,4 @@
-From 33fe8a39798da399ef8abd647745771cddd9c410 Mon Sep 17 00:00:00 2001
+From 5bbfd17e10b92832b0459da91bb1044c3eb38f17 Mon Sep 17 00:00:00 2001
 From: Isaac Moore <rmsy@me.com>
 Date: Mon, 29 Feb 2016 18:02:25 -0600
 Subject: [PATCH] Add PlayerLocaleChangeEvent
@@ -6,7 +6,7 @@ Subject: [PATCH] Add PlayerLocaleChangeEvent
 
 diff --git a/src/main/java/com/destroystokyo/paper/event/player/PlayerLocaleChangeEvent.java b/src/main/java/com/destroystokyo/paper/event/player/PlayerLocaleChangeEvent.java
 new file mode 100644
-index 00000000..17afc8ca
+index 0000000..17afc8c
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/event/player/PlayerLocaleChangeEvent.java
 @@ -0,0 +1,47 @@
@@ -58,5 +58,5 @@ index 00000000..17afc8ca
 +    }
 +}
 -- 
-2.12.1
+2.8.0
 

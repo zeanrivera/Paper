@@ -1,11 +1,11 @@
-From f2bbe33ed075142f13f0c6d51b67f5e2d62f7a31 Mon Sep 17 00:00:00 2001
+From 6ee4894cd7619d860ec2d48dc29031bf2bd0384b Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 1 Mar 2016 22:01:19 -0600
 Subject: [PATCH] Optimize TileEntity Ticking
 
 
 diff --git a/src/main/java/net/minecraft/server/TileEntityChest.java b/src/main/java/net/minecraft/server/TileEntityChest.java
-index 28a514a..60452e8 100644
+index 28a514a64..60452e83b 100644
 --- a/src/main/java/net/minecraft/server/TileEntityChest.java
 +++ b/src/main/java/net/minecraft/server/TileEntityChest.java
 @@ -8,17 +8,17 @@ import org.bukkit.craftbukkit.entity.CraftHumanEntity;
@@ -117,7 +117,7 @@ index 28a514a..60452e8 100644
              this.world.applyPhysics(this.position, this.getBlock(), false);
  
 diff --git a/src/main/java/net/minecraft/server/TileEntityEnderChest.java b/src/main/java/net/minecraft/server/TileEntityEnderChest.java
-index 3d61c2d..586ceaa 100644
+index 3d61c2d68..586ceaa67 100644
 --- a/src/main/java/net/minecraft/server/TileEntityEnderChest.java
 +++ b/src/main/java/net/minecraft/server/TileEntityEnderChest.java
 @@ -1,15 +1,17 @@
@@ -186,5 +186,5 @@ index 3d61c2d..586ceaa 100644
      }
  
 -- 
-2.10.2
+2.12.0.windows.1
 

@@ -1,4 +1,4 @@
-From 840b01f98216ecb466d1f10ed3e4d67ded99c874 Mon Sep 17 00:00:00 2001
+From d9b95019ce4ca79338a34067bd0b6ea22ddd245d Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 17:58:01 -0600
 Subject: [PATCH] Check Paper versions
@@ -148,5 +148,5 @@ index 760d58eb..aae605e9 100644
 +    // Paper end
  }
 -- 
-2.12.1
+2.11.1.windows.1
 

@@ -1,4 +1,4 @@
-From 28e05719f8e0a3f399db8c129b780df4fc2984e7 Mon Sep 17 00:00:00 2001
+From 9d5e09ca837a92224b403ec20930f9ad1e300ed8 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Wed, 2 Mar 2016 11:59:48 -0600
 Subject: [PATCH] Optimize explosions
@@ -10,10 +10,10 @@ This patch adds a per-tick cache that is used for storing and retrieving
 an entity's exposure during an explosion.
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index bc50289..356265e 100644
+index 3b19b53a8..a7dfd2af7 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -185,4 +185,10 @@ public class PaperWorldConfig {
+@@ -179,4 +179,10 @@ public class PaperWorldConfig {
          generateVillage = getBoolean("generator-settings.village", true);
          generateFlatBedrock = getBoolean("generator-settings.flat-bedrock", false);
      }
@@ -25,7 +25,7 @@ index bc50289..356265e 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/Explosion.java b/src/main/java/net/minecraft/server/Explosion.java
-index 4e05bcd..49fc95e 100644
+index 4e05bcdfa..49fc95e35 100644
 --- a/src/main/java/net/minecraft/server/Explosion.java
 +++ b/src/main/java/net/minecraft/server/Explosion.java
 @@ -130,7 +130,7 @@ public class Explosion {
@@ -124,10 +124,10 @@ index 4e05bcd..49fc95e 100644
 +    // Paper end
  }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 2e72b8c..a872e76 100644
+index f953ef8e0..3b67ff52e 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -877,6 +877,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
+@@ -886,6 +886,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                  worldserver.getTracker().updatePlayers();
                  this.methodProfiler.b();
                  this.methodProfiler.b();
@@ -136,7 +136,7 @@ index 2e72b8c..a872e76 100644
  
              // this.i[i][this.ticks % 100] = System.nanoTime() - j; // CraftBukkit
 diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
-index abe11ad..1248a9f 100644
+index e6e85e7a8..5f7590e11 100644
 --- a/src/main/java/net/minecraft/server/World.java
 +++ b/src/main/java/net/minecraft/server/World.java
 @@ -15,6 +15,7 @@ import javax.annotation.Nullable;
@@ -156,5 +156,5 @@ index abe11ad..1248a9f 100644
      public CraftWorld getWorld() {
          return this.world;
 -- 
-2.10.2
+2.12.0.windows.1
 
