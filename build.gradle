@@ -11,7 +11,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:1.0.13"
+        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:1.0.14"
         classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
 }
