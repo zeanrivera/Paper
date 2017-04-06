@@ -1,4 +1,4 @@
-From e523a4b6c84dcec00f7583b27d6f2d39d341767b Mon Sep 17 00:00:00 2001
+From 0d9b8a89aa5589487966f4768a1a51dddfc35bfe Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 27 Nov 2016 08:01:04 -0600
 Subject: [PATCH] Setup Gradle config
@@ -6,11 +6,12 @@ Subject: [PATCH] Setup Gradle config
 
 diff --git a/.gitignore b/.gitignore
 new file mode 100644
-index 0000000..567609b
+index 0000000..4e7bf47
 --- /dev/null
 +++ b/.gitignore
-@@ -0,0 +1 @@
+@@ -0,0 +1,2 @@
 +build/
++.cache
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
 index 0000000..9858351

@@ -1,4 +1,4 @@
-From 0b1960945bfe5df0eda304dbe479c80916e050cc Mon Sep 17 00:00:00 2001
+From 946807dbe6f451af8903d556bc449686021696d0 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 17:16:08 -0600
 Subject: [PATCH] Setup Gradle config
@@ -6,7 +6,7 @@ Subject: [PATCH] Setup Gradle config
 
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
-index 0000000..aa054eb
+index 00000000..aa054eb5
 --- /dev/null
 +++ b/build.gradle
 @@ -0,0 +1,65 @@
@@ -77,14 +77,14 @@ index 0000000..aa054eb
 +build.dependsOn shadowJar
 diff --git a/gradle.properties b/gradle.properties
 new file mode 100644
-index 0000000..36e69a8
+index 00000000..36e69a8a
 --- /dev/null
 +++ b/gradle.properties
 @@ -0,0 +1 @@
 +artifactId = paper-api
 diff --git a/pom.xml b/pom.xml
 deleted file mode 100644
-index 4b788b0..0000000
+index 28d2a576..00000000
 --- a/pom.xml
 +++ /dev/null
 @@ -1,173 +0,0 @@
@@ -101,7 +101,7 @@ index 4b788b0..0000000
 -
 -    <groupId>org.spigotmc</groupId>
 -    <artifactId>spigot-api</artifactId>
--    <version>1.11-R0.1-SNAPSHOT</version>
+-    <version>1.11.2-R0.1-SNAPSHOT</version>
 -    <packaging>jar</packaging>
 -
 -    <name>Spigot-API</name>
@@ -262,5 +262,5 @@ index 4b788b0..0000000
 -    </build>
 -</project>
 -- 
-2.10.2
+2.12.1
 
