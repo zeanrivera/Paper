@@ -1,0 +1,74 @@
+From dbee630e270d26dde9e2dffc746109edf79a8399 Mon Sep 17 00:00:00 2001
+From: kashike <kashike@vq.lc>
+Date: Mon, 29 Feb 2016 19:48:59 -0600
+Subject: [PATCH] Expose server CommandMap
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index 3b16953a..07077ec4 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -17,10 +17,7 @@ import org.bukkit.boss.BarColor;
+ import org.bukkit.boss.BarFlag;
+ import org.bukkit.boss.BarStyle;
+ import org.bukkit.boss.BossBar;
+-import org.bukkit.command.CommandException;
+-import org.bukkit.command.CommandSender;
+-import org.bukkit.command.ConsoleCommandSender;
+-import org.bukkit.command.PluginCommand;
++import org.bukkit.command.*;
+ import org.bukkit.entity.Entity;
+ import org.bukkit.entity.Player;
+ import org.bukkit.event.inventory.InventoryType;
+@@ -1161,6 +1158,17 @@ public final class Bukkit {
+         return server.getUnsafe();
+     }
+ 
++    // Paper start
++    /**
++     * Gets the active {@link CommandMap}
++     *
++     * @return the active command map
++     */
++    public static CommandMap getCommandMap() {
++        return server.getCommandMap();
++    }
++    // Paper end
++
+     public static Server.Spigot spigot()
+     {
+         return server.spigot();
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index a4e68943..4463ab33 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -17,10 +17,7 @@ import org.bukkit.boss.BarColor;
+ import org.bukkit.boss.BarFlag;
+ import org.bukkit.boss.BarStyle;
+ import org.bukkit.boss.BossBar;
+-import org.bukkit.command.CommandException;
+-import org.bukkit.command.CommandSender;
+-import org.bukkit.command.ConsoleCommandSender;
+-import org.bukkit.command.PluginCommand;
++import org.bukkit.command.*;
+ import org.bukkit.entity.Entity;
+ import org.bukkit.entity.Player;
+ import org.bukkit.event.inventory.InventoryType;
+@@ -943,6 +940,14 @@ public interface Server extends PluginMessageRecipient {
+     public double[] getTPS();
+     // Paper end
+ 
++    // Paper start
++    /**
++     * Gets the active {@link CommandMap}
++     *
++     * @return the active command map
++     */
++    CommandMap getCommandMap();
++
+     /**
+      * @see UnsafeValues
+      * @return the unsafe values instance
+-- 
+2.12.1
+

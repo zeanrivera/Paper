@@ -1,9 +1,29 @@
-From 946807dbe6f451af8903d556bc449686021696d0 Mon Sep 17 00:00:00 2001
+From 4fbb2ee8679f1fb00ce1480fd55ff604dfa8e172 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 17:16:08 -0600
 Subject: [PATCH] Setup Gradle config
 
 
+diff --git a/.gitignore b/.gitignore
+index edf9e5c3..41b38f10 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -6,7 +6,7 @@
+ # netbeans
+ /nbproject
+ 
+-# we use maven!
++# we use gradle!
+ /build.xml
+ 
+ # maven
+@@ -29,3 +29,6 @@
+ *.ipr
+ *.iws
+ .idea/
++
++build/
++.cache
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
 index 00000000..aa054eb5
