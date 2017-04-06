@@ -1,4 +1,4 @@
-From 6ae8d4ded1a396d93d7ffa625803b06080442e08 Mon Sep 17 00:00:00 2001
+From 794d8aa9a278731eed61f241a00436e478a9b0d0 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 2 Apr 2017 22:52:10 -0500
 Subject: [PATCH] Fix decompile
@@ -192,49 +192,6 @@ index 136c652..b578eb2 100644
  
                              if (var40 != null) {
                                  for (NextTickListEntry var48 : var40) {
-diff --git a/src/main/java/net/minecraft/command/CommandExecuteAt.java b/src/main/java/net/minecraft/command/CommandExecuteAt.java
-index 70126a9..c7f0ba8 100644
---- a/src/main/java/net/minecraft/command/CommandExecuteAt.java
-+++ b/src/main/java/net/minecraft/command/CommandExecuteAt.java
-@@ -170,30 +170,30 @@ public class CommandExecuteAt extends CommandBase {
-             ICommandManager icommandhandler = server.getCommandManager();
- 
-             try {
--                CommandSender sender = null;
-+                CommandSender sender1 = null; // Paper - fix decompile
-                 ICommandSender listener = sender;
- 
--                while (sender == null) {
-+                while (sender1 == null) { // Paper - fix decompile
-                     if (listener instanceof DedicatedServer) {
--                        sender = server.console;
-+                        sender1 = server.console; // Paper - fix decompile
-                     } else if (listener instanceof RConConsoleSource) {
--                        sender = server.remoteConsole;
-+                        sender1 = server.remoteConsole; // Paper - fix decompile
-                     } else if (listener instanceof CommandBlockBaseLogic) {
--                        sender = ((CommandBlockBaseLogic)listener).sender;
-+                        sender1 = ((CommandBlockBaseLogic)listener).sender; // Paper - fix decompile
-                     } else if (listener instanceof ProxyListener) {
-                         listener = ((ProxyListener)listener).base;
-                     } else if (VanillaCommandWrapper.lastSender != null) {
--                        sender = VanillaCommandWrapper.lastSender;
-+                        sender1 = VanillaCommandWrapper.lastSender; // Paper - fix decompile
-                     } else {
-                         if (listener.getCommandSenderEntity() == null) {
-                             throw new CommandException("Unhandled executor " + sender.getClass().getSimpleName(), new Object[0]);
-                         }
- 
--                        sender = listener.getCommandSenderEntity().getBukkitEntity();
-+                        sender1 = listener.getCommandSenderEntity().getBukkitEntity(); // Paper - fix decompile
-                     }
-                 }
- 
--                int i = CommandBlockBaseLogic.executeCommand(icommandlistener1, new ProxiedNativeCommandSender(icommandlistener1, sender, entity.getBukkitEntity()), s);
-+                int i = CommandBlockBaseLogic.executeCommand(icommandlistener1, new ProxiedNativeCommandSender(icommandlistener1, sender1, entity.getBukkitEntity()), s); // Paper - fix decompile
- 
-                 if (i < 1) {
-                     throw new CommandException("commands.execute.allInvocationsFailed", new Object[] {s});
 diff --git a/src/main/java/net/minecraft/command/CommandFill.java b/src/main/java/net/minecraft/command/CommandFill.java
 index 3dfc64b..cc6fc94 100644
 --- a/src/main/java/net/minecraft/command/CommandFill.java
