@@ -15,7 +15,7 @@ Task Descriptions
 
 These are the custom tasks that are in `PaperGradle`, and how to interact with them.
 
- * ###`mcpRewrites`:
+ * ### `mcpRewrites`:
 
     This task fixes name clashing issues between Spigot and MCP. For example, in `MinecraftServer`, Spigot has added a field of type
     `List<WorldServer>` called `worlds`. There is field already present in `MinecraftServer` of type `WorldServer[]`, which in Spigot isn't
@@ -33,35 +33,35 @@ These are the custom tasks that are in `PaperGradle`, and how to interact with t
     The SRG name of the field, method, or parameter, followed by the MCP name we want to use instead. Here instead of `worlds` we call it
     `mcpWorlds` to disambiguate between this field and the Spigot-added field.
 
- * ###`genSpigotSrgs`:
+ * ### `genSpigotSrgs`:
 
     This task is essential to our build process. This task tasks as input the SRG files created from the `genSrgs` task, as well as the
     CSRG files Spigot uses, and creates SRG mappings to and from SRG and Spigot, and to and from MCP and Spigot. This is how we are able to
     accomplish this at all. This task is totally automated from based on the `genSrgs` task, so it really shouldn't require any fiddling
     with on Minecraft version upgrades.
 
- * ###`decompileVanillaJar`:
+ * ### `decompileVanillaJar`:
  
     It does what it sounds like, but the key here is it uses Spigot's FernFlower and Spigot's FernFlower settings. This is necessary for the
     next task.
 
- * ###`applyVanillaPatches`:
+ * ### `applyVanillaPatches`:
  
     This is the patching process that applies patches onto Vanilla and transforms it from Vanilla to CraftBukkit. This is simply a step in
     the Spigot build process faithfully recreated in PaperGradle.
 
- * ###`applyBukkitPatches` / `applyCraftBukkitPatches`:
+ * ### `applyBukkitPatches` / `applyCraftBukkitPatches`:
  
     Again, this is the patching process which applies patches onto Bukkit and CraftBukkit and transforms it from Bukkit and CraftBukkit to
     Spigot API and Spigot Server respectively. This is a step in the Spigot build process recreated in PaperGradle.
 
- * ###`buildSpigot`:
+ * ### `buildSpigot`:
  
     As the name implies, this task is responsible for building Spigot. Up to this point, we have followed Spigot's build process exactly, so
     everything should patch fine and build correctly based on the Spigot patches. After this task is where things get a little more
     interesting.
     
- * ###`cleanSpigotJar`:
+ * ### `cleanSpigotJar`:
  
     This task removes the parts of the now-built Spigot jar we don't need. It really only leaves the relevant packages that we want to
     decompile.
@@ -72,7 +72,7 @@ These are the custom tasks that are in `PaperGradle`, and how to interact with t
     as these invalid classes which are simply incorrectly mapped duplicates of other classes show up. As an easy solution, this task also
     reads in the `mcp/remove-list.txt` file and removes and of the listed file paths in that file from the jar.
 
- * ###`preMapReMap`:
+ * ### `preMapReMap`:
  
     This task takes in the SRG file defined in `mcp/paper.srg` and applies the  transformations in that SRG file before the
     `deobfuscateSpigotJar` task. This task fixes two special types of problems in the decompile process:
@@ -100,7 +100,7 @@ These are the custom tasks that are in `PaperGradle`, and how to interact with t
          arbitrary SRG file for any reason and happily apply any mappings given, so other use cases could theoretically pop up, but these
          are the two use cases which prompted this task to be created.
  
- * ###`deobfuscateSpigotJar`:
+ * ### `deobfuscateSpigotJar`:
  
     This task does the magic to convert all the Spigot code to SRG (and eventually MCP) mappings. It takes in the SRG files generated from
     the `genSpigotSrgs` and outputs a deobfuscated jar. This is an automated task based on the outputs of another automated task, so not
@@ -111,7 +111,7 @@ These are the custom tasks that are in `PaperGradle`, and how to interact with t
     likes to add members that are package-private, which doesn't work in MCP where there are actually packages) or just a general use case
     to open up a member without needed to clutter up the workspace with patches.
 
- * ###`sourceProcessJar`:
+ * ### `sourceProcessJar`:
  
     This task does several things to the source code which makes it nicer to work with. First, it applies any MCP patch which might still
     work on our code base. Since we need to have the whole MCP code base in our project compilable, we'll take any MCP patch we can to help
@@ -126,12 +126,12 @@ These are the custom tasks that are in `PaperGradle`, and how to interact with t
     This is one of the great reasons for forking ForgeGradle, since we get awesome stuff like this for free. The last thing this task does
     is reformat the source code to how we like it (K&R style).
 
- * ###`remapSpigotJar`:
+ * ### `remapSpigotJar`:
  
     This task remaps the SRG field, method, and parameter names to their MCP names. Since all SRG names are unique this is actually a
     pretty simple task. This is finally where the changes made in the `mcpRewrites` task are applied.
 
- * ###`applySpigotApiPatches` / `applySpigotServerPatches`:
+ * ### `applySpigotApiPatches` / `applySpigotServerPatches`:
  
     This task finally applies the MCP-mapped patches which finally brings everything from simply a remapped Spigot to a fully MCP mapped
     Paper codebase. This is pretty much a direct port (but in Java) of our old script system.
