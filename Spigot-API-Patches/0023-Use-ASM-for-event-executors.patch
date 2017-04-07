@@ -1,4 +1,4 @@
-From cccdc00c965b9ff20083c306745cdb5a40738c54 Mon Sep 17 00:00:00 2001
+From fe8f9bf84ec864f156b8df82d770dafc760bf949 Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Thu, 3 Mar 2016 13:20:33 -0700
 Subject: [PATCH] Use ASM for event executors.
@@ -6,7 +6,7 @@ Subject: [PATCH] Use ASM for event executors.
 Uses method handles for private or static methods.
 
 diff --git a/build.gradle b/build.gradle
-index 47dbe93a..13e66fc0 100644
+index 5e3b4c4e..d77f577a 100644
 --- a/build.gradle
 +++ b/build.gradle
 @@ -19,6 +19,9 @@ dependencies {

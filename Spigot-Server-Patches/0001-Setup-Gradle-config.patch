@@ -1,4 +1,4 @@
-From a691e97c7754a7ce078dea785155ac206f298e8a Mon Sep 17 00:00:00 2001
+From 96322b468d83257bc768f6fe9a0464d32a84ef03 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 27 Nov 2016 08:01:04 -0600
 Subject: [PATCH] Setup Gradle config
@@ -14,10 +14,10 @@ index 0000000..4e7bf47
 +.cache
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
-index 0000000..9858351
+index 0000000..308419b
 --- /dev/null
 +++ b/build.gradle
-@@ -0,0 +1,51 @@
+@@ -0,0 +1,49 @@
 +repositories {
 +    maven {
 +        name "minecraft"
@@ -67,8 +67,6 @@ index 0000000..9858351
 +    relocate "org.ibex", "org.bukkit.craftbukkit.libs.org.ibex"
 +    relocate "org.gjt", "org.bukkit.craftbukkit.libs.org.gjt"
 +}
-+
-+build.dependsOn shadowJar
 diff --git a/gradle.properties b/gradle.properties
 new file mode 100644
 index 0000000..5f7e198

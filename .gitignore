@@ -22,6 +22,7 @@ build/
 bin/
 dist/
 manifest.mf
+run/
 
 work/1.*/
 work/BuildData/

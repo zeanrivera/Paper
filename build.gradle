@@ -11,7 +11,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:1.0.15"
+        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:1.0.16"
         classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
 }
@@ -95,4 +95,10 @@ minecraft {
         preMapSrg = "mcp/paper.srg"
         removeList = "mcp/remove-list.txt"
     }
+}
+
+task cleanPaper {
+    group "Paper"
+    description "Clean the Paper-API and Paper-Server subprojects, without cleaning the setup."
+    dependsOn ":Paper-API:clean", ":Paper-Server:clean"
 }

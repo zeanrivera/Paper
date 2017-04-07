@@ -1,4 +1,4 @@
-From 4fbb2ee8679f1fb00ce1480fd55ff604dfa8e172 Mon Sep 17 00:00:00 2001
+From cea833acbba38336af27d8406b7ba1e867e07d92 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 17:16:08 -0600
 Subject: [PATCH] Setup Gradle config
@@ -26,10 +26,10 @@ index edf9e5c3..41b38f10 100644
 +.cache
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
-index 00000000..aa054eb5
+index 00000000..b897c1ee
 --- /dev/null
 +++ b/build.gradle
-@@ -0,0 +1,65 @@
+@@ -0,0 +1,63 @@
 +apply plugin: "maven-publish"
 +
 +dependencies {
@@ -93,8 +93,6 @@ index 00000000..aa054eb5
 +        }
 +    }
 +}
-+
-+build.dependsOn shadowJar
 diff --git a/gradle.properties b/gradle.properties
 new file mode 100644
 index 00000000..36e69a8a
