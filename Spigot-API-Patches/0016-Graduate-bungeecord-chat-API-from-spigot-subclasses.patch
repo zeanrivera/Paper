@@ -1,4 +1,4 @@
-From 1242675d48f2dadac1dbb2dff5ffcf3a871dd702 Mon Sep 17 00:00:00 2001
+From 572d4d05f5f043347e31f17a6e2222b1ee29b98d Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 19:54:32 -0600
 Subject: [PATCH] Graduate bungeecord chat API from spigot subclasses

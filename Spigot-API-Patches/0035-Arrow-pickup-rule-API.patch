@@ -1,4 +1,4 @@
-From 460538d47dde5cc96e8cf629b0088c40d3ce72a5 Mon Sep 17 00:00:00 2001
+From 06d1e3cacf8e58b6f18953386d987b9bfa44ccb1 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Fri, 4 Mar 2016 03:13:18 -0500
 Subject: [PATCH] Arrow pickup rule API
