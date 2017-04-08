@@ -1,4 +1,4 @@
-From 798db9af39ba097504f859cfdb10b4cec43cd907 Mon Sep 17 00:00:00 2001
+From 68f81ae1395d0f45ea5ffd96460f590c9566eacf Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Wed, 2 Mar 2016 00:03:55 -0600
 Subject: [PATCH] Check online mode before converting and renaming player data

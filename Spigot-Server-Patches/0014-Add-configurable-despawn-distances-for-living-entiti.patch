@@ -1,4 +1,4 @@
-From 787e7760f86ef67d62c181508c0bb327cab8ca60 Mon Sep 17 00:00:00 2001
+From d2385bd9483c3deb09a35a4ddd6387e878be0cbf Mon Sep 17 00:00:00 2001
 From: Suddenly <suddenly@suddenly.coffee>
 Date: Tue, 1 Mar 2016 13:51:54 -0600
 Subject: [PATCH] Add configurable despawn distances for living entities

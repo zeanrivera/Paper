@@ -1,4 +1,4 @@
-From 2d3b54b205047a48f94c6499ebd0d73807a8de4b Mon Sep 17 00:00:00 2001
+From 4e4769a9b3aa77fbe5fda12160d4219bbc68eb62 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 1 Mar 2016 22:01:19 -0600
 Subject: [PATCH] Chests do not need to tick
