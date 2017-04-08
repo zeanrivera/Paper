@@ -1,0 +1,213 @@
+From 7236ed20601c11017de184800fbd0d10052a095a Mon Sep 17 00:00:00 2001
+From: Jedediah Smith <jedediah@silencegreys.com>
+Date: Tue, 1 Mar 2016 14:47:52 -0600
+Subject: [PATCH] Player affects spawning API
+
+
+diff --git a/src/main/java/net/minecraft/entity/EntityLiving.java b/src/main/java/net/minecraft/entity/EntityLiving.java
+index 87801cc..eee7e70 100644
+--- a/src/main/java/net/minecraft/entity/EntityLiving.java
++++ b/src/main/java/net/minecraft/entity/EntityLiving.java
+@@ -709,7 +709,7 @@ public abstract class EntityLiving extends EntityLivingBase {
+         } else {
+             EntityPlayer entityhuman = this.world.getClosestPlayerToEntity(this, -1.0D);
+ 
+-            if (entityhuman != null) {
++            if (entityhuman != null && entityhuman.affectsSpawning) { // Paper - Affects Spawning API
+                 double d0 = entityhuman.posX - this.posX;
+                 double d1 = entityhuman.posY - this.posY;
+                 double d2 = entityhuman.posZ - this.posZ;
+diff --git a/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java b/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java
+index ccf8721..2bed031 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java
++++ b/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java
+@@ -146,7 +146,7 @@ public class EntitySilverfish extends EntityMob {
+     public boolean getCanSpawnHere() {
+         if (super.getCanSpawnHere()) {
+             EntityPlayer entityhuman = this.world.getNearestPlayerNotCreative(this, 5.0D);
+-            return entityhuman == null;
++            return !(entityhuman != null && !entityhuman.affectsSpawning) && entityhuman == null; // Paper - Affects Spawning API
+         } else {
+             return false;
+         }
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
+index 3bb642e..1b64ca0 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
+@@ -175,6 +175,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
+     public boolean fauxSleeping;
+     public String spawnWorld = "";
+     public int oldLevel = -1;
++    public boolean affectsSpawning = true; // Paper
+ 
+     public CraftHumanEntity getBukkitEntity() {
+         return (CraftHumanEntity)super.getBukkitEntity();
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 1c97b82..848980b 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -2846,7 +2846,7 @@ public abstract class World implements IBlockAccess {
+         for (int i = 0; i < this.playerEntities.size(); ++i) {
+             EntityPlayer entityhuman = (EntityPlayer)this.playerEntities.get(i);
+ 
+-            if (EntitySelectors.NOT_SPECTATING.apply(entityhuman)) {
++            if (EntitySelectors.NOT_SPECTATING.apply(entityhuman) && entityhuman.affectsSpawning) { // Paper - Affects Spawning API
+                 double d4 = entityhuman.getDistanceSq(x, y, z);
+ 
+                 if (range < 0.0D || d4 < range * range) {
+diff --git a/src/main/java/net/minecraft/world/WorldEntitySpawner.java b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
+index 8974895..7c3d5ef 100644
+--- a/src/main/java/net/minecraft/world/WorldEntitySpawner.java
++++ b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
+@@ -62,7 +62,7 @@ public final class WorldEntitySpawner {
+             int i = 0;
+ 
+             for (EntityPlayer entityhuman : worldServerIn.playerEntities) {
+-                if (!entityhuman.isSpectator()) {
++                if (!entityhuman.isSpectator() && entityhuman.affectsSpawning) { // Paper
+                     int l = MathHelper.floor(entityhuman.posX / 16.0D);
+                     int j = MathHelper.floor(entityhuman.posZ / 16.0D);
+                     boolean flag3 = true;
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 5632653..58bc754 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -5,32 +5,12 @@ import com.google.common.collect.ImmutableSet;
+ import com.google.common.io.BaseEncoding;
+ import com.mojang.authlib.GameProfile;
+ import io.netty.buffer.Unpooled;
+-import java.io.ByteArrayOutputStream;
+-import java.io.IOException;
+-import java.net.InetSocketAddress;
+-import java.net.SocketAddress;
+-import java.util.ArrayList;
+-import java.util.Collection;
+-import java.util.Collections;
+-import java.util.Date;
+-import java.util.HashSet;
+-import java.util.LinkedHashMap;
+-import java.util.List;
+-import java.util.Map;
+-import java.util.Set;
+-import java.util.UUID;
+-import java.util.logging.Level;
+-import java.util.logging.Logger;
+ import net.md_5.bungee.api.ChatMessageType;
+ import net.md_5.bungee.api.chat.BaseComponent;
+ import net.minecraft.entity.EntityLivingBase;
+ import net.minecraft.entity.EntityTracker;
+ import net.minecraft.entity.EntityTrackerEntry;
+-import net.minecraft.entity.ai.attributes.AttributeMap;
+-import net.minecraft.entity.ai.attributes.IAttribute;
+-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+-import net.minecraft.entity.ai.attributes.RangedAttribute;
++import net.minecraft.entity.ai.attributes.*;
+ import net.minecraft.entity.player.EntityPlayer;
+ import net.minecraft.entity.player.EntityPlayerMP;
+ import net.minecraft.inventory.Container;
+@@ -38,19 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
+ import net.minecraft.network.NetHandlerPlayServer;
+ import net.minecraft.network.Packet;
+ import net.minecraft.network.PacketBuffer;
+-import net.minecraft.network.play.server.SPacketBlockChange;
+-import net.minecraft.network.play.server.SPacketChat;
+-import net.minecraft.network.play.server.SPacketCustomPayload;
+-import net.minecraft.network.play.server.SPacketCustomSound;
+-import net.minecraft.network.play.server.SPacketEffect;
+-import net.minecraft.network.play.server.SPacketEntityProperties;
+-import net.minecraft.network.play.server.SPacketMaps;
+-import net.minecraft.network.play.server.SPacketParticles;
+-import net.minecraft.network.play.server.SPacketPlayerListItem;
+-import net.minecraft.network.play.server.SPacketSoundEffect;
+-import net.minecraft.network.play.server.SPacketSpawnPosition;
+-import net.minecraft.network.play.server.SPacketTitle;
+-import net.minecraft.network.play.server.SPacketUpdateHealth;
++import net.minecraft.network.play.server.*;
+ import net.minecraft.stats.StatBase;
+ import net.minecraft.tileentity.TileEntitySign;
+ import net.minecraft.util.EnumParticleTypes;
+@@ -63,31 +31,13 @@ import net.minecraft.world.WorldServer;
+ import net.minecraft.world.storage.MapDecoration;
+ import org.apache.commons.lang.NotImplementedException;
+ import org.apache.commons.lang.Validate;
+-import org.bukkit.Achievement;
+-import org.bukkit.Effect;
+-import org.bukkit.GameMode;
+-import org.bukkit.Instrument;
+-import org.bukkit.Location;
+-import org.bukkit.Material;
+-import org.bukkit.Note;
+-import org.bukkit.OfflinePlayer;
+-import org.bukkit.Particle;
+-import org.bukkit.Sound;
+-import org.bukkit.Statistic;
+-import org.bukkit.WeatherType;
+-import org.bukkit.World;
++import org.bukkit.*;
+ import org.bukkit.Effect.Type;
+ import org.bukkit.configuration.serialization.DelegateDeserialization;
+ import org.bukkit.conversations.Conversation;
+ import org.bukkit.conversations.ConversationAbandonedEvent;
+ import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
+-import org.bukkit.craftbukkit.CraftEffect;
+-import org.bukkit.craftbukkit.CraftOfflinePlayer;
+-import org.bukkit.craftbukkit.CraftParticle;
+-import org.bukkit.craftbukkit.CraftServer;
+-import org.bukkit.craftbukkit.CraftSound;
+-import org.bukkit.craftbukkit.CraftStatistic;
+-import org.bukkit.craftbukkit.CraftWorld;
++import org.bukkit.craftbukkit.*;
+ import org.bukkit.craftbukkit.block.CraftSign;
+ import org.bukkit.craftbukkit.conversations.ConversationTracker;
+ import org.bukkit.craftbukkit.map.CraftMapView;
+@@ -98,11 +48,10 @@ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.entity.Entity;
+ import org.bukkit.entity.EntityType;
+ import org.bukkit.entity.Player;
+-import org.bukkit.entity.Player.Spigot;
+ import org.bukkit.event.player.PlayerRegisterChannelEvent;
+ import org.bukkit.event.player.PlayerTeleportEvent;
+-import org.bukkit.event.player.PlayerUnregisterChannelEvent;
+ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
++import org.bukkit.event.player.PlayerUnregisterChannelEvent;
+ import org.bukkit.inventory.InventoryView.Property;
+ import org.bukkit.map.MapCursor;
+ import org.bukkit.map.MapView;
+@@ -112,6 +61,14 @@ import org.bukkit.plugin.messaging.StandardMessenger;
+ import org.bukkit.scoreboard.Scoreboard;
+ import org.spigotmc.AsyncCatcher;
+ 
++import java.io.ByteArrayOutputStream;
++import java.io.IOException;
++import java.net.InetSocketAddress;
++import java.net.SocketAddress;
++import java.util.*;
++import java.util.logging.Level;
++import java.util.logging.Logger;
++
+ @DelegateDeserialization(CraftOfflinePlayer.class)
+ public class CraftPlayer extends CraftHumanEntity implements Player {
+     private long firstPlayed = 0L;
+@@ -1413,6 +1370,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         }
+     }
+ 
++    // Paper start - Affects spawning API
++    @Override
++    public void setAffectsSpawning(boolean affects) {
++        this.getHandle().affectsSpawning = affects;
++    }
++
++    @Override
++    public boolean getAffectsSpawning() {
++        return this.getHandle().affectsSpawning;
++    }
++    // Paper end
++
+     public Player.Spigot spigot() { // Paper - fix decompile
+         return this.spigot;
+     }
+-- 
+2.9.3
+

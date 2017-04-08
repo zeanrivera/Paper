@@ -1,4 +1,4 @@
-From 7bc25ff2eee1713ea3d905527a73f5b2684f5984 Mon Sep 17 00:00:00 2001
+From 9f95fd54ab6f4ced193466a08c3d10d9f4b3a137 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 21:02:09 -0600
 Subject: [PATCH] Paper config files
@@ -240,16 +240,16 @@ index 0000000..328ff01
 +}
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 new file mode 100644
-index 0000000..3cc8feb
+index 0000000..1d59136
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -0,0 +1,65 @@
 +package com.destroystokyo.paper;
 +
-+import java.util.List;
-+
 +import org.bukkit.configuration.file.YamlConfiguration;
 +import org.spigotmc.SpigotWorldConfig;
++
++import java.util.List;
 +
 +import static com.destroystokyo.paper.PaperConfig.log;
 +
@@ -453,5 +453,5 @@ index e5c5d88..a21a465 100644
          return this.config.getString("world-settings." + this.worldName + "." + path, this.config.getString("world-settings.default." + path));
      }
 -- 
-2.8.2
+2.9.3
 

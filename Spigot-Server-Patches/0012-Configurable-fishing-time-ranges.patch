@@ -1,0 +1,40 @@
+From aa2be8dc17850ccf362712d0888a0319a4580f76 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Tue, 1 Mar 2016 13:14:11 -0600
+Subject: [PATCH] Configurable fishing time ranges
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 4aa7ffa..17337dc 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -84,4 +84,13 @@ public class PaperWorldConfig {
+         babyZombieMovementSpeed = getDouble("baby-zombie-movement-speed", 0.5D); // Player moves at 0.1F, for reference
+         log("Baby zombies will move at the speed of " + babyZombieMovementSpeed);
+     }
++
++
++    public int fishingMinTicks;
++    public int fishingMaxTicks;
++    private void fishingTickRange() {
++        fishingMinTicks = getInt("fishing-time-range.MinimumTicks", 100);
++        fishingMaxTicks = getInt("fishing-time-range.MaximumTicks", 600);
++        log("Fishing time ranges are between " + fishingMinTicks + " and " + fishingMaxTicks + " ticks");
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+index 97c56a5..24fc87a 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+@@ -394,7 +394,7 @@ public class EntityFishHook extends Entity {
+                 this.ticksCatchableDelay = MathHelper.getInt(this.rand, 20, 80);
+             }
+         } else {
+-            this.ticksCaughtDelay = MathHelper.getInt(this.rand, 100, 600);
++            this.ticksCaughtDelay = MathHelper.getInt(this.rand, world.paperConfig.fishingMinTicks, world.paperConfig.fishingMaxTicks); // Paper
+             this.ticksCaughtDelay -= this.field_191519_ax * 20 * 5;
+         }
+     }
+-- 
+2.9.3
+

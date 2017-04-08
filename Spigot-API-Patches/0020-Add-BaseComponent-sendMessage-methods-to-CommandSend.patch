@@ -1,4 +1,4 @@
-From 729c4c5ba08cb301b04458a915d6c9f1cf42c1b8 Mon Sep 17 00:00:00 2001
+From 6e9954573972201c107f0700df4f07bd529f9273 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Tue, 8 Mar 2016 13:05:59 -0800
 Subject: [PATCH] Add BaseComponent sendMessage methods to CommandSender

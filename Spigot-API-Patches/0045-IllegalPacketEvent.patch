@@ -1,4 +1,4 @@
-From 88545b70d3e184b93a0a5cb99e14ab1451065328 Mon Sep 17 00:00:00 2001
+From 772e2c479d6752171b6c0c8c9d9d7ab133b68bfa Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 4 Dec 2016 01:19:14 -0500
 Subject: [PATCH] IllegalPacketEvent

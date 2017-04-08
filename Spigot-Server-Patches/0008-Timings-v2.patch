@@ -1,4 +1,4 @@
-From e9937d4d9fbcab60f4025b8f44f8ec0c29ecf95b Mon Sep 17 00:00:00 2001
+From 434bf57658a468b9fae229ed6aa4efe82b327551 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 3 Mar 2016 04:00:11 -0600
 Subject: [PATCH] Timings v2
@@ -451,7 +451,7 @@ index af409a1..717d5c6 100644
      public static int getIdFromBlock(Block blockIn) {
          return REGISTRY.getIDForObject(blockIn);
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index 92d97c4..975433f 100644
+index 92d97c4..ab97564 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
 @@ -1,5 +1,7 @@
@@ -462,7 +462,15 @@ index 92d97c4..975433f 100644
  import com.google.common.base.Preconditions;
  import com.google.common.collect.Iterables;
  import com.google.common.collect.Lists;
-@@ -109,7 +111,6 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
+@@ -89,7 +91,6 @@ import org.bukkit.block.BlockFace;
+ import org.bukkit.craftbukkit.CraftServer;
+ import org.bukkit.craftbukkit.CraftTravelAgent;
+ import org.bukkit.craftbukkit.CraftWorld;
+-import org.bukkit.craftbukkit.SpigotTimings;
+ import org.bukkit.craftbukkit.entity.CraftEntity;
+ import org.bukkit.craftbukkit.entity.CraftPlayer;
+ import org.bukkit.craftbukkit.event.CraftEventFactory;
+@@ -109,7 +110,6 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
  import org.bukkit.plugin.PluginManager;
  import org.bukkit.projectiles.ProjectileSource;
  import org.spigotmc.ActivationRange;
@@ -470,7 +478,7 @@ index 92d97c4..975433f 100644
  import org.spigotmc.event.entity.EntityDismountEvent;
  import org.spigotmc.event.entity.EntityMountEvent;
  
-@@ -248,7 +249,7 @@ public abstract class Entity implements ICommandSender {
+@@ -248,7 +248,7 @@ public abstract class Entity implements ICommandSender {
      public boolean valid;
      public ProjectileSource projectileSource;
      public boolean forceExplosionKnockback;
@@ -479,7 +487,7 @@ index 92d97c4..975433f 100644
      public final byte activationType = ActivationRange.initializeEntityActivationType(this);
      public final boolean defaultActivationState;
      public long activatedTick = -2147483648L;
-@@ -635,8 +636,6 @@ public abstract class Entity implements ICommandSender {
+@@ -635,8 +635,6 @@ public abstract class Entity implements ICommandSender {
       * Tries to move the entity towards the specified location.
       */
      public void move(MoverType type, double x, double y, double z) {
@@ -488,7 +496,7 @@ index 92d97c4..975433f 100644
          if (this.noClip) {
              this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
              this.resetPositionToBB();
-@@ -1009,8 +1008,6 @@ public abstract class Entity implements ICommandSender {
+@@ -1009,8 +1007,6 @@ public abstract class Entity implements ICommandSender {
  
              this.world.profiler.endSection();
          }

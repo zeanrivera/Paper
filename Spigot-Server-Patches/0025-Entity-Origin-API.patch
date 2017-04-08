@@ -1,0 +1,93 @@
+From 87b175ac7e3d04ed7e1d1d346ddef64cea40b890 Mon Sep 17 00:00:00 2001
+From: Byteflux <byte@byteflux.net>
+Date: Tue, 1 Mar 2016 23:45:08 -0600
+Subject: [PATCH] Entity Origin API
+
+
+diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
+index ab97564..ebba0db 100644
+--- a/src/main/java/net/minecraft/entity/Entity.java
++++ b/src/main/java/net/minecraft/entity/Entity.java
+@@ -253,6 +253,7 @@ public abstract class Entity implements ICommandSender {
+     public final boolean defaultActivationState;
+     public long activatedTick = -2147483648L;
+     public boolean fromMobSpawner;
++    public Location origin; // Paper
+ 
+     static boolean isLevelAtLeast(NBTTagCompound tag, int level) {
+         return tag.hasKey("Bukkit.updateLevel") && tag.getInteger("Bukkit.updateLevel") >= level;
+@@ -1618,6 +1619,7 @@ public abstract class Entity implements ICommandSender {
+             compound.setLong("WorldUUIDMost", this.world.getSaveHandler().getUUID().getMostSignificantBits());
+             compound.setInteger("Bukkit.updateLevel", 2);
+             compound.setInteger("Spigot.ticksLived", this.ticksExisted);
++            if (origin != null) compound.setTag("Paper.Origin", this.newDoubleNBTList(origin.getX(), origin.getY(), origin.getZ())); // Paper - Save the entity's origin location
+ 
+             if (this.hasCustomName()) {
+                 compound.setString("CustomName", this.getCustomNameTag());
+@@ -1708,6 +1710,12 @@ public abstract class Entity implements ICommandSender {
+             this.fire = compound.getShort("Fire");
+             this.setAir(compound.getShort("Air"));
+             this.onGround = compound.getBoolean("OnGround");
++            // Paper start - Restore origin loc, if present
++            if (compound.hasKey("Paper.Origin", 6)) {
++                NBTTagList originTag = compound.getTagList("Paper.Origin", 6);
++                origin = new Location(world.getWorld(), originTag.getDoubleAt(0), originTag.getDoubleAt(1), originTag.getDoubleAt(2));
++            }
++            // Paper end
+ 
+             if (compound.hasKey("Dimension")) {
+                 this.dimension = compound.getInteger("Dimension");
+diff --git a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
+index 7b57893..be4c707 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
++++ b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
+@@ -279,6 +279,12 @@ public class EntityFallingBlock extends Entity {
+         if (block == null || block.getDefaultState().getMaterial() == Material.AIR) {
+             this.fallTile = Blocks.SAND.getDefaultState();
+         }
++
++        // Paper start - Backwards compat with ancient origin tags
++        if (compound.hasKey("SourceLoc_x")) {
++            origin = new org.bukkit.Location(world.getWorld(), compound.getInteger("SourceLoc_x"), compound.getInteger("SourceLoc_y"), compound.getInteger("SourceLoc_z"));
++        }
++        // Paper start
+     }
+ 
+     public void setHurtEntities(boolean p_145806_1_) {
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 848980b..6cd346a 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -1107,6 +1107,12 @@ public abstract class World implements IBlockAccess {
+             int j = MathHelper.floor(entity.posZ / 16.0D);
+             boolean flag = entity.forceSpawn;
+ 
++            // Paper start - Set origin location when the entity is being added to the world
++            if (entity.origin == null) {
++                entity.origin = entity.getBukkitEntity().getLocation();
++            }
++            // Paper end
++
+             if (entity instanceof EntityPlayer) {
+                 flag = true;
+             }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index 6f607b0..d3f626b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -991,4 +991,12 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+     public Spigot spigot() {
+         return this.spigot;
+     }
++
++    // Paper start
++    @Override
++    public Location getOrigin() {
++        Location origin = getHandle().origin;
++        return origin == null ? null : origin.clone();
++    }
++    // Paper end
+ }
+-- 
+2.9.3
+

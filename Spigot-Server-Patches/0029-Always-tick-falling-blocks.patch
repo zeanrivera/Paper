@@ -1,0 +1,30 @@
+From 4f16f357e2e2c9496c599b2ba6007d81268f5fb5 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Wed, 2 Mar 2016 00:32:25 -0600
+Subject: [PATCH] Always tick falling blocks
+
+
+diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
+index e644786..c1b1029 100644
+--- a/src/main/java/org/spigotmc/ActivationRange.java
++++ b/src/main/java/org/spigotmc/ActivationRange.java
+@@ -9,6 +9,7 @@ import net.minecraft.entity.boss.EntityDragonPart;
+ import net.minecraft.entity.boss.EntityWither;
+ import net.minecraft.entity.effect.EntityWeatherEffect;
+ import net.minecraft.entity.item.EntityEnderCrystal;
++import net.minecraft.entity.item.EntityFallingBlock;
+ import net.minecraft.entity.item.EntityFireworkRocket;
+ import net.minecraft.entity.item.EntityTNTPrimed;
+ import net.minecraft.entity.monster.EntityCreeper;
+@@ -40,7 +41,7 @@ public class ActivationRange {
+     }
+ 
+     public static boolean initializeEntityActivationState(Entity entity, SpigotWorldConfig config) {
+-        return entity.activationType == 3 && config.miscActivationRange == 0 || entity.activationType == 2 && config.animalActivationRange == 0 || entity.activationType == 1 && config.monsterActivationRange == 0 || entity instanceof EntityPlayer || entity instanceof EntityThrowable || entity instanceof EntityDragon || entity instanceof EntityDragonPart || entity instanceof EntityWither || entity instanceof EntityFireball || entity instanceof EntityWeatherEffect || entity instanceof EntityTNTPrimed || entity instanceof EntityEnderCrystal || entity instanceof EntityFireworkRocket;
++        return entity.activationType == 3 && config.miscActivationRange == 0 || entity.activationType == 2 && config.animalActivationRange == 0 || entity.activationType == 1 && config.monsterActivationRange == 0 || entity instanceof EntityPlayer || entity instanceof EntityThrowable || entity instanceof EntityDragon || entity instanceof EntityDragonPart || entity instanceof EntityWither || entity instanceof EntityFireball || entity instanceof EntityWeatherEffect || entity instanceof EntityTNTPrimed || entity instanceof EntityEnderCrystal || entity instanceof EntityFireworkRocket || entity instanceof EntityFallingBlock; // Paper - Always tick falling blocks
+     }
+ 
+     public static void activateEntities(World world) {
+-- 
+2.9.3
+

@@ -1,4 +1,4 @@
-From d721057893c5776cdbe160c44f6319dd0147e2f7 Mon Sep 17 00:00:00 2001
+From b706b0a2fc012977deb9557315f135e9f9da07aa Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 24 Mar 2017 23:56:01 -0500
 Subject: [PATCH] Paper Metrics
@@ -1050,5 +1050,5 @@ index c02e6b8..c6c2271 100644
  
      static void readConfig(Class<?> clazz, Object instance) {
 -- 
-2.8.2
+2.9.3
 
