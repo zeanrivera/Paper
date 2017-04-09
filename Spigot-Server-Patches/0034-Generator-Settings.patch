@@ -1,0 +1,286 @@
+From 7b0b9a1ecae396b477081dce8d1d2b545c200477 Mon Sep 17 00:00:00 2001
+From: Byteflux <byte@byteflux.net>
+Date: Wed, 2 Mar 2016 02:17:54 -0600
+Subject: [PATCH] Generator Settings
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 400fe76..ab3f8f4 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -153,4 +153,29 @@ public class PaperWorldConfig {
+         disableEndCredits = getBoolean("game-mechanics.disable-end-credits", false);
+         log("End credits disabled: " + disableEndCredits);
+     }
++
++    public boolean generateCanyon;
++    public boolean generateCaves;
++    public boolean generateDungeon;
++    public boolean generateFortress;
++    public boolean generateMansion;
++    public boolean generateMineshaft;
++    public boolean generateMonument;
++    public boolean generateStronghold;
++    public boolean generateTemple;
++    public boolean generateVillage;
++    public boolean generateFlatBedrock;
++    private void generatorSettings() {
++        generateCanyon = getBoolean("generator-settings.canyon", true);
++        generateCaves = getBoolean("generator-settings.caves", true);
++        generateDungeon = getBoolean("generator-settings.dungeon", true);
++        generateFortress = getBoolean("generator-settings.fortress", true);
++        generateMansion = getBoolean("generator-settings.mansion", true);
++        generateMineshaft = getBoolean("generator-settings.mineshaft", true);
++        generateMonument = getBoolean("generator-settings.monument", true);
++        generateStronghold = getBoolean("generator-settings.stronghold", true);
++        generateTemple = getBoolean("generator-settings.temple", true);
++        generateVillage = getBoolean("generator-settings.village", true);
++        generateFlatBedrock = getBoolean("generator-settings.flat-bedrock", false);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/world/biome/Biome.java b/src/main/java/net/minecraft/world/biome/Biome.java
+index f39e0b7..6397c71 100644
+--- a/src/main/java/net/minecraft/world/biome/Biome.java
++++ b/src/main/java/net/minecraft/world/biome/Biome.java
+@@ -250,7 +250,7 @@ public abstract class Biome {
+         BlockPos.MutableBlockPos var15 = new BlockPos.MutableBlockPos();
+ 
+         for (int var16 = 255; var16 >= 0; --var16) {
+-            if (var16 <= rand.nextInt(5)) {
++            if (var16 <= (worldIn.paperConfig.generateFlatBedrock ? 0 : rand.nextInt(5))) { // Paper - Configurable flat bedrock
+                 chunkPrimerIn.setBlockState(var14, var16, var13, BEDROCK);
+             } else {
+                 IBlockState var17 = chunkPrimerIn.getBlockState(var14, var16, var13);
+diff --git a/src/main/java/net/minecraft/world/biome/BiomeMesa.java b/src/main/java/net/minecraft/world/biome/BiomeMesa.java
+index cd4e730..3b68dea 100644
+--- a/src/main/java/net/minecraft/world/biome/BiomeMesa.java
++++ b/src/main/java/net/minecraft/world/biome/BiomeMesa.java
+@@ -109,7 +109,7 @@ public class BiomeMesa extends Biome {
+                 chunkPrimerIn.setBlockState(var26, var20, var25, STONE);
+             }
+ 
+-            if (var20 <= rand.nextInt(5)) {
++            if (var20 <= (worldIn.paperConfig.generateFlatBedrock ? 0 : rand.nextInt(5))) { // Paper - Configurable flat bedrock
+                 chunkPrimerIn.setBlockState(var26, var20, var25, BEDROCK);
+             } else if (var19 < 15 || this.brycePillars) {
+                 IBlockState var21 = chunkPrimerIn.getBlockState(var26, var20, var25);
+diff --git a/src/main/java/net/minecraft/world/gen/ChunkProviderFlat.java b/src/main/java/net/minecraft/world/gen/ChunkProviderFlat.java
+index 11d2279..c349160 100644
+--- a/src/main/java/net/minecraft/world/gen/ChunkProviderFlat.java
++++ b/src/main/java/net/minecraft/world/gen/ChunkProviderFlat.java
+@@ -44,7 +44,7 @@ public class ChunkProviderFlat implements IChunkGenerator {
+         if (generateStructures) {
+             Map var6 = this.flatWorldGenInfo.getWorldFeatures();
+ 
+-            if (var6.containsKey("village")) {
++            if (var6.containsKey("village") && world.paperConfig.generateVillage) { // Paper
+                 Map var7 = (Map)var6.get("village");
+ 
+                 if (!var7.containsKey("size")) {
+@@ -54,19 +54,19 @@ public class ChunkProviderFlat implements IChunkGenerator {
+                 this.structureGenerators.put("Village", new MapGenVillage(var7));
+             }
+ 
+-            if (var6.containsKey("biome_1")) {
++            if (var6.containsKey("biome_1") && world.paperConfig.generateTemple) { // Paper
+                 this.structureGenerators.put("Temple", new MapGenScatteredFeature((Map)var6.get("biome_1")));
+             }
+ 
+-            if (var6.containsKey("mineshaft")) {
++            if (var6.containsKey("mineshaft") && world.paperConfig.generateMineshaft) { // Paper
+                 this.structureGenerators.put("Mineshaft", new MapGenMineshaft((Map)var6.get("mineshaft")));
+             }
+ 
+-            if (var6.containsKey("stronghold")) {
++            if (var6.containsKey("stronghold") && world.paperConfig.generateStronghold) { // Paper
+                 this.structureGenerators.put("Stronghold", new MapGenStronghold((Map)var6.get("stronghold")));
+             }
+ 
+-            if (var6.containsKey("oceanmonument")) {
++            if (var6.containsKey("oceanmonument") && world.paperConfig.generateMonument) { // Paper
+                 this.structureGenerators.put("Monument", new StructureOceanMonument((Map)var6.get("oceanmonument")));
+             }
+         }
+@@ -79,7 +79,7 @@ public class ChunkProviderFlat implements IChunkGenerator {
+             this.lavaLakeGenerator = new WorldGenLakes(Blocks.LAVA);
+         }
+ 
+-        this.hasDungeons = this.flatWorldGenInfo.getWorldFeatures().containsKey("dungeon");
++        this.hasDungeons = world.paperConfig.generateDungeon && this.flatWorldGenInfo.getWorldFeatures().containsKey("dungeon");
+         int var13 = 0;
+         int var14 = 0;
+         boolean var8 = true;
+diff --git a/src/main/java/net/minecraft/world/gen/ChunkProviderHell.java b/src/main/java/net/minecraft/world/gen/ChunkProviderHell.java
+index b575038..c2d90a5 100644
+--- a/src/main/java/net/minecraft/world/gen/ChunkProviderHell.java
++++ b/src/main/java/net/minecraft/world/gen/ChunkProviderHell.java
+@@ -163,7 +163,10 @@ public class ChunkProviderHell implements IChunkGenerator {
+                 IBlockState var14 = NETHERRACK;
+ 
+                 for (int var15 = 127; var15 >= 0; --var15) {
+-                    if (var15 < 127 - this.rand.nextInt(5) && var15 > this.rand.nextInt(5)) {
++                    // Paper start - Configurable flat bedrock worldgen
++                    if (var15 < 127 - (world.paperConfig.generateFlatBedrock ? 0 : this.rand.nextInt(5)) &&
++                            var15 > (world.paperConfig.generateFlatBedrock ? 0 : this.rand.nextInt(5))) {
++                        // Paper end
+                         IBlockState var16 = primer.getBlockState(var8, var15, var7);
+ 
+                         if (var16.getBlock() != null && var16.getMaterial() != Material.AIR) {
+@@ -392,6 +395,6 @@ public class ChunkProviderHell implements IChunkGenerator {
+     }
+ 
+     public void recreateStructures(Chunk chunkIn, int x, int z) {
+-        this.genNetherBridge.generate(this.world, x, z, (ChunkPrimer)null);
++        if (this.world.paperConfig.generateFortress) this.genNetherBridge.generate(this.world, x, z, (ChunkPrimer)null); // Paper
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/gen/ChunkProviderOverworld.java b/src/main/java/net/minecraft/world/gen/ChunkProviderOverworld.java
+index 8bd47ab..fd6855b 100644
+--- a/src/main/java/net/minecraft/world/gen/ChunkProviderOverworld.java
++++ b/src/main/java/net/minecraft/world/gen/ChunkProviderOverworld.java
+@@ -169,36 +169,36 @@ public class ChunkProviderOverworld implements IChunkGenerator {
+         this.biomesForGeneration = this.world.getBiomeProvider().getBiomes(this.biomesForGeneration, x * 16, z * 16, 16, 16);
+         this.replaceBiomeBlocks(x, z, chunksnapshot, this.biomesForGeneration);
+ 
+-        if (this.settings.useCaves) {
++        if (this.settings.useCaves && this.world.paperConfig.generateCaves) { // Paper
+             this.caveGenerator.generate(this.world, x, z, chunksnapshot);
+         }
+ 
+-        if (this.settings.useRavines) {
++        if (this.settings.useRavines && this.world.paperConfig.generateCanyon) { // Paper
+             this.ravineGenerator.generate(this.world, x, z, chunksnapshot);
+         }
+ 
+         if (this.mapFeaturesEnabled) {
+-            if (this.settings.useMineShafts) {
++            if (this.settings.useMineShafts && this.world.paperConfig.generateMineshaft) { // Paper
+                 this.mineshaftGenerator.generate(this.world, x, z, chunksnapshot);
+             }
+ 
+-            if (this.settings.useVillages) {
++            if (this.settings.useVillages && this.world.paperConfig.generateVillage) { // Paper
+                 this.villageGenerator.generate(this.world, x, z, chunksnapshot);
+             }
+ 
+-            if (this.settings.useStrongholds) {
++            if (this.settings.useStrongholds && this.world.paperConfig.generateStronghold) { // Paper
+                 this.strongholdGenerator.generate(this.world, x, z, chunksnapshot);
+             }
+ 
+-            if (this.settings.useTemples) {
++            if (this.settings.useTemples && this.world.paperConfig.generateTemple) { // Paper
+                 this.scatteredFeatureGenerator.generate(this.world, x, z, chunksnapshot);
+             }
+ 
+-            if (this.settings.useMonuments) {
++            if (this.settings.useMonuments  && this.world.paperConfig.generateMonument) { // Paper
+                 this.oceanMonumentGenerator.generate(this.world, x, z, chunksnapshot);
+             }
+ 
+-            if (this.settings.useMansions) {
++            if (this.settings.useMansions && this.world.paperConfig.generateMansion) { // Paper
+                 this.woodlandMansionGenerator.generate(this.world, x, z, chunksnapshot);
+             }
+         }
+@@ -335,28 +335,28 @@ public class ChunkProviderOverworld implements IChunkGenerator {
+         boolean flag = false;
+         ChunkPos chunkcoordintpair = new ChunkPos(x, z);
+ 
+-        if (this.mapFeaturesEnabled) {
++        if (this.mapFeaturesEnabled && this.world.paperConfig.generateMineshaft) { // Paper
+             if (this.settings.useMineShafts) {
+                 this.mineshaftGenerator.generateStructure(this.world, this.rand, chunkcoordintpair);
+             }
+ 
+-            if (this.settings.useVillages) {
++            if (this.settings.useVillages && this.world.paperConfig.generateVillage) { // Paper
+                 flag = this.villageGenerator.generateStructure(this.world, this.rand, chunkcoordintpair);
+             }
+ 
+-            if (this.settings.useStrongholds) {
++            if (this.settings.useStrongholds && this.world.paperConfig.generateStronghold) { // Paper
+                 this.strongholdGenerator.generateStructure(this.world, this.rand, chunkcoordintpair);
+             }
+ 
+-            if (this.settings.useTemples) {
++            if (this.settings.useTemples && this.world.paperConfig.generateTemple) { // Paper
+                 this.scatteredFeatureGenerator.generateStructure(this.world, this.rand, chunkcoordintpair);
+             }
+ 
+-            if (this.settings.useMonuments) {
++            if (this.settings.useMonuments && this.world.paperConfig.generateMonument) { // Paper
+                 this.oceanMonumentGenerator.generateStructure(this.world, this.rand, chunkcoordintpair);
+             }
+ 
+-            if (this.settings.useMansions) {
++            if (this.settings.useMansions && this.world.paperConfig.generateMansion) { // Paper
+                 this.woodlandMansionGenerator.generateStructure(this.world, this.rand, chunkcoordintpair);
+             }
+         }
+@@ -378,7 +378,7 @@ public class ChunkProviderOverworld implements IChunkGenerator {
+             }
+         }
+ 
+-        if (this.settings.useDungeons) {
++        if (this.settings.useDungeons && this.world.paperConfig.generateDungeon) { // Paper
+             for (int k1 = 0; k1 < this.settings.dungeonChance; ++k1) {
+                 int l1 = this.rand.nextInt(16) + 8;
+                 int i2 = this.rand.nextInt(256);
+@@ -445,27 +445,27 @@ public class ChunkProviderOverworld implements IChunkGenerator {
+ 
+     public void recreateStructures(Chunk chunkIn, int x, int z) {
+         if (this.mapFeaturesEnabled) {
+-            if (this.settings.useMineShafts) {
++            if (this.settings.useMineShafts && this.world.paperConfig.generateMineshaft) { // Paper
+                 this.mineshaftGenerator.generate(this.world, x, z, (ChunkPrimer)null);
+             }
+ 
+-            if (this.settings.useVillages) {
++            if (this.settings.useVillages && this.world.paperConfig.generateVillage) { // Paper
+                 this.villageGenerator.generate(this.world, x, z, (ChunkPrimer)null);
+             }
+ 
+-            if (this.settings.useStrongholds) {
++            if (this.settings.useStrongholds && this.world.paperConfig.generateStronghold) { // Paper
+                 this.strongholdGenerator.generate(this.world, x, z, (ChunkPrimer)null);
+             }
+ 
+-            if (this.settings.useTemples) {
++            if (this.settings.useTemples && this.world.paperConfig.generateTemple) { // Paper
+                 this.scatteredFeatureGenerator.generate(this.world, x, z, (ChunkPrimer)null);
+             }
+ 
+-            if (this.settings.useMonuments) {
++            if (this.settings.useMonuments && this.world.paperConfig.generateMonument) { // Paper
+                 this.oceanMonumentGenerator.generate(this.world, x, z, (ChunkPrimer)null);
+             }
+ 
+-            if (this.settings.useMansions) {
++            if (this.settings.useMansions && this.world.paperConfig.generateMansion) { // Paper
+                 this.woodlandMansionGenerator.generate(this.world, x, z, (ChunkPrimer)null);
+             }
+         }
+diff --git a/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java b/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
+index b08cf63..a691bc4 100644
+--- a/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
++++ b/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
+@@ -102,6 +102,7 @@ public abstract class MapGenStructure extends MapGenBase {
+     }
+ 
+     public boolean isInsideStructure(BlockPos pos) {
++        if (this.world == null) return false; // Paper
+         this.initializeStructureData(this.world);
+         return this.getStructureAt(pos) != null;
+     }
+@@ -137,6 +138,7 @@ public abstract class MapGenStructure extends MapGenBase {
+     }
+ 
+     public boolean isPositionInStructure(World worldIn, BlockPos pos) {
++        if (this.world == null) return false; // Paper
+         this.initializeStructureData(worldIn);
+         ObjectIterator objectiterator = this.structureMap.values().iterator();
+ 
+-- 
+2.12.1.windows.1
+

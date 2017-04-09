@@ -1,0 +1,36 @@
+From 99938c270e8a1d4cb845af479ed5a942f7ad21fc Mon Sep 17 00:00:00 2001
+From: Sudzzy <originmc@outlook.com>
+Date: Wed, 2 Mar 2016 14:57:24 -0600
+Subject: [PATCH] Disable ice and snow
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index b64f70b..41a865f 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -208,4 +208,9 @@ public class PaperWorldConfig {
+     private void disableThunder() {
+         disableThunder = getBoolean("disable-thunder", false);
+     }
++
++    public boolean disableIceAndSnow;
++    private void disableIceAndSnow(){
++        disableIceAndSnow = getBoolean("disable-ice-and-snow", false);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
+index c82f2cd..180ef4a 100644
+--- a/src/main/java/net/minecraft/world/WorldServer.java
++++ b/src/main/java/net/minecraft/world/WorldServer.java
+@@ -496,7 +496,7 @@ public class WorldServer extends World implements IThreadListener {
+ 
+                     this.profiler.endStartSection("iceandsnow");
+ 
+-                    if (this.rand.nextInt(16) == 0) {
++                    if (!this.paperConfig.disableIceAndSnow && this.rand.nextInt(16) == 0) { // Paper - Disable ice and snow
+                         this.updateLCG = this.updateLCG * 3 + 1013904223;
+                         int l = this.updateLCG >> 2;
+                         BlockPos blockposition = this.getPrecipitationHeight(new BlockPos(j + (l & 15), 0, k + (l >> 8 & 15)));
+-- 
+2.12.1.windows.1
+

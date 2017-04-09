@@ -1,0 +1,40 @@
+From 9d4ed18ae19df7f231faa7735eae239f3ac6adba Mon Sep 17 00:00:00 2001
+From: DoctorDark <doctordark11@gmail.com>
+Date: Wed, 16 Mar 2016 02:21:39 -0500
+Subject: [PATCH] Configurable end credits
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index bf9cd17..400fe76 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -147,4 +147,10 @@ public class PaperWorldConfig {
+         queueLightUpdates = getBoolean("queue-light-updates", false);
+         log("Lighting Queue enabled: " + queueLightUpdates);
+     }
++    
++    public boolean disableEndCredits;
++    private void disableEndCredits() {
++        disableEndCredits = getBoolean("game-mechanics.disable-end-credits", false);
++        log("End credits disabled: " + disableEndCredits);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+index 065d829..04e3fd6 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -660,7 +660,10 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+             if (!this.playerConqueredTheEnd) {
+                 this.playerConqueredTheEnd = true;
+ 
+-                if (this.hasAchievement(AchievementList.THE_END2)) {
++                // Paper start - Configurable end portal credits
++                if (world.paperConfig.disableEndCredits || this.hasAchievement(AchievementList.THE_END2)) {
++                    if (!this.hasAchievement(AchievementList.THE_END2)) this.addStat(AchievementList.THE_END2);
++                    // Paper end
+                     this.connection.sendPacket(new SPacketChangeGameState(4, 0.0F));
+                 } else {
+                     this.addStat(AchievementList.THE_END2);
+-- 
+2.12.1.windows.1
+

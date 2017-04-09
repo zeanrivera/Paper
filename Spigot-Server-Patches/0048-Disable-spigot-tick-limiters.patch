@@ -1,0 +1,37 @@
+From 1516ae2bd7d3c30f781091c491eee53fa69ce919 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 9 Apr 2017 03:56:01 -0500
+Subject: [PATCH] Disable spigot tick limiters
+
+
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 18bb3ec..e5d0637 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -1530,9 +1530,9 @@ public abstract class World implements IBlockAccess {
+             this.tickPosition = 0;
+         }
+ 
+-        this.entityLimiter.initTick();
++        //this.entityLimiter.initTick();
+ 
+-        while (entitiesThisCycle < this.loadedEntityList.size() && (entitiesThisCycle % 10 != 0 || this.entityLimiter.shouldContinue())) {
++        while (entitiesThisCycle < this.loadedEntityList.size()) {
+             label412: {
+                 this.tickPosition = this.tickPosition < this.loadedEntityList.size() ? this.tickPosition : 0;
+                 Entity entity = (Entity)this.loadedEntityList.get(this.tickPosition);
+@@ -1600,9 +1600,9 @@ public abstract class World implements IBlockAccess {
+         }
+ 
+         int tilesThisCycle = 0;
+-        this.tileLimiter.initTick();
++        //this.tileLimiter.initTick();
+ 
+-        while (tilesThisCycle < this.tickableTileEntities.size() && (tilesThisCycle % 10 != 0 || this.tileLimiter.shouldContinue())) {
++        while (tilesThisCycle < this.tickableTileEntities.size()) {
+             this.tileTickPosition = this.tileTickPosition < this.tickableTileEntities.size() ? this.tileTickPosition : 0;
+             TileEntity tileentity = (TileEntity)this.tickableTileEntities.get(this.tileTickPosition);
+ 
+-- 
+2.12.1.windows.1
+

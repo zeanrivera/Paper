@@ -1,0 +1,36 @@
+From 22ed47ff1a97cacc7f4be5c4e049fb657078e09d Mon Sep 17 00:00:00 2001
+From: Sudzzy <originmc@outlook.com>
+Date: Wed, 2 Mar 2016 14:52:43 -0600
+Subject: [PATCH] Disable thunder
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index fed7fde..b64f70b 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -203,4 +203,9 @@ public class PaperWorldConfig {
+     private void disableExplosionKnockback() {
+         disableExplosionKnockback = getBoolean("disable-explosion-knockback", false);
+     }
++    
++    public boolean disableThunder;
++    private void disableThunder() {
++        disableThunder = getBoolean("disable-thunder", false);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
+index 349a18b..c82f2cd 100644
+--- a/src/main/java/net/minecraft/world/WorldServer.java
++++ b/src/main/java/net/minecraft/world/WorldServer.java
+@@ -473,7 +473,7 @@ public class WorldServer extends World implements IThreadListener {
+                 if (chunk.areNeighborsLoaded(1)) {
+                     this.profiler.endStartSection("thunder");
+ 
+-                    if (flag && flag1 && this.rand.nextInt(100000) == 0) {
++                    if (!this.paperConfig.disableThunder && flag && flag1 && this.rand.nextInt(100000) == 0) { // Paper - Disable thunder
+                         this.updateLCG = this.updateLCG * 3 + 1013904223;
+                         int l = this.updateLCG >> 2;
+                         BlockPos blockposition = this.adjustPosToNearbyEntity(new BlockPos(j + (l & 15), 0, k + (l >> 8 & 15)));
+-- 
+2.12.1.windows.1
+

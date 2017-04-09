@@ -1,0 +1,29 @@
+From cae9f7491b5ed4d9ecce1f05bdedd8536ef88cef Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 9 Apr 2017 00:32:26 -0500
+Subject: [PATCH] Don't create Region File's when checking if chunk exists
+
+
+diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
+index be4edd3..500be94 100644
+--- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
++++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
+@@ -50,7 +50,14 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+ 
+     public boolean chunkExists(World world, int i, int j) {
+         ChunkPos chunkcoordintpair = new ChunkPos(i, j);
+-        return this.pendingAnvilChunksCoordinates.contains(chunkcoordintpair) && this.chunksToRemove.containsKey(chunkcoordintpair) ? true : RegionFileCache.createOrLoadRegionFile(this.chunkSaveLocation, i, j).chunkExists(i & 31, j & 31);
++        // Paper start - Don't create region files when checking that they exist
++        if (this.pendingAnvilChunksCoordinates.contains(chunkcoordintpair) && this.chunksToRemove.containsKey(chunkcoordintpair)) {
++            return true;
++        } else {
++            RegionFile region = RegionFileCache.getRegionFileIfExists(this.chunkSaveLocation, i, j);
++            return region != null && region.chunkExists(i & 31, j & 31);
++        }
++        // Paper end
+     }
+ 
+     /**
+-- 
+2.12.1.windows.1
+

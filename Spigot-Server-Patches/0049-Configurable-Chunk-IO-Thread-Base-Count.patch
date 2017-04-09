@@ -1,0 +1,52 @@
+From d3d60eee11dec12a3c0db6c88c9480614d8512c4 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Wed, 2 Mar 2016 23:51:51 -0600
+Subject: [PATCH] Configurable Chunk IO Thread Base Count
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
+index fb10a9c..f1e7f74 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
+@@ -198,4 +198,9 @@ public class PaperConfig {
+                 " - Interval: " + timeSummary(Timings.getHistoryInterval() / 20) +
+                 " - Length: " + timeSummary(Timings.getHistoryLength() / 20));
+     }
++
++    public static int minChunkLoadThreads = 2;
++    private static void chunkLoadThreads() {
++        minChunkLoadThreads = Math.min(6, getInt("settings.min-chunk-load-threads", 2)); // Keep people from doing stupid things with max of 6
++    }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/chunkio/ChunkIOExecutor.java b/src/main/java/org/bukkit/craftbukkit/chunkio/ChunkIOExecutor.java
+index 3614dce..547b8c7 100644
+--- a/src/main/java/org/bukkit/craftbukkit/chunkio/ChunkIOExecutor.java
++++ b/src/main/java/org/bukkit/craftbukkit/chunkio/ChunkIOExecutor.java
+@@ -1,5 +1,6 @@
+ package org.bukkit.craftbukkit.chunkio;
+ 
++import com.destroystokyo.paper.PaperConfig;
+ import net.minecraft.world.World;
+ import net.minecraft.world.chunk.Chunk;
+ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
+@@ -7,7 +8,7 @@ import net.minecraft.world.gen.ChunkProviderServer;
+ import org.bukkit.craftbukkit.util.AsynchronousExecutor;
+ 
+ public class ChunkIOExecutor {
+-    static final int BASE_THREADS = 1;
++    static final int BASE_THREADS = PaperConfig.minChunkLoadThreads;
+     static final int PLAYERS_PER_THREAD = 50;
+     private static final AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException> instance = new AsynchronousExecutor(new ChunkIOProvider(), 1);
+ 
+@@ -24,7 +25,7 @@ public class ChunkIOExecutor {
+     }
+ 
+     public static void adjustPoolSize(int players) {
+-        int size = Math.max(1, (int)Math.ceil((double)(players / 50)));
++        int size = Math.max(BASE_THREADS, (int)Math.ceil((double)(players / PLAYERS_PER_THREAD))); // Paper - Put these back
+         instance.setActiveThreads(size);
+     }
+ 
+-- 
+2.12.1.windows.1
+

@@ -1,0 +1,68 @@
+From 246a877227c4162a86727ce29624c37893eac5ad Mon Sep 17 00:00:00 2001
+From: Sudzzy <originmc@outlook.com>
+Date: Wed, 2 Mar 2016 15:03:53 -0600
+Subject: [PATCH] Configurable mob spawner tick rate
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 41a865f..998690b 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -213,4 +213,9 @@ public class PaperWorldConfig {
+     private void disableIceAndSnow(){
+         disableIceAndSnow = getBoolean("disable-ice-and-snow", false);
+     }
++
++    public int mobSpawnerTickRate;
++    private void mobSpawnerTickRate() {
++        mobSpawnerTickRate = getInt("mob-spawner-tick-rate", 1);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java b/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
+index 5dff804..2fd7029 100644
+--- a/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
++++ b/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
+@@ -39,6 +39,7 @@ public abstract class MobSpawnerBaseLogic {
+     private int activatingRangeFromPlayer = 16;
+     /** The range coefficient for spawning entities around. */
+     private int spawnRange = 4;
++    private int tickDelay = 0; // Paper
+ 
+     @Nullable
+     public ResourceLocation getEntityId() {
+@@ -61,6 +62,10 @@ public abstract class MobSpawnerBaseLogic {
+     }
+ 
+     public void updateSpawner() {
++        // Paper start - Configurable mob spawner tick rate
++        if (spawnDelay > 0 && --tickDelay > 0) return;
++        tickDelay = this.getSpawnerWorld().paperConfig.mobSpawnerTickRate;
++        // Paper end
+         if (!this.isActivated()) {
+             this.prevMobRotation = this.mobRotation;
+         } else {
+@@ -74,18 +79,18 @@ public abstract class MobSpawnerBaseLogic {
+                 this.getSpawnerWorld().spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D, new int[0]);
+ 
+                 if (this.spawnDelay > 0) {
+-                    --this.spawnDelay;
++                    this.spawnDelay -= tickDelay; // Paper
+                 }
+ 
+                 this.prevMobRotation = this.mobRotation;
+                 this.mobRotation = (this.mobRotation + (double)(1000.0F / ((float)this.spawnDelay + 200.0F))) % 360.0D;
+             } else {
+-                if (this.spawnDelay == -1) {
++                if (this.spawnDelay < -tickDelay) { // Paper
+                     this.resetTimer();
+                 }
+ 
+                 if (this.spawnDelay > 0) {
+-                    --this.spawnDelay;
++                    this.spawnDelay -= tickDelay; // Paper
+                     return;
+                 }
+ 
+-- 
+2.12.1.windows.1
+

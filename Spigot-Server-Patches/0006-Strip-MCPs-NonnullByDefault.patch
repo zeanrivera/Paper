@@ -1,0 +1,1149 @@
+From 62ec7eaa9dd390742beaccc159167d78da77600c Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 9 Apr 2017 00:39:26 -0500
+Subject: [PATCH] Strip MCPs NonnullByDefault
+
+This isn't valid across the entire MCP codebase and it's especially invalid in ours which is tainted by upstream code.
+
+diff --git a/src/main/java/mcp/MethodsReturnNonnullByDefault.java b/src/main/java/mcp/MethodsReturnNonnullByDefault.java
+deleted file mode 100644
+index 485bb9d..0000000
+--- a/src/main/java/mcp/MethodsReturnNonnullByDefault.java
++++ /dev/null
+@@ -1,26 +0,0 @@
+-package mcp;
+-import javax.annotation.Nonnull;
+-import java.lang.annotation.Documented;
+-import java.lang.annotation.ElementType;
+-import java.lang.annotation.Retention;
+-import java.lang.annotation.RetentionPolicy;
+-
+-import javax.annotation.meta.TypeQualifierDefault;
+-
+-/**
+- * This annotation can be applied to a package, class or method to indicate that
+- * the method in that element are nonnull by default unless there is:
+- * <ul>
+- * <li>An explicit nullness annotation
+- * <li>The method overrides a method in a superclass (in which case the
+- * annotation of the corresponding method in the superclass applies)
+- * <li> there is a default parameter annotation applied to a more tightly nested
+- * element.
+- * </ul>
+- *
+- */
+-@Documented
+-@Nonnull
+-@TypeQualifierDefault(ElementType.METHOD) // Note: This is a copy of javax.annotation.ParametersAreNonnullByDefault with target changed to METHOD
+-@Retention(RetentionPolicy.RUNTIME)
+-public @interface MethodsReturnNonnullByDefault {}
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/block/material/package-info.java b/src/main/java/net/minecraft/block/material/package-info.java
+deleted file mode 100644
+index 2eaecae..0000000
+--- a/src/main/java/net/minecraft/block/material/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.block.material;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/block/package-info.java b/src/main/java/net/minecraft/block/package-info.java
+deleted file mode 100644
+index 7344a5d..0000000
+--- a/src/main/java/net/minecraft/block/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.block;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/block/properties/package-info.java b/src/main/java/net/minecraft/block/properties/package-info.java
+deleted file mode 100644
+index 8a7235f..0000000
+--- a/src/main/java/net/minecraft/block/properties/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.block.properties;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/block/state/package-info.java b/src/main/java/net/minecraft/block/state/package-info.java
+deleted file mode 100644
+index 2602ee2..0000000
+--- a/src/main/java/net/minecraft/block/state/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.block.state;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/block/state/pattern/package-info.java b/src/main/java/net/minecraft/block/state/pattern/package-info.java
+deleted file mode 100644
+index df29520..0000000
+--- a/src/main/java/net/minecraft/block/state/pattern/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.block.state.pattern;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/command/package-info.java b/src/main/java/net/minecraft/command/package-info.java
+deleted file mode 100644
+index 095cf9d..0000000
+--- a/src/main/java/net/minecraft/command/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.command;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/command/server/package-info.java b/src/main/java/net/minecraft/command/server/package-info.java
+deleted file mode 100644
+index 52d6ebc..0000000
+--- a/src/main/java/net/minecraft/command/server/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.command.server;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/crash/package-info.java b/src/main/java/net/minecraft/crash/package-info.java
+deleted file mode 100644
+index 54423ef..0000000
+--- a/src/main/java/net/minecraft/crash/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.crash;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/creativetab/package-info.java b/src/main/java/net/minecraft/creativetab/package-info.java
+deleted file mode 100644
+index 529716f..0000000
+--- a/src/main/java/net/minecraft/creativetab/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.creativetab;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/dispenser/package-info.java b/src/main/java/net/minecraft/dispenser/package-info.java
+deleted file mode 100644
+index 20edae5..0000000
+--- a/src/main/java/net/minecraft/dispenser/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.dispenser;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/enchantment/package-info.java b/src/main/java/net/minecraft/enchantment/package-info.java
+deleted file mode 100644
+index 7b494d1..0000000
+--- a/src/main/java/net/minecraft/enchantment/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.enchantment;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/ai/attributes/package-info.java b/src/main/java/net/minecraft/entity/ai/attributes/package-info.java
+deleted file mode 100644
+index 4036cc0..0000000
+--- a/src/main/java/net/minecraft/entity/ai/attributes/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity.ai.attributes;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/ai/package-info.java b/src/main/java/net/minecraft/entity/ai/package-info.java
+deleted file mode 100644
+index 2bfd599..0000000
+--- a/src/main/java/net/minecraft/entity/ai/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity.ai;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/boss/dragon/phase/package-info.java b/src/main/java/net/minecraft/entity/boss/dragon/phase/package-info.java
+deleted file mode 100644
+index 715c953..0000000
+--- a/src/main/java/net/minecraft/entity/boss/dragon/phase/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity.boss.dragon.phase;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/boss/package-info.java b/src/main/java/net/minecraft/entity/boss/package-info.java
+deleted file mode 100644
+index a1c9dfd..0000000
+--- a/src/main/java/net/minecraft/entity/boss/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity.boss;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/effect/package-info.java b/src/main/java/net/minecraft/entity/effect/package-info.java
+deleted file mode 100644
+index fac9aff..0000000
+--- a/src/main/java/net/minecraft/entity/effect/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity.effect;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/item/package-info.java b/src/main/java/net/minecraft/entity/item/package-info.java
+deleted file mode 100644
+index ace56e1..0000000
+--- a/src/main/java/net/minecraft/entity/item/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity.item;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/monster/package-info.java b/src/main/java/net/minecraft/entity/monster/package-info.java
+deleted file mode 100644
+index 6197b52..0000000
+--- a/src/main/java/net/minecraft/entity/monster/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity.monster;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/package-info.java b/src/main/java/net/minecraft/entity/package-info.java
+deleted file mode 100644
+index b935367..0000000
+--- a/src/main/java/net/minecraft/entity/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/passive/package-info.java b/src/main/java/net/minecraft/entity/passive/package-info.java
+deleted file mode 100644
+index 4ff8429..0000000
+--- a/src/main/java/net/minecraft/entity/passive/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity.passive;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/player/package-info.java b/src/main/java/net/minecraft/entity/player/package-info.java
+deleted file mode 100644
+index 6c7090d..0000000
+--- a/src/main/java/net/minecraft/entity/player/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity.player;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/entity/projectile/package-info.java b/src/main/java/net/minecraft/entity/projectile/package-info.java
+deleted file mode 100644
+index 85dc184..0000000
+--- a/src/main/java/net/minecraft/entity/projectile/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.entity.projectile;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/init/package-info.java b/src/main/java/net/minecraft/init/package-info.java
+deleted file mode 100644
+index 2d1c506..0000000
+--- a/src/main/java/net/minecraft/init/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.init;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/inventory/package-info.java b/src/main/java/net/minecraft/inventory/package-info.java
+deleted file mode 100644
+index f9ef1b8..0000000
+--- a/src/main/java/net/minecraft/inventory/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.inventory;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/item/crafting/package-info.java b/src/main/java/net/minecraft/item/crafting/package-info.java
+deleted file mode 100644
+index cbe371f..0000000
+--- a/src/main/java/net/minecraft/item/crafting/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.item.crafting;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/item/package-info.java b/src/main/java/net/minecraft/item/package-info.java
+deleted file mode 100644
+index 5f99583..0000000
+--- a/src/main/java/net/minecraft/item/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.item;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/nbt/package-info.java b/src/main/java/net/minecraft/nbt/package-info.java
+deleted file mode 100644
+index 4f1ed79..0000000
+--- a/src/main/java/net/minecraft/nbt/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.nbt;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/datasync/package-info.java b/src/main/java/net/minecraft/network/datasync/package-info.java
+deleted file mode 100644
+index 91a64e3..0000000
+--- a/src/main/java/net/minecraft/network/datasync/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.datasync;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/handshake/client/package-info.java b/src/main/java/net/minecraft/network/handshake/client/package-info.java
+deleted file mode 100644
+index 83c9770..0000000
+--- a/src/main/java/net/minecraft/network/handshake/client/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.handshake.client;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/handshake/package-info.java b/src/main/java/net/minecraft/network/handshake/package-info.java
+deleted file mode 100644
+index 4e1d30f..0000000
+--- a/src/main/java/net/minecraft/network/handshake/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.handshake;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/login/client/package-info.java b/src/main/java/net/minecraft/network/login/client/package-info.java
+deleted file mode 100644
+index e047e58..0000000
+--- a/src/main/java/net/minecraft/network/login/client/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.login.client;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/login/package-info.java b/src/main/java/net/minecraft/network/login/package-info.java
+deleted file mode 100644
+index fbf9393..0000000
+--- a/src/main/java/net/minecraft/network/login/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.login;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/login/server/package-info.java b/src/main/java/net/minecraft/network/login/server/package-info.java
+deleted file mode 100644
+index 7d45d65..0000000
+--- a/src/main/java/net/minecraft/network/login/server/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.login.server;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/package-info.java b/src/main/java/net/minecraft/network/package-info.java
+deleted file mode 100644
+index 3a7e625..0000000
+--- a/src/main/java/net/minecraft/network/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/play/client/package-info.java b/src/main/java/net/minecraft/network/play/client/package-info.java
+deleted file mode 100644
+index e0d85d0..0000000
+--- a/src/main/java/net/minecraft/network/play/client/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.play.client;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/play/package-info.java b/src/main/java/net/minecraft/network/play/package-info.java
+deleted file mode 100644
+index 9a788d9..0000000
+--- a/src/main/java/net/minecraft/network/play/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.play;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/play/server/package-info.java b/src/main/java/net/minecraft/network/play/server/package-info.java
+deleted file mode 100644
+index 8368d4e..0000000
+--- a/src/main/java/net/minecraft/network/play/server/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.play.server;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/rcon/package-info.java b/src/main/java/net/minecraft/network/rcon/package-info.java
+deleted file mode 100644
+index d89436a..0000000
+--- a/src/main/java/net/minecraft/network/rcon/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.rcon;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/status/client/package-info.java b/src/main/java/net/minecraft/network/status/client/package-info.java
+deleted file mode 100644
+index 7aa1a8f..0000000
+--- a/src/main/java/net/minecraft/network/status/client/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.status.client;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/status/package-info.java b/src/main/java/net/minecraft/network/status/package-info.java
+deleted file mode 100644
+index dbd81d5..0000000
+--- a/src/main/java/net/minecraft/network/status/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.status;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/network/status/server/package-info.java b/src/main/java/net/minecraft/network/status/server/package-info.java
+deleted file mode 100644
+index 04ec4c0..0000000
+--- a/src/main/java/net/minecraft/network/status/server/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.network.status.server;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/pathfinding/package-info.java b/src/main/java/net/minecraft/pathfinding/package-info.java
+deleted file mode 100644
+index 1b2b7dd..0000000
+--- a/src/main/java/net/minecraft/pathfinding/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.pathfinding;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/potion/package-info.java b/src/main/java/net/minecraft/potion/package-info.java
+deleted file mode 100644
+index f41e16b..0000000
+--- a/src/main/java/net/minecraft/potion/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.potion;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/profiler/package-info.java b/src/main/java/net/minecraft/profiler/package-info.java
+deleted file mode 100644
+index dc4e255..0000000
+--- a/src/main/java/net/minecraft/profiler/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.profiler;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/scoreboard/package-info.java b/src/main/java/net/minecraft/scoreboard/package-info.java
+deleted file mode 100644
+index d3774c7..0000000
+--- a/src/main/java/net/minecraft/scoreboard/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.scoreboard;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/dedicated/package-info.java b/src/main/java/net/minecraft/server/dedicated/package-info.java
+deleted file mode 100644
+index 6a2b37a..0000000
+--- a/src/main/java/net/minecraft/server/dedicated/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.server.dedicated;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/gui/package-info.java b/src/main/java/net/minecraft/server/gui/package-info.java
+deleted file mode 100644
+index c83e664..0000000
+--- a/src/main/java/net/minecraft/server/gui/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.server.gui;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/management/package-info.java b/src/main/java/net/minecraft/server/management/package-info.java
+deleted file mode 100644
+index 516a1bc..0000000
+--- a/src/main/java/net/minecraft/server/management/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.server.management;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/network/package-info.java b/src/main/java/net/minecraft/server/network/package-info.java
+deleted file mode 100644
+index 475dfb2..0000000
+--- a/src/main/java/net/minecraft/server/network/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.server.network;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/server/package-info.java b/src/main/java/net/minecraft/server/package-info.java
+deleted file mode 100644
+index 7974c62..0000000
+--- a/src/main/java/net/minecraft/server/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.server;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/stats/package-info.java b/src/main/java/net/minecraft/stats/package-info.java
+deleted file mode 100644
+index 31a19b8..0000000
+--- a/src/main/java/net/minecraft/stats/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.stats;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/tileentity/package-info.java b/src/main/java/net/minecraft/tileentity/package-info.java
+deleted file mode 100644
+index e7c61b1..0000000
+--- a/src/main/java/net/minecraft/tileentity/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.tileentity;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/datafix/fixes/package-info.java b/src/main/java/net/minecraft/util/datafix/fixes/package-info.java
+deleted file mode 100644
+index 59686b7..0000000
+--- a/src/main/java/net/minecraft/util/datafix/fixes/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.util.datafix.fixes;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/datafix/package-info.java b/src/main/java/net/minecraft/util/datafix/package-info.java
+deleted file mode 100644
+index d2af60f..0000000
+--- a/src/main/java/net/minecraft/util/datafix/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.util.datafix;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/datafix/walkers/package-info.java b/src/main/java/net/minecraft/util/datafix/walkers/package-info.java
+deleted file mode 100644
+index 9d6a337..0000000
+--- a/src/main/java/net/minecraft/util/datafix/walkers/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.util.datafix.walkers;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/math/package-info.java b/src/main/java/net/minecraft/util/math/package-info.java
+deleted file mode 100644
+index 605d43c..0000000
+--- a/src/main/java/net/minecraft/util/math/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.util.math;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/package-info.java b/src/main/java/net/minecraft/util/package-info.java
+deleted file mode 100644
+index f645f5b..0000000
+--- a/src/main/java/net/minecraft/util/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.util;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/registry/package-info.java b/src/main/java/net/minecraft/util/registry/package-info.java
+deleted file mode 100644
+index db16f4f..0000000
+--- a/src/main/java/net/minecraft/util/registry/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.util.registry;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/text/event/package-info.java b/src/main/java/net/minecraft/util/text/event/package-info.java
+deleted file mode 100644
+index d8c8660..0000000
+--- a/src/main/java/net/minecraft/util/text/event/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.util.text.event;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/text/package-info.java b/src/main/java/net/minecraft/util/text/package-info.java
+deleted file mode 100644
+index 07ed9c3..0000000
+--- a/src/main/java/net/minecraft/util/text/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.util.text;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/util/text/translation/package-info.java b/src/main/java/net/minecraft/util/text/translation/package-info.java
+deleted file mode 100644
+index 11aad35..0000000
+--- a/src/main/java/net/minecraft/util/text/translation/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.util.text.translation;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/village/package-info.java b/src/main/java/net/minecraft/village/package-info.java
+deleted file mode 100644
+index cdeb1f0..0000000
+--- a/src/main/java/net/minecraft/village/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.village;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/biome/package-info.java b/src/main/java/net/minecraft/world/biome/package-info.java
+deleted file mode 100644
+index a37959a..0000000
+--- a/src/main/java/net/minecraft/world/biome/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.biome;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/border/package-info.java b/src/main/java/net/minecraft/world/border/package-info.java
+deleted file mode 100644
+index 16c3e13..0000000
+--- a/src/main/java/net/minecraft/world/border/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.border;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/chunk/package-info.java b/src/main/java/net/minecraft/world/chunk/package-info.java
+deleted file mode 100644
+index a965569..0000000
+--- a/src/main/java/net/minecraft/world/chunk/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.chunk;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/chunk/storage/package-info.java b/src/main/java/net/minecraft/world/chunk/storage/package-info.java
+deleted file mode 100644
+index b44d1b8..0000000
+--- a/src/main/java/net/minecraft/world/chunk/storage/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.chunk.storage;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/demo/package-info.java b/src/main/java/net/minecraft/world/demo/package-info.java
+deleted file mode 100644
+index a45b773..0000000
+--- a/src/main/java/net/minecraft/world/demo/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.demo;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/end/package-info.java b/src/main/java/net/minecraft/world/end/package-info.java
+deleted file mode 100644
+index 7855269..0000000
+--- a/src/main/java/net/minecraft/world/end/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.end;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/gen/feature/package-info.java b/src/main/java/net/minecraft/world/gen/feature/package-info.java
+deleted file mode 100644
+index 5410d07..0000000
+--- a/src/main/java/net/minecraft/world/gen/feature/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.gen.feature;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/gen/layer/package-info.java b/src/main/java/net/minecraft/world/gen/layer/package-info.java
+deleted file mode 100644
+index 0de2e10..0000000
+--- a/src/main/java/net/minecraft/world/gen/layer/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.gen.layer;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/gen/package-info.java b/src/main/java/net/minecraft/world/gen/package-info.java
+deleted file mode 100644
+index ec2cc6a..0000000
+--- a/src/main/java/net/minecraft/world/gen/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.gen;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/gen/structure/package-info.java b/src/main/java/net/minecraft/world/gen/structure/package-info.java
+deleted file mode 100644
+index dbed888..0000000
+--- a/src/main/java/net/minecraft/world/gen/structure/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.gen.structure;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/gen/structure/template/package-info.java b/src/main/java/net/minecraft/world/gen/structure/template/package-info.java
+deleted file mode 100644
+index 300956d..0000000
+--- a/src/main/java/net/minecraft/world/gen/structure/template/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.gen.structure.template;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/package-info.java b/src/main/java/net/minecraft/world/package-info.java
+deleted file mode 100644
+index 004bd2f..0000000
+--- a/src/main/java/net/minecraft/world/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/storage/loot/conditions/package-info.java b/src/main/java/net/minecraft/world/storage/loot/conditions/package-info.java
+deleted file mode 100644
+index 3129093..0000000
+--- a/src/main/java/net/minecraft/world/storage/loot/conditions/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.storage.loot.conditions;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/storage/loot/functions/package-info.java b/src/main/java/net/minecraft/world/storage/loot/functions/package-info.java
+deleted file mode 100644
+index 87cb170..0000000
+--- a/src/main/java/net/minecraft/world/storage/loot/functions/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.storage.loot.functions;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/storage/loot/package-info.java b/src/main/java/net/minecraft/world/storage/loot/package-info.java
+deleted file mode 100644
+index 7092422..0000000
+--- a/src/main/java/net/minecraft/world/storage/loot/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.storage.loot;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/storage/loot/properties/package-info.java b/src/main/java/net/minecraft/world/storage/loot/properties/package-info.java
+deleted file mode 100644
+index ab21809..0000000
+--- a/src/main/java/net/minecraft/world/storage/loot/properties/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.storage.loot.properties;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+diff --git a/src/main/java/net/minecraft/world/storage/package-info.java b/src/main/java/net/minecraft/world/storage/package-info.java
+deleted file mode 100644
+index 0edf643..0000000
+--- a/src/main/java/net/minecraft/world/storage/package-info.java
++++ /dev/null
+@@ -1,7 +0,0 @@
+-// Auto generated package-info by MCP
+-@ParametersAreNonnullByDefault
+-@MethodsReturnNonnullByDefault
+-package net.minecraft.world.storage;
+-
+-import mcp.MethodsReturnNonnullByDefault;
+-import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file
+-- 
+2.12.1.windows.1
+

@@ -1,0 +1,51 @@
+From 5f87a18ca96b71ba1471b3a49164f484dd9cf8a1 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Thu, 3 Mar 2016 02:02:07 -0600
+Subject: [PATCH] Optimize Pathfinding
+
+Prevents pathfinding from spamming failures for things such as
+arrow attacks.
+
+diff --git a/src/main/java/net/minecraft/pathfinding/PathNavigate.java b/src/main/java/net/minecraft/pathfinding/PathNavigate.java
+index dd9b64b..0c32923 100644
+--- a/src/main/java/net/minecraft/pathfinding/PathNavigate.java
++++ b/src/main/java/net/minecraft/pathfinding/PathNavigate.java
+@@ -149,9 +149,26 @@ public abstract class PathNavigate {
+      * Try to find and set a path to EntityLiving. Returns true if successful. Args : entity, speed
+      */
+     public boolean tryMoveToEntityLiving(Entity entityIn, double speedIn) {
++        // Paper start - Pathfinding optimizations
++        if (this.pathfindFailures > 10 && this.currentPath == null && net.minecraft.server.MinecraftServer.currentTick < this.lastFailure + 40) {
++            return false;
++        }
++
+         Path var4 = this.getPathToEntityLiving(entityIn);
+-        return var4 != null && this.setPath(var4, speedIn);
++        if (var4 != null && this.setPath(var4, speedIn)) {
++            this.lastFailure = 0;
++            this.pathfindFailures = 0;
++            return true;
++        } else {
++            this.pathfindFailures++;
++            this.lastFailure = net.minecraft.server.MinecraftServer.currentTick;
++            return false;
++        }
+     }
++    
++    private int lastFailure = 0;
++    private int pathfindFailures = 0;
++    // Paper end
+ 
+     /**
+      * Sets a new path. If it's diferent from the old path. Checks to adjust path for sun avoiding, and stores start
+@@ -299,6 +316,7 @@ public abstract class PathNavigate {
+      * sets active PathEntity to null
+      */
+     public void clearPathEntity() {
++        this.pathfindFailures = 0; this.lastFailure = 0; // Paper - Pathfinding optimizations
+         this.currentPath = null;
+     }
+ 
+-- 
+2.12.1.windows.1
+

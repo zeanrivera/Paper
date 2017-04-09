@@ -1,0 +1,78 @@
+From 12118bdeef31397ab846323c49279f3e63582992 Mon Sep 17 00:00:00 2001
+From: Byteflux <byte@byteflux.net>
+Date: Tue, 1 Mar 2016 14:14:15 -0600
+Subject: [PATCH] Drop falling block and tnt entities at the specified height
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index db50570..0f4f241 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -120,4 +120,14 @@ public class PaperWorldConfig {
+         keepSpawnInMemory = getBoolean("keep-spawn-loaded", true);
+         log("Keep spawn chunk loaded: " + keepSpawnInMemory);
+     }
++
++    public int fallingBlockHeightNerf;
++    public int entityTNTHeightNerf;
++    private void heightNerfs() {
++        fallingBlockHeightNerf = getInt("falling-block-height-nerf", 0);
++        entityTNTHeightNerf = getInt("tnt-entity-height-nerf", 0);
++
++        if (fallingBlockHeightNerf != 0) log("Falling Block Height Limit set to Y: " + fallingBlockHeightNerf);
++        if (entityTNTHeightNerf != 0) log("TNT Entity Height Limit set to Y: " + entityTNTHeightNerf);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
+index 04e85f7..7b57893 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
++++ b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
+@@ -111,6 +111,16 @@ public class EntityFallingBlock extends Entity {
+             }
+ 
+             this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
++
++            // Paper start - Configurable EntityFallingBlock height nerf
++            if (this.world.paperConfig.fallingBlockHeightNerf != 0 && this.posY > this.world.paperConfig.fallingBlockHeightNerf) {
++                if (this.shouldDropItem && this.world.getGameRules().getBoolean("doEntityDrops")) {
++                    this.entityDropItem(new ItemStack(block, 1, block.damageDropped(fallTile)), 0.0F);
++                }
++                this.kill();
++            }
++            // Paper end
++
+             this.motionX *= 0.9800000190734863D;
+             this.motionY *= 0.9800000190734863D;
+             this.motionZ *= 0.9800000190734863D;
+diff --git a/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java b/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
+index cb2a24d..868498b 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
++++ b/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
+@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
+ import net.minecraft.entity.Entity;
+ import net.minecraft.entity.EntityLivingBase;
+ import net.minecraft.entity.MoverType;
++import net.minecraft.item.ItemStack;
+ import net.minecraft.nbt.NBTTagCompound;
+ import net.minecraft.network.datasync.DataParameter;
+ import net.minecraft.network.datasync.DataSerializers;
+@@ -80,6 +81,16 @@ public class EntityTNTPrimed extends Entity {
+             }
+ 
+             this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
++
++            // Paper start - Configurable TNT entity height nerf
++            if (this.world.paperConfig.fallingBlockHeightNerf != 0 && this.posY > this.world.paperConfig.fallingBlockHeightNerf) {
++                if (this.world.getGameRules().getBoolean("doEntityDrops")) {
++                    this.entityDropItem(new ItemStack(net.minecraft.init.Blocks.TNT), 0.0F);
++                }
++                this.kill();
++            }
++            // Paper end
++
+             this.motionX *= 0.9800000190734863D;
+             this.motionY *= 0.9800000190734863D;
+             this.motionZ *= 0.9800000190734863D;
+-- 
+2.12.1.windows.1
+

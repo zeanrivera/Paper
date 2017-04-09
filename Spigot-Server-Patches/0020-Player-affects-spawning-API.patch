@@ -1,0 +1,96 @@
+From 1e84de70c3ad71b6007a732fbdeadaa90d38ceeb Mon Sep 17 00:00:00 2001
+From: Jedediah Smith <jedediah@silencegreys.com>
+Date: Tue, 1 Mar 2016 14:47:52 -0600
+Subject: [PATCH] Player affects spawning API
+
+
+diff --git a/src/main/java/net/minecraft/entity/EntityLiving.java b/src/main/java/net/minecraft/entity/EntityLiving.java
+index 87801cc..eee7e70 100644
+--- a/src/main/java/net/minecraft/entity/EntityLiving.java
++++ b/src/main/java/net/minecraft/entity/EntityLiving.java
+@@ -709,7 +709,7 @@ public abstract class EntityLiving extends EntityLivingBase {
+         } else {
+             EntityPlayer entityhuman = this.world.getClosestPlayerToEntity(this, -1.0D);
+ 
+-            if (entityhuman != null) {
++            if (entityhuman != null && entityhuman.affectsSpawning) { // Paper - Affects Spawning API
+                 double d0 = entityhuman.posX - this.posX;
+                 double d1 = entityhuman.posY - this.posY;
+                 double d2 = entityhuman.posZ - this.posZ;
+diff --git a/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java b/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java
+index ccf8721..2bed031 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java
++++ b/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java
+@@ -146,7 +146,7 @@ public class EntitySilverfish extends EntityMob {
+     public boolean getCanSpawnHere() {
+         if (super.getCanSpawnHere()) {
+             EntityPlayer entityhuman = this.world.getNearestPlayerNotCreative(this, 5.0D);
+-            return entityhuman == null;
++            return !(entityhuman != null && !entityhuman.affectsSpawning) && entityhuman == null; // Paper - Affects Spawning API
+         } else {
+             return false;
+         }
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
+index 3bb642e..1b64ca0 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
+@@ -175,6 +175,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
+     public boolean fauxSleeping;
+     public String spawnWorld = "";
+     public int oldLevel = -1;
++    public boolean affectsSpawning = true; // Paper
+ 
+     public CraftHumanEntity getBukkitEntity() {
+         return (CraftHumanEntity)super.getBukkitEntity();
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 1c97b82..848980b 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -2846,7 +2846,7 @@ public abstract class World implements IBlockAccess {
+         for (int i = 0; i < this.playerEntities.size(); ++i) {
+             EntityPlayer entityhuman = (EntityPlayer)this.playerEntities.get(i);
+ 
+-            if (EntitySelectors.NOT_SPECTATING.apply(entityhuman)) {
++            if (EntitySelectors.NOT_SPECTATING.apply(entityhuman) && entityhuman.affectsSpawning) { // Paper - Affects Spawning API
+                 double d4 = entityhuman.getDistanceSq(x, y, z);
+ 
+                 if (range < 0.0D || d4 < range * range) {
+diff --git a/src/main/java/net/minecraft/world/WorldEntitySpawner.java b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
+index 8974895..7c3d5ef 100644
+--- a/src/main/java/net/minecraft/world/WorldEntitySpawner.java
++++ b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
+@@ -62,7 +62,7 @@ public final class WorldEntitySpawner {
+             int i = 0;
+ 
+             for (EntityPlayer entityhuman : worldServerIn.playerEntities) {
+-                if (!entityhuman.isSpectator()) {
++                if (!entityhuman.isSpectator() && entityhuman.affectsSpawning) { // Paper
+                     int l = MathHelper.floor(entityhuman.posX / 16.0D);
+                     int j = MathHelper.floor(entityhuman.posZ / 16.0D);
+                     boolean flag3 = true;
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 5632653..7f15cf5 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -1413,6 +1413,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         }
+     }
+ 
++    // Paper start - Affects spawning API
++    @Override
++    public void setAffectsSpawning(boolean affects) {
++        this.getHandle().affectsSpawning = affects;
++    }
++
++    @Override
++    public boolean getAffectsSpawning() {
++        return this.getHandle().affectsSpawning;
++    }
++    // Paper end
++
+     public Player.Spigot spigot() { // Paper - fix decompile
+         return this.spigot;
+     }
+-- 
+2.12.1.windows.1
+

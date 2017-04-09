@@ -1,0 +1,115 @@
+From f310a8b99bc63d95f0e3eeb8ea7ddef9a79d0a4a Mon Sep 17 00:00:00 2001
+From: Byteflux <byte@byteflux.net>
+Date: Wed, 2 Mar 2016 12:20:52 -0600
+Subject: [PATCH] Fast draining
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 12c9d7d..b7e5f19 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -184,4 +184,11 @@ public class PaperWorldConfig {
+         optimizeExplosions = getBoolean("optimize-explosions", false);
+         log("Optimize explosions: " + optimizeExplosions);
+     }
++    
++    public boolean fastDrainLava;
++    public boolean fastDrainWater;
++    private void fastDrain() {
++        fastDrainLava = getBoolean("fast-drain.lava", false);
++        fastDrainWater = getBoolean("fast-drain.water", false);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
+index 2afdfb4..1f3c14c 100644
+--- a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
++++ b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
+@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
+ import net.minecraft.init.Blocks;
+ import net.minecraft.util.EnumFacing;
+ import net.minecraft.util.math.BlockPos;
++import net.minecraft.world.IBlockAccess;
+ import net.minecraft.world.World;
+ import org.bukkit.block.BlockFace;
+ import org.bukkit.craftbukkit.block.CraftBlock;
+@@ -70,7 +71,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+                 }
+             }
+ 
+-            if (this.blockMaterial == Material.LAVA && i < 8 && i1 < 8 && i1 > i && rand.nextInt(4) != 0) {
++            if (!worldIn.paperConfig.fastDrainLava && this.blockMaterial == Material.LAVA && i < 8 && i1 < 8 && i1 > i && rand.nextInt(4) != 0) { // Paper
+                 j *= 4;
+             }
+ 
+@@ -79,7 +80,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+             } else {
+                 i = i1;
+ 
+-                if (i1 < 0) {
++                if (i1 < 0 || canFastDrain(worldIn, pos)) { // Paper - Fast draining
+                     worldIn.setBlockToAir(pos);
+                 } else {
+                     state = state.withProperty(LEVEL, Integer.valueOf(i1));
+@@ -266,4 +267,59 @@ public class BlockDynamicLiquid extends BlockLiquid {
+         }
+         return super.tickRate(world);
+     }
++
++    /**
++     * Paper - Convenience method
++     */
++    private int getFluidLevel(IBlockAccess iblockaccess, BlockPos blockposition) {
++        return iblockaccess.getBlockState(blockposition).getMaterial() == this.blockMaterial ? iblockaccess.getBlockState(blockposition).getValue(BlockDynamicLiquid.LEVEL) : -1;
++    }
++
++    /**
++     * Paper - Data check method for fast draining
++     */
++    public int getData(World world, BlockPos position) {
++        int data = this.getFluidLevel(world, position);
++        return data < 8 ? data : 0;
++    }
++
++    /**
++     * Paper - Checks surrounding blocks to determine if block can be fast drained
++     */
++    public boolean canFastDrain(World world, BlockPos position) {
++        boolean result = false;
++        int data = getData(world, position);
++        if (this.blockMaterial == Material.WATER) {
++            if (world.paperConfig.fastDrainWater) {
++                result = true;
++                if (getData(world, position.down()) < 0) {
++                    result = false;
++                } else if (world.getBlockState(position.north()).getMaterial() == Material.WATER && getData(world, position.north()) < data) {
++                    result = false;
++                } else if (world.getBlockState(position.south()).getMaterial() == Material.WATER && getData(world, position.south()) < data) {
++                    result = false;
++                } else if (world.getBlockState(position.west()).getMaterial() == Material.WATER && getData(world, position.west()) < data) {
++                    result = false;
++                } else if (world.getBlockState(position.east()).getMaterial() == Material.WATER && getData(world, position.east()) < data) {
++                    result = false;
++                }
++            }
++        } else if (this.blockMaterial == Material.LAVA) {
++            if (world.paperConfig.fastDrainLava) {
++                result = true;
++                if (getData(world, position.down()) < 0 || world.getBlockState(position.up()).getMaterial() != Material.AIR) {
++                    result = false;
++                } else if (world.getBlockState(position.north()).getMaterial() == Material.LAVA && getData(world, position.north()) < data) {
++                    result = false;
++                } else if (world.getBlockState(position.south()).getMaterial() == Material.LAVA && getData(world, position.south()) < data) {
++                    result = false;
++                } else if (world.getBlockState(position.west()).getMaterial() == Material.LAVA && getData(world, position.west()) < data) {
++                    result = false;
++                } else if (world.getBlockState(position.east()).getMaterial() == Material.LAVA && getData(world, position.east()) < data) {
++                    result = false;
++                }
++            }
++        }
++        return result;
++    }
+ }
+-- 
+2.12.1.windows.1
+
