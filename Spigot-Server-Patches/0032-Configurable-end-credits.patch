@@ -1,18 +1,18 @@
-From 9d4ed18ae19df7f231faa7735eae239f3ac6adba Mon Sep 17 00:00:00 2001
+From 0179633aeb4090a6358850b8b5644a1016408d33 Mon Sep 17 00:00:00 2001
 From: DoctorDark <doctordark11@gmail.com>
 Date: Wed, 16 Mar 2016 02:21:39 -0500
 Subject: [PATCH] Configurable end credits
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index bf9cd17..400fe76 100644
+index bf9cd17..d4c56fe 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -147,4 +147,10 @@ public class PaperWorldConfig {
          queueLightUpdates = getBoolean("queue-light-updates", false);
          log("Lighting Queue enabled: " + queueLightUpdates);
      }
-+    
++
 +    public boolean disableEndCredits;
 +    private void disableEndCredits() {
 +        disableEndCredits = getBoolean("game-mechanics.disable-end-credits", false);

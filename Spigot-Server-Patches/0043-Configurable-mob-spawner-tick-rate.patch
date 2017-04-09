@@ -1,11 +1,11 @@
-From 246a877227c4162a86727ce29624c37893eac5ad Mon Sep 17 00:00:00 2001
+From 3b309833a4a0fb42b165d2dcdd3317d84a46311c Mon Sep 17 00:00:00 2001
 From: Sudzzy <originmc@outlook.com>
 Date: Wed, 2 Mar 2016 15:03:53 -0600
 Subject: [PATCH] Configurable mob spawner tick rate
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 41a865f..998690b 100644
+index f46bb38..92a7d61 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -213,4 +213,9 @@ public class PaperWorldConfig {

@@ -1,11 +1,11 @@
-From 2a697c9256f38b9bb9929dfe5ff8cf31b4f9550b Mon Sep 17 00:00:00 2001
+From 660a31ffdc6d69c1de64ee72b33c0f4afa8dbaa6 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 8 Apr 2017 22:49:40 -0500
 Subject: [PATCH] Add player view distance API
 
 
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-index 04e3fd6..6b987a5 100644
+index 04e3fd6..4475ab2 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 @@ -195,6 +195,17 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
@@ -14,11 +14,11 @@ index 04e3fd6..6b987a5 100644
      private float pluginRainPositionPrevious;
 +    // Paper start - Player view distance API
 +    private int viewDistance = -1;
-+    
++
 +    public int getViewDistance() {
 +        return viewDistance == -1 ? ((WorldServer) world).getPlayerChunkMap().playerViewRadius : viewDistance;
 +    }
-+    
++
 +    public void setViewDistance(int viewDistance) {
 +        this.viewDistance = viewDistance;
 +    }
@@ -27,7 +27,7 @@ index 04e3fd6..6b987a5 100644
      public EntityPlayerMP(MinecraftServer server, WorldServer worldIn, GameProfile profile, PlayerInteractionManager interactionManagerIn) {
          super(worldIn, profile);
 diff --git a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
-index 5e8bcec..9fe74e1 100644
+index 5e8bcec..486dda6 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
 @@ -280,8 +280,11 @@ public class PlayerChunkMap {
@@ -141,11 +141,10 @@ index 5e8bcec..9fe74e1 100644
          }
      }
  
-@@ -453,6 +471,23 @@ public class PlayerChunkMap {
-             this.getWorldServer().getChunkProvider().queueUnload(chunk);
+@@ -454,6 +472,23 @@ public class PlayerChunkMap {
          }
      }
-+    
+ 
 +    // Paper start - Player view distance API
 +    public void updateViewRadius(EntityPlayerMP player, int toSet) {
 +        int oldViewDistance = player.getViewDistance();
@@ -154,7 +153,7 @@ index 5e8bcec..9fe74e1 100644
 +        if (toSet < 0) {
 +            viewDistance = -1;
 +        }
-+        
++
 +        if (viewDistance != oldViewDistance) {
 +            // Order matters
 +            this.setPlayerViewRadius(player, viewDistance);
@@ -162,23 +161,24 @@ index 5e8bcec..9fe74e1 100644
 +            player.setViewDistance(viewDistance);
 +        }
 +    }
- 
++
      private static class ChunkCoordComparator implements Comparator<ChunkPos> {
          private int x;
+         private int z;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 2e03cd7..65a3efc 100644
+index 5be4604..61f560a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1424,6 +1424,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public boolean getAffectsSpawning() {
          return this.getHandle().affectsSpawning;
      }
-+    
++
 +    @Override
 +    public int getViewDistance() {
 +        return this.getHandle().getViewDistance();
 +    }
-+    
++
 +    @Override
 +    public void setViewDistance(int viewDistance) {
 +        this.getHandle().getServerWorld().getPlayerChunkMap().updateViewRadius(this.getHandle(), viewDistance);

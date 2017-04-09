@@ -1,4 +1,4 @@
-From ce1069b7b7e0a9ad3e491344f5ab34cbe8d3aa24 Mon Sep 17 00:00:00 2001
+From e3904b6d32b67a0fa354f44777c10fdaf8cf35eb Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 1 Mar 2016 12:45:11 -0600
 Subject: [PATCH] Configurable squid spawn ranges

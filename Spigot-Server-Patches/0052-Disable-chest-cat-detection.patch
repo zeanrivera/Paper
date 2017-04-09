@@ -1,11 +1,11 @@
-From 532e91f9e9427bdb37ee871fd4be472c27c3a32b Mon Sep 17 00:00:00 2001
+From 7420946cd799734b21f5b99b4558b2f5de9a76e4 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 3 Mar 2016 01:13:45 -0600
 Subject: [PATCH] Disable chest cat detection
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 31bec83..ff9919e 100644
+index 3fcc4ee..a2845bf 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -223,4 +223,9 @@ public class PaperWorldConfig {

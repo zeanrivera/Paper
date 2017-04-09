@@ -1,4 +1,4 @@
-From c78c9c036f6f54b1cde148ad319d246ef6968d27 Mon Sep 17 00:00:00 2001
+From 8afda7681f26034138d6455715c36a1764387634 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Wed, 2 Mar 2016 11:59:48 -0600
 Subject: [PATCH] Optimize explosions
@@ -10,14 +10,14 @@ This patch adds a per-tick cache that is used for storing and retrieving
 an entity's exposure during an explosion.
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index ab3f8f4..12c9d7d 100644
+index bf34881..a9cfd03 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -178,4 +178,10 @@ public class PaperWorldConfig {
          generateVillage = getBoolean("generator-settings.village", true);
          generateFlatBedrock = getBoolean("generator-settings.flat-bedrock", false);
      }
-+    
++
 +    public boolean optimizeExplosions;
 +    private void optimizeExplosions() {
 +        optimizeExplosions = getBoolean("optimize-explosions", false);

@@ -1,4 +1,4 @@
-From 1e2a2a30af5ba985cda4637e09fbb7542da27563 Mon Sep 17 00:00:00 2001
+From b7b3cb84ea6a5dd5f2a82d583ba426aeccc87cac Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 1 Mar 2016 13:14:11 -0600
 Subject: [PATCH] Configurable fishing time ranges

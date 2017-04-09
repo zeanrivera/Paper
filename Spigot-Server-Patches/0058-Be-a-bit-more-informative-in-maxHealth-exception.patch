@@ -1,4 +1,4 @@
-From 4231d464807a2478585a2fa11b4e365891c69f7a Mon Sep 17 00:00:00 2001
+From 7d8d806a7daede1e8224e7e888298977e4659488 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Thu, 3 Mar 2016 02:18:39 -0600
 Subject: [PATCH] Be a bit more informative in maxHealth exception

@@ -1,4 +1,4 @@
-From 1620113ab81849661143a934d0f1b800b5da84db Mon Sep 17 00:00:00 2001
+From 299f3273fa7031df84259e192796a6593a8cc067 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 1 Mar 2016 23:52:34 -0600
 Subject: [PATCH] Prevent tile entity and entity crashes

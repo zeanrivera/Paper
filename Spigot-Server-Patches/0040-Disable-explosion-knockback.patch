@@ -1,25 +1,25 @@
-From df38f113c8982fd0bb98360c1dc85d67a49713ee Mon Sep 17 00:00:00 2001
+From a999e43a1ed7cb594777c741f81a15ba0d2ff1a5 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 8 Apr 2017 23:03:19 -0500
 Subject: [PATCH] Disable explosion knockback
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 6550e46..fed7fde 100644
+index 3e66b40..9fe3a48 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -198,4 +198,9 @@ public class PaperWorldConfig {
          lavaFlowSpeedNormal = getInt("lava-flow-speed.normal", 30);
          lavaFlowSpeedNether = getInt("lava-flow-speed.nether", 10);
      }
-+    
++
 +    public boolean disableExplosionKnockback;
 +    private void disableExplosionKnockback() {
 +        disableExplosionKnockback = getBoolean("disable-explosion-knockback", false);
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index c335e28..9cde0cc 100644
+index cf59768..9f97056 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
 @@ -960,12 +960,14 @@ public abstract class EntityLivingBase extends Entity {

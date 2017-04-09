@@ -1,4 +1,4 @@
-From e2a5d49a7ac0ed5703baafdfe9a00299470f7ea1 Mon Sep 17 00:00:00 2001
+From 2b84557a231354e8513ccb29a65b8abbf94e486b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 3 Mar 2016 04:00:11 -0600
 Subject: [PATCH] Timings v2
@@ -385,7 +385,7 @@ index 0000000..bef7ad8
 +    }
 +}
 diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-index 75d4048..fb10a9c 100644
+index 8ac0b79..2d210c4 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
 @@ -1,5 +1,7 @@
@@ -430,14 +430,13 @@ index 75d4048..fb10a9c 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/block/Block.java b/src/main/java/net/minecraft/block/Block.java
-index af409a1..717d5c6 100644
+index af409a1..9a44e3c 100644
 --- a/src/main/java/net/minecraft/block/Block.java
 +++ b/src/main/java/net/minecraft/block/Block.java
-@@ -87,6 +87,16 @@ public class Block {
-     protected final BlockStateContainer blockState;
+@@ -88,6 +88,16 @@ public class Block {
      private IBlockState defaultBlockState;
      private String unlocalizedName;
-+    
+ 
 +    // Paper start
 +    public co.aikar.timings.Timing timing;
 +    public co.aikar.timings.Timing getTiming() {
@@ -447,9 +446,10 @@ index af409a1..717d5c6 100644
 +        return timing;
 +    }
 +    // Paper end
- 
++
      public static int getIdFromBlock(Block blockIn) {
          return REGISTRY.getIDForObject(blockIn);
+     }
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
 index 92d97c4..ab97564 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
@@ -506,7 +506,7 @@ index 92d97c4..ab97564 100644
  
      /**
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index 30bb002..c335e28 100644
+index 30bb002..cf59768 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
 @@ -1,5 +1,6 @@
@@ -532,13 +532,11 @@ index 30bb002..c335e28 100644
          super.onUpdate();
          this.updateActiveHand();
  
-@@ -2011,10 +2010,8 @@ public abstract class EntityLivingBase extends Entity {
-                 }
+@@ -2012,9 +2011,7 @@ public abstract class EntityLivingBase extends Entity {
              }
          }
--
+ 
 -        SpigotTimings.timerEntityBaseTick.stopTiming();
-+        
          this.onLivingUpdate();
 -        SpigotTimings.timerEntityTickRest.startTiming();
          double d0 = this.posX - this.prevPosX;
@@ -561,13 +559,11 @@ index 30bb002..c335e28 100644
  
          if (this.isMovementBlocked()) {
              this.isJumping = false;
-@@ -2164,8 +2158,7 @@ public abstract class EntityLivingBase extends Entity {
-             this.updateEntityActionState();
+@@ -2165,7 +2159,6 @@ public abstract class EntityLivingBase extends Entity {
              this.world.profiler.endSection();
          }
--
+ 
 -        SpigotTimings.timerEntityAI.stopTiming();
-+        
          this.world.profiler.endSection();
          this.world.profiler.startSection("jump");
  
@@ -1423,7 +1419,7 @@ index 577057b..b08cf63 100644
          return flag;
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index b58eeb1..99445ee 100644
+index b58eeb1..f7cf9e8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -239,6 +239,7 @@ public final class CraftServer implements Server {
@@ -1443,12 +1439,12 @@ index b58eeb1..99445ee 100644
 +            public YamlConfiguration getBukkitConfig() {
 +                return configuration;
 +            }
-+            
-+            @Override 
++
++            @Override
 +            public YamlConfiguration getSpigotConfig() {
 +                return org.spigotmc.SpigotConfig.config;
 +            }
-+            
++
 +            @Override
 +            public YamlConfiguration getPaperConfig() {
 +                return com.destroystokyo.paper.PaperConfig.config;
@@ -1656,14 +1652,14 @@ index 6af10bc..3b70347 100644
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 3cd40df..5632653 100644
+index 3cd40df..7f5e4b0 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -219,6 +219,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                  CraftPlayer.this.getHandle().connection.sendPacket(packet);
              }
          }
-+        
++
 +        // Paper start
 +        @Override
 +        public int getPing() {

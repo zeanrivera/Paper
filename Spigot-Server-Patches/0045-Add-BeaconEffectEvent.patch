@@ -1,11 +1,11 @@
-From bb35cc1dc0d3ba6594e24a7ebd6ca5b3ebd7ab6b Mon Sep 17 00:00:00 2001
+From 73582ac54696fd52e6060c2e68bec1c99320f309 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Wed, 2 Mar 2016 23:30:53 -0600
 Subject: [PATCH] Add BeaconEffectEvent
 
 
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
-index ab9b216..559e741 100644
+index ab9b216..d3de198 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
 @@ -36,6 +36,12 @@ import org.bukkit.craftbukkit.potion.CraftPotionUtil;
@@ -28,7 +28,7 @@ index ab9b216..559e741 100644
 +        // Paper start - BeaconEffectEvent, split
 +        applyEffect(list, effects, i, b0, true);
 +    }
-+    
++
 +    private void applyEffect(List<EntityPlayer> list, Potion effects, int i, int b0, boolean isPrimary) {
 +        org.bukkit.block.Block block = world.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
 +        PotionEffect effect = CraftPotionUtil.toBukkit(new net.minecraft.potion.PotionEffect(effects, i, b0, true, true));

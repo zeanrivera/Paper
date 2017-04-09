@@ -1,18 +1,18 @@
-From 918cd9d31dc666183e6366a3e3b95cc9fee8a406 Mon Sep 17 00:00:00 2001
+From f83375f1202240f072423e7750ba323d8076a51f Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Wed, 2 Mar 2016 12:27:07 -0600
 Subject: [PATCH] Configurable lava flow speed
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index b7e5f19..6550e46 100644
+index 919d8eb..3e66b40 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -191,4 +191,11 @@ public class PaperWorldConfig {
          fastDrainLava = getBoolean("fast-drain.lava", false);
          fastDrainWater = getBoolean("fast-drain.water", false);
      }
-+    
++
 +    public int lavaFlowSpeedNormal;
 +    public int lavaFlowSpeedNether;
 +    private void lavaFlowSpeeds() {

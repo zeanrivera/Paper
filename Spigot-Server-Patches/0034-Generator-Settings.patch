@@ -1,11 +1,11 @@
-From 7b0b9a1ecae396b477081dce8d1d2b545c200477 Mon Sep 17 00:00:00 2001
+From e444dbe134aba7e004aaea1e69c12f846ccaee1c Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Wed, 2 Mar 2016 02:17:54 -0600
 Subject: [PATCH] Generator Settings
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 400fe76..ab3f8f4 100644
+index d4c56fe..bf34881 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -153,4 +153,29 @@ public class PaperWorldConfig {

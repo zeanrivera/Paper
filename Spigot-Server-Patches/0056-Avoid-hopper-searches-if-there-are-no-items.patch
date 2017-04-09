@@ -1,4 +1,4 @@
-From 05e0d9a06f4bcc0fbd581cad206158a4fda15a43 Mon Sep 17 00:00:00 2001
+From 2a29ca0c710a1d216bcc8791afc631a9d8ee6037 Mon Sep 17 00:00:00 2001
 From: CullanP <cullanpage@gmail.com>
 Date: Thu, 3 Mar 2016 02:13:38 -0600
 Subject: [PATCH] Avoid hopper searches if there are no items
@@ -14,21 +14,21 @@ And since minecart hoppers are used _very_ rarely near we can avoid alot of sear
 Combined, this adds up a lot.
 
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index ffb2af0..c534cc2 100644
+index ffb2af0..3a7e6f6 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -107,6 +107,11 @@ public class Chunk {
-     public org.bukkit.Chunk bukkitChunk;
+@@ -108,6 +108,11 @@ public class Chunk {
      public boolean mustSave;
      public final PaperLightingQueue.LightingQueue lightingQueue = new PaperLightingQueue.LightingQueue(this); // Paper
-+    
+ 
 +    // Paper start - Track the number of minecarts and items - Keep in sync with entityList additions and removals
 +    private final int[] itemCounts = new int[16];
 +    private final int[] inventoryEntityCounts = new int[16];
 +    // Paper end
- 
++
      public boolean areNeighborsLoaded(int radius) {
          switch (radius) {
+             case 1:
 @@ -675,6 +680,13 @@ public class Chunk {
          entityIn.chunkCoordY = k;
          entityIn.chunkCoordZ = this.zPosition;

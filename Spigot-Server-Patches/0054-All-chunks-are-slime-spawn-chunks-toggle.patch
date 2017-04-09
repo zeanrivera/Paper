@@ -1,18 +1,18 @@
-From c59d4ab88f27ac30ab752692bf01f1234fc61a4c Mon Sep 17 00:00:00 2001
+From 7e0f6c6e04ce355bf1f3585e7c53b507ca6befd3 Mon Sep 17 00:00:00 2001
 From: vemacs <d@nkmem.es>
 Date: Thu, 3 Mar 2016 01:19:22 -0600
 Subject: [PATCH] All chunks are slime spawn chunks toggle
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index ff9919e..ff8230a 100644
+index a2845bf..267e7af 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -228,4 +228,9 @@ public class PaperWorldConfig {
      private void disableChestCatDetection() {
          disableChestCatDetection = getBoolean("game-mechanics.disable-chest-cat-detection", false);
      }
-+    
++
 +    public boolean allChunksAreSlimeChunks;
 +    public void allChunksAreSlimeChunks() {
 +        allChunksAreSlimeChunks = getBoolean("all-chunks-are-slime-chunks", false);
@@ -35,7 +35,7 @@ index 4fd7b11..c0450ed 100644
                  }
              }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftChunk.java b/src/main/java/org/bukkit/craftbukkit/CraftChunk.java
-index bffb129..5ccbf0b 100644
+index bffb129..1b622ee 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftChunk.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftChunk.java
 @@ -125,7 +125,7 @@ public class CraftChunk implements Chunk {
@@ -43,7 +43,7 @@ index bffb129..5ccbf0b 100644
  
      public boolean isSlimeChunk() {
 -        return this.getHandle().getRandomWithSeed((long)this.worldServer.spigotConfig.slimeSeed).nextInt(10) == 0;
-+        return worldServer.paperConfig.allChunksAreSlimeChunks || this.getHandle().getRandomWithSeed((long)this.worldServer.spigotConfig.slimeSeed).nextInt(10) == 0; // Paper - All 
++        return worldServer.paperConfig.allChunksAreSlimeChunks || this.getHandle().getRandomWithSeed((long)this.worldServer.spigotConfig.slimeSeed).nextInt(10) == 0; // Paper - All
      }
  
      public boolean unload(boolean save) {

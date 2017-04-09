@@ -1,11 +1,11 @@
-From 99938c270e8a1d4cb845af479ed5a942f7ad21fc Mon Sep 17 00:00:00 2001
+From 2fca2dff44315b86cf41e6d0c75e4b260903d2a0 Mon Sep 17 00:00:00 2001
 From: Sudzzy <originmc@outlook.com>
 Date: Wed, 2 Mar 2016 14:57:24 -0600
 Subject: [PATCH] Disable ice and snow
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index b64f70b..41a865f 100644
+index ee01143..f46bb38 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -208,4 +208,9 @@ public class PaperWorldConfig {

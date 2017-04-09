@@ -1,4 +1,4 @@
-From ff5727124d4d7050ffc702f957327082c7b8c23e Mon Sep 17 00:00:00 2001
+From 770d3dea55def7f5e04a9ac0ce0368d75750d4c2 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 24 Mar 2017 23:56:01 -0500
 Subject: [PATCH] Paper Metrics
@@ -1005,24 +1005,22 @@ index 0000000..996f1d1
 +
 +}
 diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-index 328ff01..75d4048 100644
+index 328ff01..8ac0b79 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-@@ -39,7 +39,8 @@ public class PaperConfig {
+@@ -39,6 +39,7 @@ public class PaperConfig {
      static Map<String, Command> commands;
      private static boolean verbose;
      /*========================================================================*/
--
 +    private static Metrics metrics;
-+    
+ 
      public static void init(File configFile) {
          CONFIG_FILE = configFile;
-         config = new YamlConfiguration();
 @@ -72,6 +73,10 @@ public class PaperConfig {
          for (Map.Entry<String, Command> entry : commands.entrySet()) {
              MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Paper", entry.getValue());
          }
-+        
++
 +        if (metrics == null) {
 +            metrics = new Metrics();
 +        }

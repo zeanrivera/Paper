@@ -1,4 +1,4 @@
-From 62ec7eaa9dd390742beaccc159167d78da77600c Mon Sep 17 00:00:00 2001
+From b1332842d7b509c675471abdbf7a3849514a2768 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 9 Apr 2017 00:39:26 -0500
 Subject: [PATCH] Strip MCPs NonnullByDefault
