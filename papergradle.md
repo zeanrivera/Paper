@@ -1,11 +1,12 @@
 About PaperGradle
 =================
 
-Paper has moved from Spigot's horrendously awful mappings to instead use MCP mappings in the dev workspace, and SRG mappings in the
-production environment, to allow easier stability of any plugins which interact with core Minecraft code and would like to use our mappings.
+Paper is hopefully moving from Spigot's horrendously awful mappings to instead use MCP mappings in the dev workspace, and SRG mappings in the
+production environment, to allow easier development of Paper and better stability for any plugins which interact with core Minecraft code and
+would like to use our mappings.
 
-In case there's any reason you need more proof of how much better MCP is over Spigot's mappings, compare the
-[WorldData](http://i.imgur.com/3WzBBmA.png) class in Spigot to the [WorldInfo](http://imgur.com/gguHtmD.png) class in MCP. These are the
+In case there's any reason you need proof of how much better MCP is over Spigot's mappings, compare the
+[WorldData](http://i.imgur.com/3WzBBmA.png) class in Spigot to the [WorldInfo](http://imgur.com/gguHtmD.png) class in MCP. These are both the
 same class, just mapped differently. I think it should be rather clear why we would want to use MCP mappings in our dev environment if
 possible. This page will hopefully try to explain how we managed to make this work, and give insight on how to deal with the different
 issues which will inevitably pop up when pulling in new Spigot changes, or updating to new versions of Minecraft.
@@ -19,12 +20,12 @@ These are the custom tasks that are in `PaperGradle`, and how to interact with t
 
     This task fixes name clashing issues between Spigot and MCP. For example, in `MinecraftServer`, Spigot has added a field of type
     `List<WorldServer>` called `worlds`. There is field already present in `MinecraftServer` of type `WorldServer[]`, which in Spigot isn't
-    mapped to any particular name, but in MCP, is mapped correctly to the name `worlds`. After a remap operation to MCP, these names will
+    mapped to any particular name, but in MCP is mapped correctly to the name `worlds`. After a remap operation to MCP, these names will
     obviously clash and cause issues. It is important to remember that these MCP mapped names will only exist in the development workspace,
-    as in the `reobfuscate` task we map everything back to SRG. This lets us easily define our own MCP names for SRG members without
+    as the `reobfuscate` task will remap everything back to SRG. This lets us easily define our own MCP names for SRG members without
     affecting the output jar.
     
-    This action is done in the `mcpRewrites` task. It reads the `mcp/mcp-rewrites.txt` file. Before the `genSrgs` task runs, which task as
+    This action is done in the `mcpRewrites` task. It reads the `mcp/mcp-rewrites.txt` file. Before the `genSrgs` task runs, which takes as
     input the MCP CSV files and outputs the SRG files used in the remap process, we modify the CSV files and create our own Paper-mappings.
     This only modifies the MCP names, not the SRG names. The format is quite simple:
     
@@ -35,10 +36,10 @@ These are the custom tasks that are in `PaperGradle`, and how to interact with t
 
  * ### `genSpigotSrgs`:
 
-    This task is essential to our build process. This task tasks as input the SRG files created from the `genSrgs` task, as well as the
+    This task is essential to our build process. This task takes as input the SRG files created from the `genSrgs` task, as well as the
     CSRG files Spigot uses, and creates SRG mappings to and from SRG and Spigot, and to and from MCP and Spigot. This is how we are able to
-    accomplish this at all. This task is totally automated from based on the `genSrgs` task, so it really shouldn't require any fiddling
-    with on Minecraft version upgrades.
+    accomplish this at all. This task is totally automated from the `genSrgs` task, so it really shouldn't require any fiddling
+    with during Minecraft version upgrades.
 
  * ### `decompileVanillaJar`:
  
@@ -69,8 +70,8 @@ These are the custom tasks that are in `PaperGradle`, and how to interact with t
     It also has another function, which is to remove bad output classes from the `buildSpigot` task. For whatever reason - probably a
     product of how Spigot depends on the remapped Minecraft server jar in the build process - the Spigot build occasionally emits duplicate
     classes where one is Notch mappings, and the other is Spigot mappings. This causes the decompile task to output some really wacky code
-    as these invalid classes which are simply incorrectly mapped duplicates of other classes show up. As an easy solution, this task also
-    reads in the `mcp/remove-list.txt` file and removes and of the listed file paths in that file from the jar.
+    when these invalid classes which are simply incorrectly mapped duplicates of other classes show up. As an easy solution, this task also
+    reads in the `mcp/remove-list.txt` file and removes any of the listed file paths in that file from the jar.
 
  * ### `preMapReMap`:
  
@@ -81,19 +82,18 @@ These are the custom tasks that are in `PaperGradle`, and how to interact with t
          to their Java names with a `1` prepended to it. This is valid in bytecode, but not valid in Java, so after the decompile process
          lots of patching would be required to fix this if it wasn't fixed in this task.
       
-      2. Forge's FernFlower is smarter than Spigot's. One nice feature of Forge's FernFlower is it properly decompiles implementations of
-         interfaces, even if the implementation has been obfuscated. What this means is, Spigot's FernFlower will decompile implementation
-         methods faithful to how they are in the bytecode (usually with just an `a` for a name), but Forge's FernFlower will be a bit
-         smarter and will decompile the method with the correct name to implement the interface correctly. This removes the need to patch in
-         decompilation fixes for this particular problem.
+      2. Forge's toolchain is smarter than Spigot's. One nice feature of ForgeGradle is it properly handles decompilation of implementations of
+         interfaces, even if the implementation has been obfuscated. What this means is, Spigot's tooling will decompile implementation
+         methods faithful to how they are in the bytecode (usually with just an `a` for a name), but Forge's will be a bit
+         smarter and will decompile and patch the method with the correct name to implement the interface correctly. This removes the need to patch in
+         decompilation fixes for this particular problem late in the build process.
          
          The issue is with how Spigot fixes this issue with their patches. Spigot adds the correctly named method into the class and simply
-         calls the original method (again, usually named `a`) from that method. So when Forge's FernFlower decompiles this, it finds two
+         calls the original method (again, usually named `a`) from that method. So when FernFlower decompiles this, it finds two
          methods with the exact same signature, and exact same name. FernFlower gives up when this happens and simply output empty methods.
          This could be fixed by patching in all the fixes, but ideally we would like it to simply decompile correctly the first time without
          requiring patches. We do this by remapping the Spigot methods to some arbitrary name instead - which is fine, this code won't ever
-         get called. The Spigot methods are simply added to fix the issue with the Spigot FernFlower which isn't present in the Forge
-         FernFlower.
+         get called. The Spigot methods are simply added to fix the issue with the Spigot toolchain which isn't present in ForgeGradle.
          
          In an attempt at following a pattern, I opted to prepend each Spigot method name that did this with the string `__clashing_` so it
          should be pretty clear why that method was renamed and what task was responsible for it. Obviously this task could take any
