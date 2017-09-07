@@ -22,19 +22,18 @@ build/
 bin/
 dist/
 manifest.mf
-run/
 
-work/1.*/
-work/BuildData/
-work/Bukkit/
-work/CraftBukkit/
-work/Paperclip/
-work/Spigot/
+work/1.*
+work/Minecraft
+work/BuildData
+work/Bukkit
+work/CraftBukkit
+work/Paperclip
+work/Spigot
 work/Spigot-Server
 work/Spigot-API
 work/*.jar
-work/test-server/
-work/MCP/
+work/test-server
 
 # Mac filesystem dust
 .DS_Store/
@@ -44,34 +43,17 @@ work/MCP/
 *.ipr
 *.iws
 .idea/
+out/
 
 # Linux temp files
 *~
 
 # other stuff
+run/
 
-Paper-Server/
-Paper-API/
-PaperSpigot-Server/
-PaperSpigot-API/
+Paper-Server
+Paper-API
 Paperclip.jar
 paperclip.jar
 paperclip-*.jar
 paperclip.properties
-### Gradle template
-.gradle
-
-# Ignore Gradle GUI config
-gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
-
-# Cache of project
-.gradletasknamecache
-
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
-/PaperServer/
-
-.cache
