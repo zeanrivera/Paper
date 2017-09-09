@@ -2,7 +2,6 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
-        mavenLocal()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -12,8 +11,7 @@ buildscript {
     }
 
     dependencies {
-        // Prepend gradle.plugin.xyz again when we're done done
-        classpath "com.destroystokyo.papergradle:PaperGradle:2.3-SNAPSHOT"
+        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:2.3.5"
         classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
 }
@@ -97,7 +95,7 @@ minecraft {
         paperServerDir = "Paper-Server"
         cleanDir = "work/MCP"
         accessTransformers = "mcp/paper_at.cfg"
-        mcpRewrites = "mcp/mcp-rewrites.txt"
+        mcpRewritesFile = "mcp/mcp-rewrites.txt"
         preMapSrg = "mcp/paper.srg"
         removeList = "mcp/remove-list.txt"
     }
