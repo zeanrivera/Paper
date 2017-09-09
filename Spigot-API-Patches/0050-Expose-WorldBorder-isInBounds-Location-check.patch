@@ -1,4 +1,4 @@
-From da17e3412de15b616960071a5e8d3d264fc03efe Mon Sep 17 00:00:00 2001
+From 3f1104eade7370f1304f56444a1b5e0d694ada62 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 21 Jan 2017 17:03:10 -0600
 Subject: [PATCH] Expose WorldBorder#isInBounds(Location) check

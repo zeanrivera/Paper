@@ -1,4 +1,4 @@
-From 9b40254808daac69e7657b3c20e4316de8cfac6b Mon Sep 17 00:00:00 2001
+From f7bf3b52cb8544319a06bd35ffd803c7e488a6c2 Mon Sep 17 00:00:00 2001
 From: willies952002 <admin@domnian.com>
 Date: Mon, 28 Nov 2016 10:16:39 -0500
 Subject: [PATCH] Allow Reloading of Command Aliases
@@ -6,16 +6,18 @@ Subject: [PATCH] Allow Reloading of Command Aliases
 Reload the aliases stored in commands.yml
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index f5af400d..1f663fa1 100644
+index 4a725d79..498dfd33 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -1194,6 +1194,13 @@ public final class Bukkit {
+@@ -1197,6 +1197,15 @@ public final class Bukkit {
      public static void reloadPermissions() {
          server.reloadPermissions();
      }
 +
 +    /**
 +     * Reload the Command Aliases in commands.yml
++     *
++     * @return Whether the reload was successful
 +     */
 +    public static boolean reloadCommandAliases() {
 +        return server.reloadCommandAliases();
@@ -24,35 +26,36 @@ index f5af400d..1f663fa1 100644
  
      public static Server.Spigot spigot()
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 2df83245..4a90d581 100644
+index 3c550d06..4f077b7c 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1027,4 +1027,6 @@ public interface Server extends PluginMessageRecipient {
-     Spigot spigot();
+@@ -1030,4 +1030,6 @@ public interface Server extends PluginMessageRecipient {
+     // Spigot end
  
      void reloadPermissions(); // Paper
 +
 +    boolean reloadCommandAliases(); // Paper
  }
 diff --git a/src/main/java/org/bukkit/command/CommandMap.java b/src/main/java/org/bukkit/command/CommandMap.java
-index 30d60247..d8a75607 100644
+index 30d60247..938959aa 100644
 --- a/src/main/java/org/bukkit/command/CommandMap.java
 +++ b/src/main/java/org/bukkit/command/CommandMap.java
-@@ -123,4 +123,12 @@ public interface CommandMap {
+@@ -123,4 +123,13 @@ public interface CommandMap {
       * @throws IllegalArgumentException if either sender or cmdLine are null
       */
      public List<String> tabComplete(CommandSender sender, String cmdLine, Location location) throws IllegalArgumentException;
 +
 +    // Paper start - Expose Known Commands
 +    /**
-+     * Return a Map (String -> Command) of Known Commands
-+     * @return Known Commands
++     * Return a Map of known commands
++     *
++     * @return known commands
 +     */
 +    public java.util.Map<String, Command> getKnownCommands();
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/command/SimpleCommandMap.java b/src/main/java/org/bukkit/command/SimpleCommandMap.java
-index 08976cd4..2e232fd1 100644
+index f1e9f200..c6613c0a 100644
 --- a/src/main/java/org/bukkit/command/SimpleCommandMap.java
 +++ b/src/main/java/org/bukkit/command/SimpleCommandMap.java
 @@ -280,4 +280,10 @@ public class SimpleCommandMap implements CommandMap {
@@ -94,5 +97,5 @@ index 040509c1..0069bcc0 100644
                  confirmed = true;
              } else {
 -- 
-2.11.0
+2.13.2
 

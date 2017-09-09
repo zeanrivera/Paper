@@ -1,17 +1,18 @@
-From 774d34c620e374191dc1785ce47f767714afbb27 Mon Sep 17 00:00:00 2001
+From a3cf6f6205e8985b4c575a6028c5a4bbb5ca5ba7 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Fri, 4 Mar 2016 03:13:18 -0500
 Subject: [PATCH] Arrow pickup rule API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Arrow.java b/src/main/java/org/bukkit/entity/Arrow.java
-index 1ff0951..da4678d 100644
+index 5850ab6c..a8d1826a 100644
 --- a/src/main/java/org/bukkit/entity/Arrow.java
 +++ b/src/main/java/org/bukkit/entity/Arrow.java
-@@ -72,6 +72,40 @@ public interface Arrow extends Projectile {
-         CREATIVE_ONLY
-     }
- 
+@@ -90,4 +90,38 @@ public interface Arrow extends Projectile {
+     @Override
+     Spigot spigot();
+     // Spigot end
++
 +    // Paper start
 +    /**
 +     * Gets the {@link PickupRule} for this arrow.
@@ -45,10 +46,7 @@ index 1ff0951..da4678d 100644
 +        CREATIVE_ONLY;
 +    }
 +    // Paper end
-+
-     public class Spigot extends Entity.Spigot
-     {
- 
+ }
 -- 
-2.9.3
+2.13.2
 

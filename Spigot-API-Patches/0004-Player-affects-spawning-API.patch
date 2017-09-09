@@ -1,16 +1,16 @@
-From 76f30e340d189852e76ff2b57e5301401a5fdefc Mon Sep 17 00:00:00 2001
+From a4b6a1c41d153da1b0abb5c370ba6bac5ad62b86 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Mon, 29 Feb 2016 17:22:34 -0600
 Subject: [PATCH] Player affects spawning API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 517e69f8..2f80d248 100644
+index d2a78f56..e429e701 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -1386,6 +1386,20 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
+@@ -1415,6 +1415,20 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
       */
-     public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, double extra, T data);
+     public String getLocale();
  
 +    /**
 +     * Get whether the player can affect mob spawning
@@ -30,5 +30,5 @@ index 517e69f8..2f80d248 100644
      public class Spigot extends Entity.Spigot
      {
 -- 
-2.12.1.windows.1
+2.13.0.windows.1
 

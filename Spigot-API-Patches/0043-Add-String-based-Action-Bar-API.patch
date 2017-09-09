@@ -1,14 +1,14 @@
-From 454ccdb2e4f007d19210ba79f6a8a74a7b5a2cf2 Mon Sep 17 00:00:00 2001
+From c1f59bafd368616b4cbf133847cb243aeedafe46 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 20 Dec 2016 15:55:55 -0500
 Subject: [PATCH] Add String based Action Bar API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index a0b95550..2c166a8c 100644
+index f04e2541..72c85452 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -393,6 +393,26 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
+@@ -395,6 +395,26 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
      public void sendMap(MapView map);
  
      // Paper start
@@ -35,7 +35,7 @@ index a0b95550..2c166a8c 100644
      /**
       * Sends the component to the player
       *
-@@ -416,9 +436,11 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
+@@ -418,9 +438,11 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
      /**
       * Sends an array of components as a single message to the specified screen position of this player
       *
@@ -47,7 +47,7 @@ index a0b95550..2c166a8c 100644
      public default void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent... components) {
          spigot().sendMessage(position, components);
      }
-@@ -1705,9 +1727,11 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
+@@ -1728,9 +1750,11 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
          /**
           * Sends the component to the specified screen position of this player
           *
@@ -59,19 +59,18 @@ index a0b95550..2c166a8c 100644
          public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent component) {
              throw new UnsupportedOperationException("Not supported yet.");
          }
-@@ -1715,9 +1739,11 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
+@@ -1738,9 +1762,11 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
          /**
           * Sends an array of components as a single message to the specified screen position of this player
           *
 +         * @deprecated This is unlikely the API you want to use. See {@link #sendActionBar(String)} for a more proper Action Bar API. This deprecated API may send unsafe items to the client.
           * @param position the screen position
--         * @param component the components to send
-+         * @param components the components to send
+          * @param components the components to send
           */
 +        @Deprecated
          public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent... components) {
              throw new UnsupportedOperationException("Not supported yet.");
          }
 -- 
-2.12.1.windows.1
+2.13.0.windows.1
 
