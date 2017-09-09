@@ -1,4 +1,4 @@
-version = "1.11.2-R01-SNAPSHOT"
+version = "1.12.1-R01-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -13,11 +13,11 @@ repositories {
 dependencies {
     compile "commons-lang:commons-lang:2.6"
     compile "com.googlecode.json-simple:json-simple:1.1.1"
-    compile "com.google.guava:guava:17.0"
-    compile "com.google.code.gson:gson:2.2.4"
+    compile "com.google.guava:guava:21.0"
+    compile "com.google.code.gson:gson:2.8.0"
     compile "org.avaje:ebean:2.8.1"
-    compile "org.yaml:snakeyaml:1.17"
-    compile "net.md-5:bungeecord-chat:1.10-SNAPSHOT"
+    compile "org.yaml:snakeyaml:1.18"
+    compile "net.md-5:bungeecord-chat:1.12-SNAPSHOT"
     testCompile "junit:junit:4.12"
     testCompile "org.hamcrest:hamcrest-library:1.3"
 }
