@@ -1,4 +1,4 @@
-From fdcdc195ee84b3e10612e6538ea8b4e5db307ad2 Mon Sep 17 00:00:00 2001
+From 271799e19b48018c75aa80aaf271909c53372632 Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Thu, 3 Mar 2016 13:20:33 -0700
 Subject: [PATCH] Use ASM for event executors.
@@ -6,10 +6,10 @@ Subject: [PATCH] Use ASM for event executors.
 Uses method handles for private or static methods.
 
 diff --git a/build.gradle b/build.gradle
-index 5e3b4c4e..16d843df 100644
+index 3f4d4461..1a84576e 100644
 --- a/build.gradle
 +++ b/build.gradle
-@@ -19,6 +19,8 @@ dependencies {
+@@ -18,6 +18,8 @@ dependencies {
      compile "net.sf.trove4j:trove4j:3.0.3"
      compile "co.aikar:fastutil-lite:1.0"
  
