@@ -21,6 +21,7 @@ field_82855_n,mcpPlayer # player
 func_184102_h,getMcpServer # getServer
 func_75815_a,loadMcpChunk # loadChunk
 func_152688_e,getMcpValues # getValues
+func_72863_F,getMcpChunkProvider # getChunkProvider
 
 # Params
 

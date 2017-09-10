@@ -1,4 +1,4 @@
-From 96322b468d83257bc768f6fe9a0464d32a84ef03 Mon Sep 17 00:00:00 2001
+From d7f542cf7b32f02b02f185c3c48b5e9693e9fc34 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 27 Nov 2016 08:01:04 -0600
 Subject: [PATCH] Setup Gradle config
@@ -14,10 +14,10 @@ index 0000000..4e7bf47
 +.cache
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
-index 0000000..308419b
+index 0000000..8b3c490
 --- /dev/null
 +++ b/build.gradle
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,50 @@
 +repositories {
 +    maven {
 +        name "minecraft"
@@ -27,16 +27,17 @@ index 0000000..308419b
 +
 +dependencies {
 +    compile project(":Paper-API")
-+    compile "net.sf.jopt-simple:jopt-simple:4.9"
++    compile "net.sf.jopt-simple:jopt-simple:5.0.4"
 +    compile "jline:jline:2.12.1"
-+    compile "org.xerial:sqlite-jdbc:3.15.1"
-+    compile "mysql:mysql-connector-java:5.1.39"
++    compile "org.xerial:sqlite-jdbc:3.19.3"
++    compile "mysql:mysql-connector-java:5.1.43"
 +
 +    // Minecraft deps
-+    compile "org.apache.logging.log4j:log4j-api:2.0-beta9"
-+    compile "org.apache.logging.log4j:log4j-core:2.0-beta9"
-+    compile "io.netty:netty-all:4.0.23.Final"
-+    compile "com.mojang:authlib:1.5.24"
++    compile "org.apache.logging.log4j:log4j-api:2.8.0"
++    compile "org.apache.logging.log4j:log4j-core:2.8.0"
++    compile "io.netty:netty-all:4.1.15.Final"
++    compile "it.unimi.dsi:fastutil:7.1.0"
++    compile "com.mojang:authlib:1.5.25"
 +
 +    testCompile "junit:junit:4.12"
 +    testCompile "org.hamcrest:hamcrest-library:1.3"
@@ -75,5 +76,5 @@ index 0000000..5f7e198
 @@ -0,0 +1 @@
 +artifactId = paper
 -- 
-2.12.1
+2.14.1.windows.1
 

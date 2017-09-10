@@ -1,4 +1,4 @@
-From 855cc8f9c9e49e86ff6df67a2d37c7e2bdba9921 Mon Sep 17 00:00:00 2001
+From a05d2f8cc3f58049334544657ee31136cdf28d47 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 1 Apr 2016 00:02:47 -0400
 Subject: [PATCH] add Trove and FastUtil to Bukkit
