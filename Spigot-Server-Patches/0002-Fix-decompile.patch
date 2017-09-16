@@ -1,0 +1,2938 @@
+From 82bd0592f8944dabb0969e4f59f4d08d9de8e219 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Fri, 15 Sep 2017 22:45:59 -0400
+Subject: [PATCH] Fix decompile
+
+
+diff --git a/src/main/java/net/minecraft/advancements/Advancement.java b/src/main/java/net/minecraft/advancements/Advancement.java
+index 6e93502..e8a3220 100644
+--- a/src/main/java/net/minecraft/advancements/Advancement.java
++++ b/src/main/java/net/minecraft/advancements/Advancement.java
+@@ -239,7 +239,7 @@ public class Advancement {
+             ResourceLocation minecraftkey = json.has("parent") ? new ResourceLocation(JsonUtils.getString(json, "parent")) : null;
+             DisplayInfo advancementdisplay = json.has("display") ? DisplayInfo.deserialize(JsonUtils.getJsonObject(json, "display"), context) : null;
+             AdvancementRewards advancementrewards = (AdvancementRewards)JsonUtils.deserializeClass(json, "rewards", AdvancementRewards.EMPTY, context, AdvancementRewards.class);
+-            Map map = Criterion.criteriaFromJson(JsonUtils.getJsonObject(json, "criteria"), context);
++            Map<String, Criterion> map = Criterion.criteriaFromJson(JsonUtils.getJsonObject(json, "criteria"), context);
+ 
+             if (map.isEmpty()) {
+                 throw new JsonSyntaxException("Advancement criteria cannot be empty");
+diff --git a/src/main/java/net/minecraft/advancements/AdvancementManager.java b/src/main/java/net/minecraft/advancements/AdvancementManager.java
+index c5073cc..4f3b866 100644
+--- a/src/main/java/net/minecraft/advancements/AdvancementManager.java
++++ b/src/main/java/net/minecraft/advancements/AdvancementManager.java
+@@ -48,9 +48,6 @@ public class AdvancementManager {
+             JsonObject jsonobject = JsonUtils.getJsonObject(jsonelement, "advancement");
+             return Advancement.Builder.deserialize(jsonobject, jsondeserializationcontext);
+         }
+-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+-            return this.deserialize(jsonelement, type, jsondeserializationcontext);
+-        }
+     }).registerTypeAdapter(AdvancementRewards.class, new AdvancementRewards.Deserializer()).registerTypeHierarchyAdapter(ITextComponent.class, new ITextComponent.Serializer()).registerTypeHierarchyAdapter(Style.class, new Style.Serializer()).registerTypeAdapterFactory(new EnumTypeAdapterFactory()).create();
+     public static final AdvancementList ADVANCEMENT_LIST = new AdvancementList();
+     /** The directory where this manager looks for custom advancement files. */
+diff --git a/src/main/java/net/minecraft/advancements/AdvancementProgress.java b/src/main/java/net/minecraft/advancements/AdvancementProgress.java
+index 5903ff7..b1eeeab 100644
+--- a/src/main/java/net/minecraft/advancements/AdvancementProgress.java
++++ b/src/main/java/net/minecraft/advancements/AdvancementProgress.java
+@@ -29,7 +29,7 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
+      * Update this AdvancementProgress' criteria and requirements
+      */
+     public void update(Map<String, Criterion> criteriaIn, String[][] requirements) {
+-        Set var3 = criteriaIn.keySet();
++        Set<String> var3 = criteriaIn.keySet();
+         Iterator var4 = this.criteria.entrySet().iterator();
+ 
+         while (var4.hasNext()) {
+diff --git a/src/main/java/net/minecraft/advancements/PlayerAdvancements.java b/src/main/java/net/minecraft/advancements/PlayerAdvancements.java
+index 1a80e62..e5bba9a 100644
+--- a/src/main/java/net/minecraft/advancements/PlayerAdvancements.java
++++ b/src/main/java/net/minecraft/advancements/PlayerAdvancements.java
+@@ -86,7 +86,7 @@ public class PlayerAdvancements {
+     }
+ 
+     private void ensureAllVisible() {
+-        ArrayList arraylist = Lists.newArrayList();
++        ArrayList<Advancement> arraylist = Lists.newArrayList();
+ 
+         for (Entry<Advancement, AdvancementProgress> entry : this.progress.entrySet()) {
+             if (((AdvancementProgress)entry.getValue()).isDone()) {
+@@ -121,7 +121,7 @@ public class PlayerAdvancements {
+ 
+                 Stream stream = map.entrySet().stream().sorted(Comparator.comparing(Entry::getValue));
+ 
+-                for (Entry entry : (List)stream.collect(Collectors.toList())) {
++                for (Entry entry : (List<Entry>)stream.collect(Collectors.toList())) {
+                     Advancement advancement = this.server.getAdvancementManager().getAdvancement((ResourceLocation)entry.getKey());
+ 
+                     if (advancement == null) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/BredAnimalsTrigger.java b/src/main/java/net/minecraft/advancements/critereon/BredAnimalsTrigger.java
+index f90ad31..ee7ed62 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/BredAnimalsTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/BredAnimalsTrigger.java
+@@ -107,7 +107,7 @@ public class BredAnimalsTrigger implements ICriterionTrigger<BredAnimalsTrigger.
+         }
+ 
+         public void trigger(EntityPlayerMP player, EntityAnimal parent1, EntityAnimal parent2, EntityAgeable child) {
+-            ArrayList var5 = null;
++            ArrayList<Listener> var5 = null;
+ 
+             for (ICriterionTrigger.Listener var7 : this.listeners) {
+                 if (((BredAnimalsTrigger.Instance)var7.getCriterionInstance()).test(player, parent1, parent2, child)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/BrewedPotionTrigger.java b/src/main/java/net/minecraft/advancements/critereon/BrewedPotionTrigger.java
+index 24e1e3e..b0b2b75 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/BrewedPotionTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/BrewedPotionTrigger.java
+@@ -110,7 +110,7 @@ public class BrewedPotionTrigger implements ICriterionTrigger<BrewedPotionTrigge
+         }
+ 
+         public void trigger(PotionType potion) {
+-            ArrayList var2 = null;
++            ArrayList<Listener> var2 = null;
+ 
+             for (ICriterionTrigger.Listener var4 : this.listeners) {
+                 if (((BrewedPotionTrigger.Instance)var4.getCriterionInstance()).test(potion)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java
+index 02f1cb1..450bf21 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java
+@@ -107,7 +107,7 @@ public class ChangeDimensionTrigger implements ICriterionTrigger<ChangeDimension
+         }
+ 
+         public void trigger(DimensionType from, DimensionType to) {
+-            ArrayList var3 = null;
++            ArrayList<Listener> var3 = null;
+ 
+             for (ICriterionTrigger.Listener var5 : this.listeners) {
+                 if (((ChangeDimensionTrigger.Instance)var5.getCriterionInstance()).test(from, to)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java
+index 0fa9678..de49f79 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java
+@@ -96,7 +96,7 @@ public class ConstructBeaconTrigger implements ICriterionTrigger<ConstructBeacon
+         }
+ 
+         public void trigger(TileEntityBeacon beacon) {
+-            ArrayList var2 = null;
++            ArrayList<Listener> var2 = null;
+ 
+             for (ICriterionTrigger.Listener var4 : this.listeners) {
+                 if (((ConstructBeaconTrigger.Instance)var4.getCriterionInstance()).test(beacon)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/ConsumeItemTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ConsumeItemTrigger.java
+index 656beb3..95e2e6f 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/ConsumeItemTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/ConsumeItemTrigger.java
+@@ -96,7 +96,7 @@ public class ConsumeItemTrigger implements ICriterionTrigger<ConsumeItemTrigger.
+         }
+ 
+         public void trigger(ItemStack item) {
+-            ArrayList var2 = null;
++            ArrayList<Listener> var2 = null;
+ 
+             for (ICriterionTrigger.Listener var4 : this.listeners) {
+                 if (((ConsumeItemTrigger.Instance)var4.getCriterionInstance()).test(item)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java b/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java
+index e0deb83..4b2074f 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java
+@@ -104,7 +104,7 @@ public class CuredZombieVillagerTrigger implements ICriterionTrigger<CuredZombie
+         }
+ 
+         public void trigger(EntityPlayerMP player, EntityZombie zombie, EntityVillager villager) {
+-            ArrayList var4 = null;
++            ArrayList<Listener> var4 = null;
+ 
+             for (ICriterionTrigger.Listener var6 : this.listeners) {
+                 if (((CuredZombieVillagerTrigger.Instance)var6.getCriterionInstance()).test(player, zombie, villager)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java
+index ecb2312..fc2a188 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java
+@@ -95,7 +95,7 @@ public class EffectsChangedTrigger implements ICriterionTrigger<EffectsChangedTr
+         }
+ 
+         public void trigger(EntityPlayerMP player) {
+-            ArrayList var2 = null;
++            ArrayList<Listener> var2 = null;
+ 
+             for (ICriterionTrigger.Listener var4 : this.listeners) {
+                 if (((EffectsChangedTrigger.Instance)var4.getCriterionInstance()).test(player)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java
+index e7a9655..c801fe3 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java
+@@ -103,7 +103,7 @@ public class EnchantedItemTrigger implements ICriterionTrigger<EnchantedItemTrig
+         }
+ 
+         public void trigger(ItemStack item, int levelsIn) {
+-            ArrayList var3 = null;
++            ArrayList<Listener> var3 = null;
+ 
+             for (ICriterionTrigger.Listener var5 : this.listeners) {
+                 if (((EnchantedItemTrigger.Instance)var5.getCriterionInstance()).test(item, levelsIn)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java
+index 43ffd89..2e6f737 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java
+@@ -162,7 +162,7 @@ public class EnterBlockTrigger implements ICriterionTrigger<EnterBlockTrigger.In
+         }
+ 
+         public void trigger(IBlockState state) {
+-            ArrayList var2 = null;
++            ArrayList<Listener> var2 = null;
+ 
+             for (ICriterionTrigger.Listener var4 : this.listeners) {
+                 if (((EnterBlockTrigger.Instance)var4.getCriterionInstance()).test(state)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java
+index 62f847e..8056ca0 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java
+@@ -96,7 +96,7 @@ public class EntityHurtPlayerTrigger implements ICriterionTrigger<EntityHurtPlay
+         }
+ 
+         public void trigger(EntityPlayerMP player, DamageSource source, float amountDealt, float amountTaken, boolean wasBlocked) {
+-            ArrayList var6 = null;
++            ArrayList<Listener> var6 = null;
+ 
+             for (ICriterionTrigger.Listener var8 : this.listeners) {
+                 if (((EntityHurtPlayerTrigger.Instance)var8.getCriterionInstance()).test(player, source, amountDealt, amountTaken, wasBlocked)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java b/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java
+index 403c460..9683739 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java
+@@ -148,7 +148,7 @@ public class InventoryChangeTrigger implements ICriterionTrigger<InventoryChange
+         }
+ 
+         public void trigger(InventoryPlayer inventory) {
+-            ArrayList var2 = null;
++            ArrayList<Listener> var2 = null;
+ 
+             for (ICriterionTrigger.Listener var4 : this.listeners) {
+                 if (((InventoryChangeTrigger.Instance)var4.getCriterionInstance()).test(inventory)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java
+index e451235..06e355b 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java
+@@ -108,7 +108,7 @@ public class ItemDurabilityTrigger implements ICriterionTrigger<ItemDurabilityTr
+         }
+ 
+         public void trigger(ItemStack item, int newDurability) {
+-            ArrayList var3 = null;
++            ArrayList<Listener> var3 = null;
+ 
+             for (ICriterionTrigger.Listener var5 : this.listeners) {
+                 if (((ItemDurabilityTrigger.Instance)var5.getCriterionInstance()).test(item, newDurability)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java b/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java
+index 0c04d58..7b76878 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java
+@@ -102,7 +102,7 @@ public class KilledTrigger implements ICriterionTrigger<KilledTrigger.Instance>
+         }
+ 
+         public void trigger(EntityPlayerMP player, Entity entity, DamageSource source) {
+-            ArrayList var4 = null;
++            ArrayList<Listener> var4 = null;
+ 
+             for (ICriterionTrigger.Listener var6 : this.listeners) {
+                 if (((KilledTrigger.Instance)var6.getCriterionInstance()).test(player, entity, source)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java b/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java
+index 8323bc3..390b6d6 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java
+@@ -103,7 +103,7 @@ public class LevitationTrigger implements ICriterionTrigger<LevitationTrigger.In
+         }
+ 
+         public void trigger(EntityPlayerMP player, Vec3d startPos, int durationIn) {
+-            ArrayList var4 = null;
++            ArrayList<Listener> var4 = null;
+ 
+             for (ICriterionTrigger.Listener var6 : this.listeners) {
+                 if (((LevitationTrigger.Instance)var6.getCriterionInstance()).test(player, startPos, durationIn)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/NetherTravelTrigger.java b/src/main/java/net/minecraft/advancements/critereon/NetherTravelTrigger.java
+index c3cbfdb..5763277 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/NetherTravelTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/NetherTravelTrigger.java
+@@ -109,7 +109,7 @@ public class NetherTravelTrigger implements ICriterionTrigger<NetherTravelTrigge
+         }
+ 
+         public void trigger(WorldServer world, Vec3d enteredNetherPosition, double x, double y, double z) {
+-            ArrayList var9 = null;
++            ArrayList<Listener> var9 = null;
+ 
+             for (ICriterionTrigger.Listener var11 : this.listeners) {
+                 if (((NetherTravelTrigger.Instance)var11.getCriterionInstance()).test(world, enteredNetherPosition, x, y, z)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java b/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java
+index f9df081..909e05a 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java
+@@ -176,7 +176,7 @@ public class PlacedBlockTrigger implements ICriterionTrigger<PlacedBlockTrigger.
+         }
+ 
+         public void trigger(IBlockState state, BlockPos pos, WorldServer world, ItemStack item) {
+-            ArrayList var5 = null;
++            ArrayList<Listener> var5 = null;
+ 
+             for (ICriterionTrigger.Listener var7 : this.listeners) {
+                 if (((PlacedBlockTrigger.Instance)var7.getCriterionInstance()).test(state, pos, world, item)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java b/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java
+index c8dfaee..b197678 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java
+@@ -104,7 +104,7 @@ public class PlayerHurtEntityTrigger implements ICriterionTrigger<PlayerHurtEnti
+         }
+ 
+         public void trigger(EntityPlayerMP player, Entity entity, DamageSource source, float dealt, float taken, boolean blocked) {
+-            ArrayList var7 = null;
++            ArrayList<Listener> var7 = null;
+ 
+             for (ICriterionTrigger.Listener var9 : this.listeners) {
+                 if (((PlayerHurtEntityTrigger.Instance)var9.getCriterionInstance()).test(player, entity, source, dealt, taken, blocked)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java b/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java
+index 3649897..8368d4b 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java
+@@ -100,7 +100,7 @@ public class PositionTrigger implements ICriterionTrigger<PositionTrigger.Instan
+         }
+ 
+         public void trigger(WorldServer world, double x, double y, double z) {
+-            ArrayList var8 = null;
++            ArrayList<Listener> var8 = null;
+ 
+             for (ICriterionTrigger.Listener var10 : this.listeners) {
+                 if (((PositionTrigger.Instance)var10.getCriterionInstance()).test(world, x, y, z)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java b/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java
+index fd9c6c4..219287d 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java
+@@ -96,7 +96,7 @@ public class SummonedEntityTrigger implements ICriterionTrigger<SummonedEntityTr
+         }
+ 
+         public void trigger(EntityPlayerMP player, Entity entity) {
+-            ArrayList var3 = null;
++            ArrayList<Listener> var3 = null;
+ 
+             for (ICriterionTrigger.Listener var5 : this.listeners) {
+                 if (((SummonedEntityTrigger.Instance)var5.getCriterionInstance()).test(player, entity)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java b/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java
+index 0a99e56..9b41c56 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java
+@@ -96,7 +96,7 @@ public class TameAnimalTrigger implements ICriterionTrigger<TameAnimalTrigger.In
+         }
+ 
+         public void trigger(EntityPlayerMP player, EntityAnimal entity) {
+-            ArrayList var3 = null;
++            ArrayList<Listener> var3 = null;
+ 
+             for (ICriterionTrigger.Listener var5 : this.listeners) {
+                 if (((TameAnimalTrigger.Instance)var5.getCriterionInstance()).test(player, entity)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/UsedEnderEyeTrigger.java b/src/main/java/net/minecraft/advancements/critereon/UsedEnderEyeTrigger.java
+index 99bbe54..79f9920 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/UsedEnderEyeTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/UsedEnderEyeTrigger.java
+@@ -98,7 +98,7 @@ public class UsedEnderEyeTrigger implements ICriterionTrigger<UsedEnderEyeTrigge
+         }
+ 
+         public void trigger(double distanceSq) {
+-            ArrayList var3 = null;
++            ArrayList<Listener> var3 = null;
+ 
+             for (ICriterionTrigger.Listener var5 : this.listeners) {
+                 if (((UsedEnderEyeTrigger.Instance)var5.getCriterionInstance()).test(distanceSq)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java b/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java
+index 9582236..c13498a 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java
+@@ -96,7 +96,7 @@ public class UsedTotemTrigger implements ICriterionTrigger<UsedTotemTrigger.Inst
+         }
+ 
+         public void trigger(ItemStack item) {
+-            ArrayList var2 = null;
++            ArrayList<Listener> var2 = null;
+ 
+             for (ICriterionTrigger.Listener var4 : this.listeners) {
+                 if (((UsedTotemTrigger.Instance)var4.getCriterionInstance()).test(item)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java b/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java
+index 7a9fa4a..7f82563 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java
+@@ -104,7 +104,7 @@ public class VillagerTradeTrigger implements ICriterionTrigger<VillagerTradeTrig
+         }
+ 
+         public void trigger(EntityPlayerMP player, EntityVillager villager, ItemStack item) {
+-            ArrayList var4 = null;
++            ArrayList<Listener> var4 = null;
+ 
+             for (ICriterionTrigger.Listener var6 : this.listeners) {
+                 if (((VillagerTradeTrigger.Instance)var6.getCriterionInstance()).test(player, villager, item)) {
+diff --git a/src/main/java/net/minecraft/block/BlockCauldron.java b/src/main/java/net/minecraft/block/BlockCauldron.java
+index 002c194..78ffdc2 100644
+--- a/src/main/java/net/minecraft/block/BlockCauldron.java
++++ b/src/main/java/net/minecraft/block/BlockCauldron.java
+@@ -230,7 +230,7 @@ public class BlockCauldron extends Block {
+     }
+ 
+     private boolean changeLevel(World world, BlockPos blockposition, IBlockState iblockdata, int i, Entity entity, ChangeReason reason) {
+-        int newLevel = MathHelper.clamp(i, 0, 3).intValue();
++        int newLevel = MathHelper.clamp(i, 0, 3);
+         CauldronLevelChangeEvent event = new CauldronLevelChangeEvent(world.getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ()), entity == null ? null : entity.getBukkitEntity(), reason, ((Integer)iblockdata.getValue(LEVEL)).intValue(), newLevel);
+         world.getServer().getPluginManager().callEvent(event);
+ 
+diff --git a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
+index cc55938..7e38b7b 100644
+--- a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
++++ b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
+@@ -117,7 +117,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+                 this.tryFlowInto(worldIn, pos.down(), iblockdata2, i + 8);
+             }
+         } else if (i >= 0 && (i == 0 || this.isBlocked(worldIn, pos.down(), iblockdata2))) {
+-            Set set = this.getPossibleFlowDirections(worldIn, pos);
++            Set<EnumFacing> set = this.getPossibleFlowDirections(worldIn, pos);
+             int k = i + b0;
+ 
+             if (i >= 8) {
+diff --git a/src/main/java/net/minecraft/block/BlockRedstoneWire.java b/src/main/java/net/minecraft/block/BlockRedstoneWire.java
+index 371f773..a7cf505 100644
+--- a/src/main/java/net/minecraft/block/BlockRedstoneWire.java
++++ b/src/main/java/net/minecraft/block/BlockRedstoneWire.java
+@@ -133,7 +133,7 @@ public class BlockRedstoneWire extends Block {
+ 
+     private IBlockState updateSurroundingRedstone(World worldIn, BlockPos pos, IBlockState state) {
+         state = this.calculateCurrentChanges(worldIn, pos, pos, state);
+-        ArrayList arraylist = Lists.newArrayList(this.blocksNeedingUpdate);
++        ArrayList<BlockPos> arraylist = Lists.newArrayList(this.blocksNeedingUpdate);
+         this.blocksNeedingUpdate.clear();
+ 
+         for (BlockPos blockposition1 : arraylist) {
+diff --git a/src/main/java/net/minecraft/block/BlockSponge.java b/src/main/java/net/minecraft/block/BlockSponge.java
+index f5b0be8..a613983 100644
+--- a/src/main/java/net/minecraft/block/BlockSponge.java
++++ b/src/main/java/net/minecraft/block/BlockSponge.java
+@@ -68,7 +68,7 @@ public class BlockSponge extends Block {
+ 
+     private boolean absorb(World worldIn, BlockPos pos) {
+         LinkedList var3 = Lists.newLinkedList();
+-        ArrayList var4 = Lists.newArrayList();
++        ArrayList<BlockPos> var4 = Lists.newArrayList();
+         var3.add(new Tuple(pos, Integer.valueOf(0)));
+         int var5 = 0;
+ 
+diff --git a/src/main/java/net/minecraft/block/BlockStairs.java b/src/main/java/net/minecraft/block/BlockStairs.java
+index ed5fe95..d41ad67 100644
+--- a/src/main/java/net/minecraft/block/BlockStairs.java
++++ b/src/main/java/net/minecraft/block/BlockStairs.java
+@@ -386,7 +386,7 @@ public class BlockStairs extends Block {
+      */
+     @Nullable
+     public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+-        ArrayList var6 = Lists.newArrayList();
++        ArrayList<RayTraceResult> var6 = Lists.newArrayList();
+ 
+         for (AxisAlignedBB var8 : getCollisionBoxList(this.getActualState(blockState, worldIn, pos))) {
+             var6.add(this.rayTrace(pos, start, end, var8));
+diff --git a/src/main/java/net/minecraft/block/BlockTripWire.java b/src/main/java/net/minecraft/block/BlockTripWire.java
+index 7b99c8d..9a4770d 100644
+--- a/src/main/java/net/minecraft/block/BlockTripWire.java
++++ b/src/main/java/net/minecraft/block/BlockTripWire.java
+@@ -157,7 +157,7 @@ public class BlockTripWire extends Block {
+         IBlockState iblockdata = worldIn.getBlockState(pos);
+         boolean flag = ((Boolean)iblockdata.getValue(POWERED)).booleanValue();
+         boolean flag1 = false;
+-        List list = worldIn.getEntitiesWithinAABBExcludingEntity((Entity)null, iblockdata.getBoundingBox(worldIn, pos).offset(pos));
++        List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity((Entity)null, iblockdata.getBoundingBox(worldIn, pos).offset(pos));
+ 
+         if (!list.isEmpty()) {
+             for (Entity entity : list) {
+diff --git a/src/main/java/net/minecraft/block/properties/PropertyEnum.java b/src/main/java/net/minecraft/block/properties/PropertyEnum.java
+index 7c32f9f..6ff666f 100644
+--- a/src/main/java/net/minecraft/block/properties/PropertyEnum.java
++++ b/src/main/java/net/minecraft/block/properties/PropertyEnum.java
+@@ -27,7 +27,7 @@ public class PropertyEnum<T extends Enum<T> & IStringSerializable> extends Prope
+                 throw new IllegalArgumentException("Multiple values have the same name '" + var6 + "'");
+             }
+ 
+-            this.nameToValue.put(var6, var5);
++            this.nameToValue.put(var6, (T) var5);
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/block/state/BlockStateContainer.java b/src/main/java/net/minecraft/block/state/BlockStateContainer.java
+index d72d209..66bfa65 100644
+--- a/src/main/java/net/minecraft/block/state/BlockStateContainer.java
++++ b/src/main/java/net/minecraft/block/state/BlockStateContainer.java
+@@ -65,7 +65,7 @@ public class BlockStateContainer {
+ 
+         this.properties = ImmutableSortedMap.copyOf(var3);
+         LinkedHashMap var11 = Maps.newLinkedHashMap();
+-        ArrayList var12 = Lists.newArrayList();
++        ArrayList<BlockStateContainer.StateImplementation> var12 = Lists.newArrayList();
+ 
+         for (List var8 : Cartesian.cartesianProduct(this.getAllowedValues())) {
+             Map var9 = MapPopulator.createMap(this.properties.values(), var8);
+@@ -88,7 +88,7 @@ public class BlockStateContainer {
+             throw new IllegalArgumentException("Block: " + block.getClass() + " has invalidly named property: " + var2);
+         } else {
+             for (Comparable var4 : property.getAllowedValues()) {
+-                String var5 = property.getName(var4);
++                String var5 = property.getName((T) var4);
+ 
+                 if (!NAME_PATTERN.matcher(var5).matches()) {
+                     throw new IllegalArgumentException("Block: " + block.getClass() + " has property: " + var2 + " with invalidly named value: " + var5);
+@@ -212,9 +212,9 @@ public class BlockStateContainer {
+                     Entry var4 = (Entry)var3.next();
+                     IProperty var5 = (IProperty)var4.getKey();
+ 
+-                    for (Comparable var7 : var5.getAllowedValues()) {
++                    for (Object var7 : var5.getAllowedValues()) {
+                         if (var7 != var4.getValue()) {
+-                            var2.put(var5, var7, map.get(this.getPropertiesWithValue(var5, var7)));
++                            var2.put(var5, var7, map.get(this.getPropertiesWithValue(var5, (Comparable<?>) var7)));
+                         }
+                     }
+                 }
+diff --git a/src/main/java/net/minecraft/block/state/pattern/FactoryBlockPattern.java b/src/main/java/net/minecraft/block/state/pattern/FactoryBlockPattern.java
+index 4f15701..658cb8d 100644
+--- a/src/main/java/net/minecraft/block/state/pattern/FactoryBlockPattern.java
++++ b/src/main/java/net/minecraft/block/state/pattern/FactoryBlockPattern.java
+@@ -46,7 +46,7 @@ public class FactoryBlockPattern {
+ 
+                     for (char var9 : var5.toCharArray()) {
+                         if (!this.symbolMap.containsKey(Character.valueOf(var9))) {
+-                            this.symbolMap.put(Character.valueOf(var9), (Object)null);
++                            this.symbolMap.put(Character.valueOf(var9), null);
+                         }
+                     }
+                 }
+diff --git a/src/main/java/net/minecraft/command/CommandBase.java b/src/main/java/net/minecraft/command/CommandBase.java
+index 97ec280..681d99a 100644
+--- a/src/main/java/net/minecraft/command/CommandBase.java
++++ b/src/main/java/net/minecraft/command/CommandBase.java
+@@ -474,7 +474,7 @@ public abstract class CommandBase implements ICommand {
+             }
+         } catch (RuntimeException var7) {
+             try {
+-                Map var2 = getBlockStatePropertyValueMap(p_190794_0_, p_190794_1_);
++                Map<IProperty<?>, Comparable<?>> var2 = getBlockStatePropertyValueMap(p_190794_0_, p_190794_1_);
+                 IBlockState var3 = p_190794_0_.getDefaultState();
+ 
+                 for (Entry var5 : var2.entrySet()) {
+@@ -502,7 +502,7 @@ public abstract class CommandBase implements ICommand {
+                     }
+                 };
+             } catch (RuntimeException var3) {
+-                final Map var2 = getBlockStatePropertyValueMap(p_190791_0_, p_190791_1_);
++                final Map<IProperty<?>, Comparable<?>> var2 = getBlockStatePropertyValueMap(p_190791_0_, p_190791_1_);
+                 return new Predicate<IBlockState>() {
+                     public boolean apply(@Nullable IBlockState var1) {
+                         if (var1 != null && p_190791_0_ == var1.getBlock()) {
+diff --git a/src/main/java/net/minecraft/command/CommandClone.java b/src/main/java/net/minecraft/command/CommandClone.java
+index 3346be9..187a351 100644
+--- a/src/main/java/net/minecraft/command/CommandClone.java
++++ b/src/main/java/net/minecraft/command/CommandClone.java
+@@ -93,9 +93,9 @@ public class CommandClone extends CommandBase {
+                             }
+ 
+                             ArrayList var15 = Lists.newArrayList();
+-                            ArrayList var16 = Lists.newArrayList();
++                            ArrayList<StaticCloneData> var16 = Lists.newArrayList();
+                             ArrayList var17 = Lists.newArrayList();
+-                            LinkedList var18 = Lists.newLinkedList();
++                            LinkedList<BlockPos> var18 = Lists.newLinkedList();
+                             BlockPos var19 = new BlockPos(var8.minX - var7.minX, var8.minY - var7.minY, var8.minZ - var7.minZ);
+ 
+                             for (int var20 = var7.minZ; var20 <= var7.maxZ; ++var20) {
+@@ -140,11 +140,11 @@ public class CommandClone extends CommandBase {
+                                 }
+                             }
+ 
+-                            ArrayList var31 = Lists.newArrayList();
++                            ArrayList<StaticCloneData> var31 = Lists.newArrayList();
+                             var31.addAll(var15);
+                             var31.addAll(var16);
+                             var31.addAll(var17);
+-                            List var34 = Lists.reverse(var31);
++                            List<StaticCloneData> var34 = Lists.reverse(var31);
+ 
+                             for (CommandClone.StaticCloneData var41 : var34) {
+                                 TileEntity var46 = var13.getTileEntity(var41.pos);
+@@ -182,7 +182,7 @@ public class CommandClone extends CommandBase {
+                                 var13.notifyNeighborsRespectDebug(var44.pos, var44.blockState.getBlock(), false);
+                             }
+ 
+-                            List var40 = var13.getPendingBlockUpdates(var7, false);
++                            List<NextTickListEntry> var40 = var13.getPendingBlockUpdates(var7, false);
+ 
+                             if (var40 != null) {
+                                 for (NextTickListEntry var48 : var40) {
+diff --git a/src/main/java/net/minecraft/command/CommandFill.java b/src/main/java/net/minecraft/command/CommandFill.java
+index 216b421..5862280 100644
+--- a/src/main/java/net/minecraft/command/CommandFill.java
++++ b/src/main/java/net/minecraft/command/CommandFill.java
+@@ -89,7 +89,7 @@ public class CommandFill extends CommandBase {
+                     }
+                 }
+ 
+-                ArrayList var25 = Lists.newArrayList();
++                ArrayList<BlockPos> var25 = Lists.newArrayList();
+                 var10 = 0;
+ 
+                 for (int var15 = var8.getZ(); var15 <= var9.getZ(); ++var15) {
+diff --git a/src/main/java/net/minecraft/command/CommandHandler.java b/src/main/java/net/minecraft/command/CommandHandler.java
+index ecf6140..818164f 100644
+--- a/src/main/java/net/minecraft/command/CommandHandler.java
++++ b/src/main/java/net/minecraft/command/CommandHandler.java
+@@ -52,7 +52,7 @@ public abstract class CommandHandler implements ICommandManager {
+                 sender.sendMessage(var15);
+             } else if (var5.checkPermission(this.getServer(), sender)) {
+                 if (var7 > -1) {
+-                    List var16 = EntitySelector.matchEntities(sender, var3[var7], Entity.class);
++                    List<Entity> var16 = EntitySelector.matchEntities(sender, var3[var7], Entity.class);
+                     String var9 = var3[var7];
+                     sender.setCommandStat(CommandResultStats.Type.AFFECTED_ENTITIES, var16.size());
+ 
+diff --git a/src/main/java/net/minecraft/command/CommandStats.java b/src/main/java/net/minecraft/command/CommandStats.java
+index 0640d62..45fc2da 100644
+--- a/src/main/java/net/minecraft/command/CommandStats.java
++++ b/src/main/java/net/minecraft/command/CommandStats.java
+@@ -172,7 +172,7 @@ public class CommandStats extends CommandBase {
+     }
+ 
+     protected List<String> getObjectiveNames(MinecraftServer server) {
+-        Collection var2 = server.getWorld(0).getScoreboard().getScoreObjectives();
++        Collection<ScoreObjective> var2 = server.getWorld(0).getScoreboard().getScoreObjectives();
+         ArrayList var3 = Lists.newArrayList();
+ 
+         for (ScoreObjective var5 : var2) {
+diff --git a/src/main/java/net/minecraft/command/EntitySelector.java b/src/main/java/net/minecraft/command/EntitySelector.java
+index 3f1aa08..790da26 100644
+--- a/src/main/java/net/minecraft/command/EntitySelector.java
++++ b/src/main/java/net/minecraft/command/EntitySelector.java
+@@ -106,7 +106,7 @@ public class EntitySelector {
+ 
+     @Nullable
+     public static ITextComponent matchEntitiesToTextComponent(ICommandSender sender, String token) throws CommandException {
+-        List var2 = matchEntities(sender, token, Entity.class);
++        List<Entity> var2 = matchEntities(sender, token, Entity.class);
+ 
+         if (var2.isEmpty()) {
+             return null;
+@@ -136,12 +136,12 @@ public class EntitySelector {
+                 String var5 = var3.group(1);
+                 BlockPos var6 = getBlockPosFromArguments(var4, sender.getPosition());
+                 Vec3d var7 = getPosFromArguments(var4, sender.getPositionVector());
+-                List var8 = getWorlds(sender, var4);
++                List<World> var8 = getWorlds(sender, var4);
+                 ArrayList var9 = Lists.newArrayList();
+ 
+                 for (World var11 : var8) {
+                     if (var11 != null) {
+-                        ArrayList var12 = Lists.newArrayList();
++                        ArrayList<Predicate> var12 = Lists.newArrayList();
+                         var12.addAll(getTypePredicates(var4, var5));
+                         var12.addAll(getXpLevelPredicates(var4));
+                         var12.addAll(getGamemodePredicates(var4));
+@@ -173,13 +173,13 @@ public class EntitySelector {
+                                     }
+                                 }
+ 
+-                                return Lists.newArrayList(var13);
++                                return Lists.newArrayList((T) var13);
+                             }
+ 
+                             return Collections.<T>emptyList();
+                         }
+ 
+-                        var9.addAll(filterResults(var4, targetClass, var12, var5, var11, var6));
++                        var9.addAll(filterResults(var4, targetClass, (List) var12, var5, var11, var6));
+                     }
+                 }
+ 
+@@ -282,7 +282,7 @@ public class EntitySelector {
+                 var2 = var2.substring(1);
+             }
+ 
+-            final GameType var4;
++            GameType var4;
+ 
+             try {
+                 int var5 = Integer.parseInt(var2);
+@@ -291,6 +291,7 @@ public class EntitySelector {
+                 var4 = GameType.parseGameTypeWithDefault(var2, GameType.NOT_SET);
+             }
+ 
++            GameType finalVar = var4;
+             var1.add(new Predicate<Entity>() {
+                 public boolean apply(@Nullable Entity var1) {
+                     if (!(var1 instanceof EntityPlayerMP)) {
+@@ -298,7 +299,7 @@ public class EntitySelector {
+                     } else {
+                         EntityPlayerMP var2 = (EntityPlayerMP)var1;
+                         GameType var3x = var2.interactionManager.getGameType();
+-                        return var3 ? var3x != var4 : var3x == var4;
++                        return var3 ? var3x != finalVar : var3x == finalVar;
+                     }
+                 }
+             });
+@@ -308,7 +309,7 @@ public class EntitySelector {
+ 
+     private static List<Predicate<Entity>> getTeamPredicates(Map<String, String> params) {
+         ArrayList var1 = Lists.newArrayList();
+-        final String var2 = getArgument(params, ARGUMENT_TEAM_NAME);
++        String var2 = getArgument(params, ARGUMENT_TEAM_NAME);
+         final boolean var3 = var2 != null && var2.startsWith("!");
+ 
+         if (var3) {
+@@ -316,6 +317,7 @@ public class EntitySelector {
+         }
+ 
+         if (var2 != null) {
++            String s = var2;
+             var1.add(new Predicate<Entity>() {
+                 public boolean apply(@Nullable Entity var1) {
+                     if (!(var1 instanceof EntityLivingBase)) {
+@@ -324,7 +326,7 @@ public class EntitySelector {
+                         EntityLivingBase var2x = (EntityLivingBase)var1;
+                         Team var3x = var2x.getTeam();
+                         String var4 = var3x == null ? "" : var3x.getName();
+-                        return var4.equals(var2) != var3;
++                        return var4.equals(s) != var3;
+                     }
+                 }
+             });
+@@ -334,7 +336,7 @@ public class EntitySelector {
+     }
+ 
+     private static List<Predicate<Entity>> getScorePredicates(final ICommandSender sender, Map<String, String> params) {
+-        final Map var2 = getScoreMap(params);
++        final Map<String, Integer> var2 = getScoreMap(params);
+         return (List<Predicate<Entity>>)(var2.isEmpty() ? Collections.emptyList() : Lists.newArrayList(new Predicate<Entity>() {
+             public boolean apply(@Nullable Entity var1) {
+                 if (var1 == null) {
+@@ -383,7 +385,7 @@ public class EntitySelector {
+ 
+     private static List<Predicate<Entity>> getNamePredicates(Map<String, String> params) {
+         ArrayList var1 = Lists.newArrayList();
+-        final String var2 = getArgument(params, ARGUMENT_PLAYER_NAME);
++        String var2 = getArgument(params, ARGUMENT_PLAYER_NAME);
+         final boolean var3 = var2 != null && var2.startsWith("!");
+ 
+         if (var3) {
+@@ -391,9 +393,10 @@ public class EntitySelector {
+         }
+ 
+         if (var2 != null) {
++            String s = var2;
+             var1.add(new Predicate<Entity>() {
+                 public boolean apply(@Nullable Entity var1) {
+-                    return var1 != null && var1.getName().equals(var2) != var3;
++                    return var1 != null && var1.getName().equals(s) != var3;
+                 }
+             });
+         }
+@@ -403,22 +406,23 @@ public class EntitySelector {
+ 
+     private static List<Predicate<Entity>> getTagPredicates(Map<String, String> params) {
+         ArrayList var1 = Lists.newArrayList();
+-        final String var2 = getArgument(params, ARGUMENT_ENTITY_TAG);
++        String var2 = getArgument(params, ARGUMENT_ENTITY_TAG);
+         final boolean var3 = var2 != null && var2.startsWith("!");
+ 
+         if (var3) {
+             var2 = var2.substring(1);
+         }
+ 
++        final String s = var2;
+         if (var2 != null) {
+             var1.add(new Predicate<Entity>() {
+                 public boolean apply(@Nullable Entity var1) {
+                     if (var1 == null) {
+                         return false;
+-                    } else if ("".equals(var2)) {
++                    } else if ("".equals(s)) {
+                         return var1.getTags().isEmpty() != var3;
+                     } else {
+-                        return var1.getTags().contains(var2) != var3;
++                        return var1.getTags().contains(s) != var3;
+                     }
+                 }
+             });
+@@ -567,7 +571,7 @@ public class EntitySelector {
+         Entity var7 = sender.getCommandSenderEntity();
+ 
+         if (var7 != null && targetClass.isAssignableFrom(var7.getClass()) && var6 == 1 && matchingEntities.contains(var7) && !"r".equals(type)) {
+-            matchingEntities = Lists.newArrayList(var7);
++            matchingEntities = Lists.newArrayList((T[]) new Entity[] { var7 });
+         }
+ 
+         if (var6 != 0) {
+diff --git a/src/main/java/net/minecraft/command/server/CommandBanIp.java b/src/main/java/net/minecraft/command/server/CommandBanIp.java
+index da4312a..e3c2c00 100644
+--- a/src/main/java/net/minecraft/command/server/CommandBanIp.java
++++ b/src/main/java/net/minecraft/command/server/CommandBanIp.java
+@@ -84,7 +84,7 @@ public class CommandBanIp extends CommandBase {
+     protected void banIp(MinecraftServer server, ICommandSender sender, String ipAddress, @Nullable String banReason) {
+         UserListIPBansEntry var5 = new UserListIPBansEntry(ipAddress, (Date)null, sender.getName(), (Date)null, banReason);
+         server.getPlayerList().getBannedIPs().addEntry(var5);
+-        List var6 = server.getPlayerList().getPlayersMatchingAddress(ipAddress);
++        List<EntityPlayerMP> var6 = server.getPlayerList().getPlayersMatchingAddress(ipAddress);
+         String[] var7 = new String[var6.size()];
+         int var8 = 0;
+ 
+diff --git a/src/main/java/net/minecraft/command/server/CommandScoreboard.java b/src/main/java/net/minecraft/command/server/CommandScoreboard.java
+index 86a612b..b33f69e 100644
+--- a/src/main/java/net/minecraft/command/server/CommandScoreboard.java
++++ b/src/main/java/net/minecraft/command/server/CommandScoreboard.java
+@@ -238,7 +238,7 @@ public class CommandScoreboard extends CommandBase {
+         if (var4 < 0) {
+             return false;
+         } else {
+-            ArrayList var13 = Lists.newArrayList(this.getScoreboard(server).getObjectiveNames());
++            ArrayList<String> var13 = Lists.newArrayList(this.getScoreboard(server).getObjectiveNames());
+             String var6 = args[var4];
+             ArrayList var7 = Lists.newArrayList();
+ 
+@@ -472,7 +472,7 @@ public class CommandScoreboard extends CommandBase {
+             sender.sendMessage(var8);
+             sender.sendMessage(new TextComponentString(joinNiceString(var7.toArray())));
+         } else {
+-            Collection var10 = var5.getTeams();
++            Collection<ScorePlayerTeam> var10 = var5.getTeams();
+             sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, var10.size());
+ 
+             if (var10.isEmpty()) {
+@@ -593,7 +593,7 @@ public class CommandScoreboard extends CommandBase {
+         ScorePlayerTeam var6 = this.convertToTeam(args[startIndex], server);
+ 
+         if (var6 != null) {
+-            ArrayList var7 = Lists.newArrayList(var6.getMembershipCollection());
++            ArrayList<String> var7 = Lists.newArrayList(var6.getMembershipCollection());
+             sender.setCommandStat(CommandResultStats.Type.AFFECTED_ENTITIES, var7.size());
+ 
+             if (var7.isEmpty()) {
+@@ -617,7 +617,7 @@ public class CommandScoreboard extends CommandBase {
+ 
+     protected void listObjectives(ICommandSender sender, MinecraftServer server) throws CommandException {
+         Scoreboard var3 = this.getScoreboard(server);
+-        Collection var4 = var3.getScoreObjectives();
++        Collection<ScoreObjective> var4 = var3.getScoreObjectives();
+ 
+         if (var4.isEmpty()) {
+             throw new CommandException("commands.scoreboard.objectives.list.empty", new Object[0]);
+@@ -660,7 +660,7 @@ public class CommandScoreboard extends CommandBase {
+ 
+         if (args.length > startIndex) {
+             String var6 = getEntityName(server, sender, args[startIndex]);
+-            Map var7 = var5.getObjectivesForEntity(var6);
++            Map<ScoreObjective, Score> var7 = var5.getObjectivesForEntity(var6);
+             sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, var7.size());
+ 
+             if (var7.isEmpty()) {
+@@ -1046,7 +1046,7 @@ public class CommandScoreboard extends CommandBase {
+     }
+ 
+     protected List<String> getObjectiveNames(boolean writableOnly, MinecraftServer server) {
+-        Collection var3 = this.getScoreboard(server).getScoreObjectives();
++        Collection<ScoreObjective> var3 = this.getScoreboard(server).getScoreObjectives();
+         ArrayList var4 = Lists.newArrayList();
+ 
+         for (ScoreObjective var6 : var3) {
+@@ -1059,7 +1059,7 @@ public class CommandScoreboard extends CommandBase {
+     }
+ 
+     protected List<String> getTriggerNames(MinecraftServer server) {
+-        Collection var2 = this.getScoreboard(server).getScoreObjectives();
++        Collection<ScoreObjective> var2 = this.getScoreboard(server).getScoreObjectives();
+         ArrayList var3 = Lists.newArrayList();
+ 
+         for (ScoreObjective var5 : var2) {
+diff --git a/src/main/java/net/minecraft/crash/CrashReport.java b/src/main/java/net/minecraft/crash/CrashReport.java
+index 97e2f2c..b260ab7 100644
+--- a/src/main/java/net/minecraft/crash/CrashReport.java
++++ b/src/main/java/net/minecraft/crash/CrashReport.java
+@@ -98,7 +98,7 @@ public class CrashReport {
+         this.systemDetailsCategory.addDetail("JVM Flags", new ICrashReportDetail() {
+             public String call() {
+                 RuntimeMXBean runtimemxbean = ManagementFactory.getRuntimeMXBean();
+-                List list = runtimemxbean.getInputArguments();
++                List<String> list = runtimemxbean.getInputArguments();
+                 int i = 0;
+                 StringBuilder stringbuilder = new StringBuilder();
+ 
+@@ -126,7 +126,7 @@ public class CrashReport {
+                 return this.call();
+             }
+         });
+-        this.systemDetailsCategory.addDetail("CraftBukkit Information", new CraftCrashReport());
++        this.systemDetailsCategory.addDetail("CraftBukkit Information", (ICrashReportDetail) new CraftCrashReport());
+     }
+ 
+     /**
+diff --git a/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java b/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
+index dda6caf..da38fd6 100644
+--- a/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
++++ b/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
+@@ -180,7 +180,7 @@ public class EnchantmentHelper {
+     }
+ 
+     public static int getMaxEnchantmentLevel(Enchantment p_185284_0_, EntityLivingBase p_185284_1_) {
+-        List var2 = p_185284_0_.getEntityEquipment(p_185284_1_);
++        List<ItemStack> var2 = p_185284_0_.getEntityEquipment(p_185284_1_);
+ 
+         if (var2 == null) {
+             return 0;
+@@ -258,7 +258,7 @@ public class EnchantmentHelper {
+     }
+ 
+     public static ItemStack getEnchantedItem(Enchantment p_92099_0_, EntityLivingBase p_92099_1_) {
+-        List var2 = p_92099_0_.getEntityEquipment(p_92099_1_);
++        List<ItemStack> var2 = p_92099_0_.getEntityEquipment(p_92099_1_);
+ 
+         if (var2.isEmpty()) {
+             return ItemStack.EMPTY;
+@@ -304,7 +304,7 @@ public class EnchantmentHelper {
+      * Applys a random enchantment to the specified item.
+      */
+     public static ItemStack addRandomEnchantment(Random random, ItemStack stack, int level, boolean allowTreasure) {
+-        List var4 = buildEnchantmentList(random, stack, level, allowTreasure);
++        List<EnchantmentData> var4 = buildEnchantmentList(random, stack, level, allowTreasure);
+         boolean var5 = stack.getItem() == Items.BOOK;
+ 
+         if (var5) {
+diff --git a/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java b/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java
+index 38227cb..818a54e 100644
+--- a/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java
++++ b/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java
+@@ -282,7 +282,7 @@ public class EntityAreaEffectCloud extends Entity {
+                     }
+                 }
+ 
+-                ArrayList arraylist = Lists.newArrayList();
++                ArrayList<PotionEffect> arraylist = Lists.newArrayList();
+ 
+                 for (PotionEffect mobeffect : this.potion.getEffects()) {
+                     arraylist.add(new PotionEffect(mobeffect.getPotion(), mobeffect.getDuration() / 4, mobeffect.getAmplifier(), mobeffect.getIsAmbient(), mobeffect.doesShowParticles()));
+diff --git a/src/main/java/net/minecraft/entity/EntityLeashKnot.java b/src/main/java/net/minecraft/entity/EntityLeashKnot.java
+index c7c69ab..98518a6 100644
+--- a/src/main/java/net/minecraft/entity/EntityLeashKnot.java
++++ b/src/main/java/net/minecraft/entity/EntityLeashKnot.java
+@@ -99,7 +99,7 @@ public class EntityLeashKnot extends EntityHanging {
+         } else {
+             boolean flag = false;
+             double d0 = 7.0D;
+-            List list = this.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - 7.0D, this.posY - 7.0D, this.posZ - 7.0D, this.posX + 7.0D, this.posY + 7.0D, this.posZ + 7.0D));
++            List<EntityLiving> list = this.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.posX - 7.0D, this.posY - 7.0D, this.posZ - 7.0D, this.posX + 7.0D, this.posY + 7.0D, this.posZ + 7.0D));
+ 
+             for (EntityLiving entityinsentient : list) {
+                 if (entityinsentient.getLeashed() && entityinsentient.getLeashedToEntity() == player) {
+diff --git a/src/main/java/net/minecraft/entity/EntityList.java b/src/main/java/net/minecraft/entity/EntityList.java
+index 9bd7812..a5da8a1 100644
+--- a/src/main/java/net/minecraft/entity/EntityList.java
++++ b/src/main/java/net/minecraft/entity/EntityList.java
+@@ -418,7 +418,7 @@ public class EntityList {
+             KNOWN_TYPES.add(var4);
+ 
+             while (OLD_NAMES.size() <= id) {
+-                OLD_NAMES.add((Object)null);
++                OLD_NAMES.add(null);
+             }
+ 
+             OLD_NAMES.set(id, oldName);
+diff --git a/src/main/java/net/minecraft/entity/EntityTracker.java b/src/main/java/net/minecraft/entity/EntityTracker.java
+index 1aa8d31..4ae38da 100644
+--- a/src/main/java/net/minecraft/entity/EntityTracker.java
++++ b/src/main/java/net/minecraft/entity/EntityTracker.java
+@@ -145,7 +145,7 @@ public class EntityTracker {
+     /**
+      * Args : Entity, trackingRange, updateFrequency, sendVelocityUpdates
+      */
+-    public void track(Entity entityIn, final int trackingRange, int updateFrequency, boolean sendVelocityUpdates) {
++    public void track(Entity entityIn, int trackingRange, int updateFrequency, boolean sendVelocityUpdates) {
+         AsyncCatcher.catchOp("entity track");
+         trackingRange = TrackingRange.getEntityTrackingRange(entityIn, trackingRange);
+ 
+@@ -162,11 +162,12 @@ public class EntityTracker {
+             CrashReport crashreport = CrashReport.makeCrashReport(var11, "Adding entity to track");
+             CrashReportCategory crashreportsystemdetails = crashreport.makeCategory("Entity To Track");
+             crashreportsystemdetails.addCrashSection("Tracking range", trackingRange + " blocks");
++            final int finalTrackingRange = trackingRange;
+             crashreportsystemdetails.addDetail("Update interval", new ICrashReportDetail() {
+                 public String call() throws Exception {
+-                    String s = "Once per " + trackingRange + " ticks";
++                    String s = "Once per " + finalTrackingRange + " ticks";
+ 
+-                    if (trackingRange == Integer.MAX_VALUE) {
++                    if (finalTrackingRange == Integer.MAX_VALUE) {
+                         s = "Maximum (" + s + ")";
+                     }
+ 
+@@ -269,8 +270,8 @@ public class EntityTracker {
+      * has passengers
+      */
+     public void sendLeashedEntitiesInChunk(EntityPlayerMP player, Chunk chunkIn) {
+-        ArrayList arraylist = Lists.newArrayList();
+-        ArrayList arraylist1 = Lists.newArrayList();
++        ArrayList<Entity> arraylist = Lists.newArrayList();
++        ArrayList<Entity> arraylist1 = Lists.newArrayList();
+ 
+         for (EntityTrackerEntry entitytrackerentry : this.entries) {
+             Entity entity = entitytrackerentry.getTrackedEntity();
+diff --git a/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java b/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java
+index d53bf27..7d8f280 100644
+--- a/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java
++++ b/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java
+@@ -48,7 +48,7 @@ public class SharedMonsterAttributes {
+         IAttribute iattribute = instance.getAttribute();
+         nbttagcompound.setString("Name", iattribute.getName());
+         nbttagcompound.setDouble("Base", instance.getBaseValue());
+-        Collection collection = instance.getModifiers();
++        Collection<AttributeModifier> collection = instance.getModifiers();
+ 
+         if (collection != null && !collection.isEmpty()) {
+             NBTTagList nbttaglist = new NBTTagList();
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java b/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
+index d2e471b..f69d937 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
+@@ -56,7 +56,7 @@ public class EntityAIAvoidEntity<T extends Entity> extends EntityAIBase {
+         if (var1.isEmpty()) {
+             return false;
+         } else {
+-            this.closestLivingEntity = var1.get(0);
++            this.closestLivingEntity = (T) var1.get(0);
+             Vec3d var2 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.entity, 16, 7, new Vec3d(this.closestLivingEntity.posX, this.closestLivingEntity.posY, this.closestLivingEntity.posZ));
+ 
+             if (var2 == null) {
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
+index 7cf70bf..4b81a2a 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
+@@ -42,7 +42,7 @@ public class EntityAIFollow extends EntityAIBase {
+      * Returns whether the EntityAIBase should begin execution.
+      */
+     public boolean shouldExecute() {
+-        List var1 = this.entity.world.getEntitiesWithinAABB(EntityLiving.class, this.entity.getEntityBoundingBox().grow((double)this.areaSize), this.followPredicate);
++        List<EntityLiving> var1 = this.entity.world.getEntitiesWithinAABB(EntityLiving.class, this.entity.getEntityBoundingBox().grow((double)this.areaSize), this.followPredicate);
+ 
+         if (!var1.isEmpty()) {
+             for (EntityLiving var3 : var1) {
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
+index dbe0809..c76ca20 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
+@@ -24,7 +24,7 @@ public class EntityAIFollowGolem extends EntityAIBase {
+         } else if (!this.villager.world.isDaytime()) {
+             return false;
+         } else {
+-            List var1 = this.villager.world.getEntitiesWithinAABB(EntityIronGolem.class, this.villager.getEntityBoundingBox().grow(6.0D, 2.0D, 6.0D));
++            List<EntityIronGolem> var1 = this.villager.world.getEntitiesWithinAABB(EntityIronGolem.class, this.villager.getEntityBoundingBox().grow(6.0D, 2.0D, 6.0D));
+ 
+             if (var1.isEmpty()) {
+                 return false;
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
+index 04b482f..3f816e2 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
+@@ -22,7 +22,7 @@ public class EntityAIFollowParent extends EntityAIBase {
+         if (this.childAnimal.getGrowingAge() >= 0) {
+             return false;
+         } else {
+-            List var1 = this.childAnimal.world.getEntitiesWithinAABB(this.childAnimal.getClass(), this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D));
++            List<EntityAnimal> var1 = this.childAnimal.world.getEntitiesWithinAABB(this.childAnimal.getClass(), this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D));
+             EntityAnimal var2 = null;
+             double var3 = Double.MAX_VALUE;
+ 
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java b/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
+index c20f7ee..0ce90a9 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
+@@ -20,7 +20,7 @@ public class EntityAILlamaFollowCaravan extends EntityAIBase {
+      */
+     public boolean shouldExecute() {
+         if (!this.llama.getLeashed() && !this.llama.inCaravan()) {
+-            List var1 = this.llama.world.getEntitiesWithinAABB(this.llama.getClass(), this.llama.getEntityBoundingBox().grow(9.0D, 4.0D, 9.0D));
++            List<EntityLlama> var1 = this.llama.world.getEntitiesWithinAABB(this.llama.getClass(), this.llama.getEntityBoundingBox().grow(9.0D, 4.0D, 9.0D));
+             EntityLlama var2 = null;
+             double var3 = Double.MAX_VALUE;
+ 
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
+index 3320be5..a9f17df 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
+@@ -82,7 +82,7 @@ public class EntityAIMate extends EntityAIBase {
+      * valid mate found.
+      */
+     private EntityAnimal getNearbyMate() {
+-        List list = this.world.getEntitiesWithinAABB(this.mateClass, this.animal.getEntityBoundingBox().grow(8.0D));
++        List<EntityAnimal> list = this.world.getEntitiesWithinAABB(this.mateClass, this.animal.getEntityBoundingBox().grow(8.0D));
+         double d0 = Double.MAX_VALUE;
+         EntityAnimal entityanimal = null;
+ 
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
+index a0dea47..9d1f518 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
+@@ -66,11 +66,11 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
+                 return false;
+             } else {
+                 Collections.sort(list, this.sorter);
+-                this.targetEntity = list.get(0);
++                this.targetEntity = (T) list.get(0);
+                 return true;
+             }
+         } else {
+-            this.targetEntity = this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double)this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<EntityPlayer, Double>() {
++            this.targetEntity = (T) this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double)this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<EntityPlayer, Double>() {
+                 @Nullable
+                 public Double apply(@Nullable EntityPlayer entityhuman) {
+                     ItemStack itemstack = entityhuman.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+@@ -92,7 +92,7 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
+                 public Double __clashing_apply(@Nullable EntityPlayer object) {
+                     return this.apply(object);
+                 }
+-            }, this.targetEntitySelector);
++            }, (Predicate<EntityPlayer>) this.targetEntitySelector);
+             return this.targetEntity != null;
+         }
+     }
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java b/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
+index e40093f..3f8a345 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
+@@ -26,7 +26,7 @@ public class EntityAIPlay extends EntityAIBase {
+         } else if (this.villager.getRNG().nextInt(400) != 0) {
+             return false;
+         } else {
+-            List var1 = this.villager.world.getEntitiesWithinAABB(EntityVillager.class, this.villager.getEntityBoundingBox().grow(6.0D, 3.0D, 6.0D));
++            List<EntityVillager> var1 = this.villager.world.getEntitiesWithinAABB(EntityVillager.class, this.villager.getEntityBoundingBox().grow(6.0D, 3.0D, 6.0D));
+             double var2 = Double.MAX_VALUE;
+ 
+             for (EntityVillager var5 : var1) {
+diff --git a/src/main/java/net/minecraft/entity/ai/attributes/ModifiableAttributeInstance.java b/src/main/java/net/minecraft/entity/ai/attributes/ModifiableAttributeInstance.java
+index 3c49d02..c604b06 100644
+--- a/src/main/java/net/minecraft/entity/ai/attributes/ModifiableAttributeInstance.java
++++ b/src/main/java/net/minecraft/entity/ai/attributes/ModifiableAttributeInstance.java
+@@ -79,7 +79,7 @@ public class ModifiableAttributeInstance implements IAttributeInstance {
+         if (this.getModifier(modifier.getID()) != null) {
+             throw new IllegalArgumentException("Modifier is already applied on this attribute!");
+         } else {
+-            Object var2 = this.mapByName.get(modifier.getName());
++            Set<AttributeModifier> var2 = this.mapByName.get(modifier.getName());
+ 
+             if (var2 == null) {
+                 var2 = Sets.newHashSet();
+diff --git a/src/main/java/net/minecraft/entity/boss/EntityDragon.java b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
+index 4d15628..e1efb3a 100644
+--- a/src/main/java/net/minecraft/entity/boss/EntityDragon.java
++++ b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
+@@ -408,7 +408,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
+         }
+ 
+         if (this.rand.nextInt(10) == 0) {
+-            List list = this.world.getEntitiesWithinAABB(EntityEnderCrystal.class, this.getEntityBoundingBox().grow(32.0D));
++            List<EntityEnderCrystal> list = this.world.getEntitiesWithinAABB(EntityEnderCrystal.class, this.getEntityBoundingBox().grow(32.0D));
+             EntityEnderCrystal entityendercrystal = null;
+             double d0 = Double.MAX_VALUE;
+ 
+diff --git a/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java b/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
+index 67d29b4..898d652 100644
+--- a/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
++++ b/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
+@@ -73,7 +73,7 @@ public class EntityLightningBolt extends EntityWeatherEffect {
+             float pitch = 0.8F + this.rand.nextFloat() * 0.2F;
+             int viewDistance = ((WorldServer)this.world).getServer().getViewDistance() * 16;
+ 
+-            for (EntityPlayerMP player : this.world.playerEntities) {
++            for (EntityPlayerMP player : (List<EntityPlayerMP>) (List) this.world.playerEntities) {
+                 double deltaX = this.posX - player.posX;
+                 double deltaZ = this.posZ - player.posZ;
+                 double distanceSquared = deltaX * deltaX + deltaZ * deltaZ;
+diff --git a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
+index d0a25b9..dee82bb 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
++++ b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
+@@ -211,7 +211,7 @@ public class EntityFallingBlock extends Entity {
+             int i = MathHelper.ceil(distance - 1.0F);
+ 
+             if (i > 0) {
+-                ArrayList arraylist = Lists.newArrayList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox()));
++                ArrayList<Entity> arraylist = Lists.newArrayList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox()));
+                 boolean flag = block == Blocks.ANVIL;
+                 DamageSource damagesource = flag ? DamageSource.ANVIL : DamageSource.FALLING_BLOCK;
+ 
+diff --git a/src/main/java/net/minecraft/entity/monster/EntityCreeper.java b/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
+index 5b192fd..ab2125f 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
++++ b/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
+@@ -281,7 +281,7 @@ public class EntityCreeper extends EntityMob {
+     }
+ 
+     private void spawnLingeringCloud() {
+-        Collection collection = this.getActivePotionEffects();
++        Collection<PotionEffect> collection = this.getActivePotionEffects();
+ 
+         if (!collection.isEmpty()) {
+             EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
+diff --git a/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java b/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
+index f27c526..bc419ad 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
++++ b/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
+@@ -72,7 +72,7 @@ public class EntityElderGuardian extends EntityGuardian {
+ 
+         if ((this.ticksExisted + this.getEntityId()) % 1200 == 0) {
+             Potion var2 = MobEffects.MINING_FATIGUE;
+-            List var3 = this.world.getPlayers(EntityPlayerMP.class, new Predicate<EntityPlayerMP>() {
++            List<EntityPlayerMP> var3 = this.world.getPlayers(EntityPlayerMP.class, new Predicate<EntityPlayerMP>() {
+                 public boolean apply(@Nullable EntityPlayerMP var1) {
+                     return EntityElderGuardian.this.getDistanceSqToEntity(var1) < 2500.0D && var1.interactionManager.survivalOrAdventure();
+                 }
+diff --git a/src/main/java/net/minecraft/entity/monster/EntityShulker.java b/src/main/java/net/minecraft/entity/monster/EntityShulker.java
+index 5c1932e..e5a8e4c 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntityShulker.java
++++ b/src/main/java/net/minecraft/entity/monster/EntityShulker.java
+@@ -321,7 +321,7 @@ public class EntityShulker extends EntityGolem implements IMob {
+             }
+ 
+             if (d2 > 0.0D) {
+-                List list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox());
++                List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox());
+ 
+                 if (!list.isEmpty()) {
+                     for (Entity entity : list) {
+diff --git a/src/main/java/net/minecraft/entity/monster/EntityWitch.java b/src/main/java/net/minecraft/entity/monster/EntityWitch.java
+index 6b7d289..63be5cb 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntityWitch.java
++++ b/src/main/java/net/minecraft/entity/monster/EntityWitch.java
+@@ -115,7 +115,7 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
+                     this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
+ 
+                     if (var5.getItem() == Items.POTIONITEM) {
+-                        List var6 = PotionUtils.getEffectsFromStack(var5);
++                        List<PotionEffect> var6 = PotionUtils.getEffectsFromStack(var5);
+ 
+                         if (var6 != null) {
+                             for (PotionEffect var4 : var6) {
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityChicken.java b/src/main/java/net/minecraft/entity/passive/EntityChicken.java
+index e80e325..92ffada 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityChicken.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityChicken.java
+@@ -209,8 +209,4 @@ public class EntityChicken extends EntityAnimal {
+     public void setChickenJockey(boolean jockey) {
+         this.chickenJockey = jockey;
+     }
+-
+-    public EntityAgeable createChild(EntityAgeable ageable) {
+-        return this.createChild(ageable);
+-    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityCow.java b/src/main/java/net/minecraft/entity/passive/EntityCow.java
+index 36844ba..0625056 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityCow.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityCow.java
+@@ -120,8 +120,4 @@ public class EntityCow extends EntityAnimal {
+     public float getEyeHeight() {
+         return this.isChild() ? this.height : 1.3F;
+     }
+-
+-    public EntityAgeable createChild(EntityAgeable ageable) {
+-        return this.createChild(ageable);
+-    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java b/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java
+index 24a43b4..0cdc587 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java
+@@ -87,12 +87,4 @@ public class EntityMooshroom extends EntityCow {
+     protected ResourceLocation getLootTable() {
+         return LootTableList.ENTITIES_MUSHROOM_COW;
+     }
+-
+-    public EntityCow createChild(EntityAgeable ageable) {
+-        return this.createChild(ageable);
+-    }
+-
+-    public EntityAgeable createChild(EntityAgeable ageable) {
+-        return this.createChild(ageable);
+-    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityOcelot.java b/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
+index aa6567e..79f9567 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
+@@ -319,8 +319,4 @@ public class EntityOcelot extends EntityTameable {
+ 
+         return livingdata;
+     }
+-
+-    public EntityAgeable createChild(EntityAgeable ageable) {
+-        return this.createChild(ageable);
+-    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityPig.java b/src/main/java/net/minecraft/entity/passive/EntityPig.java
+index b8370b7..f4fa920 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityPig.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityPig.java
+@@ -303,8 +303,4 @@ public class EntityPig extends EntityAnimal {
+     public boolean isBreedingItem(ItemStack stack) {
+         return TEMPTATION_ITEMS.contains(stack.getItem());
+     }
+-
+-    public EntityAgeable createChild(EntityAgeable ageable) {
+-        return this.createChild(ageable);
+-    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityRabbit.java b/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
+index 52c26b8..796bf44 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
+@@ -411,10 +411,6 @@ public class EntityRabbit extends EntityAnimal {
+         this.carrotTicks = 40;
+     }
+ 
+-    public EntityAgeable createChild(EntityAgeable ageable) {
+-        return this.createChild(ageable);
+-    }
+-
+     static class AIAvoidEntity<T extends Entity> extends EntityAIAvoidEntity<T> {
+         private final EntityRabbit rabbit;
+ 
+diff --git a/src/main/java/net/minecraft/entity/passive/EntitySheep.java b/src/main/java/net/minecraft/entity/passive/EntitySheep.java
+index 8383639..82c2f22 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntitySheep.java
++++ b/src/main/java/net/minecraft/entity/passive/EntitySheep.java
+@@ -345,10 +345,6 @@ public class EntitySheep extends EntityAnimal {
+         return 0.95F * this.height;
+     }
+ 
+-    public EntityAgeable createChild(EntityAgeable ageable) {
+-        return this.createChild(ageable);
+-    }
+-
+     static {
+         for (EnumDyeColor enumcolor : EnumDyeColor.values()) {
+             DYE_TO_RGB.put(enumcolor, createSheepColor(enumcolor));
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
+index 9f76250..ccf2d62 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
+@@ -847,10 +847,6 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
+         }
+     }
+ 
+-    public EntityAgeable createChild(EntityAgeable ageable) {
+-        return this.createChild(ageable);
+-    }
+-
+     static class EmeraldForItems implements EntityVillager.ITradeList {
+         public Item buyingItem;
+         public EntityVillager.PriceInfo price;
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityWolf.java b/src/main/java/net/minecraft/entity/passive/EntityWolf.java
+index da44269..274fb79 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityWolf.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityWolf.java
+@@ -489,10 +489,6 @@ public class EntityWolf extends EntityTameable {
+         return !this.isAngry() && super.canBeLeashedTo(player);
+     }
+ 
+-    public EntityAgeable createChild(EntityAgeable ageable) {
+-        return this.createChild(ageable);
+-    }
+-
+     class AIAvoidEntity<T extends Entity> extends EntityAIAvoidEntity<T> {
+         private final EntityWolf wolf;
+ 
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+index b0c3fd2..8f997fc 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -542,7 +542,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+     }
+ 
+     private void updateScorePoints(IScoreCriteria criteria, int points) {
+-        for (Score scoreboardscore : this.world.getServer().getScoreboardManager().getScoreboardScores(criteria, this.getName(), new ArrayList())) {
++        for (Score scoreboardscore : this.world.getServer().getScoreboardManager().getScoreboardScores(criteria, this.getName(), new ArrayList<>())) {
+             scoreboardscore.setScorePoints(points);
+         }
+     }
+@@ -598,7 +598,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+             this.closeScreen();
+             this.setSpectatingEntity(this);
+ 
+-            for (Score scoreboardscore : this.world.getServer().getScoreboardManager().getScoreboardScores(IScoreCriteria.DEATH_COUNT, this.getName(), new ArrayList())) {
++            for (Score scoreboardscore : this.world.getServer().getScoreboardManager().getScoreboardScores(IScoreCriteria.DEATH_COUNT, this.getName(), new ArrayList<>())) {
+                 scoreboardscore.incrementScore();
+             }
+ 
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java b/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java
+index 92702fe..192daec 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java
+@@ -33,7 +33,7 @@ public class EntityDragonFireball extends EntityFireball {
+     protected void onImpact(RayTraceResult result) {
+         if (result.entityHit == null || !result.entityHit.isEntityEqual(this.shootingEntity)) {
+             if (!this.world.isRemote) {
+-                List var2 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(4.0D, 2.0D, 4.0D));
++                List<EntityLivingBase> var2 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(4.0D, 2.0D, 4.0D));
+                 EntityAreaEffectCloud var3 = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
+                 var3.setOwner(this.shootingEntity);
+                 var3.setParticle(EnumParticleTypes.DRAGON_BREATH);
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+index a39acec..9b6889f 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+@@ -263,7 +263,7 @@ public class EntityFishHook extends Entity {
+         }
+ 
+         Entity entity = null;
+-        List list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D));
++        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D)); // Paper - Decompile fix
+         double d0 = 0.0D;
+ 
+         for (Entity entity1 : list) {
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java b/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
+index 9914959..8734691 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
+@@ -109,7 +109,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
+     @Nullable
+     private Entity getHitEntity(Vec3d p_190538_1_, Vec3d p_190538_2_) {
+         Entity entity = null;
+-        List list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D));
++        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D));
+         double d0 = 0.0D;
+ 
+         for (Entity entity1 : list) {
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityPotion.java b/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
+index f0688cc..446b7aa 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
+@@ -135,7 +135,7 @@ public class EntityPotion extends EntityThrowable {
+ 
+     private void applyWater() {
+         AxisAlignedBB axisalignedbb = this.getEntityBoundingBox().grow(4.0D, 2.0D, 4.0D);
+-        List list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb, WATER_SENSITIVE);
++        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb, WATER_SENSITIVE);
+ 
+         if (!list.isEmpty()) {
+             for (EntityLivingBase entityliving : list) {
+@@ -150,7 +150,7 @@ public class EntityPotion extends EntityThrowable {
+ 
+     private void applySplash(RayTraceResult p_190543_1_, List<PotionEffect> p_190543_2_) {
+         AxisAlignedBB axisalignedbb = this.getEntityBoundingBox().grow(4.0D, 2.0D, 4.0D);
+-        List list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb);
++        List<EntityLivingBase> list1 = this.world.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb);
+         Map<LivingEntity, Double> affected = new HashMap<LivingEntity, Double>();
+ 
+         if (!list1.isEmpty()) {
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java b/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java
+index 6c1e16e..e73ee49 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java
+@@ -41,7 +41,7 @@ public class EntityTippedArrow extends EntityArrow {
+     public void setPotionEffect(ItemStack stack) {
+         if (stack.getItem() == Items.TIPPED_ARROW) {
+             this.potion = PotionUtils.getPotionFromItem(stack);
+-            List list = PotionUtils.getFullEffectsFromItem(stack);
++            List<PotionEffect> list = PotionUtils.getFullEffectsFromItem(stack);
+ 
+             if (!list.isEmpty()) {
+                 for (PotionEffect mobeffect : list) {
+diff --git a/src/main/java/net/minecraft/inventory/ContainerRepair.java b/src/main/java/net/minecraft/inventory/ContainerRepair.java
+index 3243096..9323510 100644
+--- a/src/main/java/net/minecraft/inventory/ContainerRepair.java
++++ b/src/main/java/net/minecraft/inventory/ContainerRepair.java
+@@ -150,7 +150,7 @@ public class ContainerRepair extends Container {
+         } else {
+             ItemStack itemstack1 = itemstack.copy();
+             ItemStack itemstack2 = this.inputSlots.getStackInSlot(1);
+-            Map map = EnchantmentHelper.getEnchantments(itemstack1);
++            Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(itemstack1);
+             int j = b0 + itemstack.getRepairCost() + (itemstack2.isEmpty() ? 0 : itemstack2.getRepairCost());
+             this.materialCost = 0;
+ 
+@@ -200,7 +200,7 @@ public class ContainerRepair extends Container {
+                         }
+                     }
+ 
+-                    Map map1 = EnchantmentHelper.getEnchantments(itemstack2);
++                    Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(itemstack2);
+                     boolean flag1 = false;
+                     boolean flag2 = false;
+ 
+diff --git a/src/main/java/net/minecraft/item/ItemMonsterPlacer.java b/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
+index 117382d..a846a1f 100644
+--- a/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
++++ b/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
+@@ -103,7 +103,7 @@ public class ItemMonsterPlacer extends Item {
+ 
+     protected double getYOffset(World p_190909_1_, BlockPos p_190909_2_) {
+         AxisAlignedBB axisalignedbb = (new AxisAlignedBB(p_190909_2_)).expand(0.0D, -1.0D, 0.0D);
+-        List list = p_190909_1_.getCollisionBoxes((Entity)null, axisalignedbb);
++        List<AxisAlignedBB> list = p_190909_1_.getCollisionBoxes((Entity)null, axisalignedbb);
+ 
+         if (list.isEmpty()) {
+             return 0.0D;
+diff --git a/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java b/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java
+index 4231670..b7038e0 100644
+--- a/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java
++++ b/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java
+@@ -74,7 +74,7 @@ public class ShapelessRecipes implements IRecipe {
+      * Used to check if a recipe matches current crafting inventory
+      */
+     public boolean matches(InventoryCrafting inv, World worldIn) {
+-        ArrayList arraylist = Lists.newArrayList(this.recipeItems);
++        ArrayList<Ingredient> arraylist = Lists.newArrayList(this.recipeItems);
+ 
+         for (int i = 0; i < inv.getHeight(); ++i) {
+             for (int j = 0; j < inv.getWidth(); ++j) {
+diff --git a/src/main/java/net/minecraft/nbt/NBTTagCompound.java b/src/main/java/net/minecraft/nbt/NBTTagCompound.java
+index e32cdb0..83a6d8b 100644
+--- a/src/main/java/net/minecraft/nbt/NBTTagCompound.java
++++ b/src/main/java/net/minecraft/nbt/NBTTagCompound.java
+@@ -5,12 +5,7 @@ import com.google.common.collect.Maps;
+ import java.io.DataInput;
+ import java.io.DataOutput;
+ import java.io.IOException;
+-import java.util.ArrayList;
+-import java.util.Collections;
+-import java.util.Map;
+-import java.util.Objects;
+-import java.util.Set;
+-import java.util.UUID;
++import java.util.*;
+ import java.util.regex.Pattern;
+ import javax.annotation.Nullable;
+ import net.minecraft.crash.CrashReport;
+@@ -396,7 +391,7 @@ public class NBTTagCompound extends NBTBase {
+ 
+     public String toString() {
+         StringBuilder var1 = new StringBuilder("{");
+-        Object var2 = this.tagMap.keySet();
++        Collection<String> var2 = this.tagMap.keySet();
+ 
+         if (LOGGER.isDebugEnabled()) {
+             ArrayList var3 = Lists.newArrayList(this.tagMap.keySet());
+diff --git a/src/main/java/net/minecraft/nbt/NBTUtil.java b/src/main/java/net/minecraft/nbt/NBTUtil.java
+index 8df1795..753d815 100644
+--- a/src/main/java/net/minecraft/nbt/NBTUtil.java
++++ b/src/main/java/net/minecraft/nbt/NBTUtil.java
+@@ -227,7 +227,7 @@ public final class NBTUtil {
+         }
+     }
+ 
+-    private static <T extends Comparable<T>> IBlockState setValueHelper(IBlockState p_193590_0_, IProperty<T> p_193590_1_, String p_193590_2_, NBTTagCompound p_193590_3_, NBTTagCompound p_193590_4_) {
++    private static <T extends Comparable<T>> IBlockState setValueHelper(IBlockState p_193590_0_, IProperty p_193590_1_, String p_193590_2_, NBTTagCompound p_193590_3_, NBTTagCompound p_193590_4_) {
+         Optional var5 = p_193590_1_.parseValue(p_193590_3_.getString(p_193590_2_));
+ 
+         if (var5.isPresent()) {
+diff --git a/src/main/java/net/minecraft/network/EnumConnectionState.java b/src/main/java/net/minecraft/network/EnumConnectionState.java
+index 219bb45..2c8f6d5 100644
+--- a/src/main/java/net/minecraft/network/EnumConnectionState.java
++++ b/src/main/java/net/minecraft/network/EnumConnectionState.java
+@@ -281,7 +281,7 @@ public enum EnumConnectionState {
+ 
+         if (var3 == null) {
+             var3 = HashBiMap.create();
+-            this.directionMaps.put(direction, var3);
++            this.directionMaps.put(direction, (BiMap<Integer, Class<? extends Packet<?>>>) var3);
+         }
+ 
+         if (((BiMap)var3).containsValue(packetClass)) {
+@@ -327,7 +327,7 @@ public enum EnumConnectionState {
+             STATES_BY_ID[var4 - -1] = var3;
+ 
+             for (EnumPacketDirection var6 : var3.directionMaps.keySet()) {
+-                for (Class var8 : ((BiMap)var3.directionMaps.get(var6)).values()) {
++                for (Class var8 : (var3.directionMaps.get(var6)).values()) {
+                     if (STATES_BY_CLASS.containsKey(var8) && STATES_BY_CLASS.get(var8) != var3) {
+                         throw new Error("Packet " + var8 + " is already assigned to protocol " + STATES_BY_CLASS.get(var8) + " - can't reassign to " + var3);
+                     }
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index 94c0b8f..822b674 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -1231,8 +1231,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+ 
+         if (!this.player.isDead && this.player.getChatVisibility() != EntityPlayer.EnumChatVisibility.HIDDEN) {
+             this.player.markPlayerActive();
+-            final String s = packetIn.getMessage();
+-            s = StringUtils.normalizeSpace(s);
++            // Paper start - Decompile fix
++            String str = packetIn.getMessage();
++            str = StringUtils.normalizeSpace(str);
++            final String s = str;
++            // Paper end
+ 
+             for (int i = 0; i < s.length(); ++i) {
+                 if (!ChatAllowedCharacters.isAllowedCharacter(s.charAt(i))) {
+@@ -2448,11 +2451,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+                             this.player.world.setBlockState(blockposition, iblockdata.withProperty(BlockCommandBlock.FACING, enumdirection).withProperty(BlockCommandBlock.CONDITIONAL, Boolean.valueOf(flag2)), 2);
+                             break;
+                         case AUTO:
+-                            IBlockState iblockdata = Blocks.REPEATING_COMMAND_BLOCK.getDefaultState();
++                            iblockdata = Blocks.REPEATING_COMMAND_BLOCK.getDefaultState();
+                             this.player.world.setBlockState(blockposition, iblockdata.withProperty(BlockCommandBlock.FACING, enumdirection).withProperty(BlockCommandBlock.CONDITIONAL, Boolean.valueOf(flag2)), 2);
+                             break;
+                         case REDSTONE:
+-                            IBlockState iblockdata = Blocks.COMMAND_BLOCK.getDefaultState();
++                            iblockdata = Blocks.COMMAND_BLOCK.getDefaultState();
+                             this.player.world.setBlockState(blockposition, iblockdata.withProperty(BlockCommandBlock.FACING, enumdirection).withProperty(BlockCommandBlock.CONDITIONAL, Boolean.valueOf(flag2)), 2);
+                     }
+ 
+diff --git a/src/main/java/net/minecraft/network/NetworkManager.java b/src/main/java/net/minecraft/network/NetworkManager.java
+index ca798aa..d270444 100644
+--- a/src/main/java/net/minecraft/network/NetworkManager.java
++++ b/src/main/java/net/minecraft/network/NetworkManager.java
+@@ -130,7 +130,7 @@ public class NetworkManager extends SimpleChannelInboundHandler < Packet<? >> {
+         }
+     }
+ 
+-    protected void channelRead0(ChannelHandlerContext channelhandlercontext, Packet<?> packet) throws Exception {
++    protected void channelRead0(ChannelHandlerContext channelhandlercontext, Packet packet) throws Exception { // Paper - Decompile fix
+         if (this.channel.isOpen()) {
+             try {
+                 packet.processPacket(this.packetListener);
+diff --git a/src/main/java/net/minecraft/pathfinding/FlyingNodeProcessor.java b/src/main/java/net/minecraft/pathfinding/FlyingNodeProcessor.java
+index a9ca001..db4d726 100644
+--- a/src/main/java/net/minecraft/pathfinding/FlyingNodeProcessor.java
++++ b/src/main/java/net/minecraft/pathfinding/FlyingNodeProcessor.java
+@@ -46,7 +46,7 @@ public class FlyingNodeProcessor extends WalkNodeProcessor {
+         PathNodeType var9 = this.getPathNodeType(this.entity, var8.getX(), var1, var8.getZ());
+ 
+         if (this.entity.getPathPriority(var9) < 0.0F) {
+-            HashSet var4 = Sets.newHashSet();
++            HashSet<BlockPos> var4 = Sets.newHashSet();
+             var4.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double)var1, this.entity.getEntityBoundingBox().minZ));
+             var4.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double)var1, this.entity.getEntityBoundingBox().maxZ));
+             var4.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, (double)var1, this.entity.getEntityBoundingBox().minZ));
+@@ -233,7 +233,7 @@ public class FlyingNodeProcessor extends WalkNodeProcessor {
+     }
+ 
+     public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+-        EnumSet var11 = EnumSet.noneOf(PathNodeType.class);
++        EnumSet<PathNodeType> var11 = EnumSet.noneOf(PathNodeType.class);
+         PathNodeType var12 = PathNodeType.BLOCKED;
+         BlockPos var13 = new BlockPos(entitylivingIn);
+         var12 = this.getPathNodeType(blockaccessIn, x, y, z, xSize, ySize, zSize, canBreakDoorsIn, canEnterDoorsIn, var11, var12, var13);
+diff --git a/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java b/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
+index b608d38..f0b3af4 100644
+--- a/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
++++ b/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
+@@ -65,7 +65,7 @@ public class WalkNodeProcessor extends NodeProcessor {
+         PathNodeType var10 = this.getPathNodeType(this.entity, var9.getX(), var1, var9.getZ());
+ 
+         if (this.entity.getPathPriority(var10) < 0.0F) {
+-            HashSet var4 = Sets.newHashSet();
++            HashSet<BlockPos> var4 = Sets.newHashSet();
+             var4.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double)var1, this.entity.getEntityBoundingBox().minZ));
+             var4.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double)var1, this.entity.getEntityBoundingBox().maxZ));
+             var4.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, (double)var1, this.entity.getEntityBoundingBox().minZ));
+@@ -253,7 +253,7 @@ public class WalkNodeProcessor extends NodeProcessor {
+     }
+ 
+     public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+-        EnumSet var11 = EnumSet.noneOf(PathNodeType.class);
++        EnumSet<PathNodeType> var11 = EnumSet.noneOf(PathNodeType.class);
+         PathNodeType var12 = PathNodeType.BLOCKED;
+         double var13 = (double)entitylivingIn.width / 2.0D;
+         BlockPos var15 = new BlockPos(entitylivingIn);
+diff --git a/src/main/java/net/minecraft/profiler/Snooper.java b/src/main/java/net/minecraft/profiler/Snooper.java
+index 81009cf..f0c4849 100644
+--- a/src/main/java/net/minecraft/profiler/Snooper.java
++++ b/src/main/java/net/minecraft/profiler/Snooper.java
+@@ -90,7 +90,7 @@ public class Snooper {
+ 
+     private void addJvmArgsToSnooper() {
+         RuntimeMXBean var1 = ManagementFactory.getRuntimeMXBean();
+-        List var2 = var1.getInputArguments();
++        List<String> var2 = var1.getInputArguments();
+         int var3 = 0;
+ 
+         for (String var5 : var2) {
+diff --git a/src/main/java/net/minecraft/scoreboard/Scoreboard.java b/src/main/java/net/minecraft/scoreboard/Scoreboard.java
+index 5d73feb..5e0a56a 100644
+--- a/src/main/java/net/minecraft/scoreboard/Scoreboard.java
++++ b/src/main/java/net/minecraft/scoreboard/Scoreboard.java
+@@ -48,7 +48,7 @@ public class Scoreboard {
+                 throw new IllegalArgumentException("An objective with the name '" + name + "' already exists!");
+             } else {
+                 var3 = new ScoreObjective(this, name, criteria);
+-                Object var4 = this.scoreObjectiveCriterias.get(criteria);
++                List<ScoreObjective> var4 = this.scoreObjectiveCriterias.get(criteria);
+ 
+                 if (var4 == null) {
+                     var4 = Lists.newArrayList();
+@@ -92,7 +92,7 @@ public class Scoreboard {
+         if (username.length() > 40) {
+             throw new IllegalArgumentException("The player name '" + username + "' is too long!");
+         } else {
+-            Object var3 = this.entitiesScoreObjectives.get(username);
++            Map<ScoreObjective, Score> var3 = this.entitiesScoreObjectives.get(username);
+ 
+             if (var3 == null) {
+                 var3 = Maps.newHashMap();
+@@ -166,7 +166,7 @@ public class Scoreboard {
+     }
+ 
+     public Collection<Score> getScores() {
+-        Collection var1 = this.entitiesScoreObjectives.values();
++        Collection<Map<ScoreObjective, Score>> var1 = this.entitiesScoreObjectives.values();
+         ArrayList var2 = Lists.newArrayList();
+ 
+         for (Map var4 : var1) {
+diff --git a/src/main/java/net/minecraft/scoreboard/ServerScoreboard.java b/src/main/java/net/minecraft/scoreboard/ServerScoreboard.java
+index 91c4630..577ad6c 100644
+--- a/src/main/java/net/minecraft/scoreboard/ServerScoreboard.java
++++ b/src/main/java/net/minecraft/scoreboard/ServerScoreboard.java
+@@ -176,7 +176,7 @@ public class ServerScoreboard extends Scoreboard {
+     }
+ 
+     public void addObjective(ScoreObjective objective) {
+-        List list = this.getCreatePackets(objective);
++        List<Packet<?>> list = this.getCreatePackets(objective);
+ 
+         for (EntityPlayerMP entityplayer : this.scoreboardMCServer.getPlayerList().getPlayers()) {
+             if (entityplayer.getBukkitEntity().getScoreboard().getHandle() == this) {
+@@ -203,7 +203,7 @@ public class ServerScoreboard extends Scoreboard {
+     }
+ 
+     public void sendDisplaySlotRemovalPackets(ScoreObjective p_96546_1_) {
+-        List list = this.getDestroyPackets(p_96546_1_);
++        List<Packet<?>> list = this.getDestroyPackets(p_96546_1_);
+ 
+         for (EntityPlayerMP entityplayer : this.scoreboardMCServer.getPlayerList().getPlayers()) {
+             if (entityplayer.getBukkitEntity().getScoreboard().getHandle() == this) {
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 6e92fb5..ea980cc 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -36,7 +36,6 @@ import java.util.concurrent.Callable;
+ import java.util.concurrent.ConcurrentLinkedQueue;
+ import java.util.concurrent.Executors;
+ import java.util.concurrent.FutureTask;
+-import java.util.function.Supplier;
+ import javax.annotation.Nullable;
+ import javax.imageio.ImageIO;
+ import jline.console.ConsoleReader;
+@@ -328,7 +327,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+                 worlddata.checkName(worldNameIn);
+ 
+                 if (this.isDemo()) {
+-                    world = (WorldServer)(new WorldServerDemo(this, idatamanager, worlddata, dimension, this.profiler)).init();
++                    world = (WorldServer)(new WorldServerDemo(this, idatamanager, worlddata, dimension, this.profiler, Environment.getEnvironment(dimension), gen)).init(); // Paper - Decompiler fix
+                 } else {
+                     world = (WorldServer)(new WorldServer(this, idatamanager, worlddata, dimension, this.profiler, Environment.getEnvironment(dimension), gen)).init();
+                 }
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index 5fc6c7f..6e387a6 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -774,10 +774,6 @@ public class DedicatedServer extends MinecraftServer implements IServer {
+         }
+     }
+ 
+-    public PlayerList getPlayerList() {
+-        return this.getPlayerList();
+-    }
+-
+     public PropertyManager getPropertyManager() {
+         return this.settings;
+     }
+diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
+index 7f31bad..a42bead 100644
+--- a/src/main/java/net/minecraft/server/management/PlayerList.java
++++ b/src/main/java/net/minecraft/server/management/PlayerList.java
+@@ -455,7 +455,7 @@ public abstract class PlayerList {
+ 
+     public EntityPlayerMP attemptLogin(NetHandlerLoginServer loginlistener, GameProfile gameprofile, String hostname) {
+         UUID uuid = EntityPlayer.getUUID(gameprofile);
+-        ArrayList arraylist = Lists.newArrayList();
++        ArrayList<EntityPlayerMP> arraylist = Lists.newArrayList();
+ 
+         for (int i = 0; i < this.playerEntityList.size(); ++i) {
+             EntityPlayerMP entityplayer = this.playerEntityList.get(i);
+diff --git a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
+index ab12db5..d101cb6 100644
+--- a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
++++ b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
+@@ -221,7 +221,7 @@ public class PlayerProfileCache {
+ 
+         try {
+             bufferedreader = Files.newReader(this.usercacheFile, StandardCharsets.UTF_8);
+-            List list = (List)JsonUtils.fromJson(this.gson, bufferedreader, TYPE);
++            List<ProfileEntry> list = (List)JsonUtils.fromJson(this.gson, bufferedreader, TYPE);
+             this.usernameToProfileEntryMap.clear();
+             this.uuidToProfileEntryMap.clear();
+             this.gameProfiles.clear();
+diff --git a/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java b/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
+index e4aa865..8a39b0d 100644
+--- a/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
++++ b/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
+@@ -43,7 +43,7 @@ public class PreYggdrasilConverter {
+     public static final File OLD_WHITELIST_FILE = new File("white-list.txt");
+ 
+     static List<String> readFile(File inFile, Map<String, String[]> read) throws IOException {
+-        List list = Files.readLines(inFile, StandardCharsets.UTF_8);
++        List<String> list = Files.readLines(inFile, StandardCharsets.UTF_8);
+ 
+         for (String s : list) {
+             s = s.trim();
+@@ -146,7 +146,7 @@ public class PreYggdrasilConverter {
+             }
+ 
+             try {
+-                HashMap hashmap = Maps.newHashMap();
++                HashMap<String, String[]> hashmap = Maps.newHashMap();
+                 readFile(OLD_IPBAN_FILE, hashmap);
+ 
+                 for (String s : hashmap.keySet()) {
+diff --git a/src/main/java/net/minecraft/server/management/UserList.java b/src/main/java/net/minecraft/server/management/UserList.java
+index d178bb9..c1a1be1 100644
+--- a/src/main/java/net/minecraft/server/management/UserList.java
++++ b/src/main/java/net/minecraft/server/management/UserList.java
+@@ -161,7 +161,7 @@ public class UserList<K, V extends UserListEntry<K>> {
+ 
+     public void readSavedFile() throws IOException, FileNotFoundException {
+         if (this.saveFile.exists()) {
+-            Collection collection = null;
++            Collection<UserListEntry> collection = null;
+             BufferedReader bufferedreader = null;
+ 
+             try {
+@@ -181,7 +181,7 @@ public class UserList<K, V extends UserListEntry<K>> {
+ 
+                 for (UserListEntry jsonlistentry : collection) {
+                     if (jsonlistentry.getValue() != null) {
+-                        this.values.put(this.getObjectKey(jsonlistentry.getValue()), jsonlistentry);
++                        this.values.put(this.getObjectKey((K) jsonlistentry.getValue()), (V) jsonlistentry);
+                     }
+                 }
+             }
+diff --git a/src/main/java/net/minecraft/stats/StatList.java b/src/main/java/net/minecraft/stats/StatList.java
+index 432f823..782ef45 100644
+--- a/src/main/java/net/minecraft/stats/StatList.java
++++ b/src/main/java/net/minecraft/stats/StatList.java
+@@ -135,7 +135,7 @@ public class StatList {
+      * initialized.
+      */
+     private static void initCraftableStats() {
+-        HashSet var0 = Sets.newHashSet();
++        HashSet<Item> var0 = Sets.newHashSet();
+ 
+         for (IRecipe var2 : CraftingManager.REGISTRY) {
+             ItemStack var3 = var2.getRecipeOutput();
+diff --git a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
+index 0a17d44..32de83f 100644
+--- a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
++++ b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
+@@ -126,7 +126,7 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
+         return list;
+     }
+ 
+-    private void applyEffect(List list, Potion effects, int i, int b0) {
++    private void applyEffect(List<EntityPlayer> list, Potion effects, int i, int b0) {
+         for (EntityPlayer entityhuman : list) {
+             entityhuman.addPotionEffect(new net.minecraft.potion.PotionEffect(effects, i, b0, true, true));
+         }
+diff --git a/src/main/java/net/minecraft/tileentity/TileEntityPiston.java b/src/main/java/net/minecraft/tileentity/TileEntityPiston.java
+index d46b29e..78d5435 100644
+--- a/src/main/java/net/minecraft/tileentity/TileEntityPiston.java
++++ b/src/main/java/net/minecraft/tileentity/TileEntityPiston.java
+@@ -140,7 +140,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
+                             var11 = Math.min(var11, var3) + 0.01D;
+                             MOVING_ENTITY.set(var2);
+                             var10.move(MoverType.PISTON, var11 * (double)var2.getFrontOffsetX(), var11 * (double)var2.getFrontOffsetY(), var11 * (double)var2.getFrontOffsetZ());
+-                            MOVING_ENTITY.set((Object)null);
++                            MOVING_ENTITY.set(null);
+ 
+                             if (!this.extending && this.shouldHeadBeRendered) {
+                                 this.fixEntityWithinPistonBase(var10, var2, var3);
+@@ -224,7 +224,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
+                 var8 = Math.min(var8, p_190605_3_) + 0.01D;
+                 MOVING_ENTITY.set(p_190605_2_);
+                 p_190605_1_.move(MoverType.PISTON, var8 * (double)var7.getFrontOffsetX(), var8 * (double)var7.getFrontOffsetY(), var8 * (double)var7.getFrontOffsetZ());
+-                MOVING_ENTITY.set((Object)null);
++                MOVING_ENTITY.set(null);
+             }
+         }
+     }
+diff --git a/src/main/java/net/minecraft/util/ClassInheritanceMultiMap.java b/src/main/java/net/minecraft/util/ClassInheritanceMultiMap.java
+index dedf9c6..ff67f09 100644
+--- a/src/main/java/net/minecraft/util/ClassInheritanceMultiMap.java
++++ b/src/main/java/net/minecraft/util/ClassInheritanceMultiMap.java
+@@ -33,7 +33,7 @@ public class ClassInheritanceMultiMap<T> extends AbstractSet<T> {
+ 
+         for (Object object : this.values) {
+             if (clazz.isAssignableFrom(object.getClass())) {
+-                this.addForClass(object, clazz);
++                this.addForClass((T) object, clazz);
+             }
+         }
+ 
+diff --git a/src/main/java/net/minecraft/util/EntitySelectors.java b/src/main/java/net/minecraft/util/EntitySelectors.java
+index ee46dcb..442be0c 100644
+--- a/src/main/java/net/minecraft/util/EntitySelectors.java
++++ b/src/main/java/net/minecraft/util/EntitySelectors.java
+@@ -77,7 +77,6 @@ public final class EntitySelectors {
+                 }
+             }
+         });
+-        return (Predicate<T>)ret;
+     }
+ 
+     public static Predicate<Entity> notRiding(final Entity p_191324_0_) {
+diff --git a/src/main/java/net/minecraft/util/IntHashMap.java b/src/main/java/net/minecraft/util/IntHashMap.java
+index 19958a5..97855bd 100644
+--- a/src/main/java/net/minecraft/util/IntHashMap.java
++++ b/src/main/java/net/minecraft/util/IntHashMap.java
+@@ -36,7 +36,7 @@ public class IntHashMap<V> {
+ 
+         for (IntHashMap.Entry var3 = this.slots[getSlotIndex(var2, this.slots.length)]; var3 != null; var3 = var3.nextEntry) {
+             if (var3.hashEntry == hashEntry) {
+-                return var3.valueEntry;
++                return (V) var3.valueEntry;
+             }
+         }
+ 
+diff --git a/src/main/java/net/minecraft/util/IntIdentityHashBiMap.java b/src/main/java/net/minecraft/util/IntIdentityHashBiMap.java
+index 0f5a9cc..85bd4ea 100644
+--- a/src/main/java/net/minecraft/util/IntIdentityHashBiMap.java
++++ b/src/main/java/net/minecraft/util/IntIdentityHashBiMap.java
+@@ -65,7 +65,7 @@ public class IntIdentityHashBiMap<K> implements IObjectIntIterable<K> {
+ 
+         for (int var4 = 0; var4 < var2.length; ++var4) {
+             if (var2[var4] != null) {
+-                this.put(var2[var4], var3[var4]);
++                this.put((K) var2[var4], var3[var4]);
+             }
+         }
+     }
+diff --git a/src/main/java/net/minecraft/util/LowerStringMap.java b/src/main/java/net/minecraft/util/LowerStringMap.java
+index 059147f..c67b4f1 100644
+--- a/src/main/java/net/minecraft/util/LowerStringMap.java
++++ b/src/main/java/net/minecraft/util/LowerStringMap.java
+@@ -40,7 +40,7 @@ public class LowerStringMap<V> implements Map<String, V> {
+ 
+     public void putAll(Map <? extends String, ? extends V > var1) {
+         for (Entry var3 : var1.entrySet()) {
+-            this.put((String)var3.getKey(), var3.getValue());
++            this.put((String)var3.getKey(), (V) var3.getValue());
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/util/MapPopulator.java b/src/main/java/net/minecraft/util/MapPopulator.java
+index 55c75df..8429f7a 100644
+--- a/src/main/java/net/minecraft/util/MapPopulator.java
++++ b/src/main/java/net/minecraft/util/MapPopulator.java
+@@ -20,7 +20,7 @@ public class MapPopulator {
+         Iterator var3 = values.iterator();
+ 
+         for (Object var5 : keys) {
+-            map.put(var5, var3.next());
++            map.put((K) var5, (V) var3.next());
+         }
+ 
+         if (var3.hasNext()) {
+diff --git a/src/main/java/net/minecraft/util/NonNullList.java b/src/main/java/net/minecraft/util/NonNullList.java
+index 83e0136..9da4a40 100644
+--- a/src/main/java/net/minecraft/util/NonNullList.java
++++ b/src/main/java/net/minecraft/util/NonNullList.java
+@@ -23,7 +23,7 @@ public class NonNullList<E> extends AbstractList<E> {
+         Validate.notNull(fill);
+         Object[] var2 = new Object[size];
+         Arrays.fill(var2, fill);
+-        return new NonNullList<E>(Arrays.asList(var2), fill);
++        return new NonNullList<E>(Arrays.asList((E) var2), fill);
+     }
+ 
+     public static <E> NonNullList<E> from(E defaultElementIn, E... elements) {
+diff --git a/src/main/java/net/minecraft/util/datafix/DataFixer.java b/src/main/java/net/minecraft/util/datafix/DataFixer.java
+index 5795c93..fbce5b6 100644
+--- a/src/main/java/net/minecraft/util/datafix/DataFixer.java
++++ b/src/main/java/net/minecraft/util/datafix/DataFixer.java
+@@ -93,7 +93,7 @@ public class DataFixer implements IDataFixer {
+     }
+ 
+     private <V> List<V> getTypeList(Map<IFixType, List<V>> map, IFixType type) {
+-        Object var3 = (List)map.get(type);
++        List<V> var3 = (List)map.get(type);
+ 
+         if (var3 == null) {
+             var3 = Lists.newArrayList();
+diff --git a/src/main/java/net/minecraft/util/math/Cartesian.java b/src/main/java/net/minecraft/util/math/Cartesian.java
+index f78e518..fbdfe06 100644
+--- a/src/main/java/net/minecraft/util/math/Cartesian.java
++++ b/src/main/java/net/minecraft/util/math/Cartesian.java
+@@ -57,7 +57,7 @@ public class Cartesian {
+         }
+ 
+         public List<T> apply(@Nullable Object[] var1) {
+-            return Arrays.<T>asList(var1);
++            return Arrays.<T>asList((T) var1);
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index a6bebbe..e6d8e2e 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -2605,7 +2605,7 @@ public abstract class World implements IBlockAccess {
+         ArrayList arraylist = Lists.newArrayList();
+ 
+         for (Entity entity : this.loadedEntityList) {
+-            if (entityType.isAssignableFrom(entity.getClass()) && filter.apply(entity)) {
++            if (entityType.isAssignableFrom(entity.getClass()) && filter.apply((T) entity)) {
+                 arraylist.add(entity);
+             }
+         }
+@@ -2617,7 +2617,7 @@ public abstract class World implements IBlockAccess {
+         ArrayList arraylist = Lists.newArrayList();
+ 
+         for (Entity entity : this.playerEntities) {
+-            if (playerType.isAssignableFrom(entity.getClass()) && filter.apply(entity)) {
++            if (playerType.isAssignableFrom(entity.getClass()) && filter.apply((T) entity)) {
+                 arraylist.add(entity);
+             }
+         }
+diff --git a/src/main/java/net/minecraft/world/WorldEntitySpawner.java b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
+index d10cc52..44f27cd 100644
+--- a/src/main/java/net/minecraft/world/WorldEntitySpawner.java
++++ b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
+@@ -33,7 +33,11 @@ public final class WorldEntitySpawner {
+     private int getEntityCount(WorldServer server, Class oClass) {
+         int i = 0;
+ 
+-        for (Long coord : this.eligibleChunksForSpawning) {
++        // Paper - Decompile fix start
++        Iterator<Long> it = this.eligibleChunksForSpawning.iterator();
++        while (it.hasNext()) {
++            Long coord = it.next();
++            // Paper - Decompile fix end
+             int x = LongHash.msw(coord.longValue());
+             int z = LongHash.lsw(coord.longValue());
+ 
+diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
+index 914e082..e29aded 100644
+--- a/src/main/java/net/minecraft/world/WorldServer.java
++++ b/src/main/java/net/minecraft/world/WorldServer.java
+@@ -1408,13 +1408,6 @@ public class WorldServer extends World implements IThreadListener {
+         return this.functionManager;
+     }
+ 
+-    /**
+-     * gets the world's chunk provider
+-     */
+-    public IChunkProvider getChunkProvider() {
+-        return this.getChunkProvider();
+-    }
+-
+     static class ServerBlockEventList extends ArrayList<BlockEventData> {
+         private ServerBlockEventList() {
+         }
+diff --git a/src/main/java/net/minecraft/world/WorldServerDemo.java b/src/main/java/net/minecraft/world/WorldServerDemo.java
+index d806da8..5a2e386 100644
+--- a/src/main/java/net/minecraft/world/WorldServerDemo.java
++++ b/src/main/java/net/minecraft/world/WorldServerDemo.java
+@@ -4,13 +4,15 @@ import net.minecraft.profiler.Profiler;
+ import net.minecraft.server.MinecraftServer;
+ import net.minecraft.world.storage.ISaveHandler;
+ import net.minecraft.world.storage.WorldInfo;
++import org.bukkit.World;
++import org.bukkit.generator.ChunkGenerator;
+ 
+ public class WorldServerDemo extends WorldServer {
+     private static final long DEMO_WORLD_SEED = (long)"North Carolina".hashCode();
+     public static final WorldSettings DEMO_WORLD_SETTINGS = (new WorldSettings(DEMO_WORLD_SEED, GameType.SURVIVAL, true, false, WorldType.DEFAULT)).enableBonusChest();
+ 
+-    public WorldServerDemo(MinecraftServer server, ISaveHandler saveHandlerIn, WorldInfo worldInfoIn, int dimensionId, Profiler profilerIn) {
+-        super(server, saveHandlerIn, worldInfoIn, dimensionId, profilerIn);
++    public WorldServerDemo(MinecraftServer server, ISaveHandler saveHandlerIn, WorldInfo worldInfoIn, int dimensionId, Profiler profilerIn, World.Environment p_i75_6_, ChunkGenerator p_i75_7_) { // Paper - Decompile fix
++        super(server, saveHandlerIn, worldInfoIn, dimensionId, profilerIn, p_i75_6_, p_i75_7_);
+         this.worldInfo.populateFromWorldSettings(DEMO_WORLD_SETTINGS);
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
+index c040919..a9dd10c 100644
+--- a/src/main/java/net/minecraft/world/chunk/Chunk.java
++++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
+@@ -903,8 +903,8 @@ public class Chunk {
+ 
+         for (int k = i; k <= j; ++k) {
+             for (Entity entity : this.entityLists[k]) {
+-                if (entityClass.isInstance(entity) && entity.getEntityBoundingBox().intersects(aabb) && (filter == null || filter.apply(entity))) {
+-                    listToFill.add(entity);
++                if (entityClass.isInstance(entity) && entity.getEntityBoundingBox().intersects(aabb) && (filter == null || filter.apply((T) entity))) {
++                    listToFill.add((T) entity);
+                 }
+             }
+         }
+diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
+index 281bc19..043735a 100644
+--- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
++++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
+@@ -320,7 +320,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+         }
+ 
+         nbttagcompound.setTag("TileEntities", nbttaglist2);
+-        List list = world.getPendingBlockUpdates(chunk, false);
++        List<NextTickListEntry> list = world.getPendingBlockUpdates(chunk, false);
+ 
+         if (list != null) {
+             long k = world.getTotalWorldTime();
+diff --git a/src/main/java/net/minecraft/world/end/DragonFightManager.java b/src/main/java/net/minecraft/world/end/DragonFightManager.java
+index 43d4a43..38a9540 100644
+--- a/src/main/java/net/minecraft/world/end/DragonFightManager.java
++++ b/src/main/java/net/minecraft/world/end/DragonFightManager.java
+@@ -304,7 +304,7 @@ public class DragonFightManager {
+             var1.add(var3);
+         }
+ 
+-        HashSet var5 = Sets.newHashSet(this.bossInfo.getPlayers());
++        HashSet<EntityPlayerMP> var5 = Sets.newHashSet(this.bossInfo.getPlayers());
+         var5.removeAll(var1);
+ 
+         for (EntityPlayerMP var4 : var5) {
+diff --git a/src/main/java/net/minecraft/world/gen/FlatGeneratorInfo.java b/src/main/java/net/minecraft/world/gen/FlatGeneratorInfo.java
+index 94416be..82c8d13 100644
+--- a/src/main/java/net/minecraft/world/gen/FlatGeneratorInfo.java
++++ b/src/main/java/net/minecraft/world/gen/FlatGeneratorInfo.java
+@@ -86,7 +86,7 @@ public class FlatGeneratorInfo {
+                 }
+ 
+                 var1.append(((String)var4.getKey()).toLowerCase(Locale.ROOT));
+-                Map var5 = (Map)var4.getValue();
++                Map<String, String> var5 = (Map)var4.getValue();
+ 
+                 if (!var5.isEmpty()) {
+                     var1.append("(");
+diff --git a/src/main/java/net/minecraft/world/gen/layer/GenLayer.java b/src/main/java/net/minecraft/world/gen/layer/GenLayer.java
+index a1213a6..1cb29eb 100644
+--- a/src/main/java/net/minecraft/world/gen/layer/GenLayer.java
++++ b/src/main/java/net/minecraft/world/gen/layer/GenLayer.java
+@@ -56,7 +56,7 @@ public abstract class GenLayer {
+         GenLayer var35 = GenLayerZoom.magnify(1000L, var8, 2);
+         GenLayerBiomeEdge var36 = new GenLayerBiomeEdge(1000L, var35);
+         GenLayer var9 = GenLayerZoom.magnify(1000L, var30, 2);
+-        GenLayerHills var37 = new GenLayerHills(1000L, var36, var9);
++        GenLayer var37 = new GenLayerHills(1000L, var36, var9);
+         GenLayer var31 = GenLayerZoom.magnify(1000L, var30, 2);
+         var31 = GenLayerZoom.magnify(1000L, var31, var6);
+         GenLayerRiver var33 = new GenLayerRiver(1L, var31);
+diff --git a/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java b/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java
+index 157b25b..9d5ec6d 100644
+--- a/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java
++++ b/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java
+@@ -393,7 +393,7 @@ public class ComponentScatteredFeaturePieces {
+ 
+                     BlockPos blockposition2 = blockposition.add(definedstructure.calculateConnectedPos(definedstructureinfo, new BlockPos(3, -1 - i * 3, 5), definedstructureinfo, new BlockPos(3, 5, 7)));
+                     definedstructure2.addBlocksToWorldChunk(worldIn, blockposition2, definedstructureinfo);
+-                    Map map = definedstructure2.getDataBlocks(blockposition2, definedstructureinfo);
++                    Map<BlockPos, String> map = definedstructure2.getDataBlocks(blockposition2, definedstructureinfo);
+ 
+                     for (Entry entry : map.entrySet()) {
+                         if ("chest".equals(entry.getValue())) {
+diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java b/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java
+index 2eae35f..e8364ce 100644
+--- a/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java
++++ b/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java
+@@ -60,7 +60,7 @@ public abstract class StructureComponentTemplate extends StructureComponent {
+     public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn) {
+         this.placeSettings.setBoundingBox(structureBoundingBoxIn);
+         this.template.addBlocksToWorld(worldIn, this.templatePosition, this.placeSettings, 18);
+-        Map var4 = this.template.getDataBlocks(this.templatePosition, this.placeSettings);
++        Map<BlockPos, String> var4 = this.template.getDataBlocks(this.templatePosition, this.placeSettings);
+ 
+         for (Entry var6 : var4.entrySet()) {
+             String var7 = (String)var6.getValue();
+diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java b/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
+index 37802dd..31f229e 100644
+--- a/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
++++ b/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
+@@ -190,7 +190,7 @@ public class StructureEndCityPieces {
+         if (p_191088_2_ > 8) {
+             return false;
+         } else {
+-            ArrayList var7 = Lists.newArrayList();
++            ArrayList<StructureComponent> var7 = Lists.newArrayList();
+ 
+             if (p_191088_1_.generate(p_191088_0_, p_191088_2_, p_191088_3_, p_191088_4_, var7, p_191088_6_)) {
+                 boolean var8 = false;
+diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java b/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
+index 225e653..f135fcc 100644
+--- a/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
++++ b/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
+@@ -615,7 +615,7 @@ public class StructureOceanMonumentPieces {
+                 this.boundingBox = new StructureBoundingBox(p_i45599_2_, 39, p_i45599_3_, p_i45599_2_ + 58 - 1, 61, p_i45599_3_ + 58 - 1);
+             }
+ 
+-            List var6 = this.generateRoomGraph(p_i45599_1_);
++            List<RoomDefinition> var6 = this.generateRoomGraph(p_i45599_1_);
+             this.sourceRoom.claimed = true;
+             this.childPieces.add(new StructureOceanMonumentPieces.EntryRoom(var5, this.sourceRoom));
+             this.childPieces.add(new StructureOceanMonumentPieces.MonumentCoreRoom(var5, this.coreRoom, p_i45599_1_));
+@@ -743,7 +743,7 @@ public class StructureOceanMonumentPieces {
+             this.coreRoom.connections[EnumFacing.EAST.getIndex()].connections[EnumFacing.UP.getIndex()].claimed = true;
+             this.coreRoom.connections[EnumFacing.NORTH.getIndex()].connections[EnumFacing.UP.getIndex()].claimed = true;
+             this.coreRoom.connections[EnumFacing.EAST.getIndex()].connections[EnumFacing.NORTH.getIndex()].connections[EnumFacing.UP.getIndex()].claimed = true;
+-            ArrayList var30 = Lists.newArrayList();
++            ArrayList<RoomDefinition> var30 = Lists.newArrayList();
+ 
+             for (StructureOceanMonumentPieces.RoomDefinition var37 : var2) {
+                 if (var37 != null) {
+diff --git a/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java b/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
+index f13d670..6be56ef 100644
+--- a/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
++++ b/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
+@@ -261,7 +261,7 @@ public class WoodlandMansionPieces {
+         }
+ 
+         private void a(WoodlandMansionPieces.SimpleGrid var1, WoodlandMansionPieces.SimpleGrid var2) {
+-            ArrayList var3 = Lists.newArrayList();
++            ArrayList<Tuple> var3 = Lists.newArrayList();
+ 
+             for (int var4 = 0; var4 < var1.height; ++var4) {
+                 for (int var5 = 0; var5 < var1.width; ++var5) {
+diff --git a/src/main/java/net/minecraft/world/gen/structure/template/Template.java b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
+index e5b0731..f014053 100644
+--- a/src/main/java/net/minecraft/world/gen/structure/template/Template.java
++++ b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
+@@ -111,7 +111,7 @@ public class Template {
+      * takes blocks from the world and puts the data them into this template
+      */
+     private void takeEntitiesFromWorld(World worldIn, BlockPos startPos, BlockPos endPos) {
+-        List var4 = worldIn.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(startPos, endPos), new Predicate<Entity>() {
++        List<Entity> var4 = worldIn.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(startPos, endPos), new Predicate<Entity>() {
+             public boolean apply(@Nullable Entity var1) {
+                 return !(var1 instanceof EntityPlayer);
+             }
+diff --git a/src/main/java/net/minecraft/world/storage/WorldInfo.java b/src/main/java/net/minecraft/world/storage/WorldInfo.java
+index 6eb0160..6698328 100644
+--- a/src/main/java/net/minecraft/world/storage/WorldInfo.java
++++ b/src/main/java/net/minecraft/world/storage/WorldInfo.java
+@@ -1,6 +1,8 @@
+ package net.minecraft.world.storage;
+ 
+ import com.google.common.collect.Maps;
++
++import java.util.List;
+ import java.util.Map;
+ import java.util.Map.Entry;
+ import javax.annotation.Nullable;
+@@ -757,7 +759,7 @@ public class WorldInfo {
+         this.difficulty = newDifficulty;
+         SPacketServerDifficulty packet = new SPacketServerDifficulty(this.getDifficulty(), this.isDifficultyLocked());
+ 
+-        for (EntityPlayerMP player : this.world.playerEntities) {
++        for (EntityPlayerMP player : (List<EntityPlayerMP>) (List) this.world.playerEntities) {
+             player.connection.sendPacket(packet);
+         }
+     }
+diff --git a/src/main/java/net/minecraft/world/storage/loot/LootPool.java b/src/main/java/net/minecraft/world/storage/loot/LootPool.java
+index 4b08629..8745ac2 100644
+--- a/src/main/java/net/minecraft/world/storage/loot/LootPool.java
++++ b/src/main/java/net/minecraft/world/storage/loot/LootPool.java
+@@ -39,7 +39,7 @@ public class LootPool {
+      * with items with higher weights being more probable.
+      */
+     protected void createLootRoll(Collection<ItemStack> stacks, Random rand, LootContext context) {
+-        ArrayList var4 = Lists.newArrayList();
++        ArrayList<LootEntry> var4 = Lists.newArrayList();
+         int var5 = 0;
+ 
+         for (LootEntry var9 : this.lootEntries) {
+diff --git a/src/main/java/net/minecraft/world/storage/loot/LootTable.java b/src/main/java/net/minecraft/world/storage/loot/LootTable.java
+index 487e9a1..e13c531 100644
+--- a/src/main/java/net/minecraft/world/storage/loot/LootTable.java
++++ b/src/main/java/net/minecraft/world/storage/loot/LootTable.java
+@@ -50,7 +50,7 @@ public class LootTable {
+     }
+ 
+     public void fillInventory(IInventory inventory, Random rand, LootContext context) {
+-        List var4 = this.generateLootForPools(rand, context);
++        List<ItemStack> var4 = this.generateLootForPools(rand, context);
+         List var5 = this.getEmptySlotsRandomized(inventory, rand);
+         this.shuffleItems(var4, var5.size(), rand);
+ 
+diff --git a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java
+index 28d052a..7e83b34 100644
+--- a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java
++++ b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java
+@@ -57,7 +57,7 @@ public class EntityHasProperty implements LootCondition {
+         }
+ 
+         public EntityHasProperty deserialize(JsonObject json, JsonDeserializationContext context) {
+-            Set var3 = JsonUtils.getJsonObject(json, "properties").entrySet();
++            Set<Entry<String, JsonElement>> var3 = JsonUtils.getJsonObject(json, "properties").entrySet();
+             EntityProperty[] var4 = new EntityProperty[var3.size()];
+             int var5 = 0;
+ 
+diff --git a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java
+index 512c2b3..3abd123 100644
+--- a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java
++++ b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java
+@@ -74,7 +74,7 @@ public class EntityHasScore implements LootCondition {
+         }
+ 
+         public EntityHasScore deserialize(JsonObject json, JsonDeserializationContext context) {
+-            Set var3 = JsonUtils.getJsonObject(json, "scores").entrySet();
++            Set<Entry<String, JsonElement>> var3 = JsonUtils.getJsonObject(json, "scores").entrySet();
+             LinkedHashMap var4 = Maps.newLinkedHashMap();
+ 
+             for (Entry var6 : var3) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index 34dd126..c407c38 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -4,30 +4,20 @@ import com.google.common.base.Preconditions;
+ import com.google.common.base.Predicate;
+ import it.unimi.dsi.fastutil.objects.ObjectIterator;
+ import java.io.File;
+-import java.util.ArrayList;
+-import java.util.Collection;
+-import java.util.Collections;
+-import java.util.HashSet;
+-import java.util.List;
+-import java.util.Random;
+-import java.util.Set;
+-import java.util.UUID;
+-import net.minecraft.block.BlockChorusFlower;
+-import net.minecraft.block.BlockLeaves;
+-import net.minecraft.block.BlockOldLeaf;
+-import net.minecraft.block.BlockOldLog;
+-import net.minecraft.block.BlockPlanks;
++import java.util.*;
++
++import net.minecraft.block.*;
+ import net.minecraft.block.state.IBlockState;
+-import net.minecraft.entity.EntityLiving;
+-import net.minecraft.entity.IEntityLivingData;
++import net.minecraft.entity.*;
++import net.minecraft.entity.boss.EntityDragon;
++import net.minecraft.entity.boss.EntityWither;
+ import net.minecraft.entity.effect.EntityLightningBolt;
+-import net.minecraft.entity.item.EntityFallingBlock;
+-import net.minecraft.entity.item.EntityItem;
++import net.minecraft.entity.item.*;
++import net.minecraft.entity.monster.*;
++import net.minecraft.entity.passive.*;
+ import net.minecraft.entity.player.EntityPlayer;
+ import net.minecraft.entity.player.EntityPlayerMP;
+-import net.minecraft.entity.projectile.EntityArrow;
+-import net.minecraft.entity.projectile.EntitySpectralArrow;
+-import net.minecraft.entity.projectile.EntityTippedArrow;
++import net.minecraft.entity.projectile.*;
+ import net.minecraft.init.Blocks;
+ import net.minecraft.network.Packet;
+ import net.minecraft.network.play.server.SPacketCustomSound;
+@@ -36,6 +26,7 @@ import net.minecraft.network.play.server.SPacketParticles;
+ import net.minecraft.network.play.server.SPacketTimeUpdate;
+ import net.minecraft.server.management.PlayerChunkMapEntry;
+ import net.minecraft.tileentity.TileEntity;
++import net.minecraft.util.EnumFacing;
+ import net.minecraft.util.EnumParticleTypes;
+ import net.minecraft.util.IProgressUpdate;
+ import net.minecraft.util.math.AxisAlignedBB;
+@@ -83,6 +74,7 @@ import org.bukkit.World.Environment;
+ import org.bukkit.World.Spigot;
+ import org.bukkit.block.Biome;
+ import org.bukkit.block.Block;
++import org.bukkit.block.BlockFace;
+ import org.bukkit.block.BlockState;
+ import org.bukkit.craftbukkit.block.CraftBlock;
+ import org.bukkit.craftbukkit.block.CraftBlockState;
+@@ -93,17 +85,10 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
+ import org.bukkit.craftbukkit.metadata.BlockMetadataStore;
+ import org.bukkit.craftbukkit.potion.CraftPotionUtil;
+ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+-import org.bukkit.entity.Arrow;
++import org.bukkit.entity.*;
++import org.bukkit.entity.AbstractHorse;
+ import org.bukkit.entity.Entity;
+-import org.bukkit.entity.EntityType;
+-import org.bukkit.entity.FallingBlock;
+-import org.bukkit.entity.HumanEntity;
+-import org.bukkit.entity.Item;
+-import org.bukkit.entity.LightningStrike;
+-import org.bukkit.entity.LivingEntity;
+-import org.bukkit.entity.Player;
+-import org.bukkit.entity.SpectralArrow;
+-import org.bukkit.entity.TippedArrow;
++import org.bukkit.entity.minecart.*;
+ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+ import org.bukkit.event.world.SpawnChangeEvent;
+ import org.bukkit.generator.BlockPopulator;
+@@ -495,18 +480,18 @@ public class CraftWorld implements World {
+                 gen = new WorldGenMegaJungle(true, 10, 20, iblockdata1, iblockdata2);
+                 break;
+             case SMALL_JUNGLE:
+-                IBlockState iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
+-                IBlockState iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
++                iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
++                iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+                 gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, false);
+                 break;
+             case COCOA_TREE:
+-                IBlockState iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
+-                IBlockState iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
++                iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
++                iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+                 gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, true);
+                 break;
+             case JUNGLE_BUSH:
+-                IBlockState iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
+-                IBlockState iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
++                iblockdata1 = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
++                iblockdata2 = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+                 gen = new WorldGenShrub(iblockdata1, iblockdata2);
+                 break;
+             case RED_MUSHROOM:
+@@ -763,7 +748,7 @@ public class CraftWorld implements World {
+ 
+     @Deprecated
+     public <T extends Entity> Collection<T> getEntitiesByClass(Class<T>... classes) {
+-        return this.getEntitiesByClasses(classes);
++        return (Collection<T>) this.getEntitiesByClasses(classes);
+     }
+ 
+     public <T extends Entity> Collection<T> getEntitiesByClass(Class<T> clazz) {
+@@ -777,7 +762,7 @@ public class CraftWorld implements World {
+                     Class<?> bukkitClass = bukkitEntity.getClass();
+ 
+                     if (clazz.isAssignableFrom(bukkitClass)) {
+-                        list.add(bukkitEntity);
++                        list.add((T) bukkitEntity);
+                     }
+                 }
+             }
+@@ -982,8 +967,317 @@ public class CraftWorld implements World {
+         return this.spawnFallingBlock(location, Material.getMaterial(blockId), blockData);
+     }
+ 
++    // Paper - fix decompile start
++    // FF doesn't even decompile this method at all, so we just patch the whole thing back in :\
+     public net.minecraft.entity.Entity createEntity(Location param1, Class <? extends Entity > param2) throws IllegalArgumentException {
++        if (param1 == null || param2 == null) {
++            throw new IllegalArgumentException("Location or entity class cannot be null");
++        }
++
++        net.minecraft.entity.Entity entity = null;
++
++        double x = param1.getX();
++        double y = param1.getY();
++        double z = param1.getZ();
++        float pitch = param1.getPitch();
++        float yaw = param1.getYaw();
++
++        // order is important for some of these
++        if (Boat.class.isAssignableFrom(param2)) {
++            entity = new net.minecraft.entity.item.EntityBoat(world, x, y, z);
++            entity.setLocationAndAngles(x, y, z, yaw, pitch);
++        } else if (FallingBlock.class.isAssignableFrom(param2)) {
++            entity = new EntityFallingBlock(world, x, y, z, world.getBlockState(new BlockPos(x, y, z)));
++        } else if (Projectile.class.isAssignableFrom(param2)) {
++            if (Snowball.class.isAssignableFrom(param2)) {
++                entity = new EntitySnowball(world, x, y, z);
++            } else if (Egg.class.isAssignableFrom(param2)) {
++                entity = new EntityEgg(world, x, y, z);
++            } else if (Arrow.class.isAssignableFrom(param2)) {
++                if (TippedArrow.class.isAssignableFrom(param2)) {
++                    entity = new EntityTippedArrow(world);
++                    ((EntityTippedArrow) entity).setType(CraftPotionUtil.fromBukkit(new PotionData(PotionType.WATER, false, false)));
++                } else if (SpectralArrow.class.isAssignableFrom(param2)) {
++                    entity = new EntitySpectralArrow(world);
++                } else {
++                    entity = new EntityTippedArrow(world);
++                }
++                entity.setLocationAndAngles(x, y, z, 0, 0);
++            } else if (ThrownExpBottle.class.isAssignableFrom(param2)) {
++                entity = new EntityExpBottle(world);
++                entity.setLocationAndAngles(x, y, z, 0, 0);
++            } else if (EnderPearl.class.isAssignableFrom(param2)) {
++                entity = new EntityEnderPearl(world);
++                entity.setLocationAndAngles(x, y, z, 0, 0);
++            } else if (ThrownPotion.class.isAssignableFrom(param2)) {
++                if (LingeringPotion.class.isAssignableFrom(param2)) {
++                    entity = new EntityPotion(world, x, y, z, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.LINGERING_POTION, 1)));
++                } else {
++                    entity = new EntityPotion(world, x, y, z, CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.SPLASH_POTION, 1)));
++                }
++            } else if (Fireball.class.isAssignableFrom(param2)) {
++                if (SmallFireball.class.isAssignableFrom(param2)) {
++                    entity = new EntitySmallFireball(world);
++                } else if (WitherSkull.class.isAssignableFrom(param2)) {
++                    entity = new EntityWitherSkull(world);
++                } else if (DragonFireball.class.isAssignableFrom(param2)) {
++                    entity = new EntityDragonFireball(world);
++                } else {
++                    entity = new EntityLargeFireball(world);
++                }
++                entity.setLocationAndAngles(x, y, z, yaw, pitch);
++                Vector direction = param1.getDirection().multiply(10);
++                ((EntityFireball) entity).setDirection(direction.getX(), direction.getY(), direction.getZ());
++            } else if (ShulkerBullet.class.isAssignableFrom(param2)) {
++                entity = new EntityShulkerBullet(world);
++                entity.setLocationAndAngles(x, y, z, yaw, pitch);
++            } else if (LlamaSpit.class.isAssignableFrom(param2)) {
++                entity = new EntityLlamaSpit(world);
++                entity.setLocationAndAngles(x, y, z, yaw, pitch);
++            }
++        } else if (Minecart.class.isAssignableFrom(param2)) {
++            if (PoweredMinecart.class.isAssignableFrom(param2)) {
++                entity = new EntityMinecartFurnace(world, x, y, z);
++            } else if (StorageMinecart.class.isAssignableFrom(param2)) {
++                entity = new EntityMinecartChest(world, x, y, z);
++            } else if (ExplosiveMinecart.class.isAssignableFrom(param2)) {
++                entity = new EntityMinecartTNT(world, x, y, z);
++            } else if (HopperMinecart.class.isAssignableFrom(param2)) {
++                entity = new EntityMinecartHopper(world, x, y, z);
++            } else if (SpawnerMinecart.class.isAssignableFrom(param2)) {
++                entity = new EntityMinecartMobSpawner(world, x, y, z);
++            } else if (CommandMinecart.class.isAssignableFrom(param2)) {
++                entity = new EntityMinecartCommandBlock(world, x, y, z);
++            } else { // Default to rideable minecart for pre-rideable compatibility
++                entity = new EntityMinecartEmpty(world, x, y, z);
++            }
++        } else if (EnderSignal.class.isAssignableFrom(param2)) {
++            entity = new EntityEnderEye(world, x, y, z);
++        } else if (EnderCrystal.class.isAssignableFrom(param2)) {
++            entity = new EntityEnderCrystal(world);
++            entity.setLocationAndAngles(x, y, z, 0, 0);
++        } else if (LivingEntity.class.isAssignableFrom(param2)) {
++            if (Chicken.class.isAssignableFrom(param2)) {
++                entity = new EntityChicken(world);
++            } else if (Cow.class.isAssignableFrom(param2)) {
++                if (MushroomCow.class.isAssignableFrom(param2)) {
++                    entity = new EntityMooshroom(world);
++                } else {
++                    entity = new EntityCow(world);
++                }
++            } else if (Golem.class.isAssignableFrom(param2)) {
++                if (Snowman.class.isAssignableFrom(param2)) {
++                    entity = new EntitySnowman(world);
++                } else if (IronGolem.class.isAssignableFrom(param2)) {
++                    entity = new EntityIronGolem(world);
++                } else if (Shulker.class.isAssignableFrom(param2)) {
++                    entity = new EntityShulker(world);
++                }
++            } else if (Creeper.class.isAssignableFrom(param2)) {
++                entity = new EntityCreeper(world);
++            } else if (Ghast.class.isAssignableFrom(param2)) {
++                entity = new EntityGhast(world);
++            } else if (Pig.class.isAssignableFrom(param2)) {
++                entity = new EntityPig(world);
++            } else if (Player.class.isAssignableFrom(param2)) {
++                // need a net server handler for this one
++            } else if (Sheep.class.isAssignableFrom(param2)) {
++                entity = new EntitySheep(world);
++            } else if (AbstractHorse.class.isAssignableFrom(param2)) {
++                if (ChestedHorse.class.isAssignableFrom(param2)) {
++                    if (Donkey.class.isAssignableFrom(param2)) {
++                        entity = new EntityDonkey(world);
++                    } else if (Mule.class.isAssignableFrom(param2)) {
++                        entity = new EntityMule(world);
++                    } else if (Llama.class.isAssignableFrom(param2)) {
++                        entity = new EntityLlama(world);
++                    }
++                } else if (SkeletonHorse.class.isAssignableFrom(param2)) {
++                    entity = new EntitySkeletonHorse(world);
++                } else if (ZombieHorse.class.isAssignableFrom(param2)) {
++                    entity = new EntityZombieHorse(world);
++                } else {
++                    entity = new EntityHorse(world);
++                }
++            } else if (Skeleton.class.isAssignableFrom(param2)) {
++                if (Stray.class.isAssignableFrom(param2)){
++                    entity = new EntityStray(world);
++                } else if (WitherSkeleton.class.isAssignableFrom(param2)) {
++                    entity = new EntityWitherSkeleton(world);
++                } else {
++                    entity = new EntitySkeleton(world);
++                }
++            } else if (Slime.class.isAssignableFrom(param2)) {
++                if (MagmaCube.class.isAssignableFrom(param2)) {
++                    entity = new EntityMagmaCube(world);
++                } else {
++                    entity = new EntitySlime(world);
++                }
++            } else if (Spider.class.isAssignableFrom(param2)) {
++                if (CaveSpider.class.isAssignableFrom(param2)) {
++                    entity = new EntityCaveSpider(world);
++                } else {
++                    entity = new EntitySpider(world);
++                }
++            } else if (Squid.class.isAssignableFrom(param2)) {
++                entity = new EntitySquid(world);
++            } else if (Tameable.class.isAssignableFrom(param2)) {
++                if (Wolf.class.isAssignableFrom(param2)) {
++                    entity = new EntityWolf(world);
++                } else if (Ocelot.class.isAssignableFrom(param2)) {
++                    entity = new EntityOcelot(world);
++                } else if (Parrot.class.isAssignableFrom(param2)) {
++                    entity = new EntityParrot(world);
++                }
++            } else if (PigZombie.class.isAssignableFrom(param2)) {
++                entity = new EntityPigZombie(world);
++            } else if (Zombie.class.isAssignableFrom(param2)) {
++                if (Husk.class.isAssignableFrom(param2)) {
++                    entity = new EntityHusk(world);
++                } else if (ZombieVillager.class.isAssignableFrom(param2)) {
++                    entity = new EntityZombieVillager(world);
++                } else {
++                    entity = new EntityZombie(world);
++                }
++            } else if (Giant.class.isAssignableFrom(param2)) {
++                entity = new EntityGiantZombie(world);
++            } else if (Silverfish.class.isAssignableFrom(param2)) {
++                entity = new EntitySilverfish(world);
++            } else if (Enderman.class.isAssignableFrom(param2)) {
++                entity = new EntityEnderman(world);
++            } else if (Blaze.class.isAssignableFrom(param2)) {
++                entity = new EntityBlaze(world);
++            } else if (Villager.class.isAssignableFrom(param2)) {
++                entity = new EntityVillager(world);
++            } else if (Witch.class.isAssignableFrom(param2)) {
++                entity = new EntityWitch(world);
++            } else if (Wither.class.isAssignableFrom(param2)) {
++                entity = new EntityWither(world);
++            } else if (ComplexLivingEntity.class.isAssignableFrom(param2)) {
++                if (EnderDragon.class.isAssignableFrom(param2)) {
++                    entity = new EntityDragon(world);
++                }
++            } else if (Ambient.class.isAssignableFrom(param2)) {
++                if (Bat.class.isAssignableFrom(param2)) {
++                    entity = new EntityBat(world);
++                }
++            } else if (Rabbit.class.isAssignableFrom(param2)) {
++                entity = new EntityRabbit(world);
++            } else if (Endermite.class.isAssignableFrom(param2)) {
++                entity = new EntityEndermite(world);
++            } else if (Guardian.class.isAssignableFrom(param2)) {
++                if (ElderGuardian.class.isAssignableFrom(param2)){
++                    entity = new EntityElderGuardian(world);
++                } else {
++                    entity = new EntityGuardian(world);
++                }
++            } else if (ArmorStand.class.isAssignableFrom(param2)) {
++                entity = new EntityArmorStand(world, x, y, z);
++            } else if (PolarBear.class.isAssignableFrom(param2)) {
++                entity = new EntityPolarBear(world);
++            } else if (Vex.class.isAssignableFrom(param2)) {
++                entity = new EntityVex(world);
++            } else if (Illager.class.isAssignableFrom(param2)) {
++                if (Spellcaster.class.isAssignableFrom(param2)) {
++                    if (Evoker.class.isAssignableFrom(param2)) {
++                        entity = new EntityEvoker(world);
++                    } else if (Illusioner.class.isAssignableFrom(param2)) {
++                        entity = new EntityIllusionIllager(world);
++                    }
++                } else if (Vindicator.class.isAssignableFrom(param2)) {
++                    entity = new EntityVindicator(world);
++                }
++            }
++
++            if (entity != null) {
++                entity.setPositionAndRotation(x, y, z, yaw, pitch);
++            }
++        } else if (Hanging.class.isAssignableFrom(param2)) {
++            Block block = getBlockAt(param1);
++            BlockFace face = BlockFace.SELF;
++
++            int width = 16; // 1 full block, also painting smallest size.
++            int height = 16; // 1 full block, also painting smallest size.
++
++            if (ItemFrame.class.isAssignableFrom(param2)) {
++                width = 12;
++                height = 12;
++            } else if (LeashHitch.class.isAssignableFrom(param2)) {
++                width = 9;
++                height = 9;
++            }
++
++            BlockFace[] faces = new BlockFace[]{BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
++            final BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
++            for (BlockFace dir : faces) {
++                net.minecraft.block.Block nmsBlock = CraftMagicNumbers.getBlock(block.getRelative(dir));
++                if (nmsBlock.getDefaultState().getMaterial().isSolid() || BlockRedstoneDiode.isDiode(nmsBlock.getDefaultState())) {
++                    boolean taken = false;
++                    AxisAlignedBB bb = EntityHanging.calculateBoundingBox(null, pos, CraftBlock.blockFaceToNotch(dir).getOpposite(), width, height);
++                    List<net.minecraft.entity.Entity> list = (List<net.minecraft.entity.Entity>) world.getEntitiesWithinAABBExcludingEntity(null, bb);
++                    for (Iterator<net.minecraft.entity.Entity> it = list.iterator(); !taken && it.hasNext();) {
++                        net.minecraft.entity.Entity e = it.next();
++                        if (e instanceof EntityHanging) {
++                            taken = true; // Hanging entities do not like hanging entities which intersect them.
++                        }
++                    }
++
++                    if (!taken) {
++                        face = dir;
++                        break;
++                    }
++                }
++            }
++
++            if (LeashHitch.class.isAssignableFrom(param2)) {
++                entity = new EntityLeashKnot(world, new BlockPos((int) x, (int) y, (int) z));
++                entity.forceSpawn = true;
++            } else {
++                // No valid face found
++                Preconditions.checkArgument(face != BlockFace.SELF, "Cannot spawn hanging entity for %s at %s (no free face)", param2.getName(), param1);
++
++                EnumFacing dir = CraftBlock.blockFaceToNotch(face).getOpposite();
++                if (Painting.class.isAssignableFrom(param2)) {
++                    entity = new EntityPainting(world, new BlockPos((int) x, (int) y, (int) z), dir);
++                } else if (ItemFrame.class.isAssignableFrom(param2)) {
++                    entity = new EntityItemFrame(world, new BlockPos((int) x, (int) y, (int) z), dir);
++                }
++            }
++
++            if (entity != null && !((EntityHanging) entity).onValidSurface()) {
++                throw new IllegalArgumentException("Cannot spawn hanging entity for " + param2.getName() + " at " + param1);
++            }
++        } else if (TNTPrimed.class.isAssignableFrom(param2)) {
++            entity = new EntityTNTPrimed(world, x, y, z, null);
++        } else if (ExperienceOrb.class.isAssignableFrom(param2)) {
++            entity = new EntityXPOrb(world, x, y, z, 0);
++        } else if (Weather.class.isAssignableFrom(param2)) {
++            // not sure what this can do
++            if (LightningStrike.class.isAssignableFrom(param2)) {
++                entity = new EntityLightningBolt(world, x, y, z, false);
++                // what is this, I don't even
++            }
++        } else if (Firework.class.isAssignableFrom(param2)) {
++            entity = new EntityFireworkRocket(world, x, y, z, net.minecraft.item.ItemStack.EMPTY);
++        } else if (AreaEffectCloud.class.isAssignableFrom(param2)) {
++            entity = new EntityAreaEffectCloud(world, x, y, z);
++        } else if (EvokerFangs.class.isAssignableFrom(param2)) {
++            entity = new EntityEvokerFangs(world, x, y, z, (float) Math.toRadians(yaw), 0, null);
++        }
++
++        if (entity != null) {
++            // Spigot start
++            if (entity instanceof EntityOcelot)
++            {
++                ( (EntityOcelot) entity ).spawnBonus = false;
++            }
++            // Spigot end
++            return entity;
++        }
++
++        throw new IllegalArgumentException("Cannot spawn an entity for " + param2.getName());
+     }
++    // Paper end
+ 
+     public <T extends Entity> T addEntity(net.minecraft.entity.Entity entity, SpawnReason reason) throws IllegalArgumentException {
+         return (T)this.addEntity(entity, reason, (Consumer)null);
+@@ -997,7 +1291,7 @@ public class CraftWorld implements World {
+         }
+ 
+         if (function != null) {
+-            function.accept(entity.getBukkitEntity());
++            function.accept((T) entity.getBukkitEntity());
+         }
+ 
+         this.world.addEntity(entity, reason);
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
+index 5dcf699..4f38b07 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
+@@ -24,7 +24,7 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
+ 
+     public CraftBlockEntityState(Material material, T tileEntity) {
+         super(material);
+-        this.tileEntityClass = tileEntity.getClass();
++        this.tileEntityClass = (Class<T>) tileEntity.getClass();
+         this.tileEntity = tileEntity;
+         this.snapshot = this.createSnapshot(tileEntity);
+         this.load(this.snapshot);
+@@ -35,7 +35,7 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
+             return (T)null;
+         } else {
+             NBTTagCompound nbtTagCompound = tileEntity.writeToNBT(new NBTTagCompound());
+-            T snapshot = TileEntity.create((World)null, nbtTagCompound);
++            T snapshot = (T) TileEntity.create((World)null, nbtTagCompound);
+             return snapshot;
+         }
+     }
+@@ -88,7 +88,7 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
+             TileEntity tile = this.getTileEntityFromWorld();
+ 
+             if (this.isApplicable(tile)) {
+-                this.applyTo((TileEntity)this.tileEntityClass.cast(tile));
++                this.applyTo(this.tileEntityClass.cast(tile));
+                 tile.markDirty();
+             }
+         }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
+index 8bda108..fd849da 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
+@@ -12,7 +12,7 @@ import org.bukkit.entity.Arrow.Spigot;
+ import org.bukkit.projectiles.ProjectileSource;
+ 
+ public class CraftArrow extends AbstractProjectile implements Arrow {
+-    private final Spigot spigot = new Spigot() {
++    private final Arrow.Spigot spigot = new Arrow.Spigot() {
+         public double getDamage() {
+             return CraftArrow.this.getHandle().getDamage();
+         }
+@@ -87,7 +87,7 @@ public class CraftArrow extends AbstractProjectile implements Arrow {
+         this.getHandle().shootingEntity = ((CraftLivingEntity)shooter).getHandle();
+     }
+ 
+-    public Spigot spigot() {
++    public Arrow.Spigot spigot() {
+         return this.spigot;
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java
+index c13b33d..19bb86e 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java
+@@ -24,11 +24,11 @@ public class CraftEvoker extends CraftSpellcaster implements Evoker {
+         return EntityType.EVOKER;
+     }
+ 
+-    public Spell getCurrentSpell() {
+-        return Spell.values()[this.getHandle().getSpellType().ordinal()];
++    public Evoker.Spell getCurrentSpell() {
++        return Evoker.Spell.values()[this.getHandle().getSpellType().ordinal()];
+     }
+ 
+-    public void setCurrentSpell(Spell spell) {
++    public void setCurrentSpell(Evoker.Spell spell) {
+         this.getHandle().setSpellType(spell == null ? EntitySpellcasterIllager.SpellType.NONE : EntitySpellcasterIllager.SpellType.getFromId(spell.ordinal()));
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java
+index f7f0505..4de9660 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java
+@@ -7,7 +7,7 @@ import org.bukkit.entity.LightningStrike;
+ import org.bukkit.entity.LightningStrike.Spigot;
+ 
+ public class CraftLightningStrike extends CraftEntity implements LightningStrike {
+-    private final Spigot spigot = new Spigot() {
++    private final LightningStrike.Spigot spigot = new LightningStrike.Spigot() {
+         public boolean isSilent() {
+             return CraftLightningStrike.this.getHandle().isSilent;
+         }
+@@ -33,7 +33,7 @@ public class CraftLightningStrike extends CraftEntity implements LightningStrike
+         return EntityType.LIGHTNING;
+     }
+ 
+-    public Spigot spigot() {
++    public LightningStrike.Spigot spigot() {
+         return this.spigot;
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index fa076bf..1d45049 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -130,7 +130,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     private double health = 20.0D;
+     private boolean scaledHealth = false;
+     private double healthScale = 20.0D;
+-    private final Spigot spigot = new Spigot() {
++    private final Player.Spigot spigot = new Player.Spigot() { // Paper - Decompile fix
+         public InetSocketAddress getRawAddress() {
+             return (InetSocketAddress)CraftPlayer.this.getHandle().connection.netManager.getRawAddress();
+         }
+@@ -1439,7 +1439,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         return this.getHandle().language;
+     }
+ 
+-    public Spigot spigot() {
++    public Player.Spigot spigot() { // Paper - Decompile fix
+         return this.spigot;
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
+index cc0552a..5c784b3 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
+@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
+ 
+ public final class CraftItemFactory implements ItemFactory {
+     static final Color DEFAULT_LEATHER_COLOR = Color.fromRGB(10511680);
+-    static final Collection<String> KNOWN_NBT_ATTRIBUTE_NAMES = ImmutableSet.builder().add("generic.armor").add("generic.armorToughness").add("generic.attackDamage").add("generic.followRange").add("generic.knockbackResistance").add("generic.maxHealth").add("generic.movementSpeed").add("generic.flyingSpeed").add("generic.attackSpeed").add("generic.luck").add("horse.jumpStrength").add("zombie.spawnReinforcements").build();
++    static final Collection<String> KNOWN_NBT_ATTRIBUTE_NAMES = ImmutableSet.<String>builder().add("generic.armor").add("generic.armorToughness").add("generic.attackDamage").add("generic.followRange").add("generic.knockbackResistance").add("generic.maxHealth").add("generic.movementSpeed").add("generic.flyingSpeed").add("generic.attackSpeed").add("generic.luck").add("horse.jumpStrength").add("zombie.spawnReinforcements").build();
+     private static final CraftItemFactory instance = new CraftItemFactory();
+ 
+     public boolean isApplicable(ItemMeta meta, ItemStack itemstack) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
+index 9cb05cc..e406e7f 100644
+--- a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
++++ b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
+@@ -10,9 +10,9 @@ import org.bukkit.potion.PotionEffectType;
+ import org.bukkit.potion.PotionType;
+ 
+ public class CraftPotionUtil {
+-    private static final BiMap<PotionType, String> regular = ImmutableBiMap.builder().put(PotionType.UNCRAFTABLE, "empty").put(PotionType.WATER, "water").put(PotionType.MUNDANE, "mundane").put(PotionType.THICK, "thick").put(PotionType.AWKWARD, "awkward").put(PotionType.NIGHT_VISION, "night_vision").put(PotionType.INVISIBILITY, "invisibility").put(PotionType.JUMP, "leaping").put(PotionType.FIRE_RESISTANCE, "fire_resistance").put(PotionType.SPEED, "swiftness").put(PotionType.SLOWNESS, "slowness").put(PotionType.WATER_BREATHING, "water_breathing").put(PotionType.INSTANT_HEAL, "healing").put(PotionType.INSTANT_DAMAGE, "harming").put(PotionType.POISON, "poison").put(PotionType.REGEN, "regeneration").put(PotionType.STRENGTH, "strength").put(PotionType.WEAKNESS, "weakness").put(PotionType.LUCK, "luck").build();
+-    private static final BiMap<PotionType, String> upgradeable = ImmutableBiMap.builder().put(PotionType.JUMP, "strong_leaping").put(PotionType.SPEED, "strong_swiftness").put(PotionType.INSTANT_HEAL, "strong_healing").put(PotionType.INSTANT_DAMAGE, "strong_harming").put(PotionType.POISON, "strong_poison").put(PotionType.REGEN, "strong_regeneration").put(PotionType.STRENGTH, "strong_strength").build();
+-    private static final BiMap<PotionType, String> extendable = ImmutableBiMap.builder().put(PotionType.NIGHT_VISION, "long_night_vision").put(PotionType.INVISIBILITY, "long_invisibility").put(PotionType.JUMP, "long_leaping").put(PotionType.FIRE_RESISTANCE, "long_fire_resistance").put(PotionType.SPEED, "long_swiftness").put(PotionType.SLOWNESS, "long_slowness").put(PotionType.WATER_BREATHING, "long_water_breathing").put(PotionType.POISON, "long_poison").put(PotionType.REGEN, "long_regeneration").put(PotionType.STRENGTH, "long_strength").put(PotionType.WEAKNESS, "long_weakness").build();
++    private static final BiMap<PotionType, String> regular = ImmutableBiMap.<PotionType, String>builder().put(PotionType.UNCRAFTABLE, "empty").put(PotionType.WATER, "water").put(PotionType.MUNDANE, "mundane").put(PotionType.THICK, "thick").put(PotionType.AWKWARD, "awkward").put(PotionType.NIGHT_VISION, "night_vision").put(PotionType.INVISIBILITY, "invisibility").put(PotionType.JUMP, "leaping").put(PotionType.FIRE_RESISTANCE, "fire_resistance").put(PotionType.SPEED, "swiftness").put(PotionType.SLOWNESS, "slowness").put(PotionType.WATER_BREATHING, "water_breathing").put(PotionType.INSTANT_HEAL, "healing").put(PotionType.INSTANT_DAMAGE, "harming").put(PotionType.POISON, "poison").put(PotionType.REGEN, "regeneration").put(PotionType.STRENGTH, "strength").put(PotionType.WEAKNESS, "weakness").put(PotionType.LUCK, "luck").build();
++    private static final BiMap<PotionType, String> upgradeable = ImmutableBiMap.<PotionType, String>builder().put(PotionType.JUMP, "strong_leaping").put(PotionType.SPEED, "strong_swiftness").put(PotionType.INSTANT_HEAL, "strong_healing").put(PotionType.INSTANT_DAMAGE, "strong_harming").put(PotionType.POISON, "strong_poison").put(PotionType.REGEN, "strong_regeneration").put(PotionType.STRENGTH, "strong_strength").build();
++    private static final BiMap<PotionType, String> extendable = ImmutableBiMap.<PotionType, String>builder().put(PotionType.NIGHT_VISION, "long_night_vision").put(PotionType.INVISIBILITY, "long_invisibility").put(PotionType.JUMP, "long_leaping").put(PotionType.FIRE_RESISTANCE, "long_fire_resistance").put(PotionType.SPEED, "long_swiftness").put(PotionType.SLOWNESS, "long_slowness").put(PotionType.WATER_BREATHING, "long_water_breathing").put(PotionType.POISON, "long_poison").put(PotionType.REGEN, "long_regeneration").put(PotionType.STRENGTH, "long_strength").put(PotionType.WEAKNESS, "long_weakness").build();
+ 
+     public static String fromBukkit(PotionData data) {
+         String type;
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java b/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
+index 7c56806..9236fdc 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/AsynchronousExecutor.java
+@@ -223,7 +223,7 @@ public final class AsynchronousExecutor<P, T, C, E extends Throwable> {
+             this.initSync();
+ 
+             if (this.callbacks.isEmpty()) {
+-                this.callbacks.add(this);
++                this.callbacks.add((C) this);
+             }
+ 
+             this.finish();
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java b/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java
+index 1677ded..c90dc1b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/LongObjectHashMap.java
+@@ -114,7 +114,7 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
+             this.keys[index] = var10 = Arrays.copyOf(innerKeys, i << 1);
+             Arrays.fill(var10, i, var10.length, Long.MIN_VALUE);
+             Object[] var12;
+-            this.values[index] = var12 = Arrays.copyOf(innerValues, i << 1);
++            this.values[index] = (V[]) (var12 = Arrays.copyOf(innerValues, i << 1));
+             var10[i] = key;
+             var12[i] = value;
+             ++this.size;
+@@ -155,7 +155,7 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
+ 
+     public void putAll(Map <? extends Long, ? extends V > map) {
+         for (java.util.Map.Entry entry : map.entrySet()) {
+-            this.put(((Long)entry.getKey()).longValue(), entry.getValue());
++            this.put(((Long)entry.getKey()).longValue(), (V) entry.getValue());
+         }
+     }
+ 
+@@ -329,7 +329,7 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
+         }
+ 
+         public boolean contains(Object value) {
+-            return LongObjectHashMap.this.containsValue(value);
++            return LongObjectHashMap.this.containsValue((V) value);
+         }
+ 
+         public Iterator<V> iterator() {
+diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
+index 09e56e3..4128c9e 100644
+--- a/src/main/java/org/spigotmc/ActivationRange.java
++++ b/src/main/java/org/spigotmc/ActivationRange.java
+@@ -80,7 +80,7 @@ public class ActivationRange {
+     }
+ 
+     private static void activateChunkEntities(Chunk chunk) {
+-        List[] var1 = chunk.entityLists;
++        List<Entity>[] var1 = chunk.entityLists;
+         int var2 = var1.length;
+ 
+         for (int var3 = 0; var3 < var2; ++var3) {
+-- 
+2.14.1.windows.1
+

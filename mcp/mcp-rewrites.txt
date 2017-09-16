@@ -15,6 +15,7 @@
 field_71305_c,mcpWorlds # worlds
 field_82862_h,mcpPlayer # player
 field_82855_n,mcpPlayer # player
+field_192390_i,mcpPlayer # player
 
 # Methods
 
@@ -27,3 +28,7 @@ func_152688_e,getMcpValues # getValues
 p_180679_2_,mcpPos # pos
 p_180673_2_,mcpPos # pos
 p_184881_2_,mcpSender # sender
+p_194145_2_,mcpSender # sender
+p_186019_2_,mcpData # data
+p_184795_1_,mcpPlayer # player
+p_75752_1_, mcpPlayer # player
