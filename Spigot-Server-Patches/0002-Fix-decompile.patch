@@ -1,4 +1,4 @@
-From 82bd0592f8944dabb0969e4f59f4d08d9de8e219 Mon Sep 17 00:00:00 2001
+From bcb3c7f3fd4cc138c1d5f17451ba7b1de412fe0e Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -45,7 +45,7 @@ index 5903ff7..b1eeeab 100644
  
          while (var4.hasNext()) {
 diff --git a/src/main/java/net/minecraft/advancements/PlayerAdvancements.java b/src/main/java/net/minecraft/advancements/PlayerAdvancements.java
-index 1a80e62..e5bba9a 100644
+index 98fe8ac..318ffd4 100644
 --- a/src/main/java/net/minecraft/advancements/PlayerAdvancements.java
 +++ b/src/main/java/net/minecraft/advancements/PlayerAdvancements.java
 @@ -86,7 +86,7 @@ public class PlayerAdvancements {
@@ -67,10 +67,10 @@ index 1a80e62..e5bba9a 100644
  
                      if (advancement == null) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/BredAnimalsTrigger.java b/src/main/java/net/minecraft/advancements/critereon/BredAnimalsTrigger.java
-index f90ad31..ee7ed62 100644
+index ca84106..b3d6f69 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/BredAnimalsTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/BredAnimalsTrigger.java
-@@ -107,7 +107,7 @@ public class BredAnimalsTrigger implements ICriterionTrigger<BredAnimalsTrigger.
+@@ -110,7 +110,7 @@ public class BredAnimalsTrigger implements ICriterionTrigger<BredAnimalsTrigger.
          }
  
          public void trigger(EntityPlayerMP player, EntityAnimal parent1, EntityAnimal parent2, EntityAgeable child) {
@@ -80,10 +80,10 @@ index f90ad31..ee7ed62 100644
              for (ICriterionTrigger.Listener var7 : this.listeners) {
                  if (((BredAnimalsTrigger.Instance)var7.getCriterionInstance()).test(player, parent1, parent2, child)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/BrewedPotionTrigger.java b/src/main/java/net/minecraft/advancements/critereon/BrewedPotionTrigger.java
-index 24e1e3e..b0b2b75 100644
+index 0f0f352..4e4e6d3 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/BrewedPotionTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/BrewedPotionTrigger.java
-@@ -110,7 +110,7 @@ public class BrewedPotionTrigger implements ICriterionTrigger<BrewedPotionTrigge
+@@ -113,7 +113,7 @@ public class BrewedPotionTrigger implements ICriterionTrigger<BrewedPotionTrigge
          }
  
          public void trigger(PotionType potion) {
@@ -93,10 +93,10 @@ index 24e1e3e..b0b2b75 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((BrewedPotionTrigger.Instance)var4.getCriterionInstance()).test(potion)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java
-index 02f1cb1..450bf21 100644
+index 6be5545..43f42ce 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java
-@@ -107,7 +107,7 @@ public class ChangeDimensionTrigger implements ICriterionTrigger<ChangeDimension
+@@ -110,7 +110,7 @@ public class ChangeDimensionTrigger implements ICriterionTrigger<ChangeDimension
          }
  
          public void trigger(DimensionType from, DimensionType to) {
@@ -106,10 +106,10 @@ index 02f1cb1..450bf21 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((ChangeDimensionTrigger.Instance)var5.getCriterionInstance()).test(from, to)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java
-index 0fa9678..de49f79 100644
+index aa09106..22ff617 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java
-@@ -96,7 +96,7 @@ public class ConstructBeaconTrigger implements ICriterionTrigger<ConstructBeacon
+@@ -99,7 +99,7 @@ public class ConstructBeaconTrigger implements ICriterionTrigger<ConstructBeacon
          }
  
          public void trigger(TileEntityBeacon beacon) {
@@ -119,10 +119,10 @@ index 0fa9678..de49f79 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((ConstructBeaconTrigger.Instance)var4.getCriterionInstance()).test(beacon)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/ConsumeItemTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ConsumeItemTrigger.java
-index 656beb3..95e2e6f 100644
+index dbd74d8..58aef23 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/ConsumeItemTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/ConsumeItemTrigger.java
-@@ -96,7 +96,7 @@ public class ConsumeItemTrigger implements ICriterionTrigger<ConsumeItemTrigger.
+@@ -99,7 +99,7 @@ public class ConsumeItemTrigger implements ICriterionTrigger<ConsumeItemTrigger.
          }
  
          public void trigger(ItemStack item) {
@@ -132,10 +132,10 @@ index 656beb3..95e2e6f 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((ConsumeItemTrigger.Instance)var4.getCriterionInstance()).test(item)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java b/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java
-index e0deb83..4b2074f 100644
+index 605da83..cb4a000 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java
-@@ -104,7 +104,7 @@ public class CuredZombieVillagerTrigger implements ICriterionTrigger<CuredZombie
+@@ -107,7 +107,7 @@ public class CuredZombieVillagerTrigger implements ICriterionTrigger<CuredZombie
          }
  
          public void trigger(EntityPlayerMP player, EntityZombie zombie, EntityVillager villager) {
@@ -145,10 +145,10 @@ index e0deb83..4b2074f 100644
              for (ICriterionTrigger.Listener var6 : this.listeners) {
                  if (((CuredZombieVillagerTrigger.Instance)var6.getCriterionInstance()).test(player, zombie, villager)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java
-index ecb2312..fc2a188 100644
+index ed4e212..7240fc7 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java
-@@ -95,7 +95,7 @@ public class EffectsChangedTrigger implements ICriterionTrigger<EffectsChangedTr
+@@ -98,7 +98,7 @@ public class EffectsChangedTrigger implements ICriterionTrigger<EffectsChangedTr
          }
  
          public void trigger(EntityPlayerMP player) {
@@ -158,10 +158,10 @@ index ecb2312..fc2a188 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((EffectsChangedTrigger.Instance)var4.getCriterionInstance()).test(player)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java
-index e7a9655..c801fe3 100644
+index f8731c6..336541e 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java
-@@ -103,7 +103,7 @@ public class EnchantedItemTrigger implements ICriterionTrigger<EnchantedItemTrig
+@@ -106,7 +106,7 @@ public class EnchantedItemTrigger implements ICriterionTrigger<EnchantedItemTrig
          }
  
          public void trigger(ItemStack item, int levelsIn) {
@@ -171,10 +171,10 @@ index e7a9655..c801fe3 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((EnchantedItemTrigger.Instance)var5.getCriterionInstance()).test(item, levelsIn)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java
-index 43ffd89..2e6f737 100644
+index 68f5c4f..a3d87ce 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java
-@@ -162,7 +162,7 @@ public class EnterBlockTrigger implements ICriterionTrigger<EnterBlockTrigger.In
+@@ -165,7 +165,7 @@ public class EnterBlockTrigger implements ICriterionTrigger<EnterBlockTrigger.In
          }
  
          public void trigger(IBlockState state) {
@@ -184,10 +184,10 @@ index 43ffd89..2e6f737 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((EnterBlockTrigger.Instance)var4.getCriterionInstance()).test(state)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java
-index 62f847e..8056ca0 100644
+index 13e730d..cbdffe0 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java
-@@ -96,7 +96,7 @@ public class EntityHurtPlayerTrigger implements ICriterionTrigger<EntityHurtPlay
+@@ -99,7 +99,7 @@ public class EntityHurtPlayerTrigger implements ICriterionTrigger<EntityHurtPlay
          }
  
          public void trigger(EntityPlayerMP player, DamageSource source, float amountDealt, float amountTaken, boolean wasBlocked) {
@@ -197,10 +197,10 @@ index 62f847e..8056ca0 100644
              for (ICriterionTrigger.Listener var8 : this.listeners) {
                  if (((EntityHurtPlayerTrigger.Instance)var8.getCriterionInstance()).test(player, source, amountDealt, amountTaken, wasBlocked)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java b/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java
-index 403c460..9683739 100644
+index ab7950a..10ec573 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java
-@@ -148,7 +148,7 @@ public class InventoryChangeTrigger implements ICriterionTrigger<InventoryChange
+@@ -151,7 +151,7 @@ public class InventoryChangeTrigger implements ICriterionTrigger<InventoryChange
          }
  
          public void trigger(InventoryPlayer inventory) {
@@ -210,10 +210,10 @@ index 403c460..9683739 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((InventoryChangeTrigger.Instance)var4.getCriterionInstance()).test(inventory)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java
-index e451235..06e355b 100644
+index 2b8f5f2..813cd61 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java
-@@ -108,7 +108,7 @@ public class ItemDurabilityTrigger implements ICriterionTrigger<ItemDurabilityTr
+@@ -111,7 +111,7 @@ public class ItemDurabilityTrigger implements ICriterionTrigger<ItemDurabilityTr
          }
  
          public void trigger(ItemStack item, int newDurability) {
@@ -223,10 +223,10 @@ index e451235..06e355b 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((ItemDurabilityTrigger.Instance)var5.getCriterionInstance()).test(item, newDurability)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java b/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java
-index 0c04d58..7b76878 100644
+index 0acb929..7c5b10a 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java
-@@ -102,7 +102,7 @@ public class KilledTrigger implements ICriterionTrigger<KilledTrigger.Instance>
+@@ -105,7 +105,7 @@ public class KilledTrigger implements ICriterionTrigger<KilledTrigger.Instance>
          }
  
          public void trigger(EntityPlayerMP player, Entity entity, DamageSource source) {
@@ -236,10 +236,10 @@ index 0c04d58..7b76878 100644
              for (ICriterionTrigger.Listener var6 : this.listeners) {
                  if (((KilledTrigger.Instance)var6.getCriterionInstance()).test(player, entity, source)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java b/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java
-index 8323bc3..390b6d6 100644
+index 9a82787..c15d1bf 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java
-@@ -103,7 +103,7 @@ public class LevitationTrigger implements ICriterionTrigger<LevitationTrigger.In
+@@ -106,7 +106,7 @@ public class LevitationTrigger implements ICriterionTrigger<LevitationTrigger.In
          }
  
          public void trigger(EntityPlayerMP player, Vec3d startPos, int durationIn) {
@@ -249,10 +249,10 @@ index 8323bc3..390b6d6 100644
              for (ICriterionTrigger.Listener var6 : this.listeners) {
                  if (((LevitationTrigger.Instance)var6.getCriterionInstance()).test(player, startPos, durationIn)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/NetherTravelTrigger.java b/src/main/java/net/minecraft/advancements/critereon/NetherTravelTrigger.java
-index c3cbfdb..5763277 100644
+index 2640f41..5f4a5c2 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/NetherTravelTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/NetherTravelTrigger.java
-@@ -109,7 +109,7 @@ public class NetherTravelTrigger implements ICriterionTrigger<NetherTravelTrigge
+@@ -112,7 +112,7 @@ public class NetherTravelTrigger implements ICriterionTrigger<NetherTravelTrigge
          }
  
          public void trigger(WorldServer world, Vec3d enteredNetherPosition, double x, double y, double z) {
@@ -262,10 +262,10 @@ index c3cbfdb..5763277 100644
              for (ICriterionTrigger.Listener var11 : this.listeners) {
                  if (((NetherTravelTrigger.Instance)var11.getCriterionInstance()).test(world, enteredNetherPosition, x, y, z)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java b/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java
-index f9df081..909e05a 100644
+index c619e9a..43b5fd5 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java
-@@ -176,7 +176,7 @@ public class PlacedBlockTrigger implements ICriterionTrigger<PlacedBlockTrigger.
+@@ -179,7 +179,7 @@ public class PlacedBlockTrigger implements ICriterionTrigger<PlacedBlockTrigger.
          }
  
          public void trigger(IBlockState state, BlockPos pos, WorldServer world, ItemStack item) {
@@ -275,10 +275,10 @@ index f9df081..909e05a 100644
              for (ICriterionTrigger.Listener var7 : this.listeners) {
                  if (((PlacedBlockTrigger.Instance)var7.getCriterionInstance()).test(state, pos, world, item)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java b/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java
-index c8dfaee..b197678 100644
+index 31e2569..6e8234b 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java
-@@ -104,7 +104,7 @@ public class PlayerHurtEntityTrigger implements ICriterionTrigger<PlayerHurtEnti
+@@ -107,7 +107,7 @@ public class PlayerHurtEntityTrigger implements ICriterionTrigger<PlayerHurtEnti
          }
  
          public void trigger(EntityPlayerMP player, Entity entity, DamageSource source, float dealt, float taken, boolean blocked) {
@@ -288,10 +288,10 @@ index c8dfaee..b197678 100644
              for (ICriterionTrigger.Listener var9 : this.listeners) {
                  if (((PlayerHurtEntityTrigger.Instance)var9.getCriterionInstance()).test(player, entity, source, dealt, taken, blocked)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java b/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java
-index 3649897..8368d4b 100644
+index 6ad0c23..985f301 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java
-@@ -100,7 +100,7 @@ public class PositionTrigger implements ICriterionTrigger<PositionTrigger.Instan
+@@ -103,7 +103,7 @@ public class PositionTrigger implements ICriterionTrigger<PositionTrigger.Instan
          }
  
          public void trigger(WorldServer world, double x, double y, double z) {
@@ -300,11 +300,24 @@ index 3649897..8368d4b 100644
  
              for (ICriterionTrigger.Listener var10 : this.listeners) {
                  if (((PositionTrigger.Instance)var10.getCriterionInstance()).test(world, x, y, z)) {
+diff --git a/src/main/java/net/minecraft/advancements/critereon/RecipeUnlockedTrigger.java b/src/main/java/net/minecraft/advancements/critereon/RecipeUnlockedTrigger.java
+index f284ca8..ccf88a7 100644
+--- a/src/main/java/net/minecraft/advancements/critereon/RecipeUnlockedTrigger.java
++++ b/src/main/java/net/minecraft/advancements/critereon/RecipeUnlockedTrigger.java
+@@ -108,7 +108,7 @@ public class RecipeUnlockedTrigger implements ICriterionTrigger<RecipeUnlockedTr
+         }
+ 
+         public void trigger(IRecipe recipe) {
+-            ArrayList var2 = null;
++            ArrayList<Listener> var2 = null;
+ 
+             for (ICriterionTrigger.Listener var4 : this.listeners) {
+                 if (((RecipeUnlockedTrigger.Instance)var4.getCriterionInstance()).test(recipe)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java b/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java
-index fd9c6c4..219287d 100644
+index 8362ebf..b60285d 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java
-@@ -96,7 +96,7 @@ public class SummonedEntityTrigger implements ICriterionTrigger<SummonedEntityTr
+@@ -99,7 +99,7 @@ public class SummonedEntityTrigger implements ICriterionTrigger<SummonedEntityTr
          }
  
          public void trigger(EntityPlayerMP player, Entity entity) {
@@ -314,10 +327,10 @@ index fd9c6c4..219287d 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((SummonedEntityTrigger.Instance)var5.getCriterionInstance()).test(player, entity)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java b/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java
-index 0a99e56..9b41c56 100644
+index e752ea5..74f97f5 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java
-@@ -96,7 +96,7 @@ public class TameAnimalTrigger implements ICriterionTrigger<TameAnimalTrigger.In
+@@ -99,7 +99,7 @@ public class TameAnimalTrigger implements ICriterionTrigger<TameAnimalTrigger.In
          }
  
          public void trigger(EntityPlayerMP player, EntityAnimal entity) {
@@ -327,10 +340,10 @@ index 0a99e56..9b41c56 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((TameAnimalTrigger.Instance)var5.getCriterionInstance()).test(player, entity)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/UsedEnderEyeTrigger.java b/src/main/java/net/minecraft/advancements/critereon/UsedEnderEyeTrigger.java
-index 99bbe54..79f9920 100644
+index feb5883..c396f9c 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/UsedEnderEyeTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/UsedEnderEyeTrigger.java
-@@ -98,7 +98,7 @@ public class UsedEnderEyeTrigger implements ICriterionTrigger<UsedEnderEyeTrigge
+@@ -101,7 +101,7 @@ public class UsedEnderEyeTrigger implements ICriterionTrigger<UsedEnderEyeTrigge
          }
  
          public void trigger(double distanceSq) {
@@ -340,10 +353,10 @@ index 99bbe54..79f9920 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((UsedEnderEyeTrigger.Instance)var5.getCriterionInstance()).test(distanceSq)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java b/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java
-index 9582236..c13498a 100644
+index 5f57691..b566159 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java
-@@ -96,7 +96,7 @@ public class UsedTotemTrigger implements ICriterionTrigger<UsedTotemTrigger.Inst
+@@ -99,7 +99,7 @@ public class UsedTotemTrigger implements ICriterionTrigger<UsedTotemTrigger.Inst
          }
  
          public void trigger(ItemStack item) {
@@ -353,10 +366,10 @@ index 9582236..c13498a 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((UsedTotemTrigger.Instance)var4.getCriterionInstance()).test(item)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java b/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java
-index 7a9fa4a..7f82563 100644
+index f43ee11..b26595e 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java
-@@ -104,7 +104,7 @@ public class VillagerTradeTrigger implements ICriterionTrigger<VillagerTradeTrig
+@@ -107,7 +107,7 @@ public class VillagerTradeTrigger implements ICriterionTrigger<VillagerTradeTrig
          }
  
          public void trigger(EntityPlayerMP player, EntityVillager villager, ItemStack item) {
@@ -404,6 +417,21 @@ index 371f773..a7cf505 100644
          this.blocksNeedingUpdate.clear();
  
          for (BlockPos blockposition1 : arraylist) {
+diff --git a/src/main/java/net/minecraft/block/BlockSapling.java b/src/main/java/net/minecraft/block/BlockSapling.java
+index 3efaa40..de5b1f7 100644
+--- a/src/main/java/net/minecraft/block/BlockSapling.java
++++ b/src/main/java/net/minecraft/block/BlockSapling.java
+@@ -64,8 +64,8 @@ public class BlockSapling extends BlockBush implements IGrowable {
+                 worldIn.captureTreeGeneration = false;
+ 
+                 if (worldIn.capturedBlockStates.size() > 0) {
+-                    TreeType treeType = treeType;
+-                    treeType = null;
++                    TreeType treeType = BlockSapling.treeType;
++                    BlockSapling.treeType = null;
+                     Location location = new Location(worldIn.getWorld(), (double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
+                     List<BlockState> blocks = (List)worldIn.capturedBlockStates.clone();
+                     worldIn.capturedBlockStates.clear();
 diff --git a/src/main/java/net/minecraft/block/BlockSponge.java b/src/main/java/net/minecraft/block/BlockSponge.java
 index f5b0be8..a613983 100644
 --- a/src/main/java/net/minecraft/block/BlockSponge.java
@@ -1376,7 +1404,7 @@ index 92702fe..192daec 100644
                  var3.setOwner(this.shootingEntity);
                  var3.setParticle(EnumParticleTypes.DRAGON_BREATH);
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
-index a39acec..9b6889f 100644
+index 0f1fad7..fc87323 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
 @@ -263,7 +263,7 @@ public class EntityFishHook extends Entity {
@@ -2179,18 +2207,18 @@ index 225e653..f135fcc 100644
              for (StructureOceanMonumentPieces.RoomDefinition var37 : var2) {
                  if (var37 != null) {
 diff --git a/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java b/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
-index f13d670..6be56ef 100644
+index b338d74..3ecc3b6 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
 @@ -261,7 +261,7 @@ public class WoodlandMansionPieces {
          }
  
-         private void a(WoodlandMansionPieces.SimpleGrid var1, WoodlandMansionPieces.SimpleGrid var2) {
+         private void identifyRooms(WoodlandMansionPieces.SimpleGrid p_191116_1_, WoodlandMansionPieces.SimpleGrid p_191116_2_) {
 -            ArrayList var3 = Lists.newArrayList();
 +            ArrayList<Tuple> var3 = Lists.newArrayList();
  
-             for (int var4 = 0; var4 < var1.height; ++var4) {
-                 for (int var5 = 0; var5 < var1.width; ++var5) {
+             for (int var4 = 0; var4 < p_191116_1_.height; ++var4) {
+                 for (int var5 = 0; var5 < p_191116_1_.width; ++var5) {
 diff --git a/src/main/java/net/minecraft/world/gen/structure/template/Template.java b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
 index e5b0731..f014053 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/template/Template.java
@@ -2253,7 +2281,7 @@ index 487e9a1..e13c531 100644
          this.shuffleItems(var4, var5.size(), rand);
  
 diff --git a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java
-index 28d052a..7e83b34 100644
+index 469eca1..4edd23a 100644
 --- a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java
 +++ b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasProperty.java
 @@ -57,7 +57,7 @@ public class EntityHasProperty implements LootCondition {
@@ -2933,6 +2961,23 @@ index 09e56e3..4128c9e 100644
          int var2 = var1.length;
  
          for (int var3 = 0; var3 < var2; ++var3) {
+diff --git a/src/main/java/org/spigotmc/SneakyThrow.java b/src/main/java/org/spigotmc/SneakyThrow.java
+index a3e334c..674bb88 100644
+--- a/src/main/java/org/spigotmc/SneakyThrow.java
++++ b/src/main/java/org/spigotmc/SneakyThrow.java
+@@ -2,10 +2,10 @@ package org.spigotmc;
+ 
+ public class SneakyThrow {
+     public static void sneaky(Throwable t) {
+-        throw(RuntimeException)superSneaky(t);
++        throw SneakyThrow.<RuntimeException>superSneaky( t );
+     }
+ 
+     private static <T extends Throwable> T superSneaky(Throwable t) throws T {
+-        throw t;
++        throw (T) t;
+     }
+ }
 -- 
-2.14.1.windows.1
+2.14.1
 

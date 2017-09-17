@@ -1,4 +1,4 @@
-From cb98509e2681eca75afbe68eff4078953f7fa6e7 Mon Sep 17 00:00:00 2001
+From 791d849fe2b6826e11ea2df5f917cd940ebe0897 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 27 Nov 2016 08:01:04 -0600
 Subject: [PATCH] Setup Gradle config
@@ -15,7 +15,7 @@ index 0000000..ce8fb16
 +.cache
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
-index 0000000..0707ef0
+index 0000000..437579f
 --- /dev/null
 +++ b/build.gradle
 @@ -0,0 +1,52 @@
@@ -35,8 +35,8 @@ index 0000000..0707ef0
 +
 +
 +    // Minecraft deps
-+    compile "org.apache.logging.log4j:log4j-api:2.8.0"
-+    compile "org.apache.logging.log4j:log4j-core:2.8.0"
++    compile "org.apache.logging.log4j:log4j-api:2.8.2"
++    compile "org.apache.logging.log4j:log4j-core:2.8.2"
 +    compile "io.netty:netty-all:4.1.15.Final"
 +    compile "it.unimi.dsi:fastutil:7.1.0"
 +    compile "com.mojang:authlib:1.5.25"
@@ -80,5 +80,5 @@ index 0000000..5f7e198
 @@ -0,0 +1 @@
 +artifactId = paper
 -- 
-2.14.1.windows.1
+2.14.1
 
