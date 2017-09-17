@@ -1,14 +1,14 @@
-From e9368d218a580632c2ebb2e9dc19b299961730be Mon Sep 17 00:00:00 2001
+From 423c812267a14735dfee29f40c9d84707629191e Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sat, 16 Sep 2017 23:19:13 -0400
 Subject: [PATCH] Tag this as Paper-MCP
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 3121792..3d7ac70 100644
+index e9cec44..e76d003 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -457,7 +457,7 @@ public final class CraftServer implements Server {
+@@ -490,7 +490,7 @@ public final class CraftServer implements Server {
      }
  
      public String getName() {
