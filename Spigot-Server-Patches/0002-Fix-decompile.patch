@@ -1,4 +1,4 @@
-From fbeab0e5b86e54282b6af55e216b34eaf731feff Mon Sep 17 00:00:00 2001
+From c83ec3b2de82dd661ff077e30d373a1a2d729b51 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -635,7 +635,7 @@ index dff2a45..f7b94b2 100644
  
          for (ScoreObjective var5 : var2) {
 diff --git a/src/main/java/net/minecraft/command/EntitySelector.java b/src/main/java/net/minecraft/command/EntitySelector.java
-index d343306..12f7fa8 100644
+index d343306..e7bb3bf 100644
 --- a/src/main/java/net/minecraft/command/EntitySelector.java
 +++ b/src/main/java/net/minecraft/command/EntitySelector.java
 @@ -107,7 +107,7 @@ public class EntitySelector {
@@ -739,7 +739,7 @@ index d343306..12f7fa8 100644
          return (List<Predicate<Entity>>)
                  (var2.isEmpty()
                          ? Collections.emptyList()
-@@ -388,7 +390,7 @@ public class EntitySelector {
+@@ -388,18 +390,19 @@ public class EntitySelector {
  
      private static List<Predicate<Entity>> getNamePredicates(Map<String, String> params) {
          ArrayList var1 = Lists.newArrayList();
@@ -748,7 +748,20 @@ index d343306..12f7fa8 100644
          final boolean var3 = var2 != null && var2.startsWith("!");
  
          if (var3) {
-@@ -409,23 +411,24 @@ public class EntitySelector {
+             var2 = var2.substring(1);
+         }
+ 
++        final String s = var2;
+         if (var2 != null) {
+             var1.add(
+                     new Predicate<Entity>() {
+                         public boolean apply(@Nullable Entity var1) {
+-                            return var1 != null && var1.getName().equals(var2) != var3;
++                            return var1 != null && var1.getName().equals(s) != var3;
+                         }
+                     });
+         }
+@@ -409,23 +412,24 @@ public class EntitySelector {
  
      private static List<Predicate<Entity>> getTagPredicates(Map<String, String> params) {
          ArrayList var1 = Lists.newArrayList();
@@ -776,7 +789,7 @@ index d343306..12f7fa8 100644
                              }
                          }
                      });
-@@ -602,7 +605,7 @@ public class EntitySelector {
+@@ -602,7 +606,7 @@ public class EntitySelector {
                  && var6 == 1
                  && matchingEntities.contains(var7)
                  && !"r".equals(type)) {
@@ -1558,6 +1571,19 @@ index 62a7f3a..d369b8f 100644
  
          if (LOGGER.isDebugEnabled()) {
              ArrayList var3 = Lists.newArrayList(this.tagMap.keySet());
+diff --git a/src/main/java/net/minecraft/nbt/NBTUtil.java b/src/main/java/net/minecraft/nbt/NBTUtil.java
+index 559ef7c..932bad9 100644
+--- a/src/main/java/net/minecraft/nbt/NBTUtil.java
++++ b/src/main/java/net/minecraft/nbt/NBTUtil.java
+@@ -206,7 +206,7 @@ public final class NBTUtil {
+     }
+ 
+     private static <T extends Comparable<T>> IBlockState setValueHelper(
+-            IBlockState p_193590_0_, IProperty<T> p_193590_1_, String p_193590_2_, NBTTagCompound p_193590_3_, NBTTagCompound p_193590_4_) {
++            IBlockState p_193590_0_, IProperty p_193590_1_, String p_193590_2_, NBTTagCompound p_193590_3_, NBTTagCompound p_193590_4_) {
+         Optional var5 = p_193590_1_.parseValue(p_193590_3_.getString(p_193590_2_));
+ 
+         if (var5.isPresent()) {
 diff --git a/src/main/java/net/minecraft/network/EnumConnectionState.java b/src/main/java/net/minecraft/network/EnumConnectionState.java
 index b23ae9f..aae4dc6 100644
 --- a/src/main/java/net/minecraft/network/EnumConnectionState.java
@@ -2056,6 +2082,21 @@ index a813fb9..0294aae 100644
 +            // Paper - Decompile fix end
              int x = LongHash.msw(coord.longValue());
              int z = LongHash.lsw(coord.longValue());
+ 
+diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
+index 97387ab..a6dd88f 100644
+--- a/src/main/java/net/minecraft/world/WorldServer.java
++++ b/src/main/java/net/minecraft/world/WorldServer.java
+@@ -1510,10 +1510,6 @@ public class WorldServer extends World implements IThreadListener {
+         return this.functionManager;
+     }
+ 
+-    public IChunkProvider getChunkProvider() {
+-        return this.getChunkProvider();
+-    }
+-
+     static class ServerBlockEventList extends ArrayList<BlockEventData> {
+         private ServerBlockEventList() {}
  
 diff --git a/src/main/java/net/minecraft/world/WorldServerDemo.java b/src/main/java/net/minecraft/world/WorldServerDemo.java
 index 03e0f8e..f27d4c0 100644
@@ -2993,7 +3034,7 @@ index 877376f..2fca21e 100644
  
          for (int var3 = 0; var3 < var2; ++var3) {
 diff --git a/src/main/java/org/spigotmc/SneakyThrow.java b/src/main/java/org/spigotmc/SneakyThrow.java
-index 0c40ff9..e1fa851 100644
+index 0c40ff9..1931031 100644
 --- a/src/main/java/org/spigotmc/SneakyThrow.java
 +++ b/src/main/java/org/spigotmc/SneakyThrow.java
 @@ -2,10 +2,10 @@ package org.spigotmc;
@@ -3001,7 +3042,7 @@ index 0c40ff9..e1fa851 100644
  public class SneakyThrow {
      public static void sneaky(Throwable t) {
 -        throw (RuntimeException) superSneaky(t);
-+        throw SneakyThrow.superSneaky(t);
++        throw SneakyThrow.<RuntimeException>superSneaky(t);
      }
  
      private static <T extends Throwable> T superSneaky(Throwable t) throws T {
