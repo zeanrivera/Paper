@@ -8,10 +8,13 @@ buildscript {
         maven {
             url "http://files.minecraftforge.net/maven"
         }
+        maven {
+            url "https://repo.destroystokyo.com/repository/maven-snapshots/"
+        }
     }
 
     dependencies {
-        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:2.3.6"
+        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:2.3.7"
         classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
 }
