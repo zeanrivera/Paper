@@ -1,4 +1,4 @@
-From a56ea56b92246947e757994242a4f328a1897182 Mon Sep 17 00:00:00 2001
+From 5053acf85d47d712b5fd546882339290f2875b3c Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -1096,10 +1096,26 @@ index 3320be5..a9f17df 100644
          EntityAnimal entityanimal = null;
  
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
-index a0dea47..9d1f518 100644
+index a0dea47..5f064c3 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
-@@ -66,11 +66,11 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
+@@ -43,14 +43,7 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
+         this.targetChance = chance;
+         this.sorter = new EntityAINearestAttackableTarget.Sorter(creature);
+         this.setMutexBits(1);
+-        this.targetEntitySelector = new Predicate() {
+-            public boolean apply(@Nullable T t0) {
+-                return t0 == null ? false : (targetSelector != null && !targetSelector.apply(t0) ? false : (!EntitySelectors.NOT_SPECTATING.apply(t0) ? false : EntityAINearestAttackableTarget.this.isSuitableTarget(t0, false)));
+-            }
+-            public boolean apply(@Nullable Object object) {
+-                return this.apply((EntityLivingBase)object);
+-            }
+-        };
++        this.targetEntitySelector = t0 -> t0 == null ? false : (targetSelector != null && !targetSelector.apply(t0) ? false : (!EntitySelectors.NOT_SPECTATING.apply(t0) ? false : EntityAINearestAttackableTarget.this.isSuitableTarget(t0, false)));
+     }
+ 
+     /**
+@@ -66,11 +59,11 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
                  return false;
              } else {
                  Collections.sort(list, this.sorter);
@@ -1113,7 +1129,7 @@ index a0dea47..9d1f518 100644
                  @Nullable
                  public Double apply(@Nullable EntityPlayer entityhuman) {
                      ItemStack itemstack = entityhuman.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-@@ -92,7 +92,7 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
+@@ -92,7 +85,7 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
                  public Double __clashing_apply(@Nullable EntityPlayer object) {
                      return this.apply(object);
                  }
