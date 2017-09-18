@@ -3062,7 +3062,7 @@ index 4acd8d3..4552647 100644
 +                this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
              entityhuman.wakeUpPlayer(false, false, true);
          }
- 
+
 -- 
 2.14.1
 
