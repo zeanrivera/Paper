@@ -1,4 +1,4 @@
-version = "1.12.1-R01-SNAPSHOT"
+version = "1.12.2-R01-SNAPSHOT"
 
 repositories {
     mavenCentral()

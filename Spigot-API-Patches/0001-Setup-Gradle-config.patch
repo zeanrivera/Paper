@@ -1,4 +1,4 @@
-From b1e44ce3bbb55e483c04c736e267fb3bcddcad94 Mon Sep 17 00:00:00 2001
+From ec08f0e3571e41b891aad8066b72f92e7cbcfd1f Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 17:16:08 -0600
 Subject: [PATCH] Setup Gradle config
@@ -101,7 +101,7 @@ index 00000000..36e69a8a
 +artifactId = paper-api
 diff --git a/pom.xml b/pom.xml
 deleted file mode 100644
-index 31b8f93e..00000000
+index 98f2d67a..00000000
 --- a/pom.xml
 +++ /dev/null
 @@ -1,160 +0,0 @@
@@ -112,7 +112,7 @@ index 31b8f93e..00000000
 -
 -    <groupId>org.spigotmc</groupId>
 -    <artifactId>spigot-api</artifactId>
--    <version>1.12.1-R0.1-SNAPSHOT</version>
+-    <version>1.12.2-R0.1-SNAPSHOT</version>
 -    <packaging>jar</packaging>
 -
 -    <name>Spigot-API</name>
@@ -211,7 +211,7 @@ index 31b8f93e..00000000
 -            <plugin>
 -                <groupId>org.apache.maven.plugins</groupId>
 -                <artifactId>maven-compiler-plugin</artifactId>
--                <version>3.6.2</version>
+-                <version>3.7.0</version>
 -                <configuration>
 -                    <!-- we use the Eclipse compiler as it doesn't need a JDK -->
 -                    <compilerId>eclipse</compilerId>
@@ -228,7 +228,7 @@ index 31b8f93e..00000000
 -            <plugin>
 -                <groupId>org.codehaus.mojo</groupId>
 -                <artifactId>animal-sniffer-maven-plugin</artifactId>
--                <version>1.15</version>
+-                <version>1.16</version>
 -                <executions>
 -                    <execution>
 -                        <phase>process-classes</phase>
@@ -248,7 +248,7 @@ index 31b8f93e..00000000
 -            <plugin>
 -                <groupId>org.apache.maven.plugins</groupId>
 -                <artifactId>maven-shade-plugin</artifactId>
--                <version>3.0.0</version>
+-                <version>3.1.0</version>
 -                <executions>
 -                    <execution>
 -                        <phase>package</phase>
@@ -266,5 +266,5 @@ index 31b8f93e..00000000
 -    </build>
 -</project>
 -- 
-2.14.1.windows.1
+2.14.1
 

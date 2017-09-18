@@ -1,4 +1,4 @@
-From c83ec3b2de82dd661ff077e30d373a1a2d729b51 Mon Sep 17 00:00:00 2001
+From e58d6c4a67e07381aa2804ba37b2ff888ca2231c Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -879,7 +879,7 @@ index ed5b656..576ef0e 100644
  
          for (ScoreObjective var5 : var2) {
 diff --git a/src/main/java/net/minecraft/crash/CrashReport.java b/src/main/java/net/minecraft/crash/CrashReport.java
-index 3f1e73b..e36bc29 100644
+index a2e71b4..4db50e2 100644
 --- a/src/main/java/net/minecraft/crash/CrashReport.java
 +++ b/src/main/java/net/minecraft/crash/CrashReport.java
 @@ -113,7 +113,7 @@ public class CrashReport {
@@ -1026,7 +1026,7 @@ index 06fa0ed..43a4efa 100644
          if (collection != null && !collection.isEmpty()) {
              NBTTagList nbttaglist = new NBTTagList();
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java b/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
-index 1ee83d9..1b4c470 100644
+index ce94817..3b31017 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
 @@ -63,7 +63,7 @@ public class EntityAIAvoidEntity<T extends Entity> extends EntityAIBase {
@@ -1039,7 +1039,7 @@ index 1ee83d9..1b4c470 100644
                      RandomPositionGenerator.findRandomTargetBlockAwayFrom(
                              this.entity,
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
-index 58b59a7..7b134a4 100644
+index fedf026..75c783a 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
 @@ -40,7 +40,7 @@ public class EntityAIFollow extends EntityAIBase {
@@ -1052,7 +1052,7 @@ index 58b59a7..7b134a4 100644
                          EntityLiving.class, this.entity.getEntityBoundingBox().grow((double) this.areaSize), this.followPredicate);
  
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
-index 125f514..6eab67a 100644
+index 30799a3..8190acc 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
 @@ -21,7 +21,7 @@ public class EntityAIFollowGolem extends EntityAIBase {
@@ -1181,7 +1181,7 @@ index d9d05c6..958713f 100644
              if (var2 == null) {
                  var2 = Sets.newHashSet();
 diff --git a/src/main/java/net/minecraft/entity/boss/EntityDragon.java b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
-index d630c7e..3cb004b 100644
+index e4d3f18..8679b2d 100644
 --- a/src/main/java/net/minecraft/entity/boss/EntityDragon.java
 +++ b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
 @@ -454,7 +454,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
@@ -1386,7 +1386,7 @@ index b3dd695..3b32efd 100644
          public Item buyingItem;
          public EntityVillager.PriceInfo price;
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityWolf.java b/src/main/java/net/minecraft/entity/passive/EntityWolf.java
-index 9ed6667..c990b80 100644
+index 22c187f..261d6c1 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityWolf.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityWolf.java
 @@ -473,10 +473,6 @@ public class EntityWolf extends EntityTameable {
@@ -1607,11 +1607,11 @@ index b23ae9f..aae4dc6 100644
                          throw new Error(
                                  "Packet "
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 9faaba0..796a340 100644
+index 19e6605..b371652 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -194,7 +194,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
-     private long lastSentPingPacket;
+     private long field_194404_h;
      private volatile int chatSpamThresholdCount;
      private static final AtomicIntegerFieldUpdater chatSpamField =
 -            AtomicIntegerFieldUpdater.newUpdater(NetHandlerPlayServer.class, "chatThrottle");
@@ -1619,7 +1619,7 @@ index 9faaba0..796a340 100644
      private int itemDropThreshold;
      private final IntHashMap<Short> pendingTransactions = new IntHashMap<Short>();
      private double firstGoodX;
-@@ -1372,8 +1372,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1377,8 +1377,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
  
          if (!this.player.isDead && this.player.getChatVisibility() != EntityPlayer.EnumChatVisibility.HIDDEN) {
              this.player.markPlayerActive();
@@ -1633,7 +1633,7 @@ index 9faaba0..796a340 100644
  
              for (int i = 0; i < s.length(); ++i) {
                  if (!ChatAllowedCharacters.isAllowedCharacter(s.charAt(i))) {
-@@ -2629,7 +2632,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -2637,7 +2640,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                                      2);
                              break;
                          case AUTO:
@@ -1642,7 +1642,7 @@ index 9faaba0..796a340 100644
                              this.player.world.setBlockState(
                                      blockposition,
                                      iblockdata
-@@ -2638,7 +2641,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -2646,7 +2649,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                                      2);
                              break;
                          case REDSTONE:
@@ -1665,7 +1665,7 @@ index 6ee4f63..ddda859 100644
              try {
                  packet.processPacket(this.packetListener);
 diff --git a/src/main/java/net/minecraft/pathfinding/FlyingNodeProcessor.java b/src/main/java/net/minecraft/pathfinding/FlyingNodeProcessor.java
-index 4b5926f..46d0860 100644
+index b64b1f1..6bc22c0 100644
 --- a/src/main/java/net/minecraft/pathfinding/FlyingNodeProcessor.java
 +++ b/src/main/java/net/minecraft/pathfinding/FlyingNodeProcessor.java
 @@ -44,7 +44,7 @@ public class FlyingNodeProcessor extends WalkNodeProcessor {
@@ -1687,7 +1687,7 @@ index 4b5926f..46d0860 100644
          BlockPos var13 = new BlockPos(entitylivingIn);
          var12 = this.getPathNodeType(blockaccessIn, x, y, z, xSize, ySize, zSize, canBreakDoorsIn, canEnterDoorsIn, var11, var12, var13);
 diff --git a/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java b/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
-index 80b81bb..1eef164 100644
+index 6574da1..ed89f2a 100644
 --- a/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
 +++ b/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
 @@ -65,7 +65,7 @@ public class WalkNodeProcessor extends NodeProcessor {
@@ -1709,7 +1709,7 @@ index 80b81bb..1eef164 100644
          double var13 = (double) entitylivingIn.width / 2.0D;
          BlockPos var15 = new BlockPos(entitylivingIn);
 diff --git a/src/main/java/net/minecraft/profiler/Snooper.java b/src/main/java/net/minecraft/profiler/Snooper.java
-index e43e1c1..ffc64ff 100644
+index 9ac5e0b..93ec3cf 100644
 --- a/src/main/java/net/minecraft/profiler/Snooper.java
 +++ b/src/main/java/net/minecraft/profiler/Snooper.java
 @@ -84,7 +84,7 @@ public class Snooper {
@@ -1775,7 +1775,7 @@ index d45f937..cf751ae 100644
          for (EntityPlayerMP entityplayer : this.scoreboardMCServer.getPlayerList().getPlayers()) {
              if (entityplayer.getBukkitEntity().getScoreboard().getHandle() == this) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index d819ea4..33852e4 100644
+index 3c48d81..9c0835f 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -36,7 +36,6 @@ import java.util.concurrent.Callable;
@@ -1796,7 +1796,7 @@ index d819ea4..33852e4 100644
                      world =
                              (WorldServer)
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index b6ae105..9a5e8b7 100644
+index fdc8f55..84b159e 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -727,10 +727,6 @@ public class DedicatedServer extends MinecraftServer implements IServer {
@@ -2019,7 +2019,7 @@ index f135a75..2744493 100644
  
      public static <E> NonNullList<E> from(E defaultElementIn, E... elements) {
 diff --git a/src/main/java/net/minecraft/util/datafix/DataFixer.java b/src/main/java/net/minecraft/util/datafix/DataFixer.java
-index 12d68e9..20ab135 100644
+index 293506b..01616cc 100644
 --- a/src/main/java/net/minecraft/util/datafix/DataFixer.java
 +++ b/src/main/java/net/minecraft/util/datafix/DataFixer.java
 @@ -93,7 +93,7 @@ public class DataFixer implements IDataFixer {
@@ -2045,7 +2045,7 @@ index a926724..e53beef 100644
      }
  
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 74d5f63..c5dbf4d 100644
+index c2605e4..0066612 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -2527,7 +2527,7 @@ public abstract class World implements IBlockAccess {
@@ -2084,7 +2084,7 @@ index a813fb9..0294aae 100644
              int z = LongHash.lsw(coord.longValue());
  
 diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
-index 97387ab..a6dd88f 100644
+index 924696d..4acd8d3 100644
 --- a/src/main/java/net/minecraft/world/WorldServer.java
 +++ b/src/main/java/net/minecraft/world/WorldServer.java
 @@ -1510,10 +1510,6 @@ public class WorldServer extends World implements IThreadListener {
@@ -2138,7 +2138,7 @@ index 8a8680f..70a954b 100644
              }
          }
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-index d1b8209..2eb9340 100644
+index af6283c..c28dcfc 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 @@ -312,7 +312,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
@@ -2264,7 +2264,7 @@ index bd6190f..ee7bf64 100644
              for (int var4 = 0; var4 < p_191116_1_.height; ++var4) {
                  for (int var5 = 0; var5 < p_191116_1_.width; ++var5) {
 diff --git a/src/main/java/net/minecraft/world/gen/structure/template/Template.java b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
-index 618781f..08f537b 100644
+index 7263c88..060182b 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/template/Template.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
 @@ -109,7 +109,7 @@ public class Template {
@@ -2277,7 +2277,7 @@ index 618781f..08f537b 100644
                          Entity.class,
                          new AxisAlignedBB(startPos, endPos),
 diff --git a/src/main/java/net/minecraft/world/storage/WorldInfo.java b/src/main/java/net/minecraft/world/storage/WorldInfo.java
-index c7c3379..54e36a2 100644
+index e19ea32..588b516 100644
 --- a/src/main/java/net/minecraft/world/storage/WorldInfo.java
 +++ b/src/main/java/net/minecraft/world/storage/WorldInfo.java
 @@ -1,6 +1,8 @@
@@ -2351,7 +2351,7 @@ index 3447f63..2b2dec8 100644
  
              for (Entry var6 : var3) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 9560058..ff8a94c 100644
+index 0f798fd..03c30ec 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -4,30 +4,20 @@ import com.google.common.base.Preconditions;
@@ -3050,6 +3050,19 @@ index 0c40ff9..1931031 100644
 +        throw (T) t;
      }
  }
+diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
+index 4acd8d3..4552647 100644
+--- a/src/main/java/net/minecraft/world/WorldServer.java
++++ b/src/main/java/net/minecraft/world/WorldServer.java
+@@ -464,7 +464,7 @@ public class WorldServer extends World implements IThreadListener {
+         this.allPlayersSleeping = false;
+
+         for (EntityPlayer entityhuman :
+-                (List) this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
++                this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
+             entityhuman.wakeUpPlayer(false, false, true);
+         }
+ 
 -- 
 2.14.1
 
