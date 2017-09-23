@@ -1,4 +1,4 @@
-From c90eb35aed8c00523955820c86367fbbe5e39b0c Mon Sep 17 00:00:00 2001
+From 32d4844f2f9fc69b5aa5dbf4a0e276475fad2257 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Tue, 8 Mar 2016 13:05:59 -0800
 Subject: [PATCH] Add BaseComponent sendMessage methods to CommandSender
@@ -40,7 +40,7 @@ index abf68a2c..fcb03b83 100644
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 34a9d696..78f877d9 100644
+index eecbe47b..fdee4725 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -400,6 +400,7 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
@@ -60,5 +60,5 @@ index 34a9d696..78f877d9 100644
          spigot().sendMessage(components);
      }
 -- 
-2.13.0
+2.14.1
 

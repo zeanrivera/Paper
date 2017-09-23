@@ -1,4 +1,4 @@
-From a5a7153cde37ce84714514cd647693113fdea266 Mon Sep 17 00:00:00 2001
+From a7d23dde174a03fa80d3d4f6ed8c76671e8f5ecb Mon Sep 17 00:00:00 2001
 From: vemacs <d@nkmem.es>
 Date: Wed, 23 Nov 2016 12:53:43 -0500
 Subject: [PATCH] Misc Utils
@@ -42,5 +42,5 @@ index 00000000..d60ecbb1
 +    }
 +}
 -- 
-2.12.2
+2.14.1
 

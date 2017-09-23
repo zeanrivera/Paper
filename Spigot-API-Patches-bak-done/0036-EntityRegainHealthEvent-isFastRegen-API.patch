@@ -1,4 +1,4 @@
-From 0d97df2900c479d7713b9b02c3eaeb6624c6a1c1 Mon Sep 17 00:00:00 2001
+From 5401e611339c951cdd18579d39fecc9ab5c808de Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 22 Apr 2016 01:43:11 -0500
 Subject: [PATCH] EntityRegainHealthEvent isFastRegen API
@@ -41,5 +41,5 @@ index 1dd50c56..74fc12e9 100644
      /**
       * Gets the amount of regained health
 -- 
-2.13.2
+2.14.1
 

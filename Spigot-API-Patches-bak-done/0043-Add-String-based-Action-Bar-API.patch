@@ -1,11 +1,11 @@
-From c1f59bafd368616b4cbf133847cb243aeedafe46 Mon Sep 17 00:00:00 2001
+From 566d745403d227315a0c55daa952a0bf82aaf776 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 20 Dec 2016 15:55:55 -0500
 Subject: [PATCH] Add String based Action Bar API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index f04e2541..72c85452 100644
+index 1bfad8f7..a80b4599 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -395,6 +395,26 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
@@ -72,5 +72,5 @@ index f04e2541..72c85452 100644
              throw new UnsupportedOperationException("Not supported yet.");
          }
 -- 
-2.13.0.windows.1
+2.14.1
 

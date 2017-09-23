@@ -1,4 +1,4 @@
-From e4a91b4babe80ccab09955b6069d1498676c5e53 Mon Sep 17 00:00:00 2001
+From 10e896b34f6dd561d66d1391969985566c8eaba2 Mon Sep 17 00:00:00 2001
 From: BillyGalbreath <Blake.Galbreath@GMail.com>
 Date: Sat, 14 Jan 2017 16:15:20 -0600
 Subject: [PATCH] Add fromBottle flag to Experience Orbs
@@ -21,5 +21,5 @@ index c286edfd..e8a83c06 100644
 +    public boolean isFromBottle();
  }
 -- 
-2.13.0.windows.1
+2.14.1
 

@@ -1,11 +1,11 @@
-From ee9faa9162c7b9f27b5b1072e016c288f54f8e6a Mon Sep 17 00:00:00 2001
+From 39f1cb7948d21f9c4325694ba274525da495bfe9 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Mon, 29 Feb 2016 19:48:59 -0600
 Subject: [PATCH] Expose server CommandMap
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 89135b86..94ec8189 100644
+index 74d07cc5..39523ea7 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
 @@ -17,10 +17,7 @@ import org.bukkit.boss.BarColor;
@@ -39,7 +39,7 @@ index 89135b86..94ec8189 100644
      {
          return server.spigot();
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index c81c073d..63624ff6 100644
+index da84ce40..28ea20ef 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
 @@ -17,10 +17,7 @@ import org.bukkit.boss.BarColor;
@@ -70,5 +70,5 @@ index c81c073d..63624ff6 100644
       * Get the advancement specified by this key.
       *
 -- 
-2.13.0
+2.14.1
 
