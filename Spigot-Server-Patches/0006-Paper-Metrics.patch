@@ -1,6 +1,6 @@
-From 4a515602fa2dcfb95515ce32f502a744ffa01bc9 Mon Sep 17 00:00:00 2001
+From cb8ab45467eded1035e7e53152cb120eb830bed1 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
-Date: Fri, 24 Mar 2017 23:56:01 -0500
+Date: Sat, 23 Sep 2017 17:45:22 -0400
 Subject: [PATCH] Paper Metrics
 
 Removes Spigot's mcstats metrics in favor of a system using bStats
@@ -15,7 +15,7 @@ decisions on behalf of the project.
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
 new file mode 100644
-index 000000000..9389f9a8c
+index 0000000..9389f9a
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/Metrics.java
 @@ -0,0 +1,603 @@
@@ -623,7 +623,7 @@ index 000000000..9389f9a8c
 +    }
 +}
 diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-index 3d8ee9ed3..5ab2cf6ee 100644
+index 3d8ee9e..5ab2cf6 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
 @@ -39,6 +39,7 @@ public class PaperConfig {
@@ -647,25 +647,25 @@ index 3d8ee9ed3..5ab2cf6ee 100644
  
      static void readConfig(Class<?> clazz, Object instance) {
 diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
-index 80068e285..c779e035c 100644
+index 1eca998..004db76 100644
 --- a/src/main/java/org/spigotmc/SpigotConfig.java
 +++ b/src/main/java/org/spigotmc/SpigotConfig.java
-@@ -83,6 +83,7 @@ public class SpigotConfig
-             MinecraftServer.getServer().server.getCommandMap().register( entry.getKey(), "Spigot", entry.getValue() );
+@@ -99,6 +99,7 @@ public class SpigotConfig {
+             MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Spigot", entry.getValue());
          }
  
 +        /* // Paper - Replace with our own
-         if ( metrics == null )
-         {
-             try
-@@ -94,6 +95,7 @@ public class SpigotConfig
-                 Bukkit.getServer().getLogger().log( Level.SEVERE, "Could not start metrics service", ex );
+         if (metrics == null) {
+             try {
+                 metrics = new Metrics();
+@@ -107,6 +108,7 @@ public class SpigotConfig {
+                 Bukkit.getServer().getLogger().log(Level.SEVERE, "Could not start metrics service", (Throwable) var2);
              }
          }
 +        */ // Paper end
      }
  
-     static void readConfig(Class<?> clazz, Object instance)
+     static void readConfig(Class<?> clazz, Object instance) {
 -- 
-2.13.0
+2.14.1
 

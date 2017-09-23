@@ -1,4 +1,4 @@
-From e58d6c4a67e07381aa2804ba37b2ff888ca2231c Mon Sep 17 00:00:00 2001
+From ad978a7b2eb700fb6e066efd8882ee3b907e9931 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -1607,7 +1607,7 @@ index b23ae9f..aae4dc6 100644
                          throw new Error(
                                  "Packet "
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 19e6605..b371652 100644
+index 1e757e8..43c58f8 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -194,7 +194,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
@@ -1633,7 +1633,7 @@ index 19e6605..b371652 100644
  
              for (int i = 0; i < s.length(); ++i) {
                  if (!ChatAllowedCharacters.isAllowedCharacter(s.charAt(i))) {
-@@ -2637,7 +2640,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -2639,7 +2642,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                                      2);
                              break;
                          case AUTO:
@@ -1642,7 +1642,7 @@ index 19e6605..b371652 100644
                              this.player.world.setBlockState(
                                      blockposition,
                                      iblockdata
-@@ -2646,7 +2649,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -2648,7 +2651,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                                      2);
                              break;
                          case REDSTONE:
@@ -2084,9 +2084,18 @@ index a813fb9..0294aae 100644
              int z = LongHash.lsw(coord.longValue());
  
 diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
-index 924696d..4acd8d3 100644
+index 924696d..4552647 100644
 --- a/src/main/java/net/minecraft/world/WorldServer.java
 +++ b/src/main/java/net/minecraft/world/WorldServer.java
+@@ -464,7 +464,7 @@ public class WorldServer extends World implements IThreadListener {
+         this.allPlayersSleeping = false;
+ 
+         for (EntityPlayer entityhuman :
+-                (List) this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
++                this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
+             entityhuman.wakeUpPlayer(false, false, true);
+         }
+ 
 @@ -1510,10 +1510,6 @@ public class WorldServer extends World implements IThreadListener {
          return this.functionManager;
      }
@@ -3050,19 +3059,6 @@ index 0c40ff9..1931031 100644
 +        throw (T) t;
      }
  }
-diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
-index 4acd8d3..4552647 100644
---- a/src/main/java/net/minecraft/world/WorldServer.java
-+++ b/src/main/java/net/minecraft/world/WorldServer.java
-@@ -464,7 +464,7 @@ public class WorldServer extends World implements IThreadListener {
-         this.allPlayersSleeping = false;
-
-         for (EntityPlayer entityhuman :
--                (List) this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
-+                this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
-             entityhuman.wakeUpPlayer(false, false, true);
-         }
-
 -- 
 2.14.1
 

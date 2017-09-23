@@ -1,11 +1,11 @@
-From 39f1cb7948d21f9c4325694ba274525da495bfe9 Mon Sep 17 00:00:00 2001
+From 7136213597317f412017223aabe99d7458cc206a Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Mon, 29 Feb 2016 19:48:59 -0600
 Subject: [PATCH] Expose server CommandMap
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 74d07cc5..39523ea7 100644
+index eb6b7976..e27d54ab 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
 @@ -17,10 +17,7 @@ import org.bukkit.boss.BarColor;
@@ -20,7 +20,7 @@ index 74d07cc5..39523ea7 100644
  import org.bukkit.entity.Entity;
  import org.bukkit.entity.Player;
  import org.bukkit.event.inventory.InventoryType;
-@@ -1164,6 +1161,17 @@ public final class Bukkit {
+@@ -1155,6 +1152,17 @@ public final class Bukkit {
          return server.getUnsafe();
      }
  
@@ -39,7 +39,7 @@ index 74d07cc5..39523ea7 100644
      {
          return server.spigot();
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index da84ce40..28ea20ef 100644
+index 83b66361..ef712349 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
 @@ -17,10 +17,7 @@ import org.bukkit.boss.BarColor;
@@ -54,9 +54,9 @@ index da84ce40..28ea20ef 100644
  import org.bukkit.entity.Entity;
  import org.bukkit.entity.Player;
  import org.bukkit.event.inventory.InventoryType;
-@@ -928,6 +925,14 @@ public interface Server extends PluginMessageRecipient {
-     public double[] getTPS();
-     // Paper end
+@@ -919,6 +916,14 @@ public interface Server extends PluginMessageRecipient {
+      */
+     Entity getEntity(UUID uuid);
  
 +    // Paper start
 +    /**

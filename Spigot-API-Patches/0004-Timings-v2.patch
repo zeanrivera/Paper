@@ -1,4 +1,4 @@
-From 51ee58987690f58c359f7480ba879b107ac21fb3 Mon Sep 17 00:00:00 2001
+From 444a779c0bf321d76937e4c6c883eaab0c1ca962 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 29 Feb 2016 18:48:17 -0600
 Subject: [PATCH] Timings v2
@@ -2963,10 +2963,10 @@ index 00000000..df592d85
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index eb6b7976..a9081ddb 100644
+index e27d54ab..b7a6f2c3 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -523,7 +523,6 @@ public final class Bukkit {
+@@ -520,7 +520,6 @@ public final class Bukkit {
       */
      public static void reload() {
          server.reload();
@@ -2975,10 +2975,10 @@ index eb6b7976..a9081ddb 100644
  
      /**
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 83b66361..bc3211f9 100644
+index ef712349..6b4e39ec 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -945,12 +945,27 @@ public interface Server extends PluginMessageRecipient {
+@@ -950,12 +950,27 @@ public interface Server extends PluginMessageRecipient {
      // Spigot start
      public class Spigot
      {
