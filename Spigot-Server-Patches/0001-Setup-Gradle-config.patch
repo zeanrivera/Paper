@@ -1,0 +1,84 @@
+From 476bf851032a19467b8bc5b5591d558f29d1b970 Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Sun, 27 Nov 2016 08:01:04 -0600
+Subject: [PATCH] Setup Gradle config
+
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..ce8fb16
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,3 @@
++build/
++out/
++.cache
+diff --git a/build.gradle b/build.gradle
+new file mode 100644
+index 0000000..437579f
+--- /dev/null
++++ b/build.gradle
+@@ -0,0 +1,52 @@
++repositories {
++    maven {
++        name "minecraft"
++        url "https://libraries.minecraft.net/"
++    }
++}
++
++dependencies {
++    compile project(":Paper-API")
++    compile "net.sf.jopt-simple:jopt-simple:5.0.4"
++    compile "jline:jline:2.12.1"
++    compile "org.xerial:sqlite-jdbc:3.19.3"
++    compile "mysql:mysql-connector-java:5.1.43"
++
++
++    // Minecraft deps
++    compile "org.apache.logging.log4j:log4j-api:2.8.2"
++    compile "org.apache.logging.log4j:log4j-core:2.8.2"
++    compile "io.netty:netty-all:4.1.15.Final"
++    compile "it.unimi.dsi:fastutil:7.1.0"
++    compile "com.mojang:authlib:1.5.25"
++    compile "net.sf.trove4j:trove4j:3.0.3"
++
++    testCompile "junit:junit:4.12"
++    testCompile "org.hamcrest:hamcrest-library:1.3"
++}
++
++jar {
++    manifest {
++        attributes "Main-Class": "org.bukkit.craftbukkit.Main"
++        attributes "Implementation-Title": "CraftBukkit"
++        attributes "Implementation-Version": paperVersion
++        attributes "Specification-Title": "Bukkit"
++        attributes "Specification-Version": "unknown"
++        attributes "Specification-Vendor": "Bukkit Team"
++    }
++}
++
++shadowJar {
++    baseName = "Paper-Server"
++    version = null
++
++    dependencies {
++        exclude(dependency {
++            it.moduleGroup == "junit" || it.moduleGroup == "org.hamcrest"
++        })
++    }
++
++    relocate "jline", "org.bukkit.craftbukkit.libs.jline"
++    relocate "org.ibex", "org.bukkit.craftbukkit.libs.org.ibex"
++    relocate "org.gjt", "org.bukkit.craftbukkit.libs.org.gjt"
++}
+\ No newline at end of file
+diff --git a/gradle.properties b/gradle.properties
+new file mode 100644
+index 0000000..5f7e198
+--- /dev/null
++++ b/gradle.properties
+@@ -0,0 +1 @@
++artifactId = paper
+-- 
+2.14.1
+

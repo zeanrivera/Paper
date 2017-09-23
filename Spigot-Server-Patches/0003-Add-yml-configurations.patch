@@ -1,0 +1,31 @@
+From e0fc705464e06547603d5791af559819fa2bcff4 Mon Sep 17 00:00:00 2001
+From: DemonWav <demonwav@gmail.com>
+Date: Tue, 4 Apr 2017 22:21:31 -0500
+Subject: [PATCH] Add yml configurations
+
+
+diff --git a/src/main/resources/configurations/commands.yml b/src/main/resources/configurations/commands.yml
+new file mode 100644
+index 0000000..203e8b2
+--- /dev/null
++++ b/src/main/resources/configurations/commands.yml
+@@ -0,0 +1,16 @@
++# This is the commands configuration file for Bukkit.
++# For documentation on how to make use of this file, check out the Bukkit Wiki at
++# http://wiki.bukkit.org/Commands.yml
++#
++# If you need help on this file, feel free to join us on irc or leave a message
++# on the forums asking for advice.
++#
++# IRC: #spigot @ irc.spi.gt
++#    (If this means nothing to you, just go to http://www.spigotmc.org/pages/irc/ )
++# Forums: http://www.spigotmc.org/
++# Bug tracker: http://www.spigotmc.org/go/bugs
++
++command-block-overrides: []
++aliases:
++    icanhasbukkit:
++      - "version $1-"
+-- 
+2.14.1
+
