@@ -1,0 +1,75 @@
+From 62587406703d2778a3d67ba23ff6bd392aadc04c Mon Sep 17 00:00:00 2001
+From: Sudzzy <originmc@outlook.com>
+Date: Sun, 24 Sep 2017 18:24:17 -0400
+Subject: [PATCH] Option to disable explosion knockback
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index eb26386..3c2ced2 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -201,4 +201,9 @@ public class PaperWorldConfig {
+         lavaFlowSpeedNormal = getInt("lava-flow-speed.normal", 30);
+         lavaFlowSpeedNether = getInt("lava-flow-speed.nether", 10);
+     }
++
++    public boolean disableExplosionKnockback;
++    private void disableExplosionKnockback(){
++        disableExplosionKnockback = getBoolean("disable-explosion-knockback", false);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
+index 99103b1..c9bb72b 100644
+--- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
++++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
+@@ -929,6 +929,7 @@ public abstract class EntityLivingBase extends Entity {
+                     }
+                 }
+ 
++                boolean knockbackCancelled = world.paperConfig.disableExplosionKnockback && source.isExplosion() && this instanceof EntityPlayer; // Paper - Disable explosion knockback
+                 if (flag1) {
+                     if (flag) {
+                         this.world.setEntityState(this, (byte) 29);
+@@ -945,6 +946,7 @@ public abstract class EntityLivingBase extends Entity {
+                             b0 = 2;
+                         }
+ 
++                        if (!knockbackCancelled) // Paper - Option to disable explosion knockback
+                         this.world.setEntityState(this, b0);
+                     }
+ 
+@@ -967,6 +969,7 @@ public abstract class EntityLivingBase extends Entity {
+                     }
+                 }
+ 
++                if (knockbackCancelled) this.world.setEntityState(this, (byte) 2); // Paper - Disable explosion knockback
+                 if (this.getHealth() <= 0.0F) {
+                     if (!this.checkTotemDeathProtection(source)) {
+                         SoundEvent soundeffect = this.getDeathSound();
+diff --git a/src/main/java/net/minecraft/world/Explosion.java b/src/main/java/net/minecraft/world/Explosion.java
+index a8c66d8..c9b8c29 100644
+--- a/src/main/java/net/minecraft/world/Explosion.java
++++ b/src/main/java/net/minecraft/world/Explosion.java
+@@ -155,7 +155,8 @@ public class Explosion {
+                                 double d14 = d13;
+ 
+                                 if (entity instanceof EntityLivingBase) {
+-                                    d14 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d13);
++                                    // Paper - Option to disable explosion knockback
++                                    d14 = entity instanceof EntityPlayer && world.paperConfig.disableExplosionKnockback ? 0 :EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d13);
+                                 }
+ 
+                                 entity.motionX += d8 * d14;
+@@ -165,7 +166,8 @@ public class Explosion {
+                                 if (entity instanceof EntityPlayer) {
+                                     EntityPlayer entityhuman = (EntityPlayer) entity;
+ 
+-                                    if (!entityhuman.isSpectator() && (!entityhuman.isCreative() || !entityhuman.capabilities.isFlying)) {
++                                    // Paper - Option to disable explosion knockback
++                                    if (!entityhuman.isSpectator() && !world.paperConfig.disableExplosionKnockback && (!entityhuman.isCreative() || !entityhuman.capabilities.isFlying)) {
+                                         this.playerKnockbackMap.put(entityhuman, new Vec3d(d8 * d13, d9 * d13, d10 * d13));
+                                     }
+                                 }
+-- 
+2.14.1
+

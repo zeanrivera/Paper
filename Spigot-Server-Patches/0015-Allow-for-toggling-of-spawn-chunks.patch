@@ -1,4 +1,4 @@
-From 51e29901ccbc04de29273b4a348e11b4eeaa5e8c Mon Sep 17 00:00:00 2001
+From 39967b818ee7606ac7356358e9ac7159b902d045 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Thu, 3 Mar 2016 03:53:43 -0600
 Subject: [PATCH] Allow for toggling of spawn chunks

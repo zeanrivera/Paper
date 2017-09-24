@@ -1,4 +1,4 @@
-From 322185f3edc7df47cd8fa48d40542db81b5ad51b Mon Sep 17 00:00:00 2001
+From fd3d2c6a7d18d0f1633fa5114a161ecd0eeb0529 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 24 Sep 2017 15:39:35 -0400
 Subject: [PATCH] Configurable top of nether void damage
