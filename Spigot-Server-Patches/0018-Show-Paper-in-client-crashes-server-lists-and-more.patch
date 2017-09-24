@@ -1,4 +1,4 @@
-From 9d880105639177881d1480ab720fe0ee375c31f6 Mon Sep 17 00:00:00 2001
+From 0fb04193e9e0c378cf2597135aafba05ef1bef4d Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 21:21:28 -0400
 Subject: [PATCH] Show Paper in client crashes, server lists, and more

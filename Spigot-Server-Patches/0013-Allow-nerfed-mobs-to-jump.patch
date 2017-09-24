@@ -1,4 +1,4 @@
-From 3e2c2254ea491d48e5ba1be6702420e554fbc1f2 Mon Sep 17 00:00:00 2001
+From c665ec33a8623534fff8f745e7929716163437b5 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 21:00:41 -0400
 Subject: [PATCH] Allow nerfed mobs to jump

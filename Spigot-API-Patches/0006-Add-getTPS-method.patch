@@ -1,4 +1,4 @@
-From fa168622b892afbd2189b80b9e30a5ec65b57d58 Mon Sep 17 00:00:00 2001
+From 0845bc92d9dbc0ab5d604eedbe3a28c7519e903d Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 29 Feb 2016 17:24:57 -0600
 Subject: [PATCH] Add getTPS method
