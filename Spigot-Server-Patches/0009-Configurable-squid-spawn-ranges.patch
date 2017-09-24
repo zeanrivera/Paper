@@ -1,11 +1,11 @@
-From fbea6e7aa23f4b7e63d3ad5671c1bc18a1e4189d Mon Sep 17 00:00:00 2001
+From c2af1220a64d676b86d4668d68d4a41342d6bbf3 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 1 Mar 2016 12:45:11 -0600
 Subject: [PATCH] Configurable squid spawn ranges
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 621bf7051..f24839378 100644
+index 621bf70..f248393 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -63,4 +63,12 @@ public class PaperWorldConfig {
@@ -21,19 +21,20 @@ index 621bf7051..f24839378 100644
 +        log("Squids will spawn between Y: " + squidMinSpawnHeight + " and Y: " + squidMaxSpawnHeight);
 +    }
  }
-diff --git a/src/main/java/net/minecraft/server/EntitySquid.java b/src/main/java/net/minecraft/server/EntitySquid.java
-index 20b71b455..ee8e50706 100644
---- a/src/main/java/net/minecraft/server/EntitySquid.java
-+++ b/src/main/java/net/minecraft/server/EntitySquid.java
-@@ -141,7 +141,7 @@ public class EntitySquid extends EntityWaterAnimal {
+diff --git a/src/main/java/net/minecraft/entity/passive/EntitySquid.java b/src/main/java/net/minecraft/entity/passive/EntitySquid.java
+index 6abac83..b374477 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntitySquid.java
++++ b/src/main/java/net/minecraft/entity/passive/EntitySquid.java
+@@ -157,7 +157,8 @@ public class EntitySquid extends EntityWaterMob {
      }
  
-     public boolean P() {
--        return this.locY > 45.0D && this.locY < (double) this.world.getSeaLevel() && super.P();
-+        return this.locY > world.paperConfig.squidMinSpawnHeight && this.locY < world.paperConfig.squidMaxSpawnHeight && super.P(); // Paper - Configurable squid spawn height range
+     public boolean getCanSpawnHere() {
+-        return this.posY > 45.0D && this.posY < (double) this.world.getSeaLevel() && super.getCanSpawnHere();
++        // Paper - Configurable squid spawn height range
++        return this.posY > world.paperConfig.squidMinSpawnHeight && this.posY < world.paperConfig.squidMaxSpawnHeight && super.getCanSpawnHere();
      }
  
-     public void b(float f, float f1, float f2) {
+     public void setMovementVector(float randomMotionVecXIn, float randomMotionVecYIn, float randomMotionVecZIn) {
 -- 
-2.13.0
+2.14.1
 

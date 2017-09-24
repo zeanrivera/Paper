@@ -1,0 +1,79 @@
+From 3e2c2254ea491d48e5ba1be6702420e554fbc1f2 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sat, 23 Sep 2017 21:00:41 -0400
+Subject: [PATCH] Allow nerfed mobs to jump
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 22999f0..5f13fbf 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -94,4 +94,9 @@ public class PaperWorldConfig {
+         fishingMaxTicks = getInt("fishing-time-range.MaximumTicks", 600);
+         log("Fishing time ranges are between " + fishingMinTicks +" and " + fishingMaxTicks + " ticks");
+     }
++
++    public boolean nerfedMobsShouldJump;
++    private void nerfedMobsShouldJump() {
++        nerfedMobsShouldJump = getBoolean("spawner-nerfed-mobs-should-jump", false);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/EntityLiving.java b/src/main/java/net/minecraft/entity/EntityLiving.java
+index 73bdea4..5325a78 100644
+--- a/src/main/java/net/minecraft/entity/EntityLiving.java
++++ b/src/main/java/net/minecraft/entity/EntityLiving.java
+@@ -9,11 +9,7 @@ import java.util.logging.Level;
+ import javax.annotation.Nullable;
+ import net.minecraft.block.state.IBlockState;
+ import net.minecraft.enchantment.EnchantmentHelper;
+-import net.minecraft.entity.ai.EntityAITasks;
+-import net.minecraft.entity.ai.EntityJumpHelper;
+-import net.minecraft.entity.ai.EntityLookHelper;
+-import net.minecraft.entity.ai.EntityMoveHelper;
+-import net.minecraft.entity.ai.EntitySenses;
++import net.minecraft.entity.ai.*;
+ import net.minecraft.entity.ai.attributes.AttributeModifier;
+ import net.minecraft.entity.item.EntityBoat;
+ import net.minecraft.entity.item.EntityItem;
+@@ -90,6 +86,7 @@ public abstract class EntityLiving extends EntityLivingBase {
+     private boolean isLeashed;
+     private Entity leashedToEntity;
+     private NBTTagCompound leashNBTTag;
++    @Nullable public EntityAISwimming nerfedSwimController; // Paper
+ 
+     public EntityLiving(World worldIn) {
+         super(worldIn);
+@@ -708,6 +705,13 @@ public abstract class EntityLiving extends EntityLivingBase {
+             this.jumpHelper.doJump();
+             this.world.profiler.endSection();
+             this.world.profiler.endSection();
++        } else {
++            // Paper start - Allow nerfed mobs to jump and float
++            if (nerfedSwimController != null) {
++                if (nerfedSwimController.shouldExecute()) nerfedSwimController.updateTask();
++                this.getJumpHelper().doJump();
++            }
++            // Paper end
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAISwimming.java b/src/main/java/net/minecraft/entity/ai/EntityAISwimming.java
+index 5560b03..40a04c3 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAISwimming.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAISwimming.java
+@@ -11,6 +11,12 @@ public class EntityAISwimming extends EntityAIBase {
+         this.entity = entityIn;
+         this.setMutexBits(4);
+ 
++        // Paper start - Allow nerfed mobs to swim
++        if (entityIn.fromMobSpawner && entityIn.getEntityWorld().paperConfig.nerfedMobsShouldJump){
++            entityIn.nerfedSwimController = this;
++        }
++        // Paper end
++
+         if (entityIn.getNavigator() instanceof PathNavigateGround) {
+             ((PathNavigateGround) entityIn.getNavigator()).setCanSwim(true);
+         } else if (entityIn.getNavigator() instanceof PathNavigateFlying) {
+-- 
+2.14.1
+

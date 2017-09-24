@@ -1,11 +1,11 @@
-From 95f35af2f0cbcd086e82db7f001ed34265d28217 Mon Sep 17 00:00:00 2001
+From c3beb06fadd6cc426b2702e85c500f9ced5455b4 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Thu, 3 Mar 2016 03:53:43 -0600
 Subject: [PATCH] Allow for toggling of spawn chunks
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 4b64ccaa0..7ac6a5f1f 100644
+index 4b64cca..7ac6a5f 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -115,4 +115,10 @@ public class PaperWorldConfig {
@@ -19,18 +19,18 @@ index 4b64ccaa0..7ac6a5f1f 100644
 +        log("Keep spawn chunk loaded: " + keepSpawnInMemory);
 +    }
  }
-diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
-index f06b82ec5..5c44e0ed4 100644
---- a/src/main/java/net/minecraft/server/World.java
-+++ b/src/main/java/net/minecraft/server/World.java
-@@ -202,6 +202,7 @@ public abstract class World implements IBlockAccess {
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index ca8b043..4f1cad2 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -276,6 +276,7 @@ public abstract class World implements IBlockAccess {
+                         });
          this.getServer().addWorld(this.world);
-         // CraftBukkit end
-         timings = new co.aikar.timings.WorldTimingsHandler(this); // Paper - code below can generate new world and access timings
+         this.timings = new co.aikar.timings.WorldTimingsHandler(this); // Paper - code below can generate new world and access timings
 +        this.keepSpawnInMemory = this.paperConfig.keepSpawnInMemory; // Paper
-                 this.entityLimiter = new org.spigotmc.TickLimiter(spigotConfig.entityMaxTickTime);
-         this.tileLimiter = new org.spigotmc.TickLimiter(spigotConfig.tileMaxTickTime);
+         this.entityLimiter = new TickLimiter(this.spigotConfig.entityMaxTickTime);
+         this.tileLimiter = new TickLimiter(this.spigotConfig.tileMaxTickTime);
      }
 -- 
-2.13.3.windows.1
+2.14.1
 

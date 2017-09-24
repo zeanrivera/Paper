@@ -1,45 +1,43 @@
-From 384b0da5d2abda19882237ec00c439449230b96f Mon Sep 17 00:00:00 2001
+From fa168622b892afbd2189b80b9e30a5ec65b57d58 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 29 Feb 2016 17:24:57 -0600
 Subject: [PATCH] Add getTPS method
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index a9081ddb..74d07cc5 100644
+index b7a6f2c3..89d90dc6 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -1125,6 +1125,16 @@ public final class Bukkit {
-         return server.getEntity(uuid);
+@@ -1160,6 +1160,15 @@ public final class Bukkit {
+     public static CommandMap getCommandMap() {
+         return server.getCommandMap();
      }
- 
-+    // Paper start
-+    /**
-+     * Gets the current server TPS
-+     * @return current server TPS (1m, 5m, 15m in Paper-Server)
-+     */
-+    public static double[] getTPS() {
-+        return server.getTPS();
-+    }
-+    // Paper end
 +
-     /**
-      * Get the advancement specified by this key.
-      *
-diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index bc3211f9..da84ce40 100644
---- a/src/main/java/org/bukkit/Server.java
-+++ b/src/main/java/org/bukkit/Server.java
-@@ -919,6 +919,15 @@ public interface Server extends PluginMessageRecipient {
-      */
-     Entity getEntity(UUID uuid);
- 
-+    // Paper start
 +    /**
 +     * Gets the current server TPS
 +     *
 +     * @return current server TPS (1m, 5m, 15m in Paper-Server)
 +     */
-+    public double[] getTPS();
++    public static double[] getTPS() {
++        return server.getTPS();
++    }
+     // Paper end
+ 
+     public static Server.Spigot spigot()
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 6b4e39ec..8e01099a 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -924,6 +924,14 @@ public interface Server extends PluginMessageRecipient {
+      */
+     CommandMap getCommandMap();
+ 
++    /**
++     * Gets the current server TPS
++     *
++     * @return current server TPS (1m, 5m, 15m in Paper-Server)
++     */
++    double[] getTPS();
 +    // Paper end
 +
      /**
