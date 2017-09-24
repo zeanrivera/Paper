@@ -1,4 +1,4 @@
-From d7c052066486351eabee4d956ebd09aad3bef0c2 Mon Sep 17 00:00:00 2001
+From 6bd852605f72ed3074a6280f68157310c8c0ccfe Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Tue, 1 Mar 2016 15:08:03 -0600
 Subject: [PATCH] Remove invalid mob spawner tile entities

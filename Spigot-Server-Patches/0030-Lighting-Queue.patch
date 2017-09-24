@@ -1,4 +1,4 @@
-From a77242d4bca7837b69fbb6119d22f7951633e692 Mon Sep 17 00:00:00 2001
+From 8f087dbe69ea02a478791f1dda74ddd8922d2db6 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sun, 24 Sep 2017 16:16:38 -0400
 Subject: [PATCH] Lighting Queue
@@ -188,7 +188,7 @@ index 78141f8..09890c8 100644
          co.aikar.timings.TimingsManager.FULL_SERVER_TICK.stopTiming(); // Paper
      }
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 220cc2e..c43aa7e 100644
+index 220cc2e..8ef14dd 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -1,5 +1,6 @@
@@ -211,7 +211,7 @@ index 220cc2e..c43aa7e 100644
  
          if (this.world.isAreaLoaded(new BlockPos(this.x * 16 + 8, 0, this.z * 16 + 8), 16)) {
 +            // Paper start - Queue light updates
-+            lightingQueue.add(() -> recheckGaps(onlyOne));
++            lightingQueue.add(() -> recheckGapsVanilla(onlyOne));
 +        }
 +    }
 +
