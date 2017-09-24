@@ -1,11 +1,11 @@
-From be232e4dd113882a3365785048a22d5256fe58cd Mon Sep 17 00:00:00 2001
+From e5ae93695d168ad09683f73f8a589ee75ef96a22 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 22:24:50 -0400
 Subject: [PATCH] Disable chest ticking
 
 
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityChest.java b/src/main/java/net/minecraft/tileentity/TileEntityChest.java
-index 4f3e850..bc7dc27 100644
+index 4f3e850..96aadc7 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityChest.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityChest.java
 @@ -29,7 +29,7 @@ import org.bukkit.craftbukkit.entity.CraftHumanEntity;
@@ -72,7 +72,7 @@ index 4f3e850..bc7dc27 100644
 +            // Paper start - Move close sound out of the tick loo
 +            if (this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F) {
 +                double d0 = (double) pos.getX() + 0.5D;
-+                double d2 = (double) pos.getX() + 0.5D;
++                double d2 = (double) pos.getZ() + 0.5D;
 +
 +                if (this.adjacentChestZPos != null) {
 +                    d2 += 0.5D;
@@ -92,7 +92,7 @@ index 4f3e850..bc7dc27 100644
              this.world.notifyNeighborsOfStateChange(this.pos, this.getBlockType(), false);
  
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java b/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java
-index 8067f15..9b6ada2 100644
+index 8067f15..899d0aa 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java
 @@ -6,13 +6,15 @@ import net.minecraft.init.SoundEvents;
@@ -121,7 +121,7 @@ index 8067f15..9b6ada2 100644
      }
  
      public boolean receiveClientEvent(int id, int type) {
-@@ -88,11 +92,36 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
+@@ -88,11 +92,33 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
  
      public void openChest() {
          ++this.numPlayersUsing;
@@ -148,9 +148,6 @@ index 8067f15..9b6ada2 100644
 +            double var9 = (double) pos.getZ() + 0.5D;
 +            this.world.playSound((EntityPlayer) null, var12, (double) pos.getY() + 0.5D, var9, SoundEvents.BLOCK_ENDERCHEST_CLOSE,
 +                    SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
-+        }
-+
-+        if (this.lidAngle < 0.0F) {
 +            this.lidAngle = 0.0F;
 +        }
 +        // Paper end
