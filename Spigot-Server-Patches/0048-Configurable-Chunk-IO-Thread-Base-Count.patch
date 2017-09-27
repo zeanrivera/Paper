@@ -1,11 +1,11 @@
-From ba2c8def84e686a6ee2afa8a33a624ba1914800c Mon Sep 17 00:00:00 2001
-From: Zach Brown <zach.brown@destroystokyo.com>
-Date: Wed, 2 Mar 2016 23:46:57 -0600
+From 3f835eefc96eb080d9a538d2fde89eea395f79f7 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Wed, 27 Sep 2017 14:49:06 -0400
 Subject: [PATCH] Configurable Chunk IO Thread Base Count
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-index b5795b6d3..36689db74 100644
+index b5795b6..36689db 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
 @@ -199,4 +199,9 @@ public class PaperConfig {
@@ -19,25 +19,18 @@ index b5795b6d3..36689db74 100644
 +    }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/chunkio/ChunkIOExecutor.java b/src/main/java/org/bukkit/craftbukkit/chunkio/ChunkIOExecutor.java
-index e4fd9bc60..7b7a3d01b 100644
+index a2b4ebf..53c9945 100644
 --- a/src/main/java/org/bukkit/craftbukkit/chunkio/ChunkIOExecutor.java
 +++ b/src/main/java/org/bukkit/craftbukkit/chunkio/ChunkIOExecutor.java
-@@ -1,5 +1,6 @@
- package org.bukkit.craftbukkit.chunkio;
- 
-+import com.destroystokyo.paper.PaperConfig;
- import net.minecraft.server.Chunk;
- import net.minecraft.server.ChunkProviderServer;
- import net.minecraft.server.ChunkRegionLoader;
-@@ -7,7 +8,7 @@ import net.minecraft.server.World;
+@@ -7,7 +7,7 @@ import net.minecraft.world.gen.ChunkProviderServer;
  import org.bukkit.craftbukkit.util.AsynchronousExecutor;
  
  public class ChunkIOExecutor {
 -    static final int BASE_THREADS = 1;
-+    static final int BASE_THREADS = PaperConfig.minChunkLoadThreads; // Paper
++    static final int BASE_THREADS = com.destroystokyo.paper.PaperConfig.minChunkLoadThreads; // Paper
      static final int PLAYERS_PER_THREAD = 50;
- 
-     private static final AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException> instance = new AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException>(new ChunkIOProvider(), BASE_THREADS);
+     private static final AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException> instance =
+             new AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException>(new ChunkIOProvider(), 1);
 -- 
-2.14.1
+2.14.1.windows.1
 

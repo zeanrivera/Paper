@@ -1,0 +1,35 @@
+From f54a990fe584acb833bf9442c66ffc435feba9f1 Mon Sep 17 00:00:00 2001
+From: Steve Anton <anxuiz.nx@gmail.com>
+Date: Wed, 27 Sep 2017 14:58:44 -0400
+Subject: [PATCH] Add PlayerInitialSpawnEvent
+
+
+diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
+index 0907f66..52ea87d 100644
+--- a/src/main/java/net/minecraft/server/management/PlayerList.java
++++ b/src/main/java/net/minecraft/server/management/PlayerList.java
+@@ -149,6 +149,21 @@ public abstract class PlayerList {
+             s = bukkit.hasKey("lastKnownName", 8) ? bukkit.getString("lastKnownName") : s;
+         }
+ 
++        // Paper start - support PlayerInitialSpawnEvent
++        Location originalLoc = new Location(playerIn.world.getWorld(), playerIn.posX, playerIn.posY, playerIn.posZ, playerIn.rotationYaw, playerIn.rotationPitch);
++        com.destroystokyo.paper.event.player.PlayerInitialSpawnEvent event = new com.destroystokyo.paper.event.player.PlayerInitialSpawnEvent(playerIn.getBukkitEntity(), originalLoc);
++        this.getServerInstance().server.getPluginManager().callEvent(event);
++
++        Location newLoc = event.getSpawnLocation();
++        playerIn.world = ((CraftWorld) newLoc.getWorld()).getHandle();
++        playerIn.posX = newLoc.getX();
++        playerIn.posY = newLoc.getY();
++        playerIn.posZ = newLoc.getZ();
++        playerIn.rotationYaw = newLoc.getYaw();
++        playerIn.rotationPitch = newLoc.getPitch();
++        playerIn.dimension = ((CraftWorld) newLoc.getWorld()).getHandle().dimension;
++        // Paper end
++
+         playerIn.setWorld(this.mcServer.getWorld(playerIn.dimension));
+         playerIn.interactionManager.setWorld((WorldServer) playerIn.world);
+         String s1 = "local";
+-- 
+2.14.1.windows.1
+

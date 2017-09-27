@@ -1,14 +1,14 @@
-From e57d4c1008d43b0b3e1aba3764a8336803b24a00 Mon Sep 17 00:00:00 2001
+From 2baf26faf28ce6924cfbf027e2d08da1e46d73c5 Mon Sep 17 00:00:00 2001
 From: Sudzzy <originmc@outlook.com>
-Date: Wed, 2 Mar 2016 15:03:53 -0600
+Date: Wed, 27 Sep 2017 14:07:39 -0400
 Subject: [PATCH] Configurable mob spawner tick rate
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 4fea4b359..1bb956515 100644
+index 07f54ff..a1fffc8 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -214,4 +214,9 @@ public class PaperWorldConfig {
+@@ -216,4 +216,9 @@ public class PaperWorldConfig {
      private void disableIceAndSnow(){
          disableIceAndSnow = getBoolean("disable-ice-and-snow", false);
      }
@@ -18,43 +18,43 @@ index 4fea4b359..1bb956515 100644
 +        mobSpawnerTickRate = getInt("mob-spawner-tick-rate", 1);
 +    }
  }
-diff --git a/src/main/java/net/minecraft/server/MobSpawnerAbstract.java b/src/main/java/net/minecraft/server/MobSpawnerAbstract.java
-index e87f90474..0562c6e34 100644
---- a/src/main/java/net/minecraft/server/MobSpawnerAbstract.java
-+++ b/src/main/java/net/minecraft/server/MobSpawnerAbstract.java
-@@ -19,6 +19,7 @@ public abstract class MobSpawnerAbstract {
+diff --git a/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java b/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
+index c5a1256..2e50695 100644
+--- a/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
++++ b/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
+@@ -33,6 +33,7 @@ public abstract class MobSpawnerBaseLogic {
      private int maxNearbyEntities = 6;
-     private int requiredPlayerRange = 16;
+     private int activatingRangeFromPlayer = 16;
      private int spawnRange = 4;
 +    private int tickDelay = 0; // Paper
  
-     public MobSpawnerAbstract() {}
- 
-@@ -44,6 +45,10 @@ public abstract class MobSpawnerAbstract {
+     @Nullable
+     public ResourceLocation getEntityId() {
+@@ -58,6 +59,10 @@ public abstract class MobSpawnerBaseLogic {
      }
  
-     public void c() {
+     public void updateSpawner() {
 +        // Paper start - Configurable mob spawner tick rate
 +        if (spawnDelay > 0 && --tickDelay > 0) return;
-+        tickDelay = this.a().paperConfig.mobSpawnerTickRate;
++        tickDelay = this.getSpawnerWorld().paperConfig.mobSpawnerTickRate;
 +        // Paper end
-         if (!this.h()) {
-             this.e = this.d;
+         if (!this.isActivated()) {
+             this.prevMobRotation = this.mobRotation;
          } else {
-@@ -57,18 +62,18 @@ public abstract class MobSpawnerAbstract {
-                 this.a().addParticle(EnumParticle.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D, new int[0]);
-                 this.a().addParticle(EnumParticle.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D, new int[0]);
+@@ -71,18 +76,18 @@ public abstract class MobSpawnerBaseLogic {
+                 this.getSpawnerWorld().spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+ 
                  if (this.spawnDelay > 0) {
 -                    --this.spawnDelay;
 +                    this.spawnDelay -= tickDelay; // Paper
                  }
  
-                 this.e = this.d;
-                 this.d = (this.d + (double) (1000.0F / ((float) this.spawnDelay + 200.0F))) % 360.0D;
+                 this.prevMobRotation = this.mobRotation;
+                 this.mobRotation = (this.mobRotation + (double) (1000.0F / ((float) this.spawnDelay + 200.0F))) % 360.0D;
              } else {
 -                if (this.spawnDelay == -1) {
 +                if (this.spawnDelay < -tickDelay) { // Paper
-                     this.i();
+                     this.resetTimer();
                  }
  
                  if (this.spawnDelay > 0) {
@@ -64,5 +64,5 @@ index e87f90474..0562c6e34 100644
                  }
  
 -- 
-2.13.4
+2.14.1.windows.1
 

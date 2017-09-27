@@ -1,4 +1,4 @@
-From b7caa490f536839d9f4f7c28157cd6e557853f96 Mon Sep 17 00:00:00 2001
+From 9ed96ceaa557518e70a0729de7d246042f62864a Mon Sep 17 00:00:00 2001
 From: Steve Anton <anxuiz.nx@gmail.com>
 Date: Mon, 29 Feb 2016 18:13:58 -0600
 Subject: [PATCH] Add PlayerInitialSpawnEvent
@@ -55,5 +55,5 @@ index 00000000..d1d6f33c
 +    }
 +}
 -- 
-2.14.1
+2.14.1.windows.1
 

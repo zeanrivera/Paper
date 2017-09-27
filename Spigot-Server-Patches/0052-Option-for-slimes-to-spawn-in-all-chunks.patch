@@ -1,0 +1,43 @@
+From 568bdac2ed316dea441cd48d512eb476f6e870d0 Mon Sep 17 00:00:00 2001
+From: vemacs <d@nkmem.es>
+Date: Wed, 27 Sep 2017 15:21:09 -0400
+Subject: [PATCH] Option for slimes to spawn in all chunks
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index d6989de..779b140 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -231,4 +231,9 @@ public class PaperWorldConfig {
+     private void disableChestCatDetection() {
+         disableChestCatDetection = getBoolean("game-mechanics.disable-chest-cat-detection", false);
+     }
++
++    public boolean allChunksAreSlimeChunks;
++    private void allChunksAreSlimeChunks() {
++        allChunksAreSlimeChunks = getBoolean("all-chunks-are-slime-chunks", false);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/monster/EntitySlime.java b/src/main/java/net/minecraft/entity/monster/EntitySlime.java
+index ff40fa3..c3d01af 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntitySlime.java
++++ b/src/main/java/net/minecraft/entity/monster/EntitySlime.java
+@@ -291,11 +291,14 @@ public class EntitySlime extends EntityLiving implements IMob {
+                     return super.getCanSpawnHere();
+                 }
+ 
++                // Paper start - Add option to enable slime spawns in all chunks
++                boolean isSlimeChunk = world.paperConfig.allChunksAreSlimeChunks || chunk.getRandomWithSeed((long) this.world.spigotConfig.slimeSeed).nextInt(10) == 0;
+                 if (this.rand.nextInt(10) == 0
+-                        && chunk.getRandomWithSeed((long) this.world.spigotConfig.slimeSeed).nextInt(10) == 0
++                        && isSlimeChunk
+                         && this.posY < 40.0D) {
+                     return super.getCanSpawnHere();
+                 }
++                // Paper end
+             }
+ 
+             return false;
+-- 
+2.14.1.windows.1
+
