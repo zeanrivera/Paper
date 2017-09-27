@@ -1,4 +1,4 @@
-From 7846b9765044cabec2fe02a54a74b475863cef46 Mon Sep 17 00:00:00 2001
+From b79a7190ebd1cc1ee70702e10d0021bf2cef9879 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 17:16:08 -0600
 Subject: [PATCH] Setup Gradle config

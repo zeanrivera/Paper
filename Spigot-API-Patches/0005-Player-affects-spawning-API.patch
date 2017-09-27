@@ -1,4 +1,4 @@
-From 64c154ce85d96faee0f358801caff7532dbd8a98 Mon Sep 17 00:00:00 2001
+From cc6a7d70e0118c47d2b1611e93ba1a0f08236b52 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Mon, 29 Feb 2016 17:22:34 -0600
 Subject: [PATCH] Player affects spawning API

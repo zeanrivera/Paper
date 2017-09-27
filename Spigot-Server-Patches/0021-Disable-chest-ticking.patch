@@ -1,4 +1,4 @@
-From 29f6e534463f164a6fd0add4110a8c1dea21d589 Mon Sep 17 00:00:00 2001
+From 480f9c5b2d04007b3f081c6bda69c4a6c643a4fb Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 22:24:50 -0400
 Subject: [PATCH] Disable chest ticking
