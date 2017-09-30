@@ -1,4 +1,4 @@
-From 7c49876f2e160b39df0840023ecb803d3d6d715b Mon Sep 17 00:00:00 2001
+From 7e778c06111d4540e15c65a51f1530823e1c3464 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 17:43:51 -0400
 Subject: [PATCH] Paper config files
@@ -444,45 +444,6 @@ index 2a6c4fc..208b94e 100644
                      }
                  };
          OptionSet options = null;
-diff --git a/src/main/java/org/spigotmc/SpigotWorldConfig.java b/src/main/java/org/spigotmc/SpigotWorldConfig.java
-index 3e65f16..5f5101c 100644
---- a/src/main/java/org/spigotmc/SpigotWorldConfig.java
-+++ b/src/main/java/org/spigotmc/SpigotWorldConfig.java
-@@ -82,29 +82,29 @@ public class SpigotWorldConfig {
-         this.config.set("world-settings.default." + path, val);
-     }
- 
--    private boolean getBoolean(String path, boolean def) {
-+    public boolean getBoolean(String path, boolean def) {
-         this.config.addDefault("world-settings.default." + path, Boolean.valueOf(def));
-         return this.config.getBoolean(
-                 "world-settings." + this.worldName + "." + path, this.config.getBoolean("world-settings.default." + path));
-     }
- 
--    private double getDouble(String path, double def) {
-+    public double getDouble(String path, double def) {
-         this.config.addDefault("world-settings.default." + path, Double.valueOf(def));
-         return this.config.getDouble(
-                 "world-settings." + this.worldName + "." + path, this.config.getDouble("world-settings.default." + path));
-     }
- 
--    private int getInt(String path, int def) {
-+    public int getInt(String path, int def) {
-         this.config.addDefault("world-settings.default." + path, Integer.valueOf(def));
-         return this.config.getInt("world-settings." + this.worldName + "." + path, this.config.getInt("world-settings.default." + path));
-     }
- 
--    private <T> List getList(String path, T def) {
-+    public <T> List getList(String path, T def) {
-         this.config.addDefault("world-settings.default." + path, def);
-         return this.config.getList("world-settings." + this.worldName + "." + path, this.config.getList("world-settings.default." + path));
-     }
- 
--    private String getString(String path, String def) {
-+    public String getString(String path, String def) {
-         this.config.addDefault("world-settings.default." + path, def);
-         return this.config.getString(
-                 "world-settings." + this.worldName + "." + path, this.config.getString("world-settings.default." + path));
 -- 
-2.14.1
+2.14.1.windows.1
 

@@ -1,4 +1,4 @@
-From fe4d7e2285fd5d50f75ce111103d903883960484 Mon Sep 17 00:00:00 2001
+From 909ecd0caf9086e29618e36933ed9f2e14f414af Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 20:24:35 -0600
 Subject: [PATCH] Add exception reporting event
@@ -587,5 +587,5 @@ index 041a4cd7..68dd3332 100644
          }
      }
 -- 
-2.14.1
+2.14.1.windows.1
 
