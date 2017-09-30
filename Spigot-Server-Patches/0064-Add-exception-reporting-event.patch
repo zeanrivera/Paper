@@ -129,7 +129,7 @@ index c4c38d1..9fe9e96 100644
 +                            String msg = "TileEntity threw exception at " + tileentity.world.getWorld().getName() + ":" + tileentity.pos.getX() + "," + tileentity.pos.getY() + "," + tileentity.pos.getZ();
 +                            System.err.println(msg);
                              var16.printStackTrace();
-+                            new ServerExceptionEvent(new ServerInternalException(msg, var16));
++                            new ServerExceptionEvent(new ServerInternalException(msg, var16)).callEvent();
                              tilesThisCycle--;
                              this.tickableTileEntities.remove(tileTickPosition--);
                              continue;
