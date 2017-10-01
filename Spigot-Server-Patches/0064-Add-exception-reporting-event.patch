@@ -1,4 +1,4 @@
-From 4c2cc2eb79ccaceacb4ee77fccf958cdbb70d91d Mon Sep 17 00:00:00 2001
+From 3a08ffa60e85880e5e95042b675a13d6e31605ad Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 18:09:33 -0400
 Subject: [PATCH] Add exception reporting event
@@ -98,7 +98,7 @@ index b863867..39488e7 100644
              }
  
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index c4c38d1..9fe9e96 100644
+index c4c38d1..e61ffdc 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1,5 +1,7 @@

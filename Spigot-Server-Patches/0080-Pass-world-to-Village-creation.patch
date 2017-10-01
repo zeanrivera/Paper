@@ -1,0 +1,36 @@
+From f2d22cb515e7b134dc907d9d24a64e58da0d840e Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 30 Sep 2017 23:55:22 -0400
+Subject: [PATCH] Pass world to Village creation
+
+Fixes https://github.com/PaperMC/Paper/issues/95
+
+diff --git a/src/main/java/net/minecraft/village/Village.java b/src/main/java/net/minecraft/village/Village.java
+index 5cff8b1..6c65629 100644
+--- a/src/main/java/net/minecraft/village/Village.java
++++ b/src/main/java/net/minecraft/village/Village.java
+@@ -41,7 +41,7 @@ public class Village {
+     private final List<Village.VillageAggressor> villageAgressors = Lists.<Village.VillageAggressor>newArrayList();
+     private int numIronGolems;
+ 
+-    public Village() {}
++    private Village() {} // Paper - Nothing should call this - world needs to be set.
+ 
+     public Village(World worldIn) {
+         this.world = worldIn;
+diff --git a/src/main/java/net/minecraft/village/VillageCollection.java b/src/main/java/net/minecraft/village/VillageCollection.java
+index 855ee8e..dc4cb99 100644
+--- a/src/main/java/net/minecraft/village/VillageCollection.java
++++ b/src/main/java/net/minecraft/village/VillageCollection.java
+@@ -224,7 +224,7 @@ public class VillageCollection extends WorldSavedData {
+ 
+         for (int var3 = 0; var3 < var2.tagCount(); ++var3) {
+             NBTTagCompound var4 = var2.getCompoundTagAt(var3);
+-            Village var5 = new Village();
++            Village var5 = new Village(world); // Paper
+             var5.readVillageDataFromNBT(var4);
+             this.villageList.add(var5);
+         }
+-- 
+2.14.1.windows.1
+

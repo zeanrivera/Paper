@@ -1,4 +1,4 @@
-From a0f50cdf5b3da6aa09495db38c20729ab68c2629 Mon Sep 17 00:00:00 2001
+From bb3b07e2a569003ef68385f8c98eea787f61b89c Mon Sep 17 00:00:00 2001
 From: Sudzzy <originmc@outlook.com>
 Date: Sat, 30 Sep 2017 17:28:35 -0400
 Subject: [PATCH] Option to skip teleport safety when teleporting

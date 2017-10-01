@@ -1,0 +1,46 @@
+From eeea11ffe19cf8ae7fdae58bbe16c9d0d9e896ac Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 1 Oct 2017 00:34:32 -0400
+Subject: [PATCH] Optimize Chunk Access
+
+getting a loaded chunk is one of the most hottest pieces of code in the game.
+getChunkAt is called for the same chunk multiple times in a row, often from getType();
+
+Optimize this look up by using a Last Access cache.
+
+diff --git a/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java b/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
+index adc063b..7f3133b 100644
+--- a/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
++++ b/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
+@@ -36,7 +36,27 @@ public class ChunkProviderServer implements IChunkProvider {
+     public final Set<Long> droppedChunksSet = Sets.<Long>newHashSet();
+     public final IChunkGenerator chunkGenerator;
+     private final IChunkLoader chunkLoader;
+-    public final Long2ObjectMap<Chunk> id2ChunkMap = new Long2ObjectOpenHashMap<Chunk>(8192);
++    // Paper start
++    protected Chunk lastChunkbyPos = null;
++    public final Long2ObjectMap<Chunk> id2ChunkMap = new Long2ObjectOpenHashMap<Chunk>(8192) {
++
++        @Override
++        public Chunk get(long key) {
++            if (lastChunkbyPos != null && key == lastChunkbyPos.chunkKey) {
++                return lastChunkbyPos;
++            }
++            return lastChunkbyPos = super.get(key);
++        }
++
++        @Override
++        public Chunk remove(long key) {
++            if (lastChunkbyPos != null && key == lastChunkbyPos.chunkKey) {
++                lastChunkbyPos = null;
++            }
++            return super.remove(key);
++        }
++    };
++    // Paper end
+     public final WorldServer world;
+     private static final double UNLOAD_QUEUE_RESIZE_FACTOR = 0.96D;
+ 
+-- 
+2.14.1.windows.1
+

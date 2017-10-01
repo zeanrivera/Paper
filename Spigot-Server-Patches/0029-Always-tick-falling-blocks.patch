@@ -1,4 +1,4 @@
-From 1dc61154c2f9caeb416376b628e8b96a3ef1e53e Mon Sep 17 00:00:00 2001
+From ed4fbba407d8991265db440a1e0d83c2a4b3fc80 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 24 Sep 2017 15:45:03 -0400
 Subject: [PATCH] Always tick falling blocks
@@ -25,5 +25,5 @@ index f1e5ea3..ce0f63c 100644
                  || entity instanceof EntityFireworkRocket;
      }
 -- 
-2.14.1
+2.14.1.windows.1
 
