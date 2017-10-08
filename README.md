@@ -25,7 +25,11 @@ How To (Compiling Jar From Source)
 ------
 To compile Paper, you need JDK 8, maven, and an internet connection.
 
-Clone this repo, run `./paper jar` from *bash*, get files.
+Clone this repo, then run the following from *bash*, get files.
+```bash
+./gradlew setup
+./gradlew build
+```
 
 How To (Pull Request)
 ------
