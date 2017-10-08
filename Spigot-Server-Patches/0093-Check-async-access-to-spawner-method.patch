@@ -1,4 +1,4 @@
-From 5f88b2885c8f19c107ff53d00f541db1eda5ac69 Mon Sep 17 00:00:00 2001
+From 499139af0696c5a15ca69c1a4223395e0ec95fb4 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 1 Oct 2017 01:10:32 -0400
 Subject: [PATCH] Check async access to spawner method

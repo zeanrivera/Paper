@@ -1,4 +1,4 @@
-From 96ecb2010e7de99a1382b05b7173e545d90a4bb0 Mon Sep 17 00:00:00 2001
+From a8270700f1753e074029ab993c827fcf9725c13b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 27 Sep 2017 15:04:41 -0400
 Subject: [PATCH] Ensure commands are not ran async
@@ -14,7 +14,7 @@ big slowdown in execution but throwing an exception at same time to raise awaren
 that it is happening so that plugin authors can fix their code to stop executing commands async.
 
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 11d4855..02bb172 100644
+index 1a6f0de..3995361 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -1479,6 +1479,29 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {

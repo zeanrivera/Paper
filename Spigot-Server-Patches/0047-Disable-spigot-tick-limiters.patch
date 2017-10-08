@@ -1,11 +1,11 @@
-From f7316e70e65cc8e56dba8b21b7e470181f98ffc1 Mon Sep 17 00:00:00 2001
+From f00931655effda4246a4873d3b5fa3f1ace57093 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Wed, 27 Sep 2017 14:43:33 -0400
 Subject: [PATCH] Disable spigot tick limiters
 
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 75c319d..354a527 100644
+index 602472c..c83282b 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1539,9 +1539,9 @@ public abstract class World implements IBlockAccess {

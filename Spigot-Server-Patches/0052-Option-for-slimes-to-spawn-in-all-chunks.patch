@@ -1,4 +1,4 @@
-From ab921b4186c3fb4b8731a331c9fa9d3b203aaa4b Mon Sep 17 00:00:00 2001
+From e01ebf1b699e9eabb3db7c796d79f07589f21bc9 Mon Sep 17 00:00:00 2001
 From: vemacs <d@nkmem.es>
 Date: Wed, 27 Sep 2017 15:21:09 -0400
 Subject: [PATCH] Option for slimes to spawn in all chunks
@@ -19,7 +19,7 @@ index d6989de..779b140 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/monster/EntitySlime.java b/src/main/java/net/minecraft/entity/monster/EntitySlime.java
-index ff40fa3..c3d01af 100644
+index 97f1b99..9905de0 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntitySlime.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntitySlime.java
 @@ -291,11 +291,14 @@ public class EntitySlime extends EntityLiving implements IMob {

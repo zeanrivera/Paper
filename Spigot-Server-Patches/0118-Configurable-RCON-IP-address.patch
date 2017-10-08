@@ -1,0 +1,23 @@
+From 7843e49e9fd66ccd0697b95eb3807ff67127bdb4 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 7 Oct 2017 23:47:15 -0400
+Subject: [PATCH] Configurable RCON IP address
+
+For servers with multiple IP's, ability to bind to a specific interface.
+
+diff --git a/src/main/java/net/minecraft/network/rcon/RConThreadMain.java b/src/main/java/net/minecraft/network/rcon/RConThreadMain.java
+index 6ac84b3..ea24449 100644
+--- a/src/main/java/net/minecraft/network/rcon/RConThreadMain.java
++++ b/src/main/java/net/minecraft/network/rcon/RConThreadMain.java
+@@ -23,7 +23,7 @@ public class RConThreadMain extends RConThreadBase {
+         super(p_i1538_1_, "RCON Listener");
+         this.rconPort = p_i1538_1_.getIntProperty("rcon.port", 0);
+         this.rconPassword = p_i1538_1_.getStringProperty("rcon.password", "");
+-        this.hostname = p_i1538_1_.getHostname();
++        this.hostname = p_i1538_1_.getStringProperty("rcon.ip",  p_i1538_1_.getHostname()); // Paper
+         this.serverPort = p_i1538_1_.getPort();
+ 
+         if (0 == this.rconPort) {
+-- 
+2.14.1.windows.1
+

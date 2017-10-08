@@ -1,4 +1,4 @@
-From 6bcee17aecc69a96e7e3235e883331b8e6750d2f Mon Sep 17 00:00:00 2001
+From f1ef0ea9eef061d96d215c032b627026a683223c Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 22:17:04 -0400
 Subject: [PATCH] Chunk save queue improvements
@@ -41,7 +41,7 @@ index 36689db..3898ad8 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-index 871dca1..9e6437f 100644
+index 374dee0..108687c 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 @@ -7,6 +7,7 @@ import java.util.Iterator;
@@ -59,16 +59,16 @@ index 871dca1..9e6437f 100644
 +    private ConcurrentLinkedQueue<QueuedChunk> queue = new ConcurrentLinkedQueue<>(); // Paper - Chunk queue improvements
 +    private final Object lock = new Object(); // Paper - Chunk queue improvements
      private static final Logger LOGGER = LogManager.getLogger();
-     private final Map<ChunkPos, Supplier<NBTTagCompound>> chunksToRemove = Maps.<ChunkPos, Supplier<NBTTagCompound>>newConcurrentMap();
+     private final Map<ChunkPos, Supplier<NBTTagCompound>> chunksToSave = Maps.<ChunkPos, Supplier<NBTTagCompound>>newConcurrentMap();
      private final File chunkSaveLocation;
 @@ -160,7 +163,13 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
      }
  
      protected void a(ChunkPos chunkcoordintpair, Supplier<NBTTagCompound> nbttagcompound) {
--        this.chunksToRemove.put(chunkcoordintpair, nbttagcompound);
+-        this.chunksToSave.put(chunkcoordintpair, nbttagcompound);
 +        // Paper - Chunk queue improvements
 +        synchronized (lock) {
-+            this.chunksToRemove.put(chunkcoordintpair, nbttagcompound);
++            this.chunksToSave.put(chunkcoordintpair, nbttagcompound);
 +        }
 +        queue.add(new QueuedChunk(chunkcoordintpair, nbttagcompound));
 +        // Paper end
@@ -80,7 +80,7 @@ index 871dca1..9e6437f 100644
      }
  
      private synchronized boolean processSaveQueueEntry(boolean logCompletion) {
--        Iterator<Entry<ChunkPos, Supplier<NBTTagCompound>>> iter = this.chunksToRemove.entrySet().iterator();
+-        Iterator<Entry<ChunkPos, Supplier<NBTTagCompound>>> iter = this.chunksToSave.entrySet().iterator();
 -
 -        if (!iter.hasNext()) {
 +        // Paper start - Chunk queue improvements
@@ -111,16 +111,16 @@ index 871dca1..9e6437f 100644
                  }
 +                // Paper start - Chunk queue improvements
 +                synchronized (lock) {
-+                    if (this.chunksToRemove.get(chunkcoordintpair) == chunk.compoundSupplier) { // This will not equal if a newer version is still pending
-+                        this.chunksToRemove.remove(chunkcoordintpair);
++                    if (this.chunksToSave.get(chunkcoordintpair) == chunk.compoundSupplier) { // This will not equal if a newer version is still pending
++                        this.chunksToSave.remove(chunkcoordintpair);
 +                    }
 +                }
 +                // Paper end
  
                  flag = true;
              } finally {
--                this.chunksToRemove.remove(chunkcoordintpair, value);
-+                //this.chunksToRemove.remove(chunkcoordintpair, value); // Paper
+-                this.chunksToSave.remove(chunkcoordintpair, value);
++                //this.chunksToSave.remove(chunkcoordintpair, value); // Paper
              }
  
              return flag;

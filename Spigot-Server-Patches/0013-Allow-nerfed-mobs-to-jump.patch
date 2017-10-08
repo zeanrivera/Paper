@@ -1,4 +1,4 @@
-From f8f1accb50f081ab66cf18fb16f813d0e5438f3e Mon Sep 17 00:00:00 2001
+From 188fd71a23b890ebdec6eab46c7ffabfe5cd1138 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 21:00:41 -0400
 Subject: [PATCH] Allow nerfed mobs to jump
@@ -19,31 +19,18 @@ index 22999f0..5f13fbf 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/EntityLiving.java b/src/main/java/net/minecraft/entity/EntityLiving.java
-index 73bdea4..5325a78 100644
+index 87aa3d1..69b1dc9 100644
 --- a/src/main/java/net/minecraft/entity/EntityLiving.java
 +++ b/src/main/java/net/minecraft/entity/EntityLiving.java
-@@ -9,11 +9,7 @@ import java.util.logging.Level;
- import javax.annotation.Nullable;
- import net.minecraft.block.state.IBlockState;
- import net.minecraft.enchantment.EnchantmentHelper;
--import net.minecraft.entity.ai.EntityAITasks;
--import net.minecraft.entity.ai.EntityJumpHelper;
--import net.minecraft.entity.ai.EntityLookHelper;
--import net.minecraft.entity.ai.EntityMoveHelper;
--import net.minecraft.entity.ai.EntitySenses;
-+import net.minecraft.entity.ai.*;
- import net.minecraft.entity.ai.attributes.AttributeModifier;
- import net.minecraft.entity.item.EntityBoat;
- import net.minecraft.entity.item.EntityItem;
-@@ -90,6 +86,7 @@ public abstract class EntityLiving extends EntityLivingBase {
+@@ -90,6 +90,7 @@ public abstract class EntityLiving extends EntityLivingBase {
      private boolean isLeashed;
-     private Entity leashedToEntity;
+     private Entity leashHolder;
      private NBTTagCompound leashNBTTag;
-+    @Nullable public EntityAISwimming nerfedSwimController; // Paper
++    @Nullable public net.minecraft.entity.ai.EntityAISwimming nerfedSwimController; // Paper
  
      public EntityLiving(World worldIn) {
          super(worldIn);
-@@ -708,6 +705,13 @@ public abstract class EntityLiving extends EntityLivingBase {
+@@ -708,6 +709,13 @@ public abstract class EntityLiving extends EntityLivingBase {
              this.jumpHelper.doJump();
              this.world.profiler.endSection();
              this.world.profiler.endSection();
@@ -75,5 +62,5 @@ index 5560b03..40a04c3 100644
              ((PathNavigateGround) entityIn.getNavigator()).setCanSwim(true);
          } else if (entityIn.getNavigator() instanceof PathNavigateFlying) {
 -- 
-2.14.1
+2.14.1.windows.1
 

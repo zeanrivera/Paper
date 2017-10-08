@@ -1,4 +1,4 @@
-From 4114e3b724932c4e09057f1f1619f0cb23effcfe Mon Sep 17 00:00:00 2001
+From df9af39707a2d885b4b8350264ea91854ccb3b33 Mon Sep 17 00:00:00 2001
 From: Isaac Moore <rmsy@me.com>
 Date: Mon, 29 Feb 2016 18:02:25 -0600
 Subject: [PATCH] Add PlayerLocaleChangeEvent
@@ -61,5 +61,5 @@ index 00000000..29dd763a
 +    }
 +}
 -- 
-2.14.1
+2.14.1.windows.1
 

@@ -1,0 +1,71 @@
+From 20a44b5ff3d456e846622daee2f5ff4900a9b360 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 7 Oct 2017 22:34:08 -0400
+Subject: [PATCH] Remove unused World Tile Entity List
+
+Massive hit to performance and it is completely unnecessary.
+
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index d40e6d3..79f157c 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -99,7 +99,7 @@ public abstract class World implements IBlockAccess {
+                 }
+             };
+     protected final Set<Entity> unloadedEntityList = Sets.newHashSet(); // Paper
+-    public final List<TileEntity> loadedTileEntityList = Lists.<TileEntity>newArrayList();
++    //public final List<TileEntity> loadedTileEntityList = Lists.<TileEntity>newArrayList(); // Paper - Remove unused list
+     public final List<TileEntity> tickableTileEntities = Lists.<TileEntity>newArrayList();
+     private final List<TileEntity> addedTileEntityList = Lists.<TileEntity>newArrayList();
+     private final Set<TileEntity> tileEntitiesToBeRemoved = Sets.newHashSet(); // Paper
+@@ -1594,7 +1594,7 @@ public abstract class World implements IBlockAccess {
+ 
+         if (!this.tileEntitiesToBeRemoved.isEmpty()) {
+             this.tickableTileEntities.removeAll(this.tileEntitiesToBeRemoved);
+-            this.loadedTileEntityList.removeAll(this.tileEntitiesToBeRemoved);
++            //this.loadedTileEntityList.removeAll(this.tileEntitiesToBeRemoved); // Paper - Remove unused list
+             this.tileEntitiesToBeRemoved.clear();
+         }
+ 
+@@ -1642,7 +1642,7 @@ public abstract class World implements IBlockAccess {
+                 if (tileentity.isInvalid()) {
+                     --tilesThisCycle;
+                     this.tickableTileEntities.remove(this.tileTickPosition--);
+-                    this.loadedTileEntityList.remove(tileentity);
++                    //this.loadedTileEntityList.remove(tileentity); // Paper - Remove unused list
+ 
+                     if (this.isBlockLoaded(tileentity.getPos())) {
+                         this.getChunkFromBlockCoords(tileentity.getPos()).removeTileEntity(tileentity.getPos());
+@@ -1669,7 +1669,7 @@ public abstract class World implements IBlockAccess {
+                     chunk.addTileEntity(tileentity1.getPos(), tileentity1);
+                     this.notifyBlockUpdate(tileentity1.getPos(), iblockdata, iblockdata, 3);
+ 
+-                    if (!this.loadedTileEntityList.contains(tileentity1)) {
++                    if (true) { // Paper - Remove unused list
+                         this.addTileEntity(tileentity1);
+                     }
+                 }
+@@ -1687,9 +1687,9 @@ public abstract class World implements IBlockAccess {
+     protected void tickPlayers() {}
+ 
+     public boolean addTileEntity(TileEntity tile) {
+-        boolean flag = this.loadedTileEntityList.add(tile);
++        boolean flag = true; // Paper - Remove unused list
+ 
+-        if (flag && tile instanceof ITickable) {
++        if (flag && tile instanceof ITickable && !this.tickableTileEntities.contains(tile)) { // Paper
+             this.tickableTileEntities.add(tile);
+         }
+ 
+@@ -2106,7 +2106,7 @@ public abstract class World implements IBlockAccess {
+         } else {
+             if (tileentity != null) {
+                 this.addedTileEntityList.remove(tileentity);
+-                this.loadedTileEntityList.remove(tileentity);
++                //this.loadedTileEntityList.remove(tileentity); // Paper - Remove unused list
+                 this.tickableTileEntities.remove(tileentity);
+             }
+ 
+-- 
+2.14.1.windows.1
+

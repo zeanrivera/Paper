@@ -1,0 +1,122 @@
+From af9706d0ef91c70b9fd08954bb322a8e41d91e1d Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 8 Oct 2017 01:06:09 -0400
+Subject: [PATCH] Improve Maps (in item frames) performance and bug fixes
+
+Maps used a modified version of rendering to support plugin controlled
+imaging on maps. The Craft Map Renderer is much slower than Vanilla,
+causing maps in item frames to cause a noticeable hit on server performance.
+
+This updates the map system to not use the Craft system if we detect that no
+custom renderers are in use, defaulting to the much simpler Vanilla system.
+
+Additionally, numerous issues to player position tracking on maps has been fixed.
+
+diff --git a/src/main/java/net/minecraft/entity/EntityTrackerEntry.java b/src/main/java/net/minecraft/entity/EntityTrackerEntry.java
+index 7548865..133f4e1 100644
+--- a/src/main/java/net/minecraft/entity/EntityTrackerEntry.java
++++ b/src/main/java/net/minecraft/entity/EntityTrackerEntry.java
+@@ -150,11 +150,11 @@ public class EntityTrackerEntry {
+             this.sendToTrackingAndSelf(new SPacketSetPassengers(this.trackedEntity));
+         }
+ 
+-        if (this.trackedEntity instanceof EntityItemFrame) {
++        if (this.trackedEntity instanceof EntityItemFrame && this.updateCounter % 20 == 0) { // Paper
+             EntityItemFrame entityitemframe = (EntityItemFrame) this.trackedEntity;
+             ItemStack itemstack = entityitemframe.getDisplayedItem();
+ 
+-            if (this.updateCounter % 10 == 0 && itemstack.getItem() instanceof ItemMap) {
++            if (itemstack.getItem() instanceof ItemMap) { // Paper - Moved back up
+                 MapData worldmap = Items.FILLED_MAP.getMapData(itemstack, this.trackedEntity.world);
+ 
+                 for (EntityPlayer entityhuman : this.trackingPlayers) {
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
+index 0e4ec7b..f7ae47e 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
+@@ -629,6 +629,13 @@ public abstract class EntityPlayer extends EntityLivingBase {
+             this.world.getServer().getPluginManager().callEvent(event);
+ 
+             if (!event.isCancelled()) {
++                // Paper start - remove player from map on drop
++                if (droppedItem.getItem() == Items.FILLED_MAP) {
++                    net.minecraft.world.storage.MapData worldmap = Items.FILLED_MAP.getMapData(droppedItem, this.world);
++                    worldmap.updateVisiblePlayers(this, droppedItem);
++                }
++                // Paper end
++
+                 ItemStack itemstack1 = this.dropItemAndGetStack(entityitem);
+ 
+                 if (traceItem) {
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 79f157c..3b875cc 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -1243,6 +1243,7 @@ public abstract class World implements IBlockAccess {
+ 
+                     while (iter.hasNext()) {
+                         if ((iter.next()).player == entityIn) {
++                            map.mapDecorations.remove(entityIn.getUniqueID()); // Paper
+                             iter.remove();
+                         }
+                     }
+diff --git a/src/main/java/net/minecraft/world/storage/MapData.java b/src/main/java/net/minecraft/world/storage/MapData.java
+index 0b5202d..c910ac4 100644
+--- a/src/main/java/net/minecraft/world/storage/MapData.java
++++ b/src/main/java/net/minecraft/world/storage/MapData.java
+@@ -41,9 +41,11 @@ public class MapData extends WorldSavedData {
+     public final CraftMapView mapView = new CraftMapView(this);
+     private CraftServer server = (CraftServer) Bukkit.getServer();
+     private UUID uniqueId = null;
++    private org.bukkit.craftbukkit.map.RenderData vanillaRender = new org.bukkit.craftbukkit.map.RenderData(); // Paper
+ 
+     public MapData(String mapname) {
+         super(mapname);
++        vanillaRender.buffer = colors;
+     }
+ 
+     public void calculateMapCenter(double x, double z, int mapScale) {
+@@ -72,6 +74,7 @@ public class MapData extends WorldSavedData {
+                 }
+             }
+         }
++        vanillaRender.buffer = colors; // Paper
+ 
+         this.dimension = dimension;
+         this.xCenter = nbt.getInteger("xCenter");
+@@ -331,10 +334,31 @@ public class MapData extends WorldSavedData {
+             this.player = player;
+         }
+ 
++        // Paper start
++        private void addSeenPlayers(java.util.Collection<MapDecoration> icons) {
++            org.bukkit.entity.Player player = (org.bukkit.entity.Player) this.player.getBukkitEntity();
++            MapData.this.mapDecorations.forEach((uuid, mapIcon) -> {
++                // If this cursor is for a player check visibility with vanish system
++                org.bukkit.entity.Player other = org.bukkit.Bukkit.getPlayer(uuid); // Spigot
++                if (other == null || player.canSee(other)) {
++                    icons.add(mapIcon);
++                }
++            });
++        }
++        private boolean shouldUseVanillaMap() {
++            return mapView.getRenderers().size() == 1 && mapView.getRenderers().get(0).getClass() == org.bukkit.craftbukkit.map.CraftMapRenderer.class;
++        }
++        // Paper end
++
+         @Nullable
+         public Packet<?> getPacket(ItemStack stack) {
+-            RenderData render = MapData.this.mapView.render((CraftPlayer) this.player.getBukkitEntity());
++            // Paper start
++            if (!this.isDirty && this.tick % 5 != 0) { this.tick++; return null; } // Paper - this won't end up sending, so don't render it!
++            boolean vanillaMaps = shouldUseVanillaMap();
++            org.bukkit.craftbukkit.map.RenderData render = !vanillaMaps ? MapData.this.mapView.render((org.bukkit.craftbukkit.entity.CraftPlayer) this.player.getBukkitEntity()) : MapData.this.vanillaRender;
+             Collection<MapDecoration> icons = new ArrayList<MapDecoration>();
++            if (vanillaMaps) addSeenPlayers(icons);
++            // Paper end
+ 
+             for (MapCursor cursor : render.cursors) {
+                 if (cursor.isVisible()) {
+-- 
+2.14.1.windows.1
+

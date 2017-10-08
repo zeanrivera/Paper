@@ -1,4 +1,4 @@
-From 65f17cf78cf3d29f2772ab80035fa46000cade98 Mon Sep 17 00:00:00 2001
+From 6885fb9816f1d9374b2abdcec972b588cda7c9ab Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 17:43:51 -0400
 Subject: [PATCH] Paper config files
@@ -352,7 +352,7 @@ index 84b159e..be657e0 100644
              this.setKeyPair(CryptManager.generateKeyPair());
              LOGGER.info(
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 0066612..ca944ea 100644
+index 11750dd..898fcaf 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -182,6 +182,7 @@ public abstract class World implements IBlockAccess {

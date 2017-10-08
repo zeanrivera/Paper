@@ -1,4 +1,4 @@
-From bc2d14018123854690956d451f654c95a192f82c Mon Sep 17 00:00:00 2001
+From bca665e15f2a9d619c0cd308e4c3c1c938eaacf0 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 22:23:46 -0400
 Subject: [PATCH] Chunk Save Reattempt
@@ -8,7 +8,7 @@ should re-try to save the chunk in the event of failure and hopefully
 prevent rollbacks.
 
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-index 9e6437f..9b75083 100644
+index 108687c..e4e54d5 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 @@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;

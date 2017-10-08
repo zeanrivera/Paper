@@ -1,4 +1,4 @@
-From a1c4862b84995f0121c65ac3425eaea236877b88 Mon Sep 17 00:00:00 2001
+From 071b6d1bda8789f1d7613c6e693f85bdc7f5f5e3 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Wed, 13 Apr 2016 20:20:18 -0700
 Subject: [PATCH] Add handshake event to allow plugins to handle client
@@ -223,5 +223,5 @@ index 00000000..e44d03a2
 +    }
 +}
 -- 
-2.14.1
+2.14.1.windows.1
 

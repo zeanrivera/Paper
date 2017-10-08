@@ -1,11 +1,11 @@
-From 9ae0e09f00ea11775478b3804a617e85a9918d25 Mon Sep 17 00:00:00 2001
+From 7765fdb915b7099403bb7c5cb205673984da248d Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 16:46:53 -0400
 Subject: [PATCH] Change implementation of (tile)entity removal list
 
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 354a527..c4c38d1 100644
+index c83282b..e7c2cc5 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -9,6 +9,8 @@ import com.google.common.collect.Maps;

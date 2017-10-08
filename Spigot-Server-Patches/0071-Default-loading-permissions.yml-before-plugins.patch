@@ -1,4 +1,4 @@
-From 9eb7d3c8b659c2eddf6d808a43e121193d35ae23 Mon Sep 17 00:00:00 2001
+From 36b219172a00a1bba5e28335e8139bd5e113830e Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 22:26:41 -0400
 Subject: [PATCH] Default loading permissions.yml before plugins

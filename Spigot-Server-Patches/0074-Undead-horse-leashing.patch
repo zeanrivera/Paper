@@ -1,4 +1,4 @@
-From 25b1ff6ad6354ab6072d042cde8e058543e33c5d Mon Sep 17 00:00:00 2001
+From 6e81d24234665a319aa8769d48c3cfab182de945 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 22:54:14 -0400
 Subject: [PATCH] Undead horse leashing
@@ -20,7 +20,7 @@ index 4d98e45..d77a1e6 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/passive/AbstractHorse.java b/src/main/java/net/minecraft/entity/passive/AbstractHorse.java
-index 5fec68a..20471b5 100644
+index 968c831..df49058 100644
 --- a/src/main/java/net/minecraft/entity/passive/AbstractHorse.java
 +++ b/src/main/java/net/minecraft/entity/passive/AbstractHorse.java
 @@ -168,7 +168,7 @@ public abstract class AbstractHorse extends EntityAnimal implements IInventoryCh

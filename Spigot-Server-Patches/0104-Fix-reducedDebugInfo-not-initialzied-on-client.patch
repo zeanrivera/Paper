@@ -1,18 +1,18 @@
-From 8066651b42db1405e50c4eeded29b537da56888d Mon Sep 17 00:00:00 2001
+From 07cfc954f89b92e233aad9311ae906d8eaac3825 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Sat, 7 Oct 2017 21:24:43 -0400
 Subject: [PATCH] Fix reducedDebugInfo not initialzied on client
 
 
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
-index 52ea87d..1bb6703 100644
+index 52ea87d..896b842 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerList.java
 @@ -201,6 +201,7 @@ public abstract class PlayerList {
          playerconnection.sendPacket(new SPacketServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
          playerconnection.sendPacket(new SPacketPlayerAbilities(playerIn.capabilities));
          playerconnection.sendPacket(new SPacketHeldItemChange(playerIn.inventory.currentItem));
-+        playerconnection.sendPacket(new SPacketEntityStatus(playerIn, (byte) (worldserver.getGameRules().getBoolean("reducedDebugInfo") ? 22 : 23))); // Paper - fix this rule not being initialized on the client));
++        playerconnection.sendPacket(new SPacketEntityStatus(playerIn, (byte) (worldserver.getGameRules().getBoolean("reducedDebugInfo") ? 22 : 23))); // Paper - fix this rule not being initialized on the client
          this.updatePermissionLevel(playerIn);
          playerIn.getStatFile().markAllDirty();
          playerIn.getRecipeBook().init(playerIn);

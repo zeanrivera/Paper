@@ -1,11 +1,11 @@
-From 1f803f0bd0d89d1458bb0ec7e404a702486f3051 Mon Sep 17 00:00:00 2001
+From b7bf19e67a8e2094605e12c58199163921714d33 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Sun, 1 Oct 2017 00:06:05 -0400
 Subject: [PATCH] Custom replacement for eaten items
 
 
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index c9bb72b..ec60f25 100644
+index b27e1d2..423ef7e 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
 @@ -2455,12 +2455,13 @@ public abstract class EntityLivingBase extends Entity {

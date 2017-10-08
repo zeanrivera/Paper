@@ -1,4 +1,4 @@
-From 174345f8b8ec61e9d6c05a3c9db4b379ca349d6d Mon Sep 17 00:00:00 2001
+From 2626990e8f3b698f45d1e5a90ef1de78ac2de829 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 21:33:22 -0400
 Subject: [PATCH] Configurable Keep Spawn Loaded range per world
@@ -39,7 +39,7 @@ index c673a81..6229b76 100644
  
                          if (i1 - j > 1000L) {
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index f1c8ec0..a1f331b 100644
+index f1e4cb6..0b356b2 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -3184,7 +3184,8 @@ public abstract class World implements IBlockAccess {
@@ -66,7 +66,7 @@ index a3204d3..aad129a 100644
  
                      for (int j = -short1; j <= short1; j += 16) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 08daa26..69874ab 100644
+index 238f74b..deffab3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -1427,8 +1427,11 @@ public class CraftWorld implements World {

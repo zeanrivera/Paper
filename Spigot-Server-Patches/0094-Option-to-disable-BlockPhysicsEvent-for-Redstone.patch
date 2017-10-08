@@ -1,4 +1,4 @@
-From 3ee4b9b73dc24d0a20dbab478c55548d3eaf40c7 Mon Sep 17 00:00:00 2001
+From d57946d41f81be725b843646ec70869b50b33b6c Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 01:14:19 -0400
 Subject: [PATCH] Option to disable BlockPhysicsEvent for Redstone
@@ -25,7 +25,7 @@ index 5b4bea8..599cf05 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 0f7da96..2175c58 100644
+index aaf470e..c30f276 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -604,7 +604,7 @@ public abstract class World implements IBlockAccess {

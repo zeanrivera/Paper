@@ -1,4 +1,4 @@
-From 35c406b2a8b9ca521be25e3b2d14b05fc741e8b6 Mon Sep 17 00:00:00 2001
+From a632ee0cab200ead6ab7cd674fddb57ca46aea42 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 23:24:14 -0400
 Subject: [PATCH] Add World Util Methods
@@ -6,7 +6,7 @@ Subject: [PATCH] Add World Util Methods
 Methods that can be used for other patches to help improve logic.
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index e61ffdc..9bf9652 100644
+index 7febba2..1ce34e3 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -7,11 +7,6 @@ import com.google.common.base.MoreObjects;

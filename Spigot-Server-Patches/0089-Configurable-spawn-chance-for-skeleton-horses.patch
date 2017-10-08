@@ -1,4 +1,4 @@
-From 0263b349d6900956e4dd39b0621b6cb0b045ac43 Mon Sep 17 00:00:00 2001
+From c689c8212591673df949654566c70f91ba84e12a Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 1 Oct 2017 00:37:29 -0400
 Subject: [PATCH] Configurable spawn chance for skeleton horses

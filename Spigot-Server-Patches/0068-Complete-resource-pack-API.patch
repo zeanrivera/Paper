@@ -1,11 +1,11 @@
-From d9ee1319804365123b3601cafd8318432fef5b2f Mon Sep 17 00:00:00 2001
+From 01a4c372c8d8c988898f1cd9db784f85675d6c26 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Sat, 30 Sep 2017 21:49:16 -0400
 Subject: [PATCH] Complete resource pack API
 
 
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 02bb172..f6f760d 100644
+index 3995361..2886980 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -1265,9 +1265,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {

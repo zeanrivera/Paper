@@ -1,14 +1,14 @@
-From c665f2ff3abcda38d3d391b309d3090dd4a12774 Mon Sep 17 00:00:00 2001
+From ca190eb66552b0618a786468a160b772cd3a1991 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Tue, 1 Mar 2016 14:47:52 -0600
 Subject: [PATCH] Affects spawning API
 
 
 diff --git a/src/main/java/net/minecraft/entity/EntityLiving.java b/src/main/java/net/minecraft/entity/EntityLiving.java
-index 26b87c3..e93a8ed 100644
+index 6cd6b17..49a34ae 100644
 --- a/src/main/java/net/minecraft/entity/EntityLiving.java
 +++ b/src/main/java/net/minecraft/entity/EntityLiving.java
-@@ -648,7 +648,7 @@ public abstract class EntityLiving extends EntityLivingBase {
+@@ -652,7 +652,7 @@ public abstract class EntityLiving extends EntityLivingBase {
          } else {
              EntityPlayer entityhuman = this.world.getClosestPlayerToEntity(this, -1.0D);
  
@@ -31,7 +31,7 @@ index 81e317d..e5c0b5c 100644
              return false;
          }
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-index 9f2d3b2..ffa4c35 100644
+index fd4dca6..0e4ec7b 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 @@ -152,6 +152,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
@@ -43,7 +43,7 @@ index 9f2d3b2..ffa4c35 100644
      public CraftHumanEntity getBukkitEntity() {
          return (CraftHumanEntity) super.getBukkitEntity();
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 4f1cad2..dec577b 100644
+index 0616f49..a2c550a 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -2804,7 +2804,7 @@ public abstract class World implements IBlockAccess {
@@ -92,5 +92,5 @@ index ddbb8b2..e37de64 100644
          return this.spigot;
      }
 -- 
-2.14.1
+2.14.1.windows.1
 
