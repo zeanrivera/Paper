@@ -1,4 +1,4 @@
-From aca5c1a985ec5ea48610f2d9cb9142ccbf454d84 Mon Sep 17 00:00:00 2001
+From 9ae0e09f00ea11775478b3804a617e85a9918d25 Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 16:46:53 -0400
 Subject: [PATCH] Change implementation of (tile)entity removal list

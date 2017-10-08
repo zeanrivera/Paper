@@ -1,0 +1,44 @@
+From 0c9ad38db3a6b442f61c393a4b998284a13b021b Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 7 Oct 2017 21:26:45 -0400
+Subject: [PATCH] Configurable Grass Spread Tick Rate
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 8441377..a6e4db9 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -280,4 +280,10 @@ public class PaperWorldConfig {
+     private void useInhabitedTime() {
+         useInhabitedTime = getBoolean("use-chunk-inhabited-timer", true);
+     }
++
++    public int grassUpdateRate = 1;
++    private void grassUpdateRate() {
++        grassUpdateRate = Math.max(0, getInt("grass-spread-tick-rate", grassUpdateRate));
++        log("Grass Spread Tick Rate: " + grassUpdateRate);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/block/BlockGrass.java b/src/main/java/net/minecraft/block/BlockGrass.java
+index 6362b05..4a01e77 100644
+--- a/src/main/java/net/minecraft/block/BlockGrass.java
++++ b/src/main/java/net/minecraft/block/BlockGrass.java
+@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
+ import net.minecraft.creativetab.CreativeTabs;
+ import net.minecraft.init.Blocks;
+ import net.minecraft.item.Item;
++import net.minecraft.server.MinecraftServer;
+ import net.minecraft.util.math.BlockPos;
+ import net.minecraft.world.IBlockAccess;
+ import net.minecraft.world.World;
+@@ -34,6 +35,7 @@ public class BlockGrass extends Block implements IGrowable {
+     }
+ 
+     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
++        if (worldIn.paperConfig.grassUpdateRate != 1 && (worldIn.paperConfig.grassUpdateRate < 1 || (MinecraftServer.currentTick + pos.hashCode()) % worldIn.paperConfig.grassUpdateRate != 0)) { return; } // Paper
+         if (!worldIn.isRemote) {
+             int lightLevel = -1; // Paper
+             if (worldIn.getBlockState(pos.up()).getLightOpacity() > 2 && (lightLevel = worldIn.getLightFromNeighbors(pos.up())) < 4) { // Paper - move light check to end to avoid unneeded light lookups
+-- 
+2.14.1.windows.1
+

@@ -1,4 +1,4 @@
-From 6bd7fd07b549d35999aeab66f3f4dd9f43aa4eb6 Mon Sep 17 00:00:00 2001
+From c6f81000b3db1f2d6e6e80489200fcb88eff622c Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 23:04:12 -0400
 Subject: [PATCH] Handle Item Meta Inconsistencies

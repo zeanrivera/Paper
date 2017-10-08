@@ -1,4 +1,4 @@
-From ba475c74820a8a6b6b136d8cf98df916d9a36736 Mon Sep 17 00:00:00 2001
+From 9720ed1f4cd2dd0948ae37107f2d1df853e91dac Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 22:48:41 -0400
 Subject: [PATCH] Remove Metadata on reload

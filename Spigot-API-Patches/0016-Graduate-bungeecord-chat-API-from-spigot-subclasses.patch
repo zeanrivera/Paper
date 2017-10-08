@@ -1,4 +1,4 @@
-From 09c0ce5f8d30783045d19189a0f44897f03577fc Mon Sep 17 00:00:00 2001
+From 5fe1390a641616f1bba40cd477eb98765f0b2307 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 19:54:32 -0600
 Subject: [PATCH] Graduate bungeecord chat API from spigot subclasses
@@ -109,5 +109,5 @@ index c54b6b0f..b821d338 100644
       * Forces an update of the player's entire inventory.
       *
 -- 
-2.14.1
+2.14.1.windows.1
 

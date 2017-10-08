@@ -1,4 +1,4 @@
-From 277c83e82dea69ec5ce24840554e0198a6e7668a Mon Sep 17 00:00:00 2001
+From 3cade6d0e1077165527ffc8023d201d2c3265de0 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 23:06:50 -0400
 Subject: [PATCH] Configurable Non Player Arrow Despawn Rate

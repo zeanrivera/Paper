@@ -1,4 +1,4 @@
-From 2cd450c3f880bb081919b132a2aa36aabe2af436 Mon Sep 17 00:00:00 2001
+From 6b640bbb43ab9f705200e87b260b3ac57d165329 Mon Sep 17 00:00:00 2001
 From: CullanP <cullanpage@gmail.com>
 Date: Wed, 27 Sep 2017 15:35:42 -0400
 Subject: [PATCH] Avoid hopper searches if there are no items

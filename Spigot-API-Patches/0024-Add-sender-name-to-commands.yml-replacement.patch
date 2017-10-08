@@ -1,4 +1,4 @@
-From 669b64592d81b6dd42447124e725cb29b9cd0c88 Mon Sep 17 00:00:00 2001
+From f9dac0d197d65566f5ecf1bc9726c48360c3c747 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 22 Jul 2015 18:50:41 -0400
 Subject: [PATCH] Add sender name to commands.yml replacement

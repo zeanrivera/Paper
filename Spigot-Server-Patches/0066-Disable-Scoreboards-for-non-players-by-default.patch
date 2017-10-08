@@ -1,4 +1,4 @@
-From c0affd366a921be5e865822b33839d528b5d117c Mon Sep 17 00:00:00 2001
+From 6978df26af5512fcaeb3da15d6d5c106f71ebb34 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 21:36:53 -0400
 Subject: [PATCH] Disable Scoreboards for non players by default
