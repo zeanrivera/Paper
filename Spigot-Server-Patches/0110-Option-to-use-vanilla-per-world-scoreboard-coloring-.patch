@@ -1,4 +1,4 @@
-From d1e59ecefab37a84f20d5c3b8f02bf790e864e48 Mon Sep 17 00:00:00 2001
+From 8afd1eed5436aa59b4bcb6bce89076c702f1a11b Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 7 Oct 2017 22:25:05 -0400
 Subject: [PATCH] Option to use vanilla per-world scoreboard coloring on names

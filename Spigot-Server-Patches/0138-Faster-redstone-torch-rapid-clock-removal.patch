@@ -1,0 +1,34 @@
+From 89a79d0d0fe8081fa91a6fd4462984287f131fd3 Mon Sep 17 00:00:00 2001
+From: Martin Panzer <postremus1996@googlemail.com>
+Date: Mon, 9 Oct 2017 18:39:56 -0400
+Subject: [PATCH] Faster redstone torch rapid clock removal
+
+Only resize the the redstone torch list once, since resizing arrays / lists is costly
+
+diff --git a/src/main/java/net/minecraft/block/BlockRedstoneTorch.java b/src/main/java/net/minecraft/block/BlockRedstoneTorch.java
+index 204bcaf..f4fce6f 100644
+--- a/src/main/java/net/minecraft/block/BlockRedstoneTorch.java
++++ b/src/main/java/net/minecraft/block/BlockRedstoneTorch.java
+@@ -94,9 +94,17 @@ public class BlockRedstoneTorch extends BlockTorch {
+         boolean flag = this.shouldBeOff(worldIn, pos, state);
+         List list = toggles.get(worldIn);
+ 
+-        while (list != null && !list.isEmpty() && worldIn.getTotalWorldTime() - ((BlockRedstoneTorch.Toggle) list.get(0)).time > 60L) {
+-            list.remove(0);
++        // Paper start
++        if (list != null) {
++            int index = 0;
++            while (index < list.size() && worldIn.getTotalWorldTime() - ((Toggle) list.get(index)).time > 60L) {
++                index++;
++            }
++            if (index > 0) {
++                list.subList(0, index).clear();
++            }
+         }
++        // Paper end
+ 
+         PluginManager manager = worldIn.getServer().getPluginManager();
+         org.bukkit.block.Block block = worldIn.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+-- 
+2.14.1.windows.1
+

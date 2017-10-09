@@ -1,4 +1,4 @@
-From 565d1c222b1430d40d9f78068dbffb5590f96b06 Mon Sep 17 00:00:00 2001
+From 0473cfc199564e5b571484c82085307b1914256d Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 8 Oct 2017 00:41:37 -0400
 Subject: [PATCH] Improve Minecraft Hopper Performance

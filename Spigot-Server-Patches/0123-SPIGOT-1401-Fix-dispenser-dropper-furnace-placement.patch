@@ -1,4 +1,4 @@
-From 453304e07f5e775741f75f53d69219358b046a55 Mon Sep 17 00:00:00 2001
+From d0a805600b659d03df79fd7c136bffbdaa5c011d Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 8 Oct 2017 00:30:17 -0400
 Subject: [PATCH] SPIGOT-1401: Fix dispenser, dropper, furnace placement

@@ -1,4 +1,4 @@
-From 7843e49e9fd66ccd0697b95eb3807ff67127bdb4 Mon Sep 17 00:00:00 2001
+From 2ad2d946f405502db3fbfabbd20a8db057ceaf8c Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 23:47:15 -0400
 Subject: [PATCH] Configurable RCON IP address

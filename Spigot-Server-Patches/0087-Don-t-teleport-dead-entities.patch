@@ -1,4 +1,4 @@
-From 80094494d2cb9cca8520fa72c9b9ca2180e57529 Mon Sep 17 00:00:00 2001
+From abb45f60d26468e2047ed58d2ee79a34f69ee1d0 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:30:17 -0400
 Subject: [PATCH] Don't teleport dead entities

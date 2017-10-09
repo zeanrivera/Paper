@@ -1,4 +1,4 @@
-From 8a9c99bf6bcce25d7c31f51559e3cbf849757b99 Mon Sep 17 00:00:00 2001
+From d64b2188e194363d57ac99ce252e3c7ae7885423 Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 18:09:33 -0400
 Subject: [PATCH] Add exception reporting event

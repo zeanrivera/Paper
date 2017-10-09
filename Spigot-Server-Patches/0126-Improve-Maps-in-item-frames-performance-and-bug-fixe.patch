@@ -1,4 +1,4 @@
-From af9706d0ef91c70b9fd08954bb322a8e41d91e1d Mon Sep 17 00:00:00 2001
+From 4faaa9a1ca965ad69bb4eee5982911b97103483b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 8 Oct 2017 01:06:09 -0400
 Subject: [PATCH] Improve Maps (in item frames) performance and bug fixes
@@ -31,7 +31,7 @@ index 7548865..133f4e1 100644
  
                  for (EntityPlayer entityhuman : this.trackingPlayers) {
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-index 0e4ec7b..f7ae47e 100644
+index 0e4ec7b..d231f68 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 @@ -629,6 +629,13 @@ public abstract class EntityPlayer extends EntityLivingBase {

@@ -1,4 +1,4 @@
-From d26147a538c848136737367c66f14853504a87ac Mon Sep 17 00:00:00 2001
+From d7148b914d4dab720801ffb05b89ccf692e3ccbc Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 27 Sep 2017 15:01:12 -0400
 Subject: [PATCH] Configurable chest cat detection

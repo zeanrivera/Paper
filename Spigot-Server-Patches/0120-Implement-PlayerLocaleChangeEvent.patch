@@ -1,4 +1,4 @@
-From 0cd05bb09c6e2cbeb8863fd4fd44095dd6a46612 Mon Sep 17 00:00:00 2001
+From 4338822e80abda7c335184e67938949d698e54e3 Mon Sep 17 00:00:00 2001
 From: Isaac Moore <rmsy@me.com>
 Date: Sun, 8 Oct 2017 00:08:08 -0400
 Subject: [PATCH] Implement PlayerLocaleChangeEvent

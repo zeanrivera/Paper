@@ -1,4 +1,4 @@
-From e01ebf1b699e9eabb3db7c796d79f07589f21bc9 Mon Sep 17 00:00:00 2001
+From 76b2bc38bb199799cbabc00aba984049f45f1000 Mon Sep 17 00:00:00 2001
 From: vemacs <d@nkmem.es>
 Date: Wed, 27 Sep 2017 15:21:09 -0400
 Subject: [PATCH] Option for slimes to spawn in all chunks

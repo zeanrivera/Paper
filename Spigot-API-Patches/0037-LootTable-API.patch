@@ -1,4 +1,4 @@
-From 990a7031ad82f62e1135e7918dae98ae61369b90 Mon Sep 17 00:00:00 2001
+From 5ef15816694a134c96f899072b418a9a7b70877e Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 May 2016 15:19:49 -0400
 Subject: [PATCH] LootTable API
@@ -368,5 +368,5 @@ index 4c1740e7..aa1109c4 100644
      /**
       * Get the {@link DyeColor} corresponding to this ShulkerBox
 -- 
-2.14.1
+2.14.1.windows.1
 

@@ -1,4 +1,4 @@
-From 10e785634f0ae47de0df93f46180142f0d1cc43f Mon Sep 17 00:00:00 2001
+From 61c52475e0c1c64a0863f8dcaf63e16432f78081 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 8 Oct 2017 00:46:45 -0400
 Subject: [PATCH] Remove null possibility for getServer singleton
