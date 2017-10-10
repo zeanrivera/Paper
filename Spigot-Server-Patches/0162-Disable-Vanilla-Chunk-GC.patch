@@ -1,4 +1,4 @@
-From 31103aefd1fa7ce41f2cf9f0daa290ba3b55ddc8 Mon Sep 17 00:00:00 2001
+From 126a76972edba8b80c88c77c04ee25747ac24f29 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 16:40:48 -0400
 Subject: [PATCH] Disable Vanilla Chunk GC

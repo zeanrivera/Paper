@@ -1,4 +1,4 @@
-From 112b76a742a40ff577aa49406dbfc39ba1960e71 Mon Sep 17 00:00:00 2001
+From 0f270c5be71b8d1d9941814f3db742fff15fe03d Mon Sep 17 00:00:00 2001
 From: willies952002 <admin@domnian.com>
 Date: Mon, 28 Nov 2016 10:16:39 -0500
 Subject: [PATCH] Allow Reloading of Command Aliases
@@ -6,10 +6,10 @@ Subject: [PATCH] Allow Reloading of Command Aliases
 Reload the aliases stored in commands.yml
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index fd423664..5431b17b 100644
+index 56607acf..916fe7e8 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -1197,6 +1197,15 @@ public final class Bukkit {
+@@ -1196,6 +1196,15 @@ public final class Bukkit {
      public static void reloadPermissions() {
          server.reloadPermissions();
      }
@@ -26,10 +26,10 @@ index fd423664..5431b17b 100644
  
      public static Server.Spigot spigot()
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 032d6211..83b370e5 100644
+index a37e636a..90ee8e74 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1030,4 +1030,6 @@ public interface Server extends PluginMessageRecipient {
+@@ -1029,4 +1029,6 @@ public interface Server extends PluginMessageRecipient {
      // Spigot end
  
      void reloadPermissions(); // Paper
@@ -70,7 +70,7 @@ index f1e9f200..c6613c0a 100644
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/command/defaults/ReloadCommand.java b/src/main/java/org/bukkit/command/defaults/ReloadCommand.java
-index 040509c1..0069bcc0 100644
+index 6694cd03..4d9603f4 100644
 --- a/src/main/java/org/bukkit/command/defaults/ReloadCommand.java
 +++ b/src/main/java/org/bukkit/command/defaults/ReloadCommand.java
 @@ -11,7 +11,7 @@ public class ReloadCommand extends BukkitCommand {
@@ -82,7 +82,7 @@ index 040509c1..0069bcc0 100644
          this.setPermission("bukkit.command.reload");
          this.setAliases(Arrays.asList("rl"));
      }
-@@ -28,6 +28,13 @@ public class ReloadCommand extends BukkitCommand {
+@@ -27,6 +27,13 @@ public class ReloadCommand extends BukkitCommand {
                  Bukkit.getServer().reloadPermissions();
                  Command.broadcastCommandMessage(sender, ChatColor.GREEN + "Permissions successfully reloaded.");
                  return true;
@@ -97,5 +97,5 @@ index 040509c1..0069bcc0 100644
                  confirmed = true;
              } else {
 -- 
-2.14.1
+2.14.2.windows.2
 

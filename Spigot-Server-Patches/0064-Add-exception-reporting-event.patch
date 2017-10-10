@@ -1,4 +1,4 @@
-From d64b2188e194363d57ac99ce252e3c7ae7885423 Mon Sep 17 00:00:00 2001
+From 43ad7082b6ea7ce175f5c7e6efdaff54b8a23ebe Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 18:09:33 -0400
 Subject: [PATCH] Add exception reporting event
@@ -318,7 +318,7 @@ index 569614b..c49fdd1 100644
          }
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
-index 5e32312..d225a2e 100644
+index 6007faa..15713c5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
 @@ -1,6 +1,9 @@
@@ -331,7 +331,7 @@ index 5e32312..d225a2e 100644
  import com.google.common.util.concurrent.ThreadFactoryBuilder;
  import java.util.ArrayList;
  import java.util.Comparator;
-@@ -359,14 +362,15 @@ public class CraftScheduler implements BukkitScheduler {
+@@ -355,14 +358,15 @@ public class CraftScheduler implements BukkitScheduler {
                      try {
                          task.run();
                      } catch (Throwable var6) {
@@ -355,7 +355,7 @@ index 5e32312..d225a2e 100644
                      }
  
                      this.parsePending();
-@@ -374,7 +378,7 @@ public class CraftScheduler implements BukkitScheduler {
+@@ -370,7 +374,7 @@ public class CraftScheduler implements BukkitScheduler {
                      this.debugTail =
                              this.debugTail.setNext(
                                      new CraftAsyncDebugger(currentTick + RECENT_TICKS, task.getOwner(), task.getTaskClass()));
@@ -365,5 +365,5 @@ index 5e32312..d225a2e 100644
  
                  long period = task.getPeriod();
 -- 
-2.14.1.windows.1
+2.14.2.windows.2
 

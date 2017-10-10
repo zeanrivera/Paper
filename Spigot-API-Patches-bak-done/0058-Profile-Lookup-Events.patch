@@ -1,4 +1,4 @@
-From f43d17f36fbc3bca3fff1d85def12dc161cf87b1 Mon Sep 17 00:00:00 2001
+From ed2c8565b4bb9235861e98254103959c738fa1e2 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 17 Jun 2017 16:30:44 -0400
 Subject: [PATCH] Profile Lookup Events
@@ -7,13 +7,13 @@ Adds a Pre Lookup Event and a Post Lookup Event so that plugins may prefill in p
 profiles that had to be looked up.
 
 diff --git a/build.gradle b/build.gradle
-index 1a84576e..acbaccf9 100644
+index 82b5b991..0f70ddbf 100644
 --- a/build.gradle
 +++ b/build.gradle
 @@ -19,6 +19,7 @@ dependencies {
      compile "co.aikar:fastutil-lite:1.0"
  
-     compile "org.ow2.asm:asm-all:5.0.4"
+     compile "org.ow2.asm:asm-all:5.2"
 +    compile "com.mojang:authlib:1.5.25"
  
      testCompile "junit:junit:4.12"
@@ -254,5 +254,5 @@ index 00000000..455ffaa1
 +    }
 +}
 -- 
-2.14.1
+2.14.2.windows.2
 

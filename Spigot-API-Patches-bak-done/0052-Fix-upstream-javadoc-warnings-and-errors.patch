@@ -1,4 +1,4 @@
-From cc756883c8948d707421b9ba1ac9102bbbcc2579 Mon Sep 17 00:00:00 2001
+From 386346811abcf1a51441e4ca1329837fad0ff994 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 10 Jun 2017 16:59:40 -0500
 Subject: [PATCH] Fix upstream javadoc warnings and errors
@@ -348,5 +348,5 @@ index 170ae21a..c0de37a7 100644
      ChatColor getColor() throws IllegalStateException;
  
 -- 
-2.14.1
+2.14.2.windows.2
 

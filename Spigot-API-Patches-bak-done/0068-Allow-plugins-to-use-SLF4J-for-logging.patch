@@ -1,4 +1,4 @@
-From adc611f445cddb9396dad45149ba3dbca591f780 Mon Sep 17 00:00:00 2001
+From 3615acb3a31023b7fac10e25da5a112d595f3511 Mon Sep 17 00:00:00 2001
 From: Minecrell <dev@minecrell.net>
 Date: Thu, 21 Sep 2017 16:33:12 +0200
 Subject: [PATCH] Allow plugins to use SLF4J for logging
@@ -14,12 +14,12 @@ it without having to shade it in the plugin and going through
 several layers of logging abstraction.
 
 diff --git a/build.gradle b/build.gradle
-index acbaccf9..56b707d6 100644
+index 0f70ddbf..3eeb2498 100644
 --- a/build.gradle
 +++ b/build.gradle
 @@ -20,6 +20,7 @@ dependencies {
  
-     compile "org.ow2.asm:asm-all:5.0.4"
+     compile "org.ow2.asm:asm-all:5.2"
      compile "com.mojang:authlib:1.5.25"
 +    compile "org.slf4j:slf4j-api:1.7.25"
  
@@ -43,5 +43,5 @@ index c4e22c62..02670254 100644
       * Returns the name of the plugin.
       * <p>
 -- 
-2.14.1
+2.14.2.windows.2
 

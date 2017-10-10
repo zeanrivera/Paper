@@ -1,11 +1,11 @@
-From b38759b5b4db99a0d3cd33c1e8e183281f933f23 Mon Sep 17 00:00:00 2001
+From 57bb6b091bff5e166be5a6b106dbaea6fb394cc8 Mon Sep 17 00:00:00 2001
 From: Brokkonaut <hannos17@gmx.de>
 Date: Tue, 10 Oct 2017 15:59:19 -0400
 Subject: [PATCH] Fix AIOOBE in inventory handling
 
 
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index f880ace..f6fb72f 100644
+index ccfd55c..acc5f68 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -2041,7 +2041,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {

@@ -1,4 +1,4 @@
-From 15718020d415896628501a7e0af7e164368e479e Mon Sep 17 00:00:00 2001
+From 83edbc324229fb204501e0a291db4715994cf1c4 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 10 Oct 2017 16:03:24 -0400
 Subject: [PATCH] Configurable packet in spam threshold
@@ -23,7 +23,7 @@ index cf06f8a..2001175 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index f6fb72f..e9c2365 100644
+index acc5f68..28b67ac 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -279,6 +279,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {

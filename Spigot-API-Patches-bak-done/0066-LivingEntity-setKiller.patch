@@ -1,4 +1,4 @@
-From 557aa05c9d4fbf21d12fbd50ae107f56d8331cd8 Mon Sep 17 00:00:00 2001
+From 52a0afba10d44c15283b3e8508257bbf7938b29d Mon Sep 17 00:00:00 2001
 From: BillyGalbreath <Blake.Galbreath@GMail.com>
 Date: Mon, 31 Jul 2017 01:49:43 -0500
 Subject: [PATCH] LivingEntity#setKiller
@@ -34,5 +34,5 @@ index be51e389..4a51c519 100644
       * Adds the given {@link PotionEffect} to the living entity.
       * <p>
 -- 
-2.14.1
+2.14.2.windows.2
 

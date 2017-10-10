@@ -1,4 +1,4 @@
-From ec70319e57a7cf4638db26687ccc6c04d9d6a6fe Mon Sep 17 00:00:00 2001
+From 89e5e5f36dc91896f4233a313f08e37bb50fca71 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 16:35:35 -0400
 Subject: [PATCH] Remove FishingHook reference on Craft Entity removal

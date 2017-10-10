@@ -1,4 +1,4 @@
-From efeea2e950327f53cc9a43c3cc2eab765273fe6f Mon Sep 17 00:00:00 2001
+From 06e500fcc235c57e1ce99b238c4ac72d6c799d61 Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 17:26:38 -0400
 Subject: [PATCH] Add velociy warnings
@@ -17,10 +17,10 @@ index 5bac3b1..cc2438a 100644
      public CraftServer(MinecraftServer console, PlayerList playerList) {
          this.pluginManager = new SimplePluginManager(this, this.commandMap);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index c6681aa..76301fa 100644
+index 0764265..5ae8ebd 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -617,6 +617,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -622,6 +622,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public void setVelocity(Vector velocity) {
          Preconditions.checkArgument(velocity != null, "velocity");
          velocity.checkFinite();
@@ -34,7 +34,7 @@ index c6681aa..76301fa 100644
          this.entity.motionX = velocity.getX();
          this.entity.motionY = velocity.getY();
          this.entity.motionZ = velocity.getZ();
-@@ -1045,6 +1052,29 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1050,6 +1057,29 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          Location origin = getHandle().origin;
          return origin == null ? null : origin.clone();
      }
@@ -88,5 +88,5 @@ index 2738156..d669c05 100644
                  log.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Paper!):");
                  dumpThread(
 -- 
-2.14.1.windows.1
+2.14.2.windows.2
 

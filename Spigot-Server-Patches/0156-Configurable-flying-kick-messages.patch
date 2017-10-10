@@ -1,4 +1,4 @@
-From b2c307f8cd78a3023ad1535f380bd7ad26262d19 Mon Sep 17 00:00:00 2001
+From 3fb63fd174a87b0f89209309d781f7c85f3472b9 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Tue, 10 Oct 2017 16:06:17 -0400
 Subject: [PATCH] Configurable flying kick messages
@@ -21,7 +21,7 @@ index 2001175..621c585 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index e9c2365..f678684 100644
+index 28b67ac..6da0a93 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -305,7 +305,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {

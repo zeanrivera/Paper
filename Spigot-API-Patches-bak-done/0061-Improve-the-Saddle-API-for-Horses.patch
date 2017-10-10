@@ -1,4 +1,4 @@
-From f06104ea19ef5f55a5701602c42922831785f5a6 Mon Sep 17 00:00:00 2001
+From 71c05feb97175a392f4de91752e357a76ef25a1c Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 10 Dec 2016 16:12:48 -0500
 Subject: [PATCH] Improve the Saddle API for Horses
@@ -94,5 +94,5 @@ index 00000000..010dc364
 +    void setSaddle(ItemStack stack);
 +}
 -- 
-2.14.1
+2.14.2.windows.2
 

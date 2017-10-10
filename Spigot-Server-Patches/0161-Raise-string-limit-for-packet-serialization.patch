@@ -1,4 +1,4 @@
-From 3eaa267eaeb44c836151ab41e4c9bbb2d275ea3e Mon Sep 17 00:00:00 2001
+From 8deebae8dd455cef7b1f390d52e8e17e3f1f7ee6 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 16:37:58 -0400
 Subject: [PATCH] Raise string limit for packet serialization

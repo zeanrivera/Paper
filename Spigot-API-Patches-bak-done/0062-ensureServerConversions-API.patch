@@ -1,4 +1,4 @@
-From 022dd7497e9180340e12343cd80cec6817ca7e17 Mon Sep 17 00:00:00 2001
+From 2bbc0a3c242ed89d937abe79b320ff2d598864f4 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 4 May 2016 23:55:48 -0400
 Subject: [PATCH] ensureServerConversions API
@@ -61,5 +61,5 @@ index 188ae6d7..6bb19b9d 100644
 +    // Paper end
  }
 -- 
-2.14.1
+2.14.2.windows.2
 

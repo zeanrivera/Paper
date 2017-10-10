@@ -1,4 +1,4 @@
-From 446ef49d62cbb60af18b8d26b4ee63d4475e417e Mon Sep 17 00:00:00 2001
+From e34e29529ceea932656e300045d73067aed00ec0 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 10 Oct 2017 16:42:05 -0400
 Subject: [PATCH] Option to remove corrupt tile entities

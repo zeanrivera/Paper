@@ -1,4 +1,4 @@
-From 574a1941854453fd632d0ebda19578ae76f2c77c Mon Sep 17 00:00:00 2001
+From c3ce5feaab1d2efad11df21662631c41154777d4 Mon Sep 17 00:00:00 2001
 From: Minecrell <dev@minecrell.net>
 Date: Thu, 21 Sep 2017 16:14:13 +0200
 Subject: [PATCH] Handle plugin prefixes in implementation logging
@@ -40,5 +40,5 @@ index 16b1eb37..0abad9ad 100644
  
      /**
 -- 
-2.14.1
+2.14.2.windows.2
 
