@@ -1,4 +1,4 @@
-From 3a30918096f7d83fb99d774da8ba6dcf4777e105 Mon Sep 17 00:00:00 2001
+From bd62e115e0064b50cda87e979c2d3aada0b401cc Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 29 Feb 2016 17:24:57 -0600
 Subject: [PATCH] Add getTPS method
@@ -28,11 +28,10 @@ diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Ser
 index 6b4e39ec..8e01099a 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -924,6 +924,14 @@ public interface Server extends PluginMessageRecipient {
-      */
+@@ -925,6 +925,14 @@ public interface Server extends PluginMessageRecipient {
      CommandMap getCommandMap();
  
-+    /**
+     /**
 +     * Gets the current server TPS
 +     *
 +     * @return current server TPS (1m, 5m, 15m in Paper-Server)
@@ -40,9 +39,10 @@ index 6b4e39ec..8e01099a 100644
 +    double[] getTPS();
 +    // Paper end
 +
-     /**
++    /**
       * Get the advancement specified by this key.
       *
+      * @param key unique advancement key
 -- 
-2.14.1
+2.11.0
 

@@ -1,4 +1,4 @@
-From 0319c05e84e4af25e5431fa1db5e832debba55c6 Mon Sep 17 00:00:00 2001
+From b6f28e7f43b072017c30a2f355c1aa1787755598 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 29 Feb 2016 17:43:33 -0600
 Subject: [PATCH] Add async chunk load API
@@ -8,11 +8,10 @@ diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/Worl
 index 67b0d516..21b2733f 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -136,6 +136,78 @@ public interface World extends PluginMessageRecipient, Metadatable {
-      */
+@@ -137,6 +137,78 @@ public interface World extends PluginMessageRecipient, Metadatable {
      public Chunk getChunkAt(Block block);
  
-+    /**
+     /**
 +     * Used by {@link World#getChunkAtAsync(Location,ChunkLoadCallback)} methods
 +     * to request a {@link Chunk} to be loaded, with this callback receiving
 +     * the chunk when it is finished.
@@ -84,9 +83,10 @@ index 67b0d516..21b2733f 100644
 +     */
 +    public void getChunkAtAsync(Block block, ChunkLoadCallback cb);
 +
-     /**
++    /**
       * Checks if the specified {@link Chunk} is loaded
       *
+      * @param chunk The chunk to check
 -- 
-2.14.1
+2.11.0
 
