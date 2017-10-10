@@ -1,4 +1,4 @@
-From b9bcc27d0ccea136c7c59182eb516be0bcedeeb8 Mon Sep 17 00:00:00 2001
+From d68836402cc60a3030d2da8ee99c55d5440c1d3e Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 16 Jul 2013 21:26:50 -0400
 Subject: [PATCH] Add MetadataStoreBase.removeAll(Plugin)
@@ -9,10 +9,11 @@ diff --git a/src/main/java/org/bukkit/metadata/MetadataStoreBase.java b/src/main
 index 093c1445..f7b8f859 100644
 --- a/src/main/java/org/bukkit/metadata/MetadataStoreBase.java
 +++ b/src/main/java/org/bukkit/metadata/MetadataStoreBase.java
-@@ -120,6 +120,26 @@ public abstract class MetadataStoreBase<T> {
+@@ -119,6 +119,26 @@ public abstract class MetadataStoreBase<T> {
+         }
      }
  
-     /**
++    /**
 +     * Removes all metadata in the metadata store that originates from the
 +     * given plugin.
 +     *
@@ -32,10 +33,9 @@ index 093c1445..f7b8f859 100644
 +        }
 +    }
 +
-+    /**
+     /**
       * Creates a unique name for the object receiving metadata by combining
       * unique data from the subject with a metadataKey.
-      * <p>
 -- 
-2.11.0
+2.14.2.windows.2
 

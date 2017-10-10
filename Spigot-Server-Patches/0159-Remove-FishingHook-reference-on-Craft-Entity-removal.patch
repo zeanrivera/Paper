@@ -1,14 +1,14 @@
-From 7ecd4df4d533f975f1ae131efd9bcba40d069160 Mon Sep 17 00:00:00 2001
+From ec70319e57a7cf4638db26687ccc6c04d9d6a6fe Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
-Date: Thu, 16 Jun 2016 00:17:23 -0400
+Date: Tue, 10 Oct 2017 16:35:35 -0400
 Subject: [PATCH] Remove FishingHook reference on Craft Entity removal
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftFish.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftFish.java
-index ecfc316b..3f909c17 100644
+index e76d3fb..ec65557 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftFish.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftFish.java
-@@ -64,6 +64,16 @@ public class CraftFish extends AbstractProjectile implements Fish {
+@@ -58,6 +58,16 @@ public class CraftFish extends AbstractProjectile implements Fish {
          this.biteChance = chance;
      }
  
@@ -16,15 +16,15 @@ index ecfc316b..3f909c17 100644
 +    @Override
 +    public void remove() {
 +        super.remove();
-+        if (getHandle().owner != null) {
-+            getHandle().owner.hookedFish = null;
++        if (getHandle().angler != null) {
++            getHandle().angler.fishEntity = null;
 +        }
 +    }
 +    // Paper end
 +
      @Deprecated
      public LivingEntity _INVALID_getShooter() {
-         return (LivingEntity) getShooter();
+         return (LivingEntity) this.getShooter();
 -- 
-2.13.1.windows.2
+2.14.2.windows.2
 

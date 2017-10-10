@@ -1,0 +1,159 @@
+From 85a2ccf99369fd724f995a6456475a1e3ca88102 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Tue, 10 Oct 2017 15:10:23 -0400
+Subject: [PATCH] Delay Chunk Unloads based on Player Movement
+
+When players are moving in the world, doing things such as building or exploring,
+they will commonly go back and forth in a small area. This causes a ton of chunk load
+and unload activity on the edge chunks of their view distance.
+
+A simple back and forth movement in 6 blocks could spam a chunk to thrash a
+loading and unload cycle over and over again.
+
+This is very wasteful. This system introduces a delay of inactivity on a chunk
+before it actually unloads, which is maintained separately from ChunkGC.
+
+This allows servers with smaller worlds who do less long distance exploring to stop
+wasting cpu cycles on saving/unloading/reloading chunks repeatedly.
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 696dee3..94eb221 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -348,4 +348,13 @@ public class PaperWorldConfig {
+     private void isHopperPushBased() {
+         isHopperPushBased = getBoolean("hopper.push-based", false);
+     }
++
++    public long delayChunkUnloadsBy;
++    private void delayChunkUnloadsBy() {
++        delayChunkUnloadsBy = PaperConfig.getSeconds(getString("delay-chunk-unloads-by", "10s"));
++        if (delayChunkUnloadsBy > 0) {
++            log("Delaying chunk unloads by " + delayChunkUnloadsBy + " seconds");
++            delayChunkUnloadsBy *= 1000;
++        }
++    }
+ }
+diff --git a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
+index 20a1fca..2b251e2 100644
+--- a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
++++ b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
+@@ -482,7 +482,13 @@ public class PlayerChunkMap {
+         Chunk chunk = entry.getChunk();
+ 
+         if (chunk != null) {
+-            this.getWorldServer().getChunkProvider().queueUnload(chunk);
++            // Paper start - delay chunk unloads
++            if (world.paperConfig.delayChunkUnloadsBy <= 0) {
++                this.getWorldServer().getChunkProvider().queueUnload(chunk);
++            } else {
++                chunk.scheduledForUnload = System.currentTimeMillis();
++            }
++            // Paper end
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/management/PlayerChunkMapEntry.java b/src/main/java/net/minecraft/server/management/PlayerChunkMapEntry.java
+index e194405..8186cfd 100644
+--- a/src/main/java/net/minecraft/server/management/PlayerChunkMapEntry.java
++++ b/src/main/java/net/minecraft/server/management/PlayerChunkMapEntry.java
+@@ -42,6 +42,7 @@ public class PlayerChunkMapEntry {
+                                     .getWorldServer()
+                                     .getChunkProvider()
+                                     .loadChunk(PlayerChunkMapEntry.this.pos.x, PlayerChunkMapEntry.this.pos.z);
++                    markChunkUsed(); // Paper - delay chunk unloads
+                 }
+             };
+ 
+@@ -50,8 +51,17 @@ public class PlayerChunkMapEntry {
+         this.pos = new ChunkPos(chunkX, chunkZ);
+         this.loadInProgress = true;
+         this.chunk = mapIn.getWorldServer().getChunkProvider().getChunkAt(chunkX, chunkZ, this.loadedRunnable, false);
++        markChunkUsed(); // Paper - delay chunk unloads
+     }
+ 
++    // Paper start - delay chunk unloads
++    public final void markChunkUsed() {
++        if (chunk != null && chunk.scheduledForUnload != null) {
++            chunk.scheduledForUnload = null;
++        }
++    }
++    // Paper end
++
+     public ChunkPos getPos() {
+         return this.pos;
+     }
+@@ -112,6 +122,7 @@ public class PlayerChunkMapEntry {
+                                 .getWorldServer()
+                                 .getChunkProvider()
+                                 .getChunkAt(this.pos.x, this.pos.z, this.loadedRunnable, canGenerate);
++                markChunkUsed(); // Paper - delay chunk unloads
+             }
+ 
+             return this.chunk != null;
+diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
+index a5056e6..02ede10 100644
+--- a/src/main/java/net/minecraft/world/chunk/Chunk.java
++++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
+@@ -99,6 +99,7 @@ public class Chunk {
+     private final int[] itemCounts = new int[16];
+     private final int[] inventoryEntityCounts = new int[16];
+     // Paper end
++    public Long scheduledForUnload; // Paper - delay chunk unloads
+ 
+     public boolean areNeighborsLoaded(int radius) {
+         switch (radius) {
+diff --git a/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java b/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
+index 6ce7c1a..6d9bce4 100644
+--- a/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
++++ b/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
+@@ -296,6 +296,20 @@ public class ChunkProviderServer implements IChunkProvider {
+                 activityAccountant.endActivity();
+             }
+ 
++            // Paper start - delayed chunk unloads
++            long now = System.currentTimeMillis();
++            long unloadAfter = world.paperConfig.delayChunkUnloadsBy;
++            if (unloadAfter > 0) {
++                //noinspection Convert2streamapi
++                for (Chunk chunk : id2ChunkMap.values()) {
++                    if (chunk.scheduledForUnload != null && now - chunk.scheduledForUnload > unloadAfter) {
++                        chunk.scheduledForUnload = null;
++                        queueUnload(chunk);
++                    }
++                }
++            }
++            // Paper end
++
+             this.chunkLoader.chunkTick();
+         }
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index deffab3..0afb29d 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -1722,9 +1722,19 @@ public class CraftWorld implements World {
+         while (var2.hasNext()) {
+             net.minecraft.world.chunk.Chunk chunk = (net.minecraft.world.chunk.Chunk) var2.next();
+ 
+-            if (!this.isChunkInUse(chunk.x, chunk.z) && !cps.droppedChunksSet.contains(Long.valueOf(ChunkPos.asLong(chunk.x, chunk.z)))) {
+-                cps.queueUnload(chunk);
++            // Paper start - Split this back up, much more readable
++            if (isChunkInUse(chunk.x, chunk.z) || chunk.scheduledForUnload != null) { // Paper - delayed chunk unloads
++                continue;
+             }
++
++            // Already unloading?
++            if (cps.droppedChunksSet.contains(ChunkPos.asLong(chunk.x, chunk.z))) {
++                continue;
++            }
++
++            // Add unload request
++            cps.queueUnload(chunk);
++            // Paper end
+         }
+     }
+ 
+-- 
+2.14.2.windows.2
+

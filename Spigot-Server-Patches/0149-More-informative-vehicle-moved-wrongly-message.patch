@@ -1,0 +1,22 @@
+From 8e2bbedaaeacac150dec1424a404d9ca00b8214c Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Tue, 10 Oct 2017 15:40:15 -0400
+Subject: [PATCH] More informative vehicle moved wrongly message
+
+
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index 6cc07da..f880ace 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -533,7 +533,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+ 
+                 if (d10 > SpigotConfig.movedWronglyThreshold) {
+                     flag1 = true;
+-                    LOGGER.warn("{} moved wrongly!", (Object) entity.getName());
++                    LOGGER.warn(entity.getName() + " (vehicle of " + this.player.getName() + ") moved wrongly!"); // Paper - More informative
+                 }
+ 
+                 entity.setPositionAndRotation(d3, d4, d5, f, f1);
+-- 
+2.14.2.windows.2
+

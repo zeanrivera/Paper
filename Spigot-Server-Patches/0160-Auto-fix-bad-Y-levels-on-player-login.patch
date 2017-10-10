@@ -1,0 +1,22 @@
+From c4d462cf7b4b791746fa43f3193c9c6fe1426805 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Tue, 10 Oct 2017 16:36:33 -0400
+Subject: [PATCH] Auto fix bad Y levels on player login
+
+Bring down to a saner Y level if super high, as this can cause the server to crash
+
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+index f333171..4a9125b 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -244,6 +244,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+ 
+     public void readEntityFromNBT(NBTTagCompound compound) {
+         super.readEntityFromNBT(compound);
++        if (this.posY > 300) this.posY = 257; // Paper - bring down to a saner Y level if out of world
+ 
+         if (compound.hasKey("playerGameType", 99)) {
+             if (this.getMcpServer().getForceGamemode()) {
+-- 
+2.14.2.windows.2
+

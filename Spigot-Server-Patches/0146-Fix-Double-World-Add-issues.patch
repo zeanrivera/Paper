@@ -1,0 +1,42 @@
+From c539a028e22fd623c89f83b9c1e738f7dff57a94 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Tue, 10 Oct 2017 15:22:57 -0400
+Subject: [PATCH] Fix Double World Add issues
+
+Vanilla will double add Spider Jockeys to the world, so ignore already added.
+
+Also add debug if something else tries to, and abort before world gets bad state
+
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 3b875cc..7d86f5b 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -1123,6 +1123,11 @@ public abstract class World implements IBlockAccess {
+ 
+         if (entity == null) {
+             return false;
++            // Paper start
++        } else if (entity.valid) {
++            MinecraftServer.LOGGER.error("Attempted Double World add on " + entity, new Throwable());
++            return true;
++            // Paper end
+         } else {
+             int i = MathHelper.floor(entity.posX / 16.0D);
+             int j = MathHelper.floor(entity.posZ / 16.0D);
+diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
+index e4e54d5..711fb47 100644
+--- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
++++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
+@@ -526,7 +526,8 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+     }
+ 
+     public static void a(Entity entity, World world, SpawnReason reason) {
+-        if (world.addEntity(entity, reason) && entity.isBeingRidden()) {
++        // Paper - Method split by upstream from above spawnEntity - func_186052_a
++        if (!entity.valid && world.addEntity(entity, reason) && entity.isBeingRidden()) {
+             for (Entity entity1 : entity.getPassengers()) {
+                 spawnEntity(entity1, world);
+             }
+-- 
+2.14.2.windows.2
+

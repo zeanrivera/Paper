@@ -1,0 +1,22 @@
+From 9f21b2b0dc1d4d03af065cef16f8b065887f9736 Mon Sep 17 00:00:00 2001
+From: vemacs <d@nkmem.es>
+Date: Tue, 10 Oct 2017 17:33:15 -0400
+Subject: [PATCH] Optimize Network Queue
+
+
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 70172aa..388018d 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -161,7 +161,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+     private final GameProfileRepository profileRepo;
+     private final PlayerProfileCache profileCache;
+     private long nanoTimeSinceStatusRefresh;
+-    protected final Queue<FutureTask<?>> futureTaskQueue = new ConcurrentLinkedQueue<FutureTask<?>>();
++    protected final Queue<FutureTask<?>> futureTaskQueue = new com.destroystokyo.paper.utils.CachedSizeConcurrentLinkedQueue<>(); // Paper - Make size() constant-time
+     private Thread serverThread;
+     private long currentTime = getCurrentTimeMillis();
+     public List<WorldServer> worlds = new ArrayList<WorldServer>();
+-- 
+2.14.2.windows.2
+

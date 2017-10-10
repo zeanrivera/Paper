@@ -1,14 +1,14 @@
-From ab2977d788287170bd54ff9394882fef9816fab5 Mon Sep 17 00:00:00 2001
+From 446ef49d62cbb60af18b8d26b4ee63d4475e417e Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
-Date: Wed, 5 Oct 2016 16:27:36 -0500
+Date: Tue, 10 Oct 2017 16:42:05 -0400
 Subject: [PATCH] Option to remove corrupt tile entities
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 39f8a0a2..efae01b1 100644
+index 7015e29..7b92f53 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -376,4 +376,9 @@ public class PaperWorldConfig {
+@@ -378,4 +378,9 @@ public class PaperWorldConfig {
      private void maxAutoSaveChunksPerTick() {
          maxAutoSaveChunksPerTick = getInt("max-auto-save-chunks-per-tick", 24);
      }
@@ -18,28 +18,22 @@ index 39f8a0a2..efae01b1 100644
 +        removeCorruptTEs = getBoolean("remove-corrupt-tile-entities", false);
 +    }
  }
-diff --git a/src/main/java/net/minecraft/server/Chunk.java b/src/main/java/net/minecraft/server/Chunk.java
-index f98d380f..ed595955 100644
---- a/src/main/java/net/minecraft/server/Chunk.java
-+++ b/src/main/java/net/minecraft/server/Chunk.java
-@@ -785,11 +785,17 @@ public class Chunk {
-                             "Chunk coordinates: " + (this.locX * 16) + "," + (this.locZ * 16));
+diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
+index d4cb55d..8447b1b 100644
+--- a/src/main/java/net/minecraft/world/chunk/Chunk.java
++++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
+@@ -813,6 +813,11 @@ public class Chunk {
+                     + "Chunk coordinates: " + (this.x * 16) + "," + (this.z * 16));
              e.printStackTrace();
              ServerInternalException.reportInternalException(e);
 +
 +            if (this.world.paperConfig.removeCorruptTEs) {
-+                this.removeTileEntity(tileentity.getPosition());
++                this.removeTileEntity(tileEntityIn.getPos());
 +                org.bukkit.Bukkit.getLogger().info("Removing corrupt tile entity");
 +            }
              // Paper end
-             // CraftBukkit end
          }
      }
- 
-+    public void removeTileEntity(BlockPosition blockposition) { this.d(blockposition); } // Paper - OBFHELPER
-     public void d(BlockPosition blockposition) {
-         if (this.j) {
-             TileEntity tileentity = (TileEntity) this.tileEntities.remove(blockposition);
 -- 
-2.13.1.windows.2
+2.14.2.windows.2
 

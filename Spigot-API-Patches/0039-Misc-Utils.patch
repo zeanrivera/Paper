@@ -1,4 +1,4 @@
-From a7d23dde174a03fa80d3d4f6ed8c76671e8f5ecb Mon Sep 17 00:00:00 2001
+From 34ca5ac6752c1c218c5e5db4b9d8420ff5fdeae9 Mon Sep 17 00:00:00 2001
 From: vemacs <d@nkmem.es>
 Date: Wed, 23 Nov 2016 12:53:43 -0500
 Subject: [PATCH] Misc Utils
@@ -42,5 +42,5 @@ index 00000000..d60ecbb1
 +    }
 +}
 -- 
-2.14.1
+2.14.2.windows.2
 
