@@ -1,4 +1,4 @@
-From 2393503d55ad53ef51c7bc2981a6dff7ecd6492f Mon Sep 17 00:00:00 2001
+From 47f55665fd7e78576f3a694e227b53f8ff7944ec Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:58:57 -0400
 Subject: [PATCH] Optimize isValidLocation, getType and getBlockData for inling
@@ -33,13 +33,13 @@ index f245a0b..eb851df 100644
          public MutableBlockPos() {
              this(0, 0, 0);
 diff --git a/src/main/java/net/minecraft/util/math/Vec3i.java b/src/main/java/net/minecraft/util/math/Vec3i.java
-index e14310d..ce0d34a 100644
+index f3230c4..37bf6fb 100644
 --- a/src/main/java/net/minecraft/util/math/Vec3i.java
 +++ b/src/main/java/net/minecraft/util/math/Vec3i.java
 @@ -9,6 +9,14 @@ public class Vec3i implements Comparable<Vec3i> {
-     private final int x;
-     private final int y;
-     private final int z;
+     protected int x;
+     protected int y;
+     protected int z;
 +    // Paper start
 +    public boolean isValidLocation() {
 +        return x >= -30000000 && z >= -30000000 && x < 30000000 && z < 30000000 && y >= 0 && y < 256;
@@ -187,7 +187,7 @@ index 1ce34e3..aaf470e 100644
          return null;
      }
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 0d5ec44..f90632e 100644
+index 338487d..448d1f8 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -425,11 +425,23 @@ public class Chunk {
@@ -216,5 +216,5 @@ index 0d5ec44..f90632e 100644
              IBlockState iblockdata = null;
  
 -- 
-2.14.1.windows.1
+2.14.2.windows.2
 

@@ -1,4 +1,4 @@
-From 1b1a94dfb984a8b89372bfd0b480eb1223fee306 Mon Sep 17 00:00:00 2001
+From c4fe7339f131bdac4f9b9142dc46145bcd44babd Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 15:37:11 -0400
 Subject: [PATCH] Fix Old Sign Conversion

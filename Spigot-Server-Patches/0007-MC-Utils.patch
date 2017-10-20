@@ -1,4 +1,4 @@
-From a20ee02212a8cb089d4abf653bb5470c4c5161c9 Mon Sep 17 00:00:00 2001
+From 07aef0537b3630b915e28f195dcec60b9926e921 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 28 Mar 2016 20:55:47 -0400
 Subject: [PATCH] MC Utils
@@ -6,10 +6,10 @@ Subject: [PATCH] MC Utils
 
 diff --git a/src/main/java/com/destroystokyo/paper/util/MCUtil.java b/src/main/java/com/destroystokyo/paper/util/MCUtil.java
 new file mode 100644
-index 0000000..d7257c5
+index 0000000..7eae351
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/util/MCUtil.java
-@@ -0,0 +1,199 @@
+@@ -0,0 +1,241 @@
 +package com.destroystokyo.paper.util;
 +
 +import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -24,10 +24,13 @@ index 0000000..d7257c5
 +import net.minecraft.world.chunk.Chunk;
 +import net.minecraft.world.chunk.IChunkProvider;
 +import net.minecraft.world.gen.ChunkProviderServer;
++import org.apache.commons.lang.exception.ExceptionUtils;
 +import org.bukkit.Location;
++import org.bukkit.craftbukkit.CraftWorld;
 +import org.bukkit.craftbukkit.util.Waitable;
 +import org.spigotmc.AsyncCatcher;
 +
++import javax.annotation.Nonnull;
 +import javax.annotation.Nullable;
 +import java.util.concurrent.ExecutionException;
 +import java.util.concurrent.Executor;
@@ -39,9 +42,28 @@ index 0000000..d7257c5
 +
 +    private MCUtil() {}
 +
++    /**
++     * Quickly generate a stack trace for current location
++     *
++     * @return Stacktrace
++     */
++    public static String stack() {
++        return ExceptionUtils.getFullStackTrace(new Throwable());
++    }
++
++    /**
++     * Quickly generate a stack trace for current location with message
++     *
++     * @param str
++     * @return Stacktrace
++     */
++    public static String stack(String str) {
++        return ExceptionUtils.getFullStackTrace(new Throwable(str));
++    }
 +
 +    /**
 +     * Ensures the target code is running on the main thread
++     *
 +     * @param reason
 +     * @param run
 +     * @param <T>
@@ -49,7 +71,7 @@ index 0000000..d7257c5
 +     */
 +    public static <T> T ensureMain(String reason, Supplier<T> run) {
 +        if (AsyncCatcher.enabled && Thread.currentThread() != MinecraftServer.getServer().primaryThread) {
-+            new IllegalStateException( "Asynchronous " + reason + "! Blocking thread until it returns ").printStackTrace();
++            new IllegalStateException("Asynchronous " + reason + "! Blocking thread until it returns ").printStackTrace();
 +            Waitable<T> wait = new Waitable<T>() {
 +                @Override
 +                protected T evaluate() {
@@ -69,6 +91,7 @@ index 0000000..d7257c5
 +
 +    /**
 +     * Calculates distance between 2 entities
++     *
 +     * @param e1
 +     * @param e2
 +     * @return
@@ -80,6 +103,7 @@ index 0000000..d7257c5
 +
 +    /**
 +     * Calculates distance between 2 block positions
++     *
 +     * @param e1
 +     * @param e2
 +     * @return
@@ -90,6 +114,7 @@ index 0000000..d7257c5
 +
 +    /**
 +     * Gets the distance between 2 positions
++     *
 +     * @param x1
 +     * @param y1
 +     * @param z1
@@ -104,16 +129,18 @@ index 0000000..d7257c5
 +
 +    /**
 +     * Get's the distance squared between 2 entities
++     *
 +     * @param e1
 +     * @param e2
 +     * @return
 +     */
 +    public static double distanceSq(Entity e1, Entity e2) {
-+        return distanceSq(e1.posX,e1.posY,e1.posZ, e2.posX,e2.posY,e2.posZ);
++        return distanceSq(e1.posX, e1.posY, e1.posZ, e2.posX, e2.posY, e2.posZ);
 +    }
 +
 +    /**
 +     * Gets the distance sqaured between 2 block positions
++     *
 +     * @param pos1
 +     * @param pos2
 +     * @return
@@ -124,6 +151,7 @@ index 0000000..d7257c5
 +
 +    /**
 +     * Gets the distance squared between 2 positions
++     *
 +     * @param x1
 +     * @param y1
 +     * @param z1
@@ -138,6 +166,7 @@ index 0000000..d7257c5
 +
 +    /**
 +     * Converts a NMS World/BlockPosition to Bukkit Location
++     *
 +     * @param world
 +     * @param pos
 +     * @return
@@ -148,6 +177,7 @@ index 0000000..d7257c5
 +
 +    /**
 +     * Converts an NMS entity's current location to a Bukkit Location
++     *
 +     * @param entity
 +     * @return
 +     */
@@ -167,6 +197,7 @@ index 0000000..d7257c5
 +
 +    /**
 +     * Gets a chunk without changing its boolean for should unload
++     *
 +     * @param world
 +     * @param x
 +     * @param z
@@ -179,6 +210,7 @@ index 0000000..d7257c5
 +
 +    /**
 +     * Gets a chunk without changing its boolean for should unload
++     *
 +     * @param provider
 +     * @param x
 +     * @param z
@@ -186,11 +218,12 @@ index 0000000..d7257c5
 +     */
 +    @Nullable
 +    public static Chunk getLoadedChunkWithoutMarkingActive(IChunkProvider provider, int x, int z) {
-+        return ((ChunkProviderServer)provider).id2ChunkMap.get(ChunkPos.asLong(x, z));
++        return ((ChunkProviderServer) provider).id2ChunkMap.get(ChunkPos.asLong(x, z));
 +    }
 +
 +    /**
 +     * Posts a task to be executed asynchronously
++     *
 +     * @param run
 +     */
 +    public static void scheduleAsyncTask(Runnable run) {
@@ -208,20 +241,21 @@ index 0000000..d7257c5
 +        }
 +        return null;
 +    }
++
++    @Nonnull
++    public static World getNMSWorld(@Nonnull org.bukkit.World world) {
++        return ((CraftWorld) world).getHandle();
++    }
++
++    public static World getNMSWorld(@Nonnull org.bukkit.entity.Entity entity) {
++        return getNMSWorld(entity.getWorld());
++    }
 +}
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 70a954b..185ff25 100644
+index 70a954b..6553927 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -690,7 +690,6 @@ public class Chunk {
-         int k = pos.getZ() & 15;
-         return j >= this.heightMap[k << 4 | i];
-     }
--
-     @Nullable
-     private TileEntity createNewTileEntity(BlockPos pos) {
-         IBlockState iblockdata = this.getBlockState(pos);
-@@ -700,6 +699,12 @@ public class Chunk {
+@@ -700,6 +700,12 @@ public class Chunk {
                  : ((ITileEntityProvider) block).createNewTileEntity(this.world, iblockdata.getBlock().getMetaFromState(iblockdata));
      }
  
@@ -235,5 +269,5 @@ index 70a954b..185ff25 100644
      public TileEntity getTileEntity(BlockPos pos, Chunk.EnumCreateEntityType p_177424_2_) {
          TileEntity tileentity = null;
 -- 
-2.14.1
+2.14.2.windows.2
 

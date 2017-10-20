@@ -1,4 +1,4 @@
-From c995485f65aaf449e05a6fcce75335ed5af36515 Mon Sep 17 00:00:00 2001
+From 80209baed43f2f95b85e4c509e050c5b6f734a5b Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 10 Oct 2017 15:40:15 -0400
 Subject: [PATCH] More informative vehicle moved wrongly message

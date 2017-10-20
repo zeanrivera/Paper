@@ -1,4 +1,4 @@
-From c92d8206ac7fcfee814d88d4d921d8ce41f18958 Mon Sep 17 00:00:00 2001
+From bbf3255de35a952c4102347c37ce3aa0d7e536ec Mon Sep 17 00:00:00 2001
 From: Jadon Fowler <jadonflower@gmail.com>
 Date: Tue, 10 Oct 2017 15:13:52 -0400
 Subject: [PATCH] Toggleable Elytra Wall Damage
@@ -21,7 +21,7 @@ index 94eb221..cc5548f 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index 06d1c0e..222278a 100644
+index 747fced..f15fa7d 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
 @@ -1731,6 +1731,7 @@ public abstract class EntityLivingBase extends Entity {

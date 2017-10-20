@@ -1,4 +1,4 @@
-From 5eb7f167dcfdfebd5362aa345ca9c9a8aa9f9299 Mon Sep 17 00:00:00 2001
+From 1ad75a0f1aa44c2d4fdd1f9c360b17a7d9740724 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 16:31:05 -0400
 Subject: [PATCH] Auto Save Improvements
@@ -173,10 +173,10 @@ index 8d47390..f3af5ee 100644
              timings.worldSaveChunks.startTiming(); // Paper
              chunkproviderserver.saveChunks(all);
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 02ede10..d4cb55d 100644
+index a57dfe3..47ba9c6 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -958,12 +958,9 @@ public class Chunk {
+@@ -959,12 +959,9 @@ public class Chunk {
              if (this.hasEntities && this.world.getTotalWorldTime() != this.lastSaveTime || this.dirty) {
                  return true;
              }

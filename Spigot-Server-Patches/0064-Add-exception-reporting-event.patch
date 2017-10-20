@@ -1,4 +1,4 @@
-From 0cb361bc16cc9fd6ea79b9fd91213e34741af4e8 Mon Sep 17 00:00:00 2001
+From 2c139dc83b9c80dbde08a2c8a4294782b7f040bb Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 18:09:33 -0400
 Subject: [PATCH] Add exception reporting event
@@ -163,7 +163,7 @@ index 6a92597..fab3723 100644
                              }
  
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 75e1b1f..0d5ec44 100644
+index a915956..338487d 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -1,5 +1,6 @@
@@ -173,7 +173,7 @@ index 75e1b1f..0d5ec44 100644
  import com.destroystokyo.paper.lighting.PaperLightingQueue; // Paper
  import com.google.common.base.Predicate;
  import com.google.common.collect.Lists;
-@@ -790,20 +791,15 @@ public class Chunk {
+@@ -791,20 +792,15 @@ public class Chunk {
              this.tileEntities.remove(pos);
              // Paper end
          } else {

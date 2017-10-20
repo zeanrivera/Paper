@@ -1,4 +1,4 @@
-From 6e91da95ee2a8899d194883854b24316f45d2452 Mon Sep 17 00:00:00 2001
+From a19b2cee19a60565c0c83cecee2488b84bcbe2f8 Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 17:26:38 -0400
 Subject: [PATCH] Add velociy warnings

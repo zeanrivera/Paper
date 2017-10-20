@@ -1,4 +1,4 @@
-From 530d28b324ae526ed6a9956717e7132e4ac0b4b5 Mon Sep 17 00:00:00 2001
+From 0a806f165d13942ec41ec4034c7270ccc10a9781 Mon Sep 17 00:00:00 2001
 From: Alfie Cleveland <alfeh@me.com>
 Date: Tue, 10 Oct 2017 15:55:21 -0400
 Subject: [PATCH] Optimise BlockStateEnum hashCode and equals

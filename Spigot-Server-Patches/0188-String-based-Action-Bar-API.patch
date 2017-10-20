@@ -1,0 +1,40 @@
+From 8b3b29b1ff3645e7b3d131b37a476dd4eab7aafe Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Fri, 20 Oct 2017 21:02:49 -0400
+Subject: [PATCH] String based Action Bar API
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 2025d91..45e0fbd 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -48,6 +48,7 @@ import net.minecraft.util.SoundCategory;
+ import net.minecraft.util.math.BlockPos;
+ import net.minecraft.util.text.ChatType;
+ import net.minecraft.util.text.ITextComponent;
++import net.minecraft.util.text.TextComponentString;
+ import net.minecraft.util.text.TextFormatting;
+ import net.minecraft.world.GameType;
+ import net.minecraft.world.WorldServer;
+@@ -1587,6 +1588,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         }
+         return wasSet;
+     }
++
++    @Override
++    public void sendActionBar(String message) {
++        if (getHandle().connection == null || message == null || message.isEmpty()) return;
++        getHandle().connection.sendPacket(new SPacketChat(new TextComponentString(message), ChatType.GAME_INFO));
++    }
++
++    @Override
++    public void sendActionBar(char alternateChar, String message) {
++        if (message == null || message.isEmpty()) return;
++        sendActionBar(org.bukkit.ChatColor.translateAlternateColorCodes(alternateChar, message));
++    }
+     // Paper end
+ 
+     @Override
+-- 
+2.14.2.windows.2
+

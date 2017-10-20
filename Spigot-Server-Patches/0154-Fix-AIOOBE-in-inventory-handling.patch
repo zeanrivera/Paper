@@ -1,4 +1,4 @@
-From cc1329c03a9f604b07e5de698adc2655586b44c4 Mon Sep 17 00:00:00 2001
+From 0d4ad8e39b8d82e3bcc834110b0a9c512b2c4fa0 Mon Sep 17 00:00:00 2001
 From: Brokkonaut <hannos17@gmx.de>
 Date: Tue, 10 Oct 2017 15:59:19 -0400
 Subject: [PATCH] Fix AIOOBE in inventory handling

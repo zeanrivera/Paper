@@ -1,4 +1,4 @@
-From eb728f05649d74638f48b2d8be92f6dccf3f9c26 Mon Sep 17 00:00:00 2001
+From e67fde7d799e23fdb9cf2ec5fad1dfd10b940f8a Mon Sep 17 00:00:00 2001
 From: killme <killme-git@ibts.me>
 Date: Tue, 10 Oct 2017 15:57:11 -0400
 Subject: [PATCH] Disable ticking of snow blocks

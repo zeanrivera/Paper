@@ -1,4 +1,4 @@
-From 452b207e1e40adf6a6204b033c599dd6c17f69cd Mon Sep 17 00:00:00 2001
+From 44d0a7233a3b7b6796178682d3fd289560dbea6f Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 3 Mar 2016 04:00:11 -0600
 Subject: [PATCH] Timings v2
@@ -487,7 +487,7 @@ index f209b95..557ab2a 100644
  
      public void resetPositionToBB() {
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index 0d3fd1b..2416899 100644
+index acdb182..990a3ef 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
 @@ -83,7 +83,7 @@ import net.minecraft.world.WorldServer;
@@ -1244,10 +1244,10 @@ index 4552647..0320c9d 100644
  
      public boolean addEntity(Entity entity, SpawnReason spawnReason) {
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 185ff25..4bc3e49 100644
+index 6553927..d4edee6 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -931,6 +931,8 @@ public class Chunk {
+@@ -932,6 +932,8 @@ public class Chunk {
                  }
              }
          }
@@ -1256,7 +1256,7 @@ index 185ff25..4bc3e49 100644
  
          Chunk chunk = ichunkprovider.getLoadedChunk(this.x, this.z - 1);
          Chunk chunk1 = ichunkprovider.getLoadedChunk(this.x + 1, this.z);
-@@ -957,7 +959,7 @@ public class Chunk {
+@@ -958,7 +960,7 @@ public class Chunk {
              }
          }
  
@@ -1265,7 +1265,7 @@ index 185ff25..4bc3e49 100644
      }
  
      protected void populate(IChunkGenerator generator) {
-@@ -1159,6 +1161,7 @@ public class Chunk {
+@@ -1160,6 +1162,7 @@ public class Chunk {
      }
  
      public void checkLight() {
@@ -1273,7 +1273,7 @@ index 185ff25..4bc3e49 100644
          this.isTerrainPopulated = true;
          this.isLightPopulated = true;
          BlockPos blockposition = new BlockPos(this.x << 4, 0, this.z << 4);
-@@ -1189,6 +1192,7 @@ public class Chunk {
+@@ -1190,6 +1193,7 @@ public class Chunk {
                  this.isLightPopulated = false;
              }
          }

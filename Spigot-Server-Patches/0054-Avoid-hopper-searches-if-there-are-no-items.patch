@@ -1,4 +1,4 @@
-From 97b7266b71a84e428d24f1e7717014765d548a74 Mon Sep 17 00:00:00 2001
+From 794d4a35e9e1bf79135e634f01f550b472a17121 Mon Sep 17 00:00:00 2001
 From: CullanP <cullanpage@gmail.com>
 Date: Wed, 27 Sep 2017 15:35:42 -0400
 Subject: [PATCH] Avoid hopper searches if there are no items
@@ -16,7 +16,7 @@ of searching there.
 Combined, this adds up a lot.
 
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 8ef14dd..75e1b1f 100644
+index 77e2357..a915956 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -32,6 +32,7 @@ import net.minecraft.inventory.IInventory;
@@ -69,7 +69,7 @@ index 8ef14dd..75e1b1f 100644
          if (entityIn instanceof EntityLiving) {
              EntityLiving entityinsentient = (EntityLiving) entityIn;
  
-@@ -860,6 +882,16 @@ public class Chunk {
+@@ -861,6 +883,16 @@ public class Chunk {
          for (int k = i; k <= j; ++k) {
              if (!this.entityLists[k].isEmpty()) {
                  for (Entity entity1 : this.entityLists[k]) {
@@ -86,7 +86,7 @@ index 8ef14dd..75e1b1f 100644
                      if (entity1.getEntityBoundingBox().intersects(aabb) && entity1 != entityIn) {
                          if (filter == null || filter.apply(entity1)) {
                              listToFill.add(entity1);
-@@ -889,7 +921,18 @@ public class Chunk {
+@@ -890,7 +922,18 @@ public class Chunk {
          i = MathHelper.clamp(i, 0, this.entityLists.length - 1);
          j = MathHelper.clamp(j, 0, this.entityLists.length - 1);
  
@@ -106,5 +106,5 @@ index 8ef14dd..75e1b1f 100644
                  if (entityClass.isInstance(entity)
                          && entity.getEntityBoundingBox().intersects(aabb)
 -- 
-2.14.1.windows.1
+2.14.2.windows.2
 

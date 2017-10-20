@@ -1,4 +1,4 @@
-From 7c8ac3025bd55850c72805693564604fc7979f1c Mon Sep 17 00:00:00 2001
+From 596125e47f8812a11105fc7bd2c408a141176a16 Mon Sep 17 00:00:00 2001
 From: AlphaBlend <whizkid3000@hotmail.com>
 Date: Tue, 10 Oct 2017 16:53:27 -0400
 Subject: [PATCH] Add EntityZapEvent

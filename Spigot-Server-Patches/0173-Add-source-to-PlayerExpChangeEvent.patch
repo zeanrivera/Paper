@@ -1,0 +1,78 @@
+From fdb6bf1c6451bdb20f570e8608641d8f5c30b61f Mon Sep 17 00:00:00 2001
+From: AlphaBlend <whizkid3000@hotmail.com>
+Date: Fri, 20 Oct 2017 18:36:49 -0400
+Subject: [PATCH] Add source to PlayerExpChangeEvent
+
+
+diff --git a/src/main/java/net/minecraft/entity/item/EntityXPOrb.java b/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
+index 4fb2ba0..b683adf 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
++++ b/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
+@@ -195,7 +195,7 @@ public class EntityXPOrb extends Entity {
+             }
+ 
+             if (this.xpValue > 0) {
+-                entityIn.addExperience(CraftEventFactory.callPlayerExpChangeEvent(entityIn, this.xpValue).getAmount());
++                entityIn.addExperience(CraftEventFactory.callPlayerExpChangeEvent(entityIn, this).getAmount()); // Paper - supply experience orb object
+             }
+ 
+             this.setDead();
+diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+index 8e1f7fa..96609da 100644
+--- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+@@ -17,6 +17,7 @@ import net.minecraft.entity.boss.EntityDragon;
+ import net.minecraft.entity.item.EntityEnderCrystal;
+ import net.minecraft.entity.item.EntityFireworkRocket;
+ import net.minecraft.entity.item.EntityItem;
++import net.minecraft.entity.item.EntityXPOrb;
+ import net.minecraft.entity.player.EntityPlayer;
+ import net.minecraft.entity.player.EntityPlayerMP;
+ import net.minecraft.entity.projectile.EntityArrow;
+@@ -68,23 +69,7 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
+ import org.bukkit.craftbukkit.inventory.CraftMetaBook;
+ import org.bukkit.craftbukkit.util.CraftDamageSource;
+ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+-import org.bukkit.entity.AbstractHorse;
+-import org.bukkit.entity.AnimalTamer;
+-import org.bukkit.entity.AreaEffectCloud;
+-import org.bukkit.entity.Arrow;
+-import org.bukkit.entity.Creeper;
+-import org.bukkit.entity.EntityType;
+-import org.bukkit.entity.Firework;
+-import org.bukkit.entity.LightningStrike;
+-import org.bukkit.entity.LivingEntity;
+-import org.bukkit.entity.Pig;
+-import org.bukkit.entity.PigZombie;
+-import org.bukkit.entity.Player;
+-import org.bukkit.entity.Projectile;
+-import org.bukkit.entity.TNTPrimed;
+-import org.bukkit.entity.ThrownExpBottle;
+-import org.bukkit.entity.ThrownPotion;
+-import org.bukkit.entity.Vehicle;
++import org.bukkit.entity.*;
+ import org.bukkit.event.Cancellable;
+ import org.bukkit.event.Event;
+ import org.bukkit.event.Event.Result;
+@@ -795,6 +780,18 @@ public class CraftEventFactory {
+         return event;
+     }
+ 
++    // Paper start - Add orb
++    public static PlayerExpChangeEvent callPlayerExpChangeEvent(EntityPlayer entity, EntityXPOrb entityOrb) {
++        Player player = (Player) entity.getBukkitEntity();
++        ExperienceOrb source = (ExperienceOrb) entityOrb.getBukkitEntity();
++        int expAmount = source.getExperience();
++        PlayerExpChangeEvent event = new PlayerExpChangeEvent(player, source, expAmount);
++        Bukkit.getPluginManager().callEvent(event);
++        return event;
++    }
++    // Paper end
++
++
+     public static boolean handleBlockGrowEvent(World world, int x, int y, int z, net.minecraft.block.Block type, int data) {
+         Block block = world.getWorld().getBlockAt(x, y, z);
+         CraftBlockState state = (CraftBlockState) block.getState();
+-- 
+2.14.2.windows.2
+
