@@ -1,4 +1,4 @@
-From b7774acbbfce5473a70f1e239d0c2965bfe8f7f7 Mon Sep 17 00:00:00 2001
+From 8e8d806e97d429a24cabfeaeb5db9b3156f5964f Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 17:01:59 -0400
 Subject: [PATCH] Prevent Auto Save if Save Queue is full

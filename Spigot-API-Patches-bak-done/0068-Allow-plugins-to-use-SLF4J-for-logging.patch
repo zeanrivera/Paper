@@ -1,4 +1,4 @@
-From 3615acb3a31023b7fac10e25da5a112d595f3511 Mon Sep 17 00:00:00 2001
+From 4e914e948a2c0312b27a24f25c7070774bc67238 Mon Sep 17 00:00:00 2001
 From: Minecrell <dev@minecrell.net>
 Date: Thu, 21 Sep 2017 16:33:12 +0200
 Subject: [PATCH] Allow plugins to use SLF4J for logging

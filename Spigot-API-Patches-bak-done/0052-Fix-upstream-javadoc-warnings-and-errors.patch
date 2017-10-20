@@ -1,4 +1,4 @@
-From 386346811abcf1a51441e4ca1329837fad0ff994 Mon Sep 17 00:00:00 2001
+From 94a9fd3bbb99d5b9165e1d189fc6281de2436698 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 10 Jun 2017 16:59:40 -0500
 Subject: [PATCH] Fix upstream javadoc warnings and errors

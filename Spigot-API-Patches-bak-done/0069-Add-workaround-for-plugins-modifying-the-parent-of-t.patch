@@ -1,4 +1,4 @@
-From 800de075af49eb75e9d4b28e50c12387a41998be Mon Sep 17 00:00:00 2001
+From db086ab21e4abed43d58783caba3c4e3a22394fc Mon Sep 17 00:00:00 2001
 From: Minecrell <dev@minecrell.net>
 Date: Thu, 21 Sep 2017 19:41:20 +0200
 Subject: [PATCH] Add workaround for plugins modifying the parent of the plugin

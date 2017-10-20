@@ -1,4 +1,4 @@
-From 0f270c5be71b8d1d9941814f3db742fff15fe03d Mon Sep 17 00:00:00 2001
+From 6898b83152133750b7509beed1e235b245db4582 Mon Sep 17 00:00:00 2001
 From: willies952002 <admin@domnian.com>
 Date: Mon, 28 Nov 2016 10:16:39 -0500
 Subject: [PATCH] Allow Reloading of Command Aliases
