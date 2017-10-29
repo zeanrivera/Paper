@@ -1,4 +1,4 @@
-From db086ab21e4abed43d58783caba3c4e3a22394fc Mon Sep 17 00:00:00 2001
+From 135f22c6281f7f43234a9a68151ad2b4936fb6a4 Mon Sep 17 00:00:00 2001
 From: Minecrell <dev@minecrell.net>
 Date: Thu, 21 Sep 2017 19:41:20 +0200
 Subject: [PATCH] Add workaround for plugins modifying the parent of the plugin
@@ -106,5 +106,5 @@ index b2cbf9e4..2a4587e8 100644
      }
  }
 -- 
-2.14.2.windows.2
+2.14.3.windows.1
 

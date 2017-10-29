@@ -1,0 +1,58 @@
+From c598fb3788765412141b59e6eafb5e844135f398 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 29 Oct 2017 18:41:48 -0400
+Subject: [PATCH] Add option to make parrots stay on shoulders despite movement
+
+Makes parrots not fall off whenever the player changes height, or touches water, or gets hit by a passing leaf.
+Instead, switches the behavior so that players have to sneak to make the birds leave.
+
+To be removed in the future (1.13?)
+This can be accomplished via plugins
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index ee0e9b8..c923e69 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -418,4 +418,10 @@ public class PaperWorldConfig {
+         maxCollisionsPerEntity = getInt( "max-entity-collisions", this.spigotConfig.getInt("max-entity-collisions", 8) );
+         log( "Max Entity Collisions: " + maxCollisionsPerEntity );
+     }
++
++    public boolean parrotsHangOnBetter;
++    private void parrotsHangOnBetter() {
++        parrotsHangOnBetter = getBoolean("parrots-are-unaffected-by-player-movement", false);
++        log("Parrots are unaffected by player movement: " + parrotsHangOnBetter);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
+index aab5e18..a40efbe 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
+@@ -495,7 +495,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
+         this.playShoulderEntityAmbientSound(this.getRightShoulderEntity());
+ 
+         if (!this.world.isRemote && (this.fallDistance > 0.5F || this.isInWater() || this.isRiding()) || this.capabilities.isFlying) {
+-            this.spawnShoulderEntities();
++            if (!this.world.paperConfig.parrotsHangOnBetter) this.spawnShoulderEntities();  // Paper - Hang on!
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index af0f9ea..c1527a1 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -1686,6 +1686,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+             this.player.markPlayerActive();
+             switch (packetIn.getAction()) {
+                 case START_SNEAKING:
++                    // Paper start - Get off!
++                    if (this.player.world.paperConfig.parrotsHangOnBetter) {
++                        this.player.spawnShoulderEntities();
++                    }
++                    // Paper end
+                     this.player.setSneaking(true);
+                     break;
+                 case STOP_SNEAKING:
+-- 
+2.14.3.windows.1
+

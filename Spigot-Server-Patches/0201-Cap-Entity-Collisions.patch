@@ -1,0 +1,60 @@
+From 18a702ba5466c37e62b02897fd2a4a00704238aa Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 29 Oct 2017 17:45:45 -0400
+Subject: [PATCH] Cap Entity Collisions
+
+Limit a single entity to colliding a max of configurable times per tick.
+This will alleviate issues where living entities are hoarded in 1x1 pens
+
+This is not tied to the maxEntityCramming rule. Cramming will still apply
+just as it does in Vanilla, but entity pushing logic will be capped.
+
+You can set this to 0 to disable collisions.
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index bc76cf9..ee0e9b8 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -412,4 +412,10 @@ public class PaperWorldConfig {
+     private void armorStandEntityLookups() {
+         armorStandEntityLookups = getBoolean("armor-stands-do-collision-entity-lookups", true);
+     }
++
++    public int maxCollisionsPerEntity;
++    private void maxEntityCollision() {
++        maxCollisionsPerEntity = getInt( "max-entity-collisions", this.spigotConfig.getInt("max-entity-collisions", 8) );
++        log( "Max Entity Collisions: " + maxCollisionsPerEntity );
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
+index eada500..6c2af6c 100644
+--- a/src/main/java/net/minecraft/entity/Entity.java
++++ b/src/main/java/net/minecraft/entity/Entity.java
+@@ -227,6 +227,7 @@ public abstract class Entity implements ICommandSender {
+     public Location origin; // Paper
+     public static final Random SHARED_RANDOM = new Random(); // Paper
+     EntityTrackerEntry tracker; // Paper
++    protected int numCollisions = 0; // Paper
+ 
+     static boolean isLevelAtLeast(NBTTagCompound tag, int level) {
+         return tag.hasKey("Bukkit.updateLevel") && tag.getInteger("Bukkit.updateLevel") >= level;
+diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
+index f15fa7d..d1c7978 100644
+--- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
++++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
+@@ -2252,8 +2252,11 @@ public abstract class EntityLivingBase extends Entity {
+                 }
+             }
+ 
+-            for (int j = 0; j < list.size(); ++j) {
++            numCollisions = Math.max(0, numCollisions - world.paperConfig.maxCollisionsPerEntity); // Paper
++            for (int j = 0; j < list.size() && numCollisions < world.paperConfig.maxCollisionsPerEntity; ++j) {
+                 Entity entity = (Entity) list.get(j);
++                entity.numCollisions++; // Paper
++                numCollisions++; // Paper
+                 this.collideWithEntity(entity);
+             }
+         }
+-- 
+2.14.3.windows.1
+
