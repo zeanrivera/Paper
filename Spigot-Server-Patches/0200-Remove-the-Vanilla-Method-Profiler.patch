@@ -1,4 +1,4 @@
-From 2328adf977311b6575dbe8f605f19d4206e15f8c Mon Sep 17 00:00:00 2001
+From ea2ceeca0ddffdaf3db0eb269ed97ba6722a51d7 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 17:35:20 -0400
 Subject: [PATCH] Remove the Vanilla Method Profiler

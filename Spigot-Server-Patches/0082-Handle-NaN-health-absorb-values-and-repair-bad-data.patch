@@ -1,11 +1,11 @@
-From 2a2270263b035a581649fb35e01231587acc71c3 Mon Sep 17 00:00:00 2001
+From 4cb6cecce747570315f6acf3c49cb00c4c703228 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:14:27 -0400
 Subject: [PATCH] Handle NaN health/absorb values and repair bad data
 
 
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index 423ef7e..ef4dbc3 100644
+index 12f791c..941ed0d 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
 @@ -560,7 +560,13 @@ public abstract class EntityLivingBase extends Entity {
@@ -48,10 +48,10 @@ index 423ef7e..ef4dbc3 100644
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 41f391b..1032ba3 100644
+index be15145..ed31f07 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1393,6 +1393,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1363,6 +1363,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      }
  
      public void setRealHealth(double health) {
@@ -60,5 +60,5 @@ index 41f391b..1032ba3 100644
      }
  
 -- 
-2.14.1.windows.1
+2.14.3.windows.1
 

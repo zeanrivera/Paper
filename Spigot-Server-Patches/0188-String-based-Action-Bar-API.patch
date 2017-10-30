@@ -1,14 +1,14 @@
-From 8b3b29b1ff3645e7b3d131b37a476dd4eab7aafe Mon Sep 17 00:00:00 2001
+From bc992913a9804f83ae4d34f62669b66280d1d48b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 21:02:49 -0400
 Subject: [PATCH] String based Action Bar API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 2025d91..45e0fbd 100644
+index 5ce9b71..6f586d0 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -48,6 +48,7 @@ import net.minecraft.util.SoundCategory;
+@@ -29,6 +29,7 @@ import net.minecraft.util.SoundCategory;
  import net.minecraft.util.math.BlockPos;
  import net.minecraft.util.text.ChatType;
  import net.minecraft.util.text.ITextComponent;
@@ -16,7 +16,7 @@ index 2025d91..45e0fbd 100644
  import net.minecraft.util.text.TextFormatting;
  import net.minecraft.world.GameType;
  import net.minecraft.world.WorldServer;
-@@ -1587,6 +1588,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1557,6 +1558,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          }
          return wasSet;
      }
@@ -36,5 +36,5 @@ index 2025d91..45e0fbd 100644
  
      @Override
 -- 
-2.14.2.windows.2
+2.14.3.windows.1
 

@@ -1,4 +1,4 @@
-From 7febc5aaf0bb1025f0ca9bf886320f913a2a6f3c Mon Sep 17 00:00:00 2001
+From 4e4c444cf044e8f42b7f1ef953e603694a988bb5 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sun, 24 Sep 2017 18:18:58 -0400
 Subject: [PATCH] Add player view distance API
@@ -147,10 +147,10 @@ index 13b1dbe..3eddccd 100644
      private void markSortPending() {
          this.sortMissingChunks = true;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index e4587bc..9369632 100644
+index 7856143..15d996e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1584,6 +1584,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1542,6 +1542,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public boolean getAffectsSpawning() {
          return this.getHandle().affectsSpawning;
      }
@@ -168,5 +168,5 @@ index e4587bc..9369632 100644
  
      public Player.Spigot spigot() { // Paper - Decompile fix
 -- 
-2.14.1
+2.14.3.windows.1
 

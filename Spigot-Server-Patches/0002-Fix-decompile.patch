@@ -1,4 +1,4 @@
-From b383d16c553938a984380010a18d333fb57fa65c Mon Sep 17 00:00:00 2001
+From 57844ee96a7e834ae749327cc6cdd0dda31ed7c3 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -18,7 +18,7 @@ index 4ac91a5..342caf2 100644
              if (map.isEmpty()) {
                  throw new JsonSyntaxException("Advancement criteria cannot be empty");
 diff --git a/src/main/java/net/minecraft/advancements/AdvancementManager.java b/src/main/java/net/minecraft/advancements/AdvancementManager.java
-index 81587a8..91020f5 100644
+index fbd4c64..8b635d8 100644
 --- a/src/main/java/net/minecraft/advancements/AdvancementManager.java
 +++ b/src/main/java/net/minecraft/advancements/AdvancementManager.java
 @@ -54,12 +54,6 @@ public class AdvancementManager {
@@ -382,7 +382,7 @@ index 0520dc2..97ba404 100644
              for (ICriterionTrigger.Listener var6 : this.listeners) {
                  if (((VillagerTradeTrigger.Instance) var6.getCriterionInstance()).test(player, villager, item)) {
 diff --git a/src/main/java/net/minecraft/block/BlockCauldron.java b/src/main/java/net/minecraft/block/BlockCauldron.java
-index 0b915bf..457f422 100644
+index 35a925e..3b5e2ad 100644
 --- a/src/main/java/net/minecraft/block/BlockCauldron.java
 +++ b/src/main/java/net/minecraft/block/BlockCauldron.java
 @@ -239,7 +239,7 @@ public class BlockCauldron extends Block {
@@ -945,7 +945,7 @@ index 8f6086d..e3891e4 100644
                  for (PotionEffect mobeffect : this.potion.getEffects()) {
                      arraylist.add(
 diff --git a/src/main/java/net/minecraft/entity/EntityLeashKnot.java b/src/main/java/net/minecraft/entity/EntityLeashKnot.java
-index aadf655..de71314 100644
+index 46dfb27..eb2f7ea 100644
 --- a/src/main/java/net/minecraft/entity/EntityLeashKnot.java
 +++ b/src/main/java/net/minecraft/entity/EntityLeashKnot.java
 @@ -83,8 +83,7 @@ public class EntityLeashKnot extends EntityHanging {
@@ -972,7 +972,7 @@ index a878ff8..ee64344 100644
  
              OLD_NAMES.set(id, oldName);
 diff --git a/src/main/java/net/minecraft/entity/EntityTracker.java b/src/main/java/net/minecraft/entity/EntityTracker.java
-index 2ade27b..9411557 100644
+index 8bf5235..f347063 100644
 --- a/src/main/java/net/minecraft/entity/EntityTracker.java
 +++ b/src/main/java/net/minecraft/entity/EntityTracker.java
 @@ -140,7 +140,7 @@ public class EntityTracker {
@@ -1026,7 +1026,7 @@ index 06fa0ed..43a4efa 100644
          if (collection != null && !collection.isEmpty()) {
              NBTTagList nbttaglist = new NBTTagList();
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java b/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
-index ce94817..3b31017 100644
+index 00cb710..bdbc061 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
 @@ -63,7 +63,7 @@ public class EntityAIAvoidEntity<T extends Entity> extends EntityAIBase {
@@ -1039,7 +1039,7 @@ index ce94817..3b31017 100644
                      RandomPositionGenerator.findRandomTargetBlockAwayFrom(
                              this.entity,
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
-index fedf026..75c783a 100644
+index b68d6bb..22b87a2 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
 @@ -40,7 +40,7 @@ public class EntityAIFollow extends EntityAIBase {
@@ -1052,7 +1052,7 @@ index fedf026..75c783a 100644
                          EntityLiving.class, this.entity.getEntityBoundingBox().grow((double) this.areaSize), this.followPredicate);
  
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
-index 30799a3..8190acc 100644
+index 447f231..729f46f 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
 @@ -21,7 +21,7 @@ public class EntityAIFollowGolem extends EntityAIBase {
@@ -1065,7 +1065,7 @@ index 30799a3..8190acc 100644
                              EntityIronGolem.class, this.villager.getEntityBoundingBox().grow(6.0D, 2.0D, 6.0D));
  
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
-index 9ef34db..ee35ec2 100644
+index a40e3c1..ee6774f 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
 @@ -18,7 +18,7 @@ public class EntityAIFollowParent extends EntityAIBase {
@@ -1078,7 +1078,7 @@ index 9ef34db..ee35ec2 100644
                              this.childAnimal.getClass(), this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D));
              EntityAnimal var2 = null;
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java b/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
-index ec4c86a..2f1ff0f 100644
+index c56359b..6e2bdea 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
 @@ -17,7 +17,7 @@ public class EntityAILlamaFollowCaravan extends EntityAIBase {
@@ -1091,7 +1091,7 @@ index ec4c86a..2f1ff0f 100644
              EntityLlama var2 = null;
              double var3 = Double.MAX_VALUE;
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
-index 408c313..a691499 100644
+index 26550f9..bca298a 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
 @@ -64,7 +64,7 @@ public class EntityAIMate extends EntityAIBase {
@@ -1104,7 +1104,7 @@ index 408c313..a691499 100644
          EntityAnimal entityanimal = null;
  
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
-index 262969b..71e8084 100644
+index 7c7f3fc..25cc7cb 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
 @@ -49,21 +49,7 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
@@ -1155,7 +1155,7 @@ index 262969b..71e8084 100644
          }
      }
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java b/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
-index f7d2faa..fa6223f 100644
+index 6daf2c3..d9c8300 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
 @@ -23,7 +23,7 @@ public class EntityAIPlay extends EntityAIBase {
@@ -1181,7 +1181,7 @@ index d9d05c6..958713f 100644
              if (var2 == null) {
                  var2 = Sets.newHashSet();
 diff --git a/src/main/java/net/minecraft/entity/boss/EntityDragon.java b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
-index e4d3f18..8679b2d 100644
+index 60ef30b..b8d8e0f 100644
 --- a/src/main/java/net/minecraft/entity/boss/EntityDragon.java
 +++ b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
 @@ -454,7 +454,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
@@ -1233,7 +1233,7 @@ index 6db977f..f56ccb2 100644
          if (!collection.isEmpty()) {
              EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java b/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
-index dbb8577..a66d84d 100644
+index 8b5c08f..72616ac 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
 @@ -72,7 +72,7 @@ public class EntityElderGuardian extends EntityGuardian {
@@ -1246,7 +1246,7 @@ index dbb8577..a66d84d 100644
                              EntityPlayerMP.class,
                              new Predicate<EntityPlayerMP>() {
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityShulker.java b/src/main/java/net/minecraft/entity/monster/EntityShulker.java
-index a854ef9..97d5174 100644
+index bd099b3..a23785d 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityShulker.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityShulker.java
 @@ -345,7 +345,7 @@ public class EntityShulker extends EntityGolem implements IMob {
@@ -1259,7 +1259,7 @@ index a854ef9..97d5174 100644
                  if (!list.isEmpty()) {
                      for (Entity entity : list) {
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityWitch.java b/src/main/java/net/minecraft/entity/monster/EntityWitch.java
-index 3e3bbfa..3aaa664 100644
+index a2de527..a8fdaef 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityWitch.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityWitch.java
 @@ -106,7 +106,7 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
@@ -1315,7 +1315,7 @@ index 2b955b3..7d51461 100644
 -    }
  }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityOcelot.java b/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
-index 9345f66..83cb711 100644
+index fcd9683..d44dfa4 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
 @@ -292,8 +292,4 @@ public class EntityOcelot extends EntityTameable {
@@ -1341,7 +1341,7 @@ index 91a2cd0..6c24b67 100644
 -    }
  }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityRabbit.java b/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
-index 44b6985..aa19f17 100644
+index 28b706f..9d25335 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
 @@ -390,10 +390,6 @@ public class EntityRabbit extends EntityAnimal {
@@ -1423,7 +1423,7 @@ index 4583b6b..97f3979 100644
              }
  
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java b/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java
-index 097842f..f329db0 100644
+index ca7ea78..3477cdc 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityDragonFireball.java
 @@ -30,7 +30,7 @@ public class EntityDragonFireball extends EntityFireball {
@@ -1436,7 +1436,7 @@ index 097842f..f329db0 100644
                  var3.setOwner(this.shootingEntity);
                  var3.setParticle(EnumParticleTypes.DRAGON_BREATH);
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
-index b381baf..6c0e49e 100644
+index 3659da1..7b27c00 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
 @@ -262,7 +262,7 @@ public class EntityFishHook extends Entity {
@@ -1449,7 +1449,7 @@ index b381baf..6c0e49e 100644
                          this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D));
          double d0 = 0.0D;
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java b/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
-index 2a5164b..23eca83 100644
+index e072f43..d19e0ce 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
 @@ -112,7 +112,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
@@ -1462,7 +1462,7 @@ index 2a5164b..23eca83 100644
                          this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D));
          double d0 = 0.0D;
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityPotion.java b/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
-index c60a412..64ce647 100644
+index aec69c2..8704b65 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
 @@ -132,7 +132,7 @@ public class EntityPotion extends EntityThrowable {
@@ -1607,7 +1607,7 @@ index b23ae9f..aae4dc6 100644
                          throw new Error(
                                  "Packet "
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 1e757e8..43c58f8 100644
+index af56403..0c1f75c 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -194,7 +194,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
@@ -1894,7 +1894,7 @@ index 47b41f1..36cc1cf 100644
          for (IRecipe var2 : CraftingManager.REGISTRY) {
              ItemStack var3 = var2.getRecipeOutput();
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
-index 63a5fda..6a5eda6 100644
+index d307815..f4ad831 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
 @@ -130,7 +130,7 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
@@ -2045,7 +2045,7 @@ index a926724..e53beef 100644
      }
  
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index c2605e4..0066612 100644
+index d85aaa2..11750dd 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -2527,7 +2527,7 @@ public abstract class World implements IBlockAccess {
@@ -2147,7 +2147,7 @@ index 8a8680f..70a954b 100644
              }
          }
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-index af6283c..c28dcfc 100644
+index dd8c773..e267353 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 @@ -312,7 +312,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
@@ -2360,7 +2360,7 @@ index 3447f63..2b2dec8 100644
  
              for (Entry var6 : var3) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 0f798fd..03c30ec 100644
+index 3ac3b56..581433f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -4,30 +4,20 @@ import com.google.common.base.Preconditions;
@@ -2820,7 +2820,7 @@ index 0f798fd..03c30ec 100644
  
          this.world.addEntity(entity, reason);
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
-index 5404bf4..f4cf5a3 100644
+index a0dab98..c77617a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
 @@ -24,7 +24,7 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
@@ -2918,10 +2918,130 @@ index e0c4e88..40c9279 100644
      }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 6db0e6c..7b87a39 100644
+index 6db0e6c..dd74b42 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -130,8 +130,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -5,21 +5,6 @@ import com.google.common.collect.ImmutableSet;
+ import com.google.common.io.BaseEncoding;
+ import com.mojang.authlib.GameProfile;
+ import io.netty.buffer.Unpooled;
+-import java.io.ByteArrayOutputStream;
+-import java.io.IOException;
+-import java.net.InetSocketAddress;
+-import java.net.SocketAddress;
+-import java.util.ArrayList;
+-import java.util.Collection;
+-import java.util.Collections;
+-import java.util.HashSet;
+-import java.util.LinkedHashMap;
+-import java.util.List;
+-import java.util.Map;
+-import java.util.Set;
+-import java.util.UUID;
+-import java.util.logging.Level;
+-import java.util.logging.Logger;
+ import net.md_5.bungee.api.ChatMessageType;
+ import net.md_5.bungee.api.chat.BaseComponent;
+ import net.md_5.bungee.api.chat.TextComponent;
+@@ -27,11 +12,7 @@ import net.minecraft.advancements.PlayerAdvancements;
+ import net.minecraft.entity.EntityLivingBase;
+ import net.minecraft.entity.EntityTracker;
+ import net.minecraft.entity.EntityTrackerEntry;
+-import net.minecraft.entity.ai.attributes.AttributeMap;
+-import net.minecraft.entity.ai.attributes.IAttribute;
+-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+-import net.minecraft.entity.ai.attributes.RangedAttribute;
++import net.minecraft.entity.ai.attributes.*;
+ import net.minecraft.entity.player.EntityPlayer;
+ import net.minecraft.entity.player.EntityPlayerMP;
+ import net.minecraft.inventory.Container;
+@@ -39,19 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
+ import net.minecraft.network.NetHandlerPlayServer;
+ import net.minecraft.network.Packet;
+ import net.minecraft.network.PacketBuffer;
+-import net.minecraft.network.play.server.SPacketBlockChange;
+-import net.minecraft.network.play.server.SPacketChat;
+-import net.minecraft.network.play.server.SPacketCustomPayload;
+-import net.minecraft.network.play.server.SPacketCustomSound;
+-import net.minecraft.network.play.server.SPacketEffect;
+-import net.minecraft.network.play.server.SPacketEntityProperties;
+-import net.minecraft.network.play.server.SPacketMaps;
+-import net.minecraft.network.play.server.SPacketParticles;
+-import net.minecraft.network.play.server.SPacketPlayerListItem;
+-import net.minecraft.network.play.server.SPacketSoundEffect;
+-import net.minecraft.network.play.server.SPacketSpawnPosition;
+-import net.minecraft.network.play.server.SPacketTitle;
+-import net.minecraft.network.play.server.SPacketUpdateHealth;
++import net.minecraft.network.play.server.*;
+ import net.minecraft.stats.StatBase;
+ import net.minecraft.tileentity.TileEntitySign;
+ import net.minecraft.util.EnumParticleTypes;
+@@ -65,19 +34,7 @@ import net.minecraft.world.WorldServer;
+ import net.minecraft.world.storage.MapDecoration;
+ import org.apache.commons.lang.NotImplementedException;
+ import org.apache.commons.lang.Validate;
+-import org.bukkit.Achievement;
+-import org.bukkit.Effect;
+-import org.bukkit.GameMode;
+-import org.bukkit.Instrument;
+-import org.bukkit.Location;
+-import org.bukkit.Material;
+-import org.bukkit.Note;
+-import org.bukkit.OfflinePlayer;
+-import org.bukkit.Particle;
+-import org.bukkit.Sound;
+-import org.bukkit.Statistic;
+-import org.bukkit.WeatherType;
+-import org.bukkit.World;
++import org.bukkit.*;
+ import org.bukkit.Effect.Type;
+ import org.bukkit.advancement.Advancement;
+ import org.bukkit.advancement.AdvancementProgress;
+@@ -85,13 +42,7 @@ import org.bukkit.configuration.serialization.DelegateDeserialization;
+ import org.bukkit.conversations.Conversation;
+ import org.bukkit.conversations.ConversationAbandonedEvent;
+ import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
+-import org.bukkit.craftbukkit.CraftEffect;
+-import org.bukkit.craftbukkit.CraftOfflinePlayer;
+-import org.bukkit.craftbukkit.CraftParticle;
+-import org.bukkit.craftbukkit.CraftServer;
+-import org.bukkit.craftbukkit.CraftSound;
+-import org.bukkit.craftbukkit.CraftStatistic;
+-import org.bukkit.craftbukkit.CraftWorld;
++import org.bukkit.craftbukkit.*;
+ import org.bukkit.craftbukkit.advancement.CraftAdvancement;
+ import org.bukkit.craftbukkit.advancement.CraftAdvancementProgress;
+ import org.bukkit.craftbukkit.block.CraftSign;
+@@ -104,11 +55,10 @@ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.entity.Entity;
+ import org.bukkit.entity.EntityType;
+ import org.bukkit.entity.Player;
+-import org.bukkit.entity.Player.Spigot;
+ import org.bukkit.event.player.PlayerRegisterChannelEvent;
+ import org.bukkit.event.player.PlayerTeleportEvent;
+-import org.bukkit.event.player.PlayerUnregisterChannelEvent;
+ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
++import org.bukkit.event.player.PlayerUnregisterChannelEvent;
+ import org.bukkit.inventory.InventoryView.Property;
+ import org.bukkit.map.MapCursor;
+ import org.bukkit.map.MapView;
+@@ -118,6 +68,14 @@ import org.bukkit.plugin.messaging.StandardMessenger;
+ import org.bukkit.scoreboard.Scoreboard;
+ import org.spigotmc.AsyncCatcher;
+ 
++import java.io.ByteArrayOutputStream;
++import java.io.IOException;
++import java.net.InetSocketAddress;
++import java.net.SocketAddress;
++import java.util.*;
++import java.util.logging.Level;
++import java.util.logging.Logger;
++
+ @DelegateDeserialization(CraftOfflinePlayer.class)
+ public class CraftPlayer extends CraftHumanEntity implements Player {
+     private long firstPlayed = 0L;
+@@ -130,8 +88,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      private double health = 20.0D;
      private boolean scaledHealth = false;
      private double healthScale = 20.0D;
@@ -2932,7 +3052,25 @@ index 6db0e6c..7b87a39 100644
                  public InetSocketAddress getRawAddress() {
                      return (InetSocketAddress) CraftPlayer.this.getHandle().connection.netManager.getRawAddress();
                  }
-@@ -1568,7 +1568,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -240,7 +198,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+                 }
+ 
+                 public void sendMessage(BaseComponent component) {
+-                    this.sendMessage(component);
++                    sendMessage(new BaseComponent[]{component}); // Paper - Fix decompile
+                 }
+ 
+                 public void sendMessage(BaseComponent... components) {
+@@ -252,7 +210,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+                 }
+ 
+                 public void sendMessage(ChatMessageType position, BaseComponent component) {
+-                    this.sendMessage(position, component);
++                    sendMessage(position, new BaseComponent[]{component}); // Paper - Fix decompile
+                 }
+ 
+                 public void sendMessage(ChatMessageType position, BaseComponent... components) {
+@@ -1568,7 +1526,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.getHandle().language;
      }
  
@@ -3060,5 +3198,5 @@ index 0c40ff9..1931031 100644
      }
  }
 -- 
-2.14.1
+2.14.3.windows.1
 

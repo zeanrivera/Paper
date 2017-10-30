@@ -1,7 +1,7 @@
-From 9f5bb9592dca4e1887e6f503efc3fe5f4cac4a15 Mon Sep 17 00:00:00 2001
+From c9a1cab5a0e387231e6991583784c1353da94526 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 21:19:42 -0400
-Subject: [PATCH] GH-806: Respect saving disabled before unloading all chunks 
+Subject: [PATCH] GH-806: Respect saving disabled before unloading all chunks
  in a world
 
 This behavior causes a save to occur even though saving was supposed to be turned off.

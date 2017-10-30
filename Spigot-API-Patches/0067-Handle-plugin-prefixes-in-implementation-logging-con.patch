@@ -1,4 +1,4 @@
-From e918f454b0c0c2568c2f38a41e86525af6332a22 Mon Sep 17 00:00:00 2001
+From 53cbcc2df331d61c18333126094d1e3cbb7f3a30 Mon Sep 17 00:00:00 2001
 From: Minecrell <dev@minecrell.net>
 Date: Thu, 21 Sep 2017 16:14:13 +0200
 Subject: [PATCH] Handle plugin prefixes in implementation logging

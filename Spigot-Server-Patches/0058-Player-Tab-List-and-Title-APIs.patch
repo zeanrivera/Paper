@@ -1,4 +1,4 @@
-From 60d28ea844e0ea91e148a27caa21a1d0252d0d2e Mon Sep 17 00:00:00 2001
+From 33990642806ba764c2219d00e476f83441509fd1 Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Wed, 27 Sep 2017 17:27:16 -0400
 Subject: [PATCH] Player Tab List and Title APIs
@@ -75,7 +75,7 @@ index 2a43ec6..24cdbc7 100644
  
          if (this.type == SPacketTitle.Type.TIMES) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 9369632..8208f93 100644
+index 15d996e..e7600a7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1,5 +1,6 @@
@@ -85,28 +85,7 @@ index 9369632..8208f93 100644
  import com.google.common.base.Preconditions;
  import com.google.common.collect.ImmutableSet;
  import com.google.common.io.BaseEncoding;
-@@ -39,19 +40,7 @@ import net.minecraft.nbt.NBTTagCompound;
- import net.minecraft.network.NetHandlerPlayServer;
- import net.minecraft.network.Packet;
- import net.minecraft.network.PacketBuffer;
--import net.minecraft.network.play.server.SPacketBlockChange;
--import net.minecraft.network.play.server.SPacketChat;
--import net.minecraft.network.play.server.SPacketCustomPayload;
--import net.minecraft.network.play.server.SPacketCustomSound;
--import net.minecraft.network.play.server.SPacketEffect;
--import net.minecraft.network.play.server.SPacketEntityProperties;
--import net.minecraft.network.play.server.SPacketMaps;
--import net.minecraft.network.play.server.SPacketParticles;
--import net.minecraft.network.play.server.SPacketPlayerListItem;
--import net.minecraft.network.play.server.SPacketSoundEffect;
--import net.minecraft.network.play.server.SPacketSpawnPosition;
--import net.minecraft.network.play.server.SPacketTitle;
--import net.minecraft.network.play.server.SPacketUpdateHealth;
-+import net.minecraft.network.play.server.*;
- import net.minecraft.stats.StatBase;
- import net.minecraft.tileentity.TileEntitySign;
- import net.minecraft.util.EnumParticleTypes;
-@@ -1594,6 +1583,83 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1552,6 +1553,83 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public void setViewDistance(int viewDistance) {
          ((WorldServer) getHandle().world).getPlayerChunkMap().updateViewDistance(getHandle(), viewDistance);
      }
@@ -191,5 +170,5 @@ index 9369632..8208f93 100644
  
      public Player.Spigot spigot() { // Paper - Decompile fix
 -- 
-2.14.1
+2.14.3.windows.1
 

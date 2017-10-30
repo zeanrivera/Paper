@@ -1,4 +1,4 @@
-From c0e129296f097bed597756309d3305ea203c5767 Mon Sep 17 00:00:00 2001
+From febcca881e2474beff69e30298b1b876143d27e0 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 17:51:04 -0400
 Subject: [PATCH] Do not allow a zero max height in BiomeJungle

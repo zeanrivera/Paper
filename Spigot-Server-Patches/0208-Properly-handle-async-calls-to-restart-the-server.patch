@@ -1,4 +1,4 @@
-From 93ccd03c4cfa83490565224f24f8d31567ddaa4c Mon Sep 17 00:00:00 2001
+From dbf62af38cba465b301bab22b54e629b3d74d31e Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 18:29:50 -0400
 Subject: [PATCH] Properly handle async calls to restart the server

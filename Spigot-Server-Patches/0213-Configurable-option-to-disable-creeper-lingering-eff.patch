@@ -1,4 +1,4 @@
-From eb36f128e66b6b0be9975003ba907802b257db6e Mon Sep 17 00:00:00 2001
+From ed6981f971e27d187709fffec1e47356bfcc3109 Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Sun, 29 Oct 2017 20:06:08 -0400
 Subject: [PATCH] Configurable option to disable creeper lingering effect
