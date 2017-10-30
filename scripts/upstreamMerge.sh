@@ -3,7 +3,7 @@
 (
 set -e
 PS1="$"
-basedir="$(pwd -P)"
+basedir="$(cd "$1" && pwd -P)"
 workdir="$basedir/work"
 
 function update {
@@ -17,7 +17,7 @@ update Bukkit
 update CraftBukkit
 update Spigot
 
-if [[ "$1" = "all" || "$1" = "a" ]] ; then
+if [[ "$2" = "all" || "$2" = "a" ]] ; then
 	update BuildData
 	update Paperclip
 fi
