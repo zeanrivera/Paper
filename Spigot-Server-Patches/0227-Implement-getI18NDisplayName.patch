@@ -1,4 +1,4 @@
-From 23d46e0459f78f290870ca42f6fb7d94a5e3d3a1 Mon Sep 17 00:00:00 2001
+From 9ce9fb3bb6b7874d9dd56fa64ab1adadcee1c203 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 21:17:53 -0400
 Subject: [PATCH] Implement getI18NDisplayName

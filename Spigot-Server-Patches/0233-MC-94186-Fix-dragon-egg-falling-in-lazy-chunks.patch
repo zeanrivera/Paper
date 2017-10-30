@@ -1,4 +1,4 @@
-From 578c0897037c63f694a49b4a8a5f42c0a787fa89 Mon Sep 17 00:00:00 2001
+From ed0f3ab09a40fa807e4b4eefe37d578066b0e6d7 Mon Sep 17 00:00:00 2001
 From: Brokkonaut <hannos17@gmx.de>
 Date: Sun, 29 Oct 2017 21:34:01 -0400
 Subject: [PATCH] MC-94186 Fix dragon egg falling in lazy chunks
