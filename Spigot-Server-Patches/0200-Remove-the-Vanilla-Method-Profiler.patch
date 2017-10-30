@@ -1,4 +1,4 @@
-From ea2ceeca0ddffdaf3db0eb269ed97ba6722a51d7 Mon Sep 17 00:00:00 2001
+From bfbeedd741f20836e7647eaf4f5c73b259f1f0ad Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 17:35:20 -0400
 Subject: [PATCH] Remove the Vanilla Method Profiler
@@ -11,7 +11,7 @@ added, so we do not want any risk of performance degredation.
 Paper has a proper Timings system that makes the Vanilla Method profiler obsolete and inferior.
 
 diff --git a/src/main/java/net/minecraft/command/CommandDebug.java b/src/main/java/net/minecraft/command/CommandDebug.java
-index c2c36be..a64bf70 100644
+index b78cc8b..a3e22c9 100644
 --- a/src/main/java/net/minecraft/command/CommandDebug.java
 +++ b/src/main/java/net/minecraft/command/CommandDebug.java
 @@ -36,6 +36,12 @@ public class CommandDebug extends CommandBase {

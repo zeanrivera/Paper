@@ -1,4 +1,4 @@
-From 818788f26fb46eb8622190359c876c793a354e79 Mon Sep 17 00:00:00 2001
+From d26935b23ec97dbe7e33b377021ca0dddd3e395c Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Tue, 1 Mar 2016 14:47:52 -0600
 Subject: [PATCH] Affects spawning API
@@ -69,10 +69,10 @@ index 0294aae..6a92597 100644
                      int j = MathHelper.floor(entityhuman.posZ / 16.0D);
                      boolean flag3 = true;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 3aa2ea2..7c8bcfb 100644
+index 53e5373..cb6ad6f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1531,6 +1531,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1581,6 +1581,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.getHandle().language;
      }
  

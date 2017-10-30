@@ -1,4 +1,4 @@
-From bd32d06f034791c318cbd4208a3716f185fd7cbe Mon Sep 17 00:00:00 2001
+From 46e890988aa11eaf5d379c6f0d8646f99b1b9732 Mon Sep 17 00:00:00 2001
 From: Isaac Moore <rmsy@me.com>
 Date: Sun, 8 Oct 2017 00:08:08 -0400
 Subject: [PATCH] Implement PlayerLocaleChangeEvent
@@ -44,10 +44,10 @@ index de4563b..55a112f 100644
          this.chatColours = packetIn.isColorsEnabled();
          this.getDataManager().set(PLAYER_MODEL_FLAG, Byte.valueOf((byte) packetIn.getModelPartFlags()));
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 24fe910..5ce9b71 100644
+index e95d228..c0cd8b7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -185,7 +185,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -236,7 +236,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                  }
  
                  public String getLocale() {
@@ -56,7 +56,7 @@ index 24fe910..5ce9b71 100644
                  }
  
                  public Set<Player> getHiddenPlayers() {
-@@ -1536,7 +1536,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1587,7 +1587,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      }
  
      public String getLocale() {

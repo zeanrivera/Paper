@@ -1,4 +1,4 @@
-From b70eccb22961a9547c6381243f664140d0431557 Mon Sep 17 00:00:00 2001
+From e9167f6a11faa8576e2b10df40c63d9e0d66e798 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 4 May 2016 23:55:48 -0400
 Subject: [PATCH] Add getI18NDisplayName API

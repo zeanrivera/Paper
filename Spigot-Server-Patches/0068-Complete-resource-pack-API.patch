@@ -1,4 +1,4 @@
-From f5bf27bb92084e3f908305466383482e9248393d Mon Sep 17 00:00:00 2001
+From 712e63133e8458ff282990b7ceb4da95a540be74 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Sat, 30 Sep 2017 21:49:16 -0400
 Subject: [PATCH] Complete resource pack API
@@ -24,10 +24,10 @@ index cc562a9..5c663a3 100644
  
      public void processSteerBoat(CPacketSteerBoat packetIn) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index c1d3951..be15145 100644
+index 344b4a1..eab01ba 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -232,6 +232,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -283,6 +283,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                      return getHandle().ping;
                  }
              };
@@ -38,7 +38,7 @@ index c1d3951..be15145 100644
  
      public CraftPlayer(CraftServer server, EntityPlayerMP entity) {
          super(server, entity);
-@@ -1631,6 +1635,32 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1682,6 +1686,32 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public void hideTitle() {
          getHandle().connection.sendPacket(new SPacketTitle(SPacketTitle.Type.CLEAR, (BaseComponent[]) null, 0, 0, 0));
      }

@@ -1,4 +1,4 @@
-From 57844ee96a7e834ae749327cc6cdd0dda31ed7c3 Mon Sep 17 00:00:00 2001
+From 828791b16e98ee990569d5023f1af64834dbc67f Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -595,6 +595,32 @@ index 020c6c8..f3a212a 100644
  
                              if (var40 != null) {
                                  for (NextTickListEntry var48 : var40) {
+diff --git a/src/main/java/net/minecraft/command/CommandDebug.java b/src/main/java/net/minecraft/command/CommandDebug.java
+index c2c36be..b78cc8b 100644
+--- a/src/main/java/net/minecraft/command/CommandDebug.java
++++ b/src/main/java/net/minecraft/command/CommandDebug.java
+@@ -177,8 +177,4 @@ public class CommandDebug extends CommandBase {
+     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+         return args.length == 1 ? getListOfStringsMatchingLastWord(args, new String[] {"start", "stop"}) : Collections.emptyList();
+     }
+-
+-    public int compareTo(ICommand o) {
+-        return this.compareTo(o);
+-    }
+ }
+diff --git a/src/main/java/net/minecraft/command/CommandExecuteAt.java b/src/main/java/net/minecraft/command/CommandExecuteAt.java
+index ae0ddec..61b5aad 100644
+--- a/src/main/java/net/minecraft/command/CommandExecuteAt.java
++++ b/src/main/java/net/minecraft/command/CommandExecuteAt.java
+@@ -107,8 +107,4 @@ public class CommandExecuteAt extends CommandBase {
+     public boolean isUsernameIndex(String[] args, int index) {
+         return index == 0;
+     }
+-
+-    public int compareTo(ICommand o) {
+-        return this.compareTo(o);
+-    }
+ }
 diff --git a/src/main/java/net/minecraft/command/CommandFill.java b/src/main/java/net/minecraft/command/CommandFill.java
 index 27e895e..d10220d 100644
 --- a/src/main/java/net/minecraft/command/CommandFill.java
@@ -608,6 +634,32 @@ index 27e895e..d10220d 100644
                  var10 = 0;
  
                  for (int var15 = var8.getZ(); var15 <= var9.getZ(); ++var15) {
+diff --git a/src/main/java/net/minecraft/command/CommandGameMode.java b/src/main/java/net/minecraft/command/CommandGameMode.java
+index 9f3287b..67ac3f9 100644
+--- a/src/main/java/net/minecraft/command/CommandGameMode.java
++++ b/src/main/java/net/minecraft/command/CommandGameMode.java
+@@ -68,8 +68,4 @@ public class CommandGameMode extends CommandBase {
+     public boolean isUsernameIndex(String[] args, int index) {
+         return index == 1;
+     }
+-
+-    public int compareTo(ICommand o) {
+-        return this.compareTo(o);
+-    }
+ }
+diff --git a/src/main/java/net/minecraft/command/CommandGameRule.java b/src/main/java/net/minecraft/command/CommandGameRule.java
+index 5912ba7..9ae797c 100644
+--- a/src/main/java/net/minecraft/command/CommandGameRule.java
++++ b/src/main/java/net/minecraft/command/CommandGameRule.java
+@@ -84,8 +84,4 @@ public class CommandGameRule extends CommandBase {
+     private GameRules getOverWorldGameRules(MinecraftServer server) {
+         return server.getWorld(0).getGameRules();
+     }
+-
+-    public int compareTo(ICommand o) {
+-        return this.compareTo(o);
+-    }
+ }
 diff --git a/src/main/java/net/minecraft/command/CommandHandler.java b/src/main/java/net/minecraft/command/CommandHandler.java
 index 89d2a73..dcd8471 100644
 --- a/src/main/java/net/minecraft/command/CommandHandler.java
@@ -621,6 +673,21 @@ index 89d2a73..dcd8471 100644
                      String var9 = var3[var7];
                      sender.setCommandStat(CommandResultStats.Type.AFFECTED_ENTITIES, var16.size());
  
+diff --git a/src/main/java/net/minecraft/command/CommandSpreadPlayers.java b/src/main/java/net/minecraft/command/CommandSpreadPlayers.java
+index f9f858b..7fcecd2 100644
+--- a/src/main/java/net/minecraft/command/CommandSpreadPlayers.java
++++ b/src/main/java/net/minecraft/command/CommandSpreadPlayers.java
+@@ -271,10 +271,6 @@ public class CommandSpreadPlayers extends CommandBase {
+         return args.length >= 1 && args.length <= 2 ? getTabCompletionCoordinateXZ(args, 0, targetPos) : Collections.emptyList();
+     }
+ 
+-    public int compareTo(ICommand o) {
+-        return this.compareTo(o);
+-    }
+-
+     static class Position {
+         double x;
+         double z;
 diff --git a/src/main/java/net/minecraft/command/CommandStats.java b/src/main/java/net/minecraft/command/CommandStats.java
 index dff2a45..f7b94b2 100644
 --- a/src/main/java/net/minecraft/command/CommandStats.java
@@ -634,6 +701,19 @@ index dff2a45..f7b94b2 100644
          ArrayList var3 = Lists.newArrayList();
  
          for (ScoreObjective var5 : var2) {
+diff --git a/src/main/java/net/minecraft/command/CommandTP.java b/src/main/java/net/minecraft/command/CommandTP.java
+index 3e6455d..cd3b7b5 100644
+--- a/src/main/java/net/minecraft/command/CommandTP.java
++++ b/src/main/java/net/minecraft/command/CommandTP.java
+@@ -154,8 +154,4 @@ public class CommandTP extends CommandBase {
+     public boolean isUsernameIndex(String[] args, int index) {
+         return index == 0;
+     }
+-
+-    public int compareTo(ICommand o) {
+-        return this.compareTo(o);
+-    }
+ }
 diff --git a/src/main/java/net/minecraft/command/EntitySelector.java b/src/main/java/net/minecraft/command/EntitySelector.java
 index d343306..e7bb3bf 100644
 --- a/src/main/java/net/minecraft/command/EntitySelector.java
@@ -878,6 +958,19 @@ index ed5b656..576ef0e 100644
          ArrayList var3 = Lists.newArrayList();
  
          for (ScoreObjective var5 : var2) {
+diff --git a/src/main/java/net/minecraft/command/server/CommandTeleport.java b/src/main/java/net/minecraft/command/server/CommandTeleport.java
+index 1ed4117..c273cc1 100644
+--- a/src/main/java/net/minecraft/command/server/CommandTeleport.java
++++ b/src/main/java/net/minecraft/command/server/CommandTeleport.java
+@@ -131,8 +131,4 @@ public class CommandTeleport extends CommandBase {
+     public boolean isUsernameIndex(String[] args, int index) {
+         return index == 0;
+     }
+-
+-    public int compareTo(ICommand o) {
+-        return this.compareTo(o);
+-    }
+ }
 diff --git a/src/main/java/net/minecraft/crash/CrashReport.java b/src/main/java/net/minecraft/crash/CrashReport.java
 index a2e71b4..4db50e2 100644
 --- a/src/main/java/net/minecraft/crash/CrashReport.java
@@ -2044,6 +2137,20 @@ index a926724..e53beef 100644
          }
      }
  
+diff --git a/src/main/java/net/minecraft/world/Teleporter.java b/src/main/java/net/minecraft/world/Teleporter.java
+index a7ad04f..27ee629 100644
+--- a/src/main/java/net/minecraft/world/Teleporter.java
++++ b/src/main/java/net/minecraft/world/Teleporter.java
+@@ -502,9 +502,5 @@ public class Teleporter {
+             super(pos.getX(), pos.getY(), pos.getZ());
+             this.lastUpdateTime = lastUpdate;
+         }
+-
+-        public int compareTo(Vec3i o) {
+-            return this.compareTo(o);
+-        }
+     }
+ }
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
 index d85aaa2..11750dd 100644
 --- a/src/main/java/net/minecraft/world/World.java
@@ -2918,115 +3025,10 @@ index e0c4e88..40c9279 100644
      }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 6db0e6c..dd74b42 100644
+index 6db0e6c..6c99bd3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -5,21 +5,6 @@ import com.google.common.collect.ImmutableSet;
- import com.google.common.io.BaseEncoding;
- import com.mojang.authlib.GameProfile;
- import io.netty.buffer.Unpooled;
--import java.io.ByteArrayOutputStream;
--import java.io.IOException;
--import java.net.InetSocketAddress;
--import java.net.SocketAddress;
--import java.util.ArrayList;
--import java.util.Collection;
--import java.util.Collections;
--import java.util.HashSet;
--import java.util.LinkedHashMap;
--import java.util.List;
--import java.util.Map;
--import java.util.Set;
--import java.util.UUID;
--import java.util.logging.Level;
--import java.util.logging.Logger;
- import net.md_5.bungee.api.ChatMessageType;
- import net.md_5.bungee.api.chat.BaseComponent;
- import net.md_5.bungee.api.chat.TextComponent;
-@@ -27,11 +12,7 @@ import net.minecraft.advancements.PlayerAdvancements;
- import net.minecraft.entity.EntityLivingBase;
- import net.minecraft.entity.EntityTracker;
- import net.minecraft.entity.EntityTrackerEntry;
--import net.minecraft.entity.ai.attributes.AttributeMap;
--import net.minecraft.entity.ai.attributes.IAttribute;
--import net.minecraft.entity.ai.attributes.IAttributeInstance;
--import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
--import net.minecraft.entity.ai.attributes.RangedAttribute;
-+import net.minecraft.entity.ai.attributes.*;
- import net.minecraft.entity.player.EntityPlayer;
- import net.minecraft.entity.player.EntityPlayerMP;
- import net.minecraft.inventory.Container;
-@@ -39,19 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
- import net.minecraft.network.NetHandlerPlayServer;
- import net.minecraft.network.Packet;
- import net.minecraft.network.PacketBuffer;
--import net.minecraft.network.play.server.SPacketBlockChange;
--import net.minecraft.network.play.server.SPacketChat;
--import net.minecraft.network.play.server.SPacketCustomPayload;
--import net.minecraft.network.play.server.SPacketCustomSound;
--import net.minecraft.network.play.server.SPacketEffect;
--import net.minecraft.network.play.server.SPacketEntityProperties;
--import net.minecraft.network.play.server.SPacketMaps;
--import net.minecraft.network.play.server.SPacketParticles;
--import net.minecraft.network.play.server.SPacketPlayerListItem;
--import net.minecraft.network.play.server.SPacketSoundEffect;
--import net.minecraft.network.play.server.SPacketSpawnPosition;
--import net.minecraft.network.play.server.SPacketTitle;
--import net.minecraft.network.play.server.SPacketUpdateHealth;
-+import net.minecraft.network.play.server.*;
- import net.minecraft.stats.StatBase;
- import net.minecraft.tileentity.TileEntitySign;
- import net.minecraft.util.EnumParticleTypes;
-@@ -65,19 +34,7 @@ import net.minecraft.world.WorldServer;
- import net.minecraft.world.storage.MapDecoration;
- import org.apache.commons.lang.NotImplementedException;
- import org.apache.commons.lang.Validate;
--import org.bukkit.Achievement;
--import org.bukkit.Effect;
--import org.bukkit.GameMode;
--import org.bukkit.Instrument;
--import org.bukkit.Location;
--import org.bukkit.Material;
--import org.bukkit.Note;
--import org.bukkit.OfflinePlayer;
--import org.bukkit.Particle;
--import org.bukkit.Sound;
--import org.bukkit.Statistic;
--import org.bukkit.WeatherType;
--import org.bukkit.World;
-+import org.bukkit.*;
- import org.bukkit.Effect.Type;
- import org.bukkit.advancement.Advancement;
- import org.bukkit.advancement.AdvancementProgress;
-@@ -85,13 +42,7 @@ import org.bukkit.configuration.serialization.DelegateDeserialization;
- import org.bukkit.conversations.Conversation;
- import org.bukkit.conversations.ConversationAbandonedEvent;
- import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
--import org.bukkit.craftbukkit.CraftEffect;
--import org.bukkit.craftbukkit.CraftOfflinePlayer;
--import org.bukkit.craftbukkit.CraftParticle;
--import org.bukkit.craftbukkit.CraftServer;
--import org.bukkit.craftbukkit.CraftSound;
--import org.bukkit.craftbukkit.CraftStatistic;
--import org.bukkit.craftbukkit.CraftWorld;
-+import org.bukkit.craftbukkit.*;
- import org.bukkit.craftbukkit.advancement.CraftAdvancement;
- import org.bukkit.craftbukkit.advancement.CraftAdvancementProgress;
- import org.bukkit.craftbukkit.block.CraftSign;
-@@ -104,11 +55,10 @@ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
- import org.bukkit.entity.Entity;
- import org.bukkit.entity.EntityType;
- import org.bukkit.entity.Player;
--import org.bukkit.entity.Player.Spigot;
- import org.bukkit.event.player.PlayerRegisterChannelEvent;
- import org.bukkit.event.player.PlayerTeleportEvent;
--import org.bukkit.event.player.PlayerUnregisterChannelEvent;
- import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-+import org.bukkit.event.player.PlayerUnregisterChannelEvent;
- import org.bukkit.inventory.InventoryView.Property;
- import org.bukkit.map.MapCursor;
- import org.bukkit.map.MapView;
-@@ -118,6 +68,14 @@ import org.bukkit.plugin.messaging.StandardMessenger;
+@@ -118,6 +118,14 @@ import org.bukkit.plugin.messaging.StandardMessenger;
  import org.bukkit.scoreboard.Scoreboard;
  import org.spigotmc.AsyncCatcher;
  
@@ -3041,7 +3043,7 @@ index 6db0e6c..dd74b42 100644
  @DelegateDeserialization(CraftOfflinePlayer.class)
  public class CraftPlayer extends CraftHumanEntity implements Player {
      private long firstPlayed = 0L;
-@@ -130,8 +88,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -130,8 +138,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      private double health = 20.0D;
      private boolean scaledHealth = false;
      private double healthScale = 20.0D;
@@ -3052,7 +3054,7 @@ index 6db0e6c..dd74b42 100644
                  public InetSocketAddress getRawAddress() {
                      return (InetSocketAddress) CraftPlayer.this.getHandle().connection.netManager.getRawAddress();
                  }
-@@ -240,7 +198,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -240,7 +248,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                  }
  
                  public void sendMessage(BaseComponent component) {
@@ -3061,7 +3063,7 @@ index 6db0e6c..dd74b42 100644
                  }
  
                  public void sendMessage(BaseComponent... components) {
-@@ -252,7 +210,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -252,7 +260,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                  }
  
                  public void sendMessage(ChatMessageType position, BaseComponent component) {
@@ -3070,7 +3072,7 @@ index 6db0e6c..dd74b42 100644
                  }
  
                  public void sendMessage(ChatMessageType position, BaseComponent... components) {
-@@ -1568,7 +1526,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1568,7 +1576,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.getHandle().language;
      }
  
