@@ -1,4 +1,4 @@
-From b9f611f2c73f9bceed27842355218ade3f3f81f8 Mon Sep 17 00:00:00 2001
+From cede925ec4dde6dcce0be3d9ffdbde20ae31f237 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:14:27 -0400
 Subject: [PATCH] Handle NaN health/absorb values and repair bad data

@@ -1,4 +1,4 @@
-From f2e629d01add73cc886461d824a18bbaed944211 Mon Sep 17 00:00:00 2001
+From 43f0ae2a8e8047ff6aa8b866ec090568e97b2d74 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Sun, 29 Oct 2017 18:09:57 -0400
 Subject: [PATCH] Fix NFE when attempting to read EMPTY ItemStack

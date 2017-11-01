@@ -1,0 +1,119 @@
+From eeac61c8689b3711c7fc1ef425f74e7b4d1dca4a Mon Sep 17 00:00:00 2001
+From: Minecrell <minecrell@minecrell.net>
+Date: Tue, 31 Oct 2017 20:59:10 -0400
+Subject: [PATCH] Expose client protocol version and virtual host
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/network/PaperNetworkClient.java b/src/main/java/com/destroystokyo/paper/network/PaperNetworkClient.java
+new file mode 100644
+index 0000000..5caca64
+--- /dev/null
++++ b/src/main/java/com/destroystokyo/paper/network/PaperNetworkClient.java
+@@ -0,0 +1,50 @@
++package com.destroystokyo.paper.network;
++
++import net.minecraft.server.NetworkManager;
++
++import java.net.InetSocketAddress;
++
++import javax.annotation.Nullable;
++
++public class PaperNetworkClient implements NetworkClient {
++
++    private final NetworkManager networkManager;
++
++    PaperNetworkClient(NetworkManager networkManager) {
++        this.networkManager = networkManager;
++    }
++
++    @Override
++    public InetSocketAddress getAddress() {
++        return (InetSocketAddress) this.networkManager.getSocketAddress();
++    }
++
++    @Override
++    public int getProtocolVersion() {
++        return this.networkManager.protocolVersion;
++    }
++
++    @Nullable
++    @Override
++    public InetSocketAddress getVirtualHost() {
++        return this.networkManager.virtualHost;
++    }
++
++    public static InetSocketAddress prepareVirtualHost(String host, int port) {
++        int len = host.length();
++
++        // FML appends a marker to the host to recognize FML clients (\0FML\0)
++        int pos = host.indexOf('\0');
++        if (pos >= 0) {
++            len = pos;
++        }
++
++        // When clients connect with a SRV record, their host contains a trailing '.'
++        if (len > 0 && host.charAt(len -  1) == '.') {
++            len--;
++        }
++
++        return InetSocketAddress.createUnresolved(host.substring(0, len), port);
++    }
++
++}
+diff --git a/src/main/java/net/minecraft/network/NetworkManager.java b/src/main/java/net/minecraft/network/NetworkManager.java
+index c57a348..87ab742 100644
+--- a/src/main/java/net/minecraft/network/NetworkManager.java
++++ b/src/main/java/net/minecraft/network/NetworkManager.java
+@@ -89,6 +89,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
+     private ITextComponent terminationReason;
+     private boolean isEncrypted;
+     private boolean disconnected;
++    // Paper start - NetworkClient implementation
++    public int protocolVersion;
++    public java.net.InetSocketAddress virtualHost;
++    // Paper end
+ 
+     public NetworkManager(EnumPacketDirection packetDirection) {
+         this.direction = packetDirection;
+diff --git a/src/main/java/net/minecraft/server/network/NetHandlerHandshakeTCP.java b/src/main/java/net/minecraft/server/network/NetHandlerHandshakeTCP.java
+index 26afaf2..f25f48f 100644
+--- a/src/main/java/net/minecraft/server/network/NetHandlerHandshakeTCP.java
++++ b/src/main/java/net/minecraft/server/network/NetHandlerHandshakeTCP.java
+@@ -149,6 +149,11 @@ public class NetHandlerHandshakeTCP implements INetHandlerHandshakeServer {
+             default:
+                 throw new UnsupportedOperationException("Invalid intention " + packetIn.getRequestedState());
+         }
++
++        // Paper start - NetworkClient implementation
++        this.networkManager.protocolVersion = packetIn.getProtocolVersion();
++        this.networkManager.virtualHost = com.destroystokyo.paper.network.PaperNetworkClient.prepareVirtualHost(packetIn.ip, packetIn.port);
++        // Paper end
+     }
+ 
+     public void onDisconnect(ITextComponent reason) {}
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index aad4fd9..cf5535e 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -1747,6 +1747,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     public void setResourcePackStatus(org.bukkit.event.player.PlayerResourcePackStatusEvent.Status status) {
+         this.resourcePackStatus = status;
+     }
++
++    @Override
++    public int getProtocolVersion() {
++        if (getHandle().connection == null) return -1;
++        return getHandle().connection.netManager.protocolVersion;
++    }
++
++    @Override
++    public InetSocketAddress getVirtualHost() {
++        if (getHandle().connection == null) return null;
++        return getHandle().connection.netManager.virtualHost;
++    }
+     // Paper end
+ 
+     public Player.Spigot spigot() { // Paper - Decompile fix
+-- 
+2.14.3.windows.1
+

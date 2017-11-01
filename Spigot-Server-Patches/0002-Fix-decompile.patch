@@ -1,4 +1,4 @@
-From 828791b16e98ee990569d5023f1af64834dbc67f Mon Sep 17 00:00:00 2001
+From b7c92ee1437e4315ff0e43574e894ba9db7e7670 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile

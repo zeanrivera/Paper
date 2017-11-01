@@ -1,4 +1,4 @@
-From 284f27276ff44cb301897808e20132ae032ff334 Mon Sep 17 00:00:00 2001
+From 6df4b20eeb804b3e51e0a228efea18ef9daab159 Mon Sep 17 00:00:00 2001
 From: BillyGalbreath <Blake.Galbreath@GMail.com>
 Date: Sun, 29 Oct 2017 21:41:04 -0400
 Subject: [PATCH] LivingEntity#setKiller
