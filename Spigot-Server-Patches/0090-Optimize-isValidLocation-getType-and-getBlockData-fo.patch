@@ -1,4 +1,4 @@
-From 47f55665fd7e78576f3a694e227b53f8ff7944ec Mon Sep 17 00:00:00 2001
+From e4311c609373b1b1d8048d8c074ef3a8cbe0c060 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:58:57 -0400
 Subject: [PATCH] Optimize isValidLocation, getType and getBlockData for inling
@@ -52,7 +52,7 @@ index f3230c4..37bf6fb 100644
      public Vec3i(int xIn, int yIn, int zIn) {
          this.x = xIn;
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 1ce34e3..aaf470e 100644
+index 1ce34e3..6e0133b 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -317,16 +317,12 @@ public abstract class World implements IBlockAccess {
@@ -90,7 +90,7 @@ index 1ce34e3..aaf470e 100644
          }
  
 -        if (!this.isValid(pos)) {
-+        if (pos.isValidLocation()) {
++        if (!pos.isValidLocation()) {
              return type.defaultLightValue;
          } else if (!this.isBlockLoaded(pos)) {
              return type.defaultLightValue;
@@ -216,5 +216,5 @@ index 338487d..448d1f8 100644
              IBlockState iblockdata = null;
  
 -- 
-2.14.2.windows.2
+2.14.3.windows.1
 

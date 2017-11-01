@@ -1,4 +1,4 @@
-From b2b8ec73f05ab19b64a6b73ef24f0984670eedeb Mon Sep 17 00:00:00 2001
+From f69a4fdeca68ce90cc17cc6cd810fde44d6d526c Mon Sep 17 00:00:00 2001
 From: Minecrell <dev@minecrell.net>
 Date: Tue, 31 Oct 2017 20:19:31 -0400
 Subject: [PATCH] Handle plugin prefixes using Log4J configuration

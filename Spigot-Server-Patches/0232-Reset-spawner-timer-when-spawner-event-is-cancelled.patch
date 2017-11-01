@@ -1,4 +1,4 @@
-From c9182623f7a489fde2bf7fbb2ded54fbfb9f8061 Mon Sep 17 00:00:00 2001
+From 7294a74d6d75e0ce577bbafb435ac6b0e52814d4 Mon Sep 17 00:00:00 2001
 From: BillyGalbreath <Blake.Galbreath@GMail.com>
 Date: Sun, 29 Oct 2017 21:32:26 -0400
 Subject: [PATCH] Reset spawner timer when spawner event is cancelled

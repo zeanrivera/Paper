@@ -1,4 +1,4 @@
-From 0e678946f060513019f66d5395603064d25299fc Mon Sep 17 00:00:00 2001
+From 30238f487c3b2046f228afbd3442e8e34edb9df2 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 1 Mar 2016 23:12:03 -0600
 Subject: [PATCH] Only refresh abilities if needed

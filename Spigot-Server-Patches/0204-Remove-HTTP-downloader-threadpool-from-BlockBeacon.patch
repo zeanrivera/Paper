@@ -1,4 +1,4 @@
-From 3ded4f6d2f8f1246140835046a6305e15335909c Mon Sep 17 00:00:00 2001
+From f30853c32df57a1201fd81b1363a270e8e2690aa Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 17:59:21 -0400
 Subject: [PATCH] Remove HTTP downloader threadpool from BlockBeacon

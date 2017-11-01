@@ -1,4 +1,4 @@
-From af4b4dcc1c1b26fb00008d26a56873f4f333cf91 Mon Sep 17 00:00:00 2001
+From f244f0987a4dccd9cb1a62bc83d2dd5aea375812 Mon Sep 17 00:00:00 2001
 From: Minecrell <minecrell@minecrell.net>
 Date: Tue, 31 Oct 2017 20:59:10 -0400
 Subject: [PATCH] Expose client protocol version and virtual host

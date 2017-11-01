@@ -1,4 +1,4 @@
-From 0423d216578a018e9f058377724fe0fd6141dc3a Mon Sep 17 00:00:00 2001
+From 6195471a8da5502569a11e7b295773ec213dda4f Mon Sep 17 00:00:00 2001
 From: stonar96 <minecraft.stonar96@gmail.com>
 Date: Tue, 31 Oct 2017 19:14:54 -0400
 Subject: [PATCH] Anti-Xray
@@ -1232,7 +1232,7 @@ index c9b8c29..012d561 100644
                  if (spawnParticles) {
                      double d0 = (double) ((float) blockposition.getX() + this.world.rand.nextFloat());
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index d06c732..fcc46b3 100644
+index 127de3b..9cbeb2d 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1,5 +1,7 @@

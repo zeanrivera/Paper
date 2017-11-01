@@ -1,11 +1,11 @@
-From fc39f043a8231b0444cad95eb9986dd710f63cda Mon Sep 17 00:00:00 2001
+From 51285bc8d002b7a50e9265fef75bf7225ac51aa5 Mon Sep 17 00:00:00 2001
 From: mezz <tehgeek@gmail.com>
 Date: Sun, 29 Oct 2017 21:36:28 -0400
 Subject: [PATCH] Fix MC-117075: TE Unload Lag Spike
 
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index b3a39c0..d06c732 100644
+index a1b59ba..127de3b 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1601,7 +1601,11 @@ public abstract class World implements IBlockAccess {
