@@ -1,4 +1,4 @@
-From 828648ff3153b133f08c2fde6dbaddb6f7de0226 Mon Sep 17 00:00:00 2001
+From c36aa93d5c956908a40025ebd69880417a919db2 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Sun, 29 Oct 2017 21:42:50 -0400
 Subject: [PATCH] Avoid NPE during CraftBlockEntityState load

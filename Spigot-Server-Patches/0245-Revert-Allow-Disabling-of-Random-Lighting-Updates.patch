@@ -1,4 +1,4 @@
-From df9aed350cfb8093d98cd216946c94b5f8dfec8b Mon Sep 17 00:00:00 2001
+From 53212de03866cfdd229e222b22761b41ec541a8d Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Tue, 31 Oct 2017 20:52:11 -0400
 Subject: [PATCH] Revert "Allow Disabling of Random Lighting Updates"

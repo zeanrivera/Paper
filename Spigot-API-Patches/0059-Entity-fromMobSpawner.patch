@@ -1,4 +1,4 @@
-From 23b7404bf978d65d108678996acb3644b449e72b Mon Sep 17 00:00:00 2001
+From 4b6802830d21f14e97623a835769f8ac27292b9a Mon Sep 17 00:00:00 2001
 From: BillyGalbreath <Blake.Galbreath@GMail.com>
 Date: Sun, 18 Jun 2017 18:17:05 -0500
 Subject: [PATCH] Entity#fromMobSpawner()

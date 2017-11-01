@@ -1,4 +1,4 @@
-From e8d53a60cf483ff176f8019b655d237eec6b5dd8 Mon Sep 17 00:00:00 2001
+From 5913a50f6e1b1ed505156ed8d6087aa7168ce54b Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 18:41:48 -0400
 Subject: [PATCH] Add option to make parrots stay on shoulders despite movement

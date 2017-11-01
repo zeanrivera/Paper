@@ -1,4 +1,4 @@
-From fc8077c2debdeb4cead3d0574cec0a53016b6e14 Mon Sep 17 00:00:00 2001
+From feba59ff96dc6c2ef3436f52a19807ad04e88398 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 21:00:41 -0400
 Subject: [PATCH] Allow nerfed mobs to jump
@@ -45,7 +45,7 @@ index 87aa3d1..69b1dc9 100644
      }
  
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAISwimming.java b/src/main/java/net/minecraft/entity/ai/EntityAISwimming.java
-index 5560b03..40a04c3 100644
+index 5560b03..58b24bc 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAISwimming.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAISwimming.java
 @@ -11,6 +11,12 @@ public class EntityAISwimming extends EntityAIBase {
@@ -53,7 +53,7 @@ index 5560b03..40a04c3 100644
          this.setMutexBits(4);
  
 +        // Paper start - Allow nerfed mobs to swim
-+        if (entityIn.fromMobSpawner && entityIn.getEntityWorld().paperConfig.nerfedMobsShouldJump){
++        if (entityIn.getEntityWorld().paperConfig.nerfedMobsShouldJump){
 +            entityIn.nerfedSwimController = this;
 +        }
 +        // Paper end
@@ -62,5 +62,5 @@ index 5560b03..40a04c3 100644
              ((PathNavigateGround) entityIn.getNavigator()).setCanSwim(true);
          } else if (entityIn.getNavigator() instanceof PathNavigateFlying) {
 -- 
-2.14.1.windows.1
+2.14.3.windows.1
 

@@ -1,4 +1,4 @@
-From 5341b253ef919b4b412b0702e02e65c48bbeedbe Mon Sep 17 00:00:00 2001
+From c0c0a33a70a3fcf2c394032113ad160b6d5dec1b Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Tue, 31 Oct 2017 20:54:27 -0400
 Subject: [PATCH] Revert "Fix some chunks not being sent to the client"

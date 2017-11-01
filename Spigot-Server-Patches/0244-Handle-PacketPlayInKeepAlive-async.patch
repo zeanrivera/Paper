@@ -1,4 +1,4 @@
-From 5a4820c394b610ea1c3c8cac3b409239a809263d Mon Sep 17 00:00:00 2001
+From 2fad8dc75a84d5c7c5f523dca88afdbe94670d15 Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Tue, 31 Oct 2017 20:49:29 -0400
 Subject: [PATCH] Handle PacketPlayInKeepAlive async

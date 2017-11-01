@@ -1,4 +1,4 @@
-From b3f4329f58993a66175b1e55525d77e03ea7c01d Mon Sep 17 00:00:00 2001
+From f060f1aab3fa8703e98603591772d87e200cd7bf Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Sun, 29 Oct 2017 21:39:09 -0400
 Subject: [PATCH] Allow specifying a custom "authentication servers down" kick

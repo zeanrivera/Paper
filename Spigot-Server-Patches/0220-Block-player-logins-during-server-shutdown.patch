@@ -1,4 +1,4 @@
-From 72dc66f5749f7b6a1658db0ab53ea1671361bc2e Mon Sep 17 00:00:00 2001
+From b341fd9685fa6aa62433ec79e79db53ef05e6cd9 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 20:50:07 -0400
 Subject: [PATCH] Block player logins during server shutdown

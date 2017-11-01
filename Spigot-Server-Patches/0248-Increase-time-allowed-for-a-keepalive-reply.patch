@@ -1,4 +1,4 @@
-From e80c24c1c7a322ed157a4aecb8916ac7d1df6a83 Mon Sep 17 00:00:00 2001
+From 040aa9ea1ad1d275fdbd81a0de279b18c3be1618 Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Tue, 31 Oct 2017 21:07:06 -0400
 Subject: [PATCH] Increase time allowed for a keepalive reply

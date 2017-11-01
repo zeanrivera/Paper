@@ -1,4 +1,4 @@
-From 46db8d743713cda9ede09fec26aa1c7a1571979a Mon Sep 17 00:00:00 2001
+From c575bbaa5541a150934dee9201d6394fbb34181b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 3 Mar 2016 04:00:11 -0600
 Subject: [PATCH] Timings v2
@@ -1407,7 +1407,7 @@ index a193282..410520a 100644
                      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/SpigotTimings.java b/src/main/java/org/bukkit/craftbukkit/SpigotTimings.java
 deleted file mode 100644
-index 54da247..0000000
+index 0055335..0000000
 --- a/src/main/java/org/bukkit/craftbukkit/SpigotTimings.java
 +++ /dev/null
 @@ -1,151 +0,0 @@
@@ -1488,11 +1488,11 @@ index 54da247..0000000
 -    }
 -
 -    public static CustomTimingsHandler getEntityTimings(Entity entity) {
--        String entityType = entity.getClass().getSimpleName();
+-        String entityType = entity.getClass().getName();
 -        CustomTimingsHandler result = entityTypeTimingMap.get(entityType);
 -
 -        if (result == null) {
--            result = new CustomTimingsHandler("** tickEntity - " + entityType, activatedEntityTimer);
+-            result = new CustomTimingsHandler("** tickEntity - " + entity.getClass().getSimpleName(), activatedEntityTimer);
 -            entityTypeTimingMap.put(entityType, result);
 -        }
 -
@@ -1500,11 +1500,11 @@ index 54da247..0000000
 -    }
 -
 -    public static CustomTimingsHandler getTileEntityTimings(TileEntity entity) {
--        String entityType = entity.getClass().getSimpleName();
+-        String entityType = entity.getClass().getName();
 -        CustomTimingsHandler result = tileEntityTypeTimingMap.get(entityType);
 -
 -        if (result == null) {
--            result = new CustomTimingsHandler("** tickTileEntity - " + entityType, tickTileEntityTimer);
+-            result = new CustomTimingsHandler("** tickTileEntity - " + entity.getClass().getSimpleName(), tickTileEntityTimer);
 -            tileEntityTypeTimingMap.put(entityType, result);
 -        }
 -
