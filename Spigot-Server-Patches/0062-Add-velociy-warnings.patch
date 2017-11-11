@@ -1,4 +1,4 @@
-From a19b2cee19a60565c0c83cecee2488b84bcbe2f8 Mon Sep 17 00:00:00 2001
+From c5fb4d3599126ea51f5773ee7fe14148ad6b199f Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 17:26:38 -0400
 Subject: [PATCH] Add velociy warnings
@@ -17,7 +17,7 @@ index 5bac3b1..cc2438a 100644
      public CraftServer(MinecraftServer console, PlayerList playerList) {
          this.pluginManager = new SimplePluginManager(this, this.commandMap);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 0764265..5ae8ebd 100644
+index 045ff5b..7b58083 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -622,6 +622,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
@@ -34,7 +34,7 @@ index 0764265..5ae8ebd 100644
          this.entity.motionX = velocity.getX();
          this.entity.motionY = velocity.getY();
          this.entity.motionZ = velocity.getZ();
-@@ -1050,6 +1057,29 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1054,6 +1061,29 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          Location origin = getHandle().origin;
          return origin == null ? null : origin.clone();
      }
@@ -88,5 +88,5 @@ index 2738156..d669c05 100644
                  log.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Paper!):");
                  dumpThread(
 -- 
-2.14.2.windows.2
+2.14.2
 

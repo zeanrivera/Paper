@@ -1,4 +1,4 @@
-From 7ec9caf6301097b560af8ebbc2fd8ac9e3683e27 Mon Sep 17 00:00:00 2001
+From e04d75c4c3bbdf83a8e705cbeae7eae4ead28668 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -1313,7 +1313,7 @@ index 4111a18..a8b5785 100644
                  boolean flag = block == Blocks.ANVIL;
                  DamageSource damagesource = flag ? DamageSource.ANVIL : DamageSource.FALLING_BLOCK;
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityCreeper.java b/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
-index 6db977f..f56ccb2 100644
+index 634b5e2..0c45b37 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
 @@ -258,7 +258,7 @@ public class EntityCreeper extends EntityMob {
@@ -1700,7 +1700,7 @@ index b23ae9f..aae4dc6 100644
                          throw new Error(
                                  "Packet "
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index af56403..0c1f75c 100644
+index 821e9da..6b29855 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -194,7 +194,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
@@ -1712,21 +1712,21 @@ index af56403..0c1f75c 100644
      private int itemDropThreshold;
      private final IntHashMap<Short> pendingTransactions = new IntHashMap<Short>();
      private double firstGoodX;
-@@ -1377,8 +1377,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1378,8 +1378,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
  
-         if (!this.player.isDead && this.player.getChatVisibility() != EntityPlayer.EnumChatVisibility.HIDDEN) {
-             this.player.markPlayerActive();
--            final String s = packetIn.getMessage();
--            s = StringUtils.normalizeSpace(s);
+             if (!this.player.isDead && this.player.getChatVisibility() != EntityPlayer.EnumChatVisibility.HIDDEN) {
+                 this.player.markPlayerActive();
+-                final String s = packetIn.getMessage();
+-                s = StringUtils.normalizeSpace(s);
 +            // Paper start - Decompile fix
 +            String str = packetIn.getMessage();
 +            str = StringUtils.normalizeSpace(str);
 +            final String s = str;
 +            // Paper end
  
-             for (int i = 0; i < s.length(); ++i) {
-                 if (!ChatAllowedCharacters.isAllowedCharacter(s.charAt(i))) {
-@@ -2639,7 +2642,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+                 for (int i = 0; i < s.length(); ++i) {
+                     if (!ChatAllowedCharacters.isAllowedCharacter(s.charAt(i))) {
+@@ -2643,7 +2646,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                                      2);
                              break;
                          case AUTO:
@@ -1735,7 +1735,7 @@ index af56403..0c1f75c 100644
                              this.player.world.setBlockState(
                                      blockposition,
                                      iblockdata
-@@ -2648,7 +2651,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -2652,7 +2655,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                                      2);
                              break;
                          case REDSTONE:
@@ -3200,5 +3200,5 @@ index 0c40ff9..1931031 100644
      }
  }
 -- 
-2.14.3.windows.1
+2.14.2
 

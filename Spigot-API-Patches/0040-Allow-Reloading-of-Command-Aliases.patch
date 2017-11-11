@@ -1,4 +1,4 @@
-From 26d5f2cea3a191a8407edfa14d67ebf531a8fd69 Mon Sep 17 00:00:00 2001
+From 53e0f8f8fb97c6767e0eb505a959e99b6b07255f Mon Sep 17 00:00:00 2001
 From: willies952002 <admin@domnian.com>
 Date: Mon, 28 Nov 2016 10:16:39 -0500
 Subject: [PATCH] Allow Reloading of Command Aliases
@@ -55,10 +55,10 @@ index 30d60247..938959aa 100644
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/command/SimpleCommandMap.java b/src/main/java/org/bukkit/command/SimpleCommandMap.java
-index f1e9f200..c6613c0a 100644
+index 762eb1d2..23d08336 100644
 --- a/src/main/java/org/bukkit/command/SimpleCommandMap.java
 +++ b/src/main/java/org/bukkit/command/SimpleCommandMap.java
-@@ -280,4 +280,10 @@ public class SimpleCommandMap implements CommandMap {
+@@ -281,4 +281,10 @@ public class SimpleCommandMap implements CommandMap {
              }
          }
      }
@@ -70,10 +70,10 @@ index f1e9f200..c6613c0a 100644
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/command/defaults/ReloadCommand.java b/src/main/java/org/bukkit/command/defaults/ReloadCommand.java
-index 6694cd03..4d9603f4 100644
+index dfc8178b..30da9fc0 100644
 --- a/src/main/java/org/bukkit/command/defaults/ReloadCommand.java
 +++ b/src/main/java/org/bukkit/command/defaults/ReloadCommand.java
-@@ -11,7 +11,7 @@ public class ReloadCommand extends BukkitCommand {
+@@ -13,7 +13,7 @@ public class ReloadCommand extends BukkitCommand {
      public ReloadCommand(String name) {
          super(name);
          this.description = "Reloads the server configuration and plugins";
@@ -82,7 +82,7 @@ index 6694cd03..4d9603f4 100644
          this.setPermission("bukkit.command.reload");
          this.setAliases(Arrays.asList("rl"));
      }
-@@ -27,6 +27,13 @@ public class ReloadCommand extends BukkitCommand {
+@@ -29,6 +29,13 @@ public class ReloadCommand extends BukkitCommand {
                  Bukkit.getServer().reloadPermissions();
                  Command.broadcastCommandMessage(sender, ChatColor.GREEN + "Permissions successfully reloaded.");
                  return true;
@@ -97,5 +97,5 @@ index 6694cd03..4d9603f4 100644
                  confirmed = true;
              } else {
 -- 
-2.14.2.windows.2
+2.14.2
 

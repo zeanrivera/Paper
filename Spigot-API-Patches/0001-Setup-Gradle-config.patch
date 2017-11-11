@@ -1,4 +1,4 @@
-From fe0dafe426ffaff69614e9af4211b50b573fe932 Mon Sep 17 00:00:00 2001
+From 5a2b42b8f6c2e51a6bbeaa04a35ec34cfde36e72 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 17:16:08 -0600
 Subject: [PATCH] Setup Gradle config
@@ -26,7 +26,7 @@ index edf9e5c3..41b38f10 100644
 +.cache
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
-index 00000000..aa1f09ec
+index 00000000..42c0b7cd
 --- /dev/null
 +++ b/build.gradle
 @@ -0,0 +1,62 @@
@@ -43,7 +43,7 @@ index 00000000..aa1f09ec
 +    compile "com.google.guava:guava:21.0"
 +    compile "com.google.code.gson:gson:2.8.0"
 +
-+    compile "org.yaml:snakeyaml:1.18"
++    compile "org.yaml:snakeyaml:1.19"
 +    compile "net.md-5:bungeecord-chat:1.12-SNAPSHOT"
 +
 +    testCompile "junit:junit:4.12"
@@ -101,7 +101,7 @@ index 00000000..36e69a8a
 +artifactId = paper-api
 diff --git a/pom.xml b/pom.xml
 deleted file mode 100644
-index 98f2d67a..00000000
+index 4221e017..00000000
 --- a/pom.xml
 +++ /dev/null
 @@ -1,160 +0,0 @@
@@ -180,7 +180,7 @@ index 98f2d67a..00000000
 -        <dependency>
 -            <groupId>org.yaml</groupId>
 -            <artifactId>snakeyaml</artifactId>
--            <version>1.18</version>
+-            <version>1.19</version>
 -            <scope>compile</scope>
 -        </dependency>
 -        <dependency>
@@ -266,5 +266,5 @@ index 98f2d67a..00000000
 -    </build>
 -</project>
 -- 
-2.14.3.windows.1
+2.14.2
 

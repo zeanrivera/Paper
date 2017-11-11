@@ -1,4 +1,4 @@
-From fc11f24a60c31f10ef8c75cb8e5dac4a14bbcec1 Mon Sep 17 00:00:00 2001
+From e7e284657c69de18b35c0b1b8077d718887afaf0 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 27 Sep 2017 15:04:41 -0400
 Subject: [PATCH] Ensure commands are not ran async
@@ -14,10 +14,10 @@ big slowdown in execution but throwing an exception at same time to raise awaren
 that it is happening so that plugin authors can fix their code to stop executing commands async.
 
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 1a6f0de..3995361 100644
+index 96dea1c..1db8de2 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -1479,6 +1479,29 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1483,6 +1483,29 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
      public void chat(String s, boolean async) {
          if (!s.isEmpty() && this.player.getChatVisibility() != EntityPlayer.EnumChatVisibility.HIDDEN) {
              if (!async && s.startsWith("/")) {
@@ -82,5 +82,5 @@ index e004ab0..0b0a0fc 100644
              return true;
          } else {
 -- 
-2.14.1.windows.1
+2.14.2
 

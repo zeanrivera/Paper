@@ -1,4 +1,4 @@
-From e5e6cd18d7308eca3ff3aa91d0178c8075e39d38 Mon Sep 17 00:00:00 2001
+From 34642a22fd658c788e6e2f240522da89e047cb1d Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:28:10 -0400
 Subject: [PATCH] Use a Shared Random for Entities
@@ -6,7 +6,7 @@ Subject: [PATCH] Use a Shared Random for Entities
 Reduces memory usage and provides ensures more randomness, Especially since a lot of garbage entity objects get created
 
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index 1cd5b43..c5338bc 100644
+index 8b7936b..d5a2715 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
 @@ -212,6 +212,7 @@ public abstract class Entity implements ICommandSender {
@@ -17,7 +17,7 @@ index 1cd5b43..c5338bc 100644
  
      static boolean isLevelAtLeast(NBTTagCompound tag, int level) {
          return tag.hasKey("Bukkit.updateLevel") && tag.getInteger("Bukkit.updateLevel") >= level;
-@@ -235,7 +236,7 @@ public abstract class Entity implements ICommandSender {
+@@ -239,7 +240,7 @@ public abstract class Entity implements ICommandSender {
          this.height = 1.8F;
          this.nextStepDistance = 1;
          this.nextFlap = 1.0F;
@@ -27,5 +27,5 @@ index 1cd5b43..c5338bc 100644
          this.firstUpdate = true;
          this.entityUniqueID = MathHelper.getRandomUUID(this.rand);
 -- 
-2.14.1.windows.1
+2.14.2
 

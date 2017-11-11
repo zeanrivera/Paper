@@ -1,4 +1,4 @@
-From 97291943801d25f6c2b803934053af4eb55a1e62 Mon Sep 17 00:00:00 2001
+From 9f8f01fd5d327ae112d45f7ce0120abdccedc307 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Wed, 27 Sep 2017 14:22:10 -0400
 Subject: [PATCH] Send absolute position the first time an entity is seen
@@ -77,5 +77,5 @@ index 9ef18e1..7548865 100644
                      playerMP.connection.sendPacket(packet);
  
 -- 
-2.14.1.windows.1
+2.14.2
 

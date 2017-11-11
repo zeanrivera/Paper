@@ -1,4 +1,4 @@
-From 978ced1fcbacea9b77fddf578a7428cd8749004c Mon Sep 17 00:00:00 2001
+From 3f48219ced7ebc7e3037b939eca50a3198cf3fe9 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 17:45:45 -0400
 Subject: [PATCH] Cap Entity Collisions
@@ -12,7 +12,7 @@ just as it does in Vanilla, but entity pushing logic will be capped.
 You can set this to 0 to disable collisions.
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index bc76cf9..ee0e9b8 100644
+index bc76cf9..8aa8bdf 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -412,4 +412,10 @@ public class PaperWorldConfig {
@@ -22,12 +22,12 @@ index bc76cf9..ee0e9b8 100644
 +
 +    public int maxCollisionsPerEntity;
 +    private void maxEntityCollision() {
-+        maxCollisionsPerEntity = getInt( "max-entity-collisions", this.spigotConfig.getInt("max-entity-collisions", 8) );
-+        log( "Max Entity Collisions: " + maxCollisionsPerEntity );
++        maxCollisionsPerEntity = getInt("max-entity-collisions", this.spigotConfig.getInt("max-entity-collisions", 8));
++        log("Max Entity Collisions: " + maxCollisionsPerEntity);
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index eada500..6c2af6c 100644
+index 2651f1d..e4045f4 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
 @@ -227,6 +227,7 @@ public abstract class Entity implements ICommandSender {
@@ -39,10 +39,10 @@ index eada500..6c2af6c 100644
      static boolean isLevelAtLeast(NBTTagCompound tag, int level) {
          return tag.hasKey("Bukkit.updateLevel") && tag.getInteger("Bukkit.updateLevel") >= level;
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index f15fa7d..d1c7978 100644
+index 2ddf22d..1e80cef 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-@@ -2252,8 +2252,11 @@ public abstract class EntityLivingBase extends Entity {
+@@ -2256,8 +2256,11 @@ public abstract class EntityLivingBase extends Entity {
                  }
              }
  
@@ -56,5 +56,5 @@ index f15fa7d..d1c7978 100644
              }
          }
 -- 
-2.14.3.windows.1
+2.14.2
 

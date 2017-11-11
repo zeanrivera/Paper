@@ -1,14 +1,14 @@
-From 062a56466df13ceac066a9fc74e4ec87c1a3b521 Mon Sep 17 00:00:00 2001
+From 3b68438032bcb29d3dc5de1d58dff97c59a45f15 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:14:27 -0400
 Subject: [PATCH] Handle NaN health/absorb values and repair bad data
 
 
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index 12f791c..941ed0d 100644
+index 351c5c0..834f94a 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-@@ -560,7 +560,13 @@ public abstract class EntityLivingBase extends Entity {
+@@ -564,7 +564,13 @@ public abstract class EntityLivingBase extends Entity {
      }
  
      public void readEntityFromNBT(NBTTagCompound compound) {
@@ -23,7 +23,7 @@ index 12f791c..941ed0d 100644
  
          if (compound.hasKey("Attributes", 9) && this.world != null && !this.world.isRemote) {
              SharedMonsterAttributes.setAttributeModifiers(this.getAttributeMap(), compound.getTagList("Attributes", 10));
-@@ -843,6 +849,14 @@ public abstract class EntityLivingBase extends Entity {
+@@ -847,6 +853,14 @@ public abstract class EntityLivingBase extends Entity {
      }
  
      public void setHealth(float health) {
@@ -38,7 +38,7 @@ index 12f791c..941ed0d 100644
          if (this instanceof EntityPlayerMP) {
              CraftPlayer player = ((EntityPlayerMP) this).getBukkitEntity();
  
-@@ -2325,7 +2339,7 @@ public abstract class EntityLivingBase extends Entity {
+@@ -2329,7 +2343,7 @@ public abstract class EntityLivingBase extends Entity {
      }
  
      public void setAbsorptionAmount(float amount) {
@@ -60,5 +60,5 @@ index eab01ba..de681bd 100644
      }
  
 -- 
-2.14.3.windows.1
+2.14.2
 

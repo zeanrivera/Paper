@@ -1,14 +1,14 @@
-From a80bc5ae815d3c1fdb4c3fe64241ead6b928b367 Mon Sep 17 00:00:00 2001
+From 6407b00287113f63a70c5804a35533dc99f9605f Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 18:07:12 -0400
 Subject: [PATCH] Do not let armorstands drown
 
 
 diff --git a/src/main/java/net/minecraft/entity/item/EntityArmorStand.java b/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
-index 412b8e3..2bc8462 100644
+index c7bbfd2..bd22601 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
-@@ -131,6 +131,13 @@ public class EntityArmorStand extends EntityLivingBase {
+@@ -135,6 +135,13 @@ public class EntityArmorStand extends EntityLivingBase {
          this.dataManager.register(RIGHT_LEG_ROTATION, DEFAULT_RIGHTLEG_ROTATION);
      }
  
@@ -23,5 +23,5 @@ index 412b8e3..2bc8462 100644
          return this.handItems;
      }
 -- 
-2.14.3.windows.1
+2.14.2
 

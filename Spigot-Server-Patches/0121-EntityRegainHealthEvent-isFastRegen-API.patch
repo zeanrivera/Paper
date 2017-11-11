@@ -1,4 +1,4 @@
-From de1619a161ea6940957a391586f494f1a61f0c76 Mon Sep 17 00:00:00 2001
+From 48a70c00dcffe751b344df82748bdeb936171edb Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 8 Oct 2017 00:25:24 -0400
 Subject: [PATCH] EntityRegainHealthEvent isFastRegen API
@@ -6,10 +6,10 @@ Subject: [PATCH] EntityRegainHealthEvent isFastRegen API
 Don't even get me started
 
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index ef4dbc3..06d1c0e 100644
+index 834f94a..83b5780 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-@@ -830,10 +830,16 @@ public abstract class EntityLivingBase extends Entity {
+@@ -834,10 +834,16 @@ public abstract class EntityLivingBase extends Entity {
      }
  
      public void heal(float f, RegainReason regainReason) {
@@ -41,5 +41,5 @@ index ee371cd..b455e0d 100644
                  this.foodTimer = 0;
              }
 -- 
-2.14.1.windows.1
+2.14.2
 

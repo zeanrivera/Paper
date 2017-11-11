@@ -1,4 +1,4 @@
-From bbf3255de35a952c4102347c37ce3aa0d7e536ec Mon Sep 17 00:00:00 2001
+From aebc2a785dbaaeb3f6728c738c3dc9b6ec6a2337 Mon Sep 17 00:00:00 2001
 From: Jadon Fowler <jadonflower@gmail.com>
 Date: Tue, 10 Oct 2017 15:13:52 -0400
 Subject: [PATCH] Toggleable Elytra Wall Damage
@@ -21,10 +21,10 @@ index 94eb221..cc5548f 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index 747fced..f15fa7d 100644
+index 83b5780..2ddf22d 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-@@ -1731,6 +1731,7 @@ public abstract class EntityLivingBase extends Entity {
+@@ -1735,6 +1735,7 @@ public abstract class EntityLivingBase extends Entity {
              if (!this.isInWater() || this instanceof EntityPlayer && ((EntityPlayer) this).capabilities.isFlying) {
                  if (!this.isInLava() || this instanceof EntityPlayer && ((EntityPlayer) this).capabilities.isFlying) {
                      if (this.isElytraFlying()) {
@@ -32,7 +32,7 @@ index 747fced..f15fa7d 100644
                          if (this.motionY > -0.5D) {
                              this.fallDistance = 1.0F;
                          }
-@@ -1778,6 +1779,7 @@ public abstract class EntityLivingBase extends Entity {
+@@ -1782,6 +1783,7 @@ public abstract class EntityLivingBase extends Entity {
                                  this.attackEntityFrom(DamageSource.FLY_INTO_WALL, f8);
                              }
                          }
@@ -41,5 +41,5 @@ index 747fced..f15fa7d 100644
                          if (this.onGround
                                  && !this.world.isRemote
 -- 
-2.14.2.windows.2
+2.14.2
 

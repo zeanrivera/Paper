@@ -1,4 +1,4 @@
-From 3b1452a8cd4b6ca7abf65af6daa66ef66c30f72b Mon Sep 17 00:00:00 2001
+From 04f2e079cf0b242f2c0c131739298a14dcb1ef10 Mon Sep 17 00:00:00 2001
 From: William <admin@domnian.com>
 Date: Fri, 18 Mar 2016 03:28:07 -0400
 Subject: [PATCH] Add command to reload permissions.yml and require confirm to
@@ -35,10 +35,10 @@ index 55cc6ec7..a37e636a 100644
 +    void reloadPermissions(); // Paper
  }
 diff --git a/src/main/java/org/bukkit/command/defaults/ReloadCommand.java b/src/main/java/org/bukkit/command/defaults/ReloadCommand.java
-index c70d5129..6694cd03 100644
+index 0ab7e295..dfc8178b 100644
 --- a/src/main/java/org/bukkit/command/defaults/ReloadCommand.java
 +++ b/src/main/java/org/bukkit/command/defaults/ReloadCommand.java
-@@ -11,7 +11,7 @@ public class ReloadCommand extends BukkitCommand {
+@@ -13,7 +13,7 @@ public class ReloadCommand extends BukkitCommand {
      public ReloadCommand(String name) {
          super(name);
          this.description = "Reloads the server configuration and plugins";
@@ -47,7 +47,7 @@ index c70d5129..6694cd03 100644
          this.setPermission("bukkit.command.reload");
          this.setAliases(Arrays.asList("rl"));
      }
-@@ -20,6 +20,26 @@ public class ReloadCommand extends BukkitCommand {
+@@ -22,6 +22,26 @@ public class ReloadCommand extends BukkitCommand {
      public boolean execute(CommandSender sender, String currentAlias, String[] args) {
          if (!testPermission(sender)) return true;
  
@@ -74,21 +74,21 @@ index c70d5129..6694cd03 100644
          Command.broadcastCommandMessage(sender, ChatColor.RED + "Please note that this command is not supported and may cause issues when using some plugins.");
          Command.broadcastCommandMessage(sender, ChatColor.RED + "If you encounter any issues please use the /stop command to restart your server.");
          Bukkit.reload();
-@@ -32,7 +52,8 @@ public class ReloadCommand extends BukkitCommand {
+@@ -31,7 +51,7 @@ public class ReloadCommand extends BukkitCommand {
+     }
+ 
      @Override
-     public java.util.List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException
-     {
--        return java.util.Collections.emptyList();
+-    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+-        return Collections.emptyList();
++    public java.util.List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
 +        return java.util.Collections.singletonList("permissions"); // Paper
      }
-     // Spigot End
-+
  }
 diff --git a/src/main/java/org/bukkit/plugin/SimplePluginManager.java b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
-index 68dd3332..a7bf24d2 100644
+index b88f31ca..bd0588a2 100644
 --- a/src/main/java/org/bukkit/plugin/SimplePluginManager.java
 +++ b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
-@@ -762,4 +762,13 @@ public final class SimplePluginManager implements PluginManager {
+@@ -763,4 +763,13 @@ public final class SimplePluginManager implements PluginManager {
      public void useTimings(boolean use) {
          co.aikar.timings.Timings.setTimingsEnabled(use); // Spigot
      }
@@ -103,5 +103,5 @@ index 68dd3332..a7bf24d2 100644
 +
  }
 -- 
-2.14.1.windows.1
+2.14.2
 

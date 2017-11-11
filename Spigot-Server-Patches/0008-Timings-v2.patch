@@ -1,4 +1,4 @@
-From 4dc753c014bd8cbb4d134a5474a5262ef2fd63cc Mon Sep 17 00:00:00 2001
+From 9852a1b8a33d2e475648693f282ba93094f50d96 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 3 Mar 2016 04:00:11 -0600
 Subject: [PATCH] Timings v2
@@ -446,7 +446,7 @@ index 5ca7928..c571e05 100644
      public static int getIdFromBlock(Block blockIn) {
          return REGISTRY.getIDForObject(blockIn);
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index f209b95..557ab2a 100644
+index 0dfe8f8..b3dd29b 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
 @@ -90,7 +90,8 @@ import org.bukkit.block.BlockFace;
@@ -468,7 +468,7 @@ index f209b95..557ab2a 100644
      public final byte activationType = ActivationRange.initializeEntityActivationType(this);
      public final boolean defaultActivationState;
      public long activatedTick = -2147483648L;
-@@ -554,8 +555,6 @@ public abstract class Entity implements ICommandSender {
+@@ -558,8 +559,6 @@ public abstract class Entity implements ICommandSender {
      }
  
      public void move(MoverType type, double x, double y, double z) {
@@ -477,7 +477,7 @@ index f209b95..557ab2a 100644
          if (this.noClip) {
              this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
              this.resetPositionToBB();
-@@ -965,8 +964,6 @@ public abstract class Entity implements ICommandSender {
+@@ -969,8 +968,6 @@ public abstract class Entity implements ICommandSender {
  
              this.world.profiler.endSection();
          }
@@ -487,7 +487,7 @@ index f209b95..557ab2a 100644
  
      public void resetPositionToBB() {
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index acdb182..990a3ef 100644
+index 55926c5..54c7b28 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
 @@ -83,7 +83,7 @@ import net.minecraft.world.WorldServer;
@@ -499,7 +499,7 @@ index acdb182..990a3ef 100644
  import org.bukkit.craftbukkit.attribute.CraftAttributeMap;
  import org.bukkit.craftbukkit.entity.CraftPlayer;
  import org.bukkit.craftbukkit.event.CraftEventFactory;
-@@ -1928,7 +1928,6 @@ public abstract class EntityLivingBase extends Entity {
+@@ -1932,7 +1932,6 @@ public abstract class EntityLivingBase extends Entity {
      }
  
      public void onUpdate() {
@@ -507,7 +507,7 @@ index acdb182..990a3ef 100644
          super.onUpdate();
          this.updateActiveHand();
  
-@@ -1998,9 +1997,7 @@ public abstract class EntityLivingBase extends Entity {
+@@ -2002,9 +2001,7 @@ public abstract class EntityLivingBase extends Entity {
              }
          }
  
@@ -517,7 +517,7 @@ index acdb182..990a3ef 100644
          double d0 = this.posX - this.prevPosX;
          double d1 = this.posZ - this.prevPosZ;
          float f = (float) (d0 * d0 + d1 * d1);
-@@ -2076,8 +2073,6 @@ public abstract class EntityLivingBase extends Entity {
+@@ -2080,8 +2077,6 @@ public abstract class EntityLivingBase extends Entity {
          } else {
              this.ticksElytraFlying = 0;
          }
@@ -526,7 +526,7 @@ index acdb182..990a3ef 100644
      }
  
      protected float updateDistance(float p_110146_1_, float p_110146_2_) {
-@@ -2144,7 +2139,6 @@ public abstract class EntityLivingBase extends Entity {
+@@ -2148,7 +2143,6 @@ public abstract class EntityLivingBase extends Entity {
          }
  
          this.world.profiler.startSection("ai");
@@ -534,7 +534,7 @@ index acdb182..990a3ef 100644
  
          if (this.isMovementBlocked()) {
              this.isJumping = false;
-@@ -2157,7 +2151,6 @@ public abstract class EntityLivingBase extends Entity {
+@@ -2161,7 +2155,6 @@ public abstract class EntityLivingBase extends Entity {
              this.world.profiler.endSection();
          }
  
@@ -542,7 +542,7 @@ index acdb182..990a3ef 100644
          this.world.profiler.endSection();
          this.world.profiler.startSection("jump");
  
-@@ -2180,14 +2173,10 @@ public abstract class EntityLivingBase extends Entity {
+@@ -2184,14 +2177,10 @@ public abstract class EntityLivingBase extends Entity {
          this.moveForward *= 0.98F;
          this.randomYawVelocity *= 0.9F;
          this.updateElytra();
@@ -588,7 +588,7 @@ index f347063..2109517 100644
          if (!arraylist.isEmpty()) {
              for (Entity entity1 : arraylist) {
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 0c1f75c..cae3290 100644
+index 6b29855..96dea1c 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -136,7 +136,7 @@ import org.bukkit.GameMode;
@@ -600,7 +600,7 @@ index 0c1f75c..cae3290 100644
  import org.bukkit.craftbukkit.block.CraftBlock;
  import org.bukkit.craftbukkit.block.CraftSign;
  import org.bukkit.craftbukkit.entity.CraftPlayer;
-@@ -1556,7 +1556,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1560,7 +1560,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
      }
  
      private void handleSlashCommand(String command) {
@@ -609,7 +609,7 @@ index 0c1f75c..cae3290 100644
  
          if (SpigotConfig.logCommands) {
              LOGGER.info(this.player.getName() + " issued server command: " + command);
-@@ -1567,21 +1567,21 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1571,21 +1571,21 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
          this.server.getPluginManager().callEvent(event);
  
          if (event.isCancelled()) {
@@ -1826,5 +1826,5 @@ index 2fca21e..f1e5ea3 100644
          }
      }
 -- 
-2.14.3.windows.1
+2.14.2
 

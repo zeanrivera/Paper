@@ -1,4 +1,4 @@
-From 5a155f385b10d8d031b8293374f78507a54f304e Mon Sep 17 00:00:00 2001
+From 67da9225a9e956ff4daf3bc59e9cee2a8d7f83d6 Mon Sep 17 00:00:00 2001
 From: Alfie Cleveland <alfeh@me.com>
 Date: Fri, 20 Oct 2017 20:19:22 -0400
 Subject: [PATCH] Stricter isDisconnected and isMovementBlocked checks
@@ -19,10 +19,10 @@ index 32e7bb9..34c04c9 100644
  
      public Scoreboard getWorldScoreboard() {
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index e7ea29d..e1249ac 100644
+index 7622a21..a132a27 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -2883,6 +2883,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -2887,6 +2887,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
      }
  
      public final boolean isDisconnected() {
@@ -31,5 +31,5 @@ index e7ea29d..e1249ac 100644
      }
  }
 -- 
-2.14.2.windows.2
+2.14.2
 
