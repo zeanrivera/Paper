@@ -1,4 +1,4 @@
-From 90ab68d8459b1f6d11641412925ab0a6883c2158 Mon Sep 17 00:00:00 2001
+From ecd94105ba581acf93b92b58127ada0a4ed4ede3 Mon Sep 17 00:00:00 2001
 From: killme <killme-git@ibts.me>
 Date: Sun, 12 Nov 2017 19:40:01 +0100
 Subject: [PATCH] Prevent logins from being processed when the player has
@@ -6,7 +6,7 @@ Subject: [PATCH] Prevent logins from being processed when the player has
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/util/MCUtil.java b/src/main/java/com/destroystokyo/paper/util/MCUtil.java
-index b50f274..1d106b5 100644
+index 7eae351..45e9880 100644
 --- a/src/main/java/com/destroystokyo/paper/util/MCUtil.java
 +++ b/src/main/java/com/destroystokyo/paper/util/MCUtil.java
 @@ -8,10 +8,12 @@ import net.minecraft.tileentity.TileEntity;

@@ -1,4 +1,4 @@
-From 352eec06092c5506c007b1b0fe80f62b9fc7d1e5 Mon Sep 17 00:00:00 2001
+From a55971eee62fb58cd7adce0e58f4a39cf3fc08fd Mon Sep 17 00:00:00 2001
 From: William <admin@domnian.com>
 Date: Sat, 30 Sep 2017 22:45:22 -0400
 Subject: [PATCH] Allow Reloading of Custom Permissions

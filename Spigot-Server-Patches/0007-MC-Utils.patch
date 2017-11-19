@@ -1,4 +1,4 @@
-From b976c77aa5fc64df02048467c8d210a690e251df Mon Sep 17 00:00:00 2001
+From 8d2cbc5f01b268e56a6243738480952e4f7aecfd Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 28 Mar 2016 20:55:47 -0400
 Subject: [PATCH] MC Utils
@@ -6,10 +6,10 @@ Subject: [PATCH] MC Utils
 
 diff --git a/src/main/java/com/destroystokyo/paper/util/MCUtil.java b/src/main/java/com/destroystokyo/paper/util/MCUtil.java
 new file mode 100644
-index 0000000..b50f274
+index 0000000..7eae351
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/util/MCUtil.java
-@@ -0,0 +1,245 @@
+@@ -0,0 +1,241 @@
 +package com.destroystokyo.paper.util;
 +
 +import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -250,11 +250,24 @@ index 0000000..b50f274
 +    public static World getNMSWorld(@Nonnull org.bukkit.entity.Entity entity) {
 +        return getNMSWorld(entity.getWorld());
 +    }
-+
-+    public static Long getChunkPos(BlockPos pos) {
-+        return ChunkPos.asLong(pos.getX() >> 4, pos.getZ() >> 4);
-+    }
 +}
+diff --git a/src/main/java/net/minecraft/util/math/ChunkPos.java b/src/main/java/net/minecraft/util/math/ChunkPos.java
+index 8d5e2a0..a92a371 100644
+--- a/src/main/java/net/minecraft/util/math/ChunkPos.java
++++ b/src/main/java/net/minecraft/util/math/ChunkPos.java
+@@ -16,6 +16,12 @@ public class ChunkPos {
+         this.z = pos.getZ() >> 4;
+     }
+ 
++    // Paper start - Convenience method
++    public static long asLong(BlockPos pos) {
++        return asLong(pos.getX() >> 4, pos.getZ() >> 4);
++    }
++    // Paper end
++
+     public static long asLong(int x, int z) {
+         return (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
+     }
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
 index 70a954b..6553927 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java

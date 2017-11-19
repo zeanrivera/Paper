@@ -1,4 +1,4 @@
-From 4f6a1a0aa30dfaa3209c084c76a008b8ed5adf31 Mon Sep 17 00:00:00 2001
+From d911b6f10e457969395bea29a220dc8cd3561b38 Mon Sep 17 00:00:00 2001
 From: Minecrell <dev@minecrell.net>
 Date: Sun, 29 Oct 2017 20:03:59 -0400
 Subject: [PATCH] Use TerminalConsoleAppender for console improvements

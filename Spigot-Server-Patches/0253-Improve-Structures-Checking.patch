@@ -1,4 +1,4 @@
-From bf06944fb1fe59d745b8a848043fd66dc8e0d04b Mon Sep 17 00:00:00 2001
+From e7e200ebed1c20febe98866e52fb2274da24d411 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 11 Nov 2017 17:57:39 -0500
 Subject: [PATCH] Improve Structures Checking
@@ -14,15 +14,10 @@ that has been around for a whilewith lots of structures due to ineffeciencies
 in how MC stores structures (even unloaded chunks has structured data loaded)
 
 diff --git a/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java b/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
-index cfb1a73..cad3343 100644
+index cfb1a73..5b6b1cf 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
-@@ -2,10 +2,12 @@ package net.minecraft.world.gen.structure;
- 
- import co.aikar.timings.MinecraftTimings;
- import co.aikar.timings.Timing;
-+import com.destroystokyo.paper.util.MCUtil;
- import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
  import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
  import it.unimi.dsi.fastutil.objects.ObjectIterator;
  import java.util.Iterator;
@@ -30,7 +25,7 @@ index cfb1a73..cad3343 100644
  import java.util.Random;
  import javax.annotation.Nullable;
  import net.minecraft.crash.CrashReport;
-@@ -16,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
+@@ -16,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
  import net.minecraft.util.ReportedException;
  import net.minecraft.util.math.BlockPos;
  import net.minecraft.util.math.ChunkPos;
@@ -38,7 +33,7 @@ index cfb1a73..cad3343 100644
  import net.minecraft.world.World;
  import net.minecraft.world.chunk.ChunkPrimer;
  import net.minecraft.world.gen.MapGenBase;
-@@ -24,6 +27,7 @@ public abstract class MapGenStructure extends MapGenBase {
+@@ -24,6 +26,7 @@ public abstract class MapGenStructure extends MapGenBase {
      private final Timing timing = MinecraftTimings.getStructureTiming(this); // Paper
      private MapGenStructureData structureData;
      protected Long2ObjectMap<StructureStart> structureMap = new Long2ObjectOpenHashMap<StructureStart>(1024);
@@ -46,7 +41,7 @@ index cfb1a73..cad3343 100644
  
      public abstract String getStructureName();
  
-@@ -38,6 +42,7 @@ public abstract class MapGenStructure extends MapGenBase {
+@@ -38,6 +41,7 @@ public abstract class MapGenStructure extends MapGenBase {
              try {
                  if (this.canSpawnStructureAtCoords(chunkX, chunkZ)) {
                      StructureStart structurestart = this.getStructureStart(chunkX, chunkZ);
@@ -54,12 +49,12 @@ index cfb1a73..cad3343 100644
                      this.structureMap.put(ChunkPos.asLong(chunkX, chunkZ), structurestart);
  
                      if (structurestart.isSizeableStructure()) {
-@@ -121,6 +126,20 @@ public abstract class MapGenStructure extends MapGenBase {
+@@ -121,6 +125,20 @@ public abstract class MapGenStructure extends MapGenBase {
  
      @Nullable
      protected StructureStart getStructureAt(BlockPos pos) {
 +        // Paper start - replace method
-+        StructureStart structureStart = allStructures.get(MCUtil.getChunkPos(pos));
++        StructureStart structureStart = allStructures.get(ChunkPos.asLong(pos));
 +        if (structureStart != null && structureStart.isSizeableStructure() && structureStart.getBoundingBox().isVecInside(pos)) {
 +            List<StructureComponent> structureComponents = structureStart.getComponents();
 +            for (StructureComponent component : structureComponents) {
@@ -75,7 +70,7 @@ index cfb1a73..cad3343 100644
          ObjectIterator objectiterator = this.structureMap.values().iterator();
  
          label31:
-@@ -147,11 +166,17 @@ public abstract class MapGenStructure extends MapGenBase {
+@@ -147,11 +165,17 @@ public abstract class MapGenStructure extends MapGenBase {
          }
  
          return null;
@@ -86,14 +81,14 @@ index cfb1a73..cad3343 100644
          if (this.world == null) return false; // Paper
          this.initializeStructureData(worldIn);
 +        // Paper start - Replace method
-+        StructureStart structureStart = this.allStructures.get(MCUtil.getChunkPos(pos));
++        StructureStart structureStart = this.allStructures.get(ChunkPos.asLong(pos));
 +        return structureStart != null && structureStart.isSizeableStructure() && structureStart.getBoundingBox().isVecInside(pos);
 +        // Paper end
 +        /*
          ObjectIterator objectiterator = this.structureMap.values().iterator();
  
          while (objectiterator.hasNext()) {
-@@ -163,6 +188,7 @@ public abstract class MapGenStructure extends MapGenBase {
+@@ -163,6 +187,7 @@ public abstract class MapGenStructure extends MapGenBase {
          }
  
          return false;
@@ -101,7 +96,7 @@ index cfb1a73..cad3343 100644
      }
  
      @Nullable
-@@ -194,6 +220,7 @@ public abstract class MapGenStructure extends MapGenBase {
+@@ -194,6 +219,7 @@ public abstract class MapGenStructure extends MapGenBase {
                              StructureStart structurestart = MapGenStructureIO.getStructureStart(nbttagcompound1, worldIn);
  
                              if (structurestart != null) {
@@ -109,7 +104,7 @@ index cfb1a73..cad3343 100644
                                  this.structureMap.put(ChunkPos.asLong(i, j), structurestart);
                              }
                          }
-@@ -203,6 +230,30 @@ public abstract class MapGenStructure extends MapGenBase {
+@@ -203,6 +229,30 @@ public abstract class MapGenStructure extends MapGenBase {
          }
      }
  
