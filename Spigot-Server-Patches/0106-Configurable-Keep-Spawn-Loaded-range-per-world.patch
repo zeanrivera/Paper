@@ -1,4 +1,4 @@
-From 45dd84a1181a33ab531c4707a9c87c4c5e7a2e4b Mon Sep 17 00:00:00 2001
+From b87121f8ab055a77c9e85e054ed245d46eabc33b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 21:33:22 -0400
 Subject: [PATCH] Configurable Keep Spawn Loaded range per world
@@ -39,7 +39,7 @@ index c673a81..6229b76 100644
  
                          if (i1 - j > 1000L) {
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index f1e4cb6..0b356b2 100644
+index 17a7989..f09f17f 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -3184,7 +3184,8 @@ public abstract class World implements IBlockAccess {
@@ -53,10 +53,10 @@ index f1e4cb6..0b356b2 100644
  
      public void sendPacketToServer(Packet<?> packetIn) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index a3204d3..aad129a 100644
+index 16a24ed..19e5e99 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1075,7 +1075,7 @@ public final class CraftServer implements Server {
+@@ -1070,7 +1070,7 @@ public final class CraftServer implements Server {
                          "Preparing start region for level " + (this.console.worlds.size() - 1) + " (Seed: " + internal.getSeed() + ")");
  
                  if (internal.getWorld().getKeepSpawnInMemory()) {
@@ -66,10 +66,10 @@ index a3204d3..aad129a 100644
  
                      for (int j = -short1; j <= short1; j += 16) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 238f74b..deffab3 100644
+index c14d3e1..0380cc7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -1427,8 +1427,11 @@ public class CraftWorld implements World {
+@@ -1434,8 +1434,11 @@ public class CraftWorld implements World {
          int chunkCoordX = chunkcoordinates.getX() >> 4;
          int chunkCoordZ = chunkcoordinates.getZ() >> 4;
  
@@ -84,5 +84,5 @@ index 238f74b..deffab3 100644
                      this.loadChunk(chunkCoordX + x, chunkCoordZ + z);
                  } else if (this.isChunkLoaded(chunkCoordX + x, chunkCoordZ + z)) {
 -- 
-2.14.1.windows.1
+2.15.0.windows.1
 

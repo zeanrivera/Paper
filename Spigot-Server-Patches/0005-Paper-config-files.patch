@@ -1,4 +1,4 @@
-From 783d4c4a90a68d2f9d0ef88033cd35c03c237de0 Mon Sep 17 00:00:00 2001
+From 94e91ef96cde7e712fc219a8550ea9d22079410e Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 17:43:51 -0400
 Subject: [PATCH] Paper config files
@@ -495,10 +495,10 @@ index 11750dd..898fcaf 100644
          this.world = new CraftWorld((WorldServer) this, p_i71_6_, p_i71_7_);
          this.ticksPerAnimalSpawns = (long) this.getServer().getTicksPerAnimalSpawns();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index e76d003..a193282 100644
+index 2e746bf..f852108 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -767,6 +767,7 @@ public final class CraftServer implements Server {
+@@ -762,6 +762,7 @@ public final class CraftServer implements Server {
          }
  
          SpigotConfig.init((File) this.console.options.valueOf("spigot-settings"));
@@ -506,7 +506,7 @@ index e76d003..a193282 100644
  
          for (WorldServer world : this.console.worlds) {
              world.worldInfo.setDifficulty(difficulty);
-@@ -785,6 +786,7 @@ public final class CraftServer implements Server {
+@@ -780,6 +781,7 @@ public final class CraftServer implements Server {
              }
  
              world.spigotConfig.init();
@@ -514,7 +514,7 @@ index e76d003..a193282 100644
          }
  
          this.pluginManager.clearPlugins();
-@@ -792,6 +794,7 @@ public final class CraftServer implements Server {
+@@ -787,6 +789,7 @@ public final class CraftServer implements Server {
          this.resetRecipes();
          this.reloadData();
          SpigotConfig.registerCommands();
@@ -522,7 +522,7 @@ index e76d003..a193282 100644
          this.overrideAllCommandBlockCommands = this.commandsConfiguration.getStringList("command-block-overrides").contains("*");
  
          for (int pollCount = 0; pollCount < 50 && this.getScheduler().getActiveWorkers().size() > 0; ++pollCount) {
-@@ -1815,4 +1818,26 @@ public final class CraftServer implements Server {
+@@ -1810,4 +1813,26 @@ public final class CraftServer implements Server {
              this.value = true;
          }
      }
@@ -568,5 +568,5 @@ index 2a6c4fc..208b94e 100644
                  };
          OptionSet options = null;
 -- 
-2.14.2.windows.2
+2.15.0.windows.1
 

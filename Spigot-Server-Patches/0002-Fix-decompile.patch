@@ -1,4 +1,4 @@
-From e04d75c4c3bbdf83a8e705cbeae7eae4ead28668 Mon Sep 17 00:00:00 2001
+From 236100eb57b24a6c329862e96bb850683ae32ace Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -1494,7 +1494,7 @@ index 22c187f..261d6c1 100644
          private final EntityWolf wolf;
  
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-index 4583b6b..97f3979 100644
+index 3fe13ac..760269e 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 @@ -513,7 +513,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
@@ -2467,7 +2467,7 @@ index 3447f63..2b2dec8 100644
  
              for (Entry var6 : var3) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 3ac3b56..581433f 100644
+index 5e13d98..22bbf5a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -4,30 +4,20 @@ import com.google.common.base.Preconditions;
@@ -2548,7 +2548,7 @@ index 3ac3b56..581433f 100644
  import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
  import org.bukkit.event.world.SpawnChangeEvent;
  import org.bukkit.generator.BlockPopulator;
-@@ -535,8 +520,8 @@ public class CraftWorld implements World {
+@@ -542,8 +527,8 @@ public class CraftWorld implements World {
                  gen = new WorldGenMegaJungle(true, 10, 20, iblockdata1, iblockdata2);
                  break;
              case SMALL_JUNGLE:
@@ -2559,7 +2559,7 @@ index 3ac3b56..581433f 100644
                          Blocks.LEAVES
                                  .getDefaultState()
                                  .withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE)
-@@ -544,8 +529,8 @@ public class CraftWorld implements World {
+@@ -551,8 +536,8 @@ public class CraftWorld implements World {
                  gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, false);
                  break;
              case COCOA_TREE:
@@ -2570,7 +2570,7 @@ index 3ac3b56..581433f 100644
                          Blocks.LEAVES
                                  .getDefaultState()
                                  .withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE)
-@@ -553,8 +538,8 @@ public class CraftWorld implements World {
+@@ -560,8 +545,8 @@ public class CraftWorld implements World {
                  gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, true);
                  break;
              case JUNGLE_BUSH:
@@ -2581,7 +2581,7 @@ index 3ac3b56..581433f 100644
                          Blocks.LEAVES
                                  .getDefaultState()
                                  .withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK)
-@@ -820,7 +805,7 @@ public class CraftWorld implements World {
+@@ -827,7 +812,7 @@ public class CraftWorld implements World {
  
      @Deprecated
      public <T extends Entity> Collection<T> getEntitiesByClass(Class<T>... classes) {
@@ -2590,7 +2590,7 @@ index 3ac3b56..581433f 100644
      }
  
      public <T extends Entity> Collection<T> getEntitiesByClass(Class<T> clazz) {
-@@ -834,7 +819,7 @@ public class CraftWorld implements World {
+@@ -841,7 +826,7 @@ public class CraftWorld implements World {
                      Class<?> bukkitClass = bukkitEntity.getClass();
  
                      if (clazz.isAssignableFrom(bukkitClass)) {
@@ -2599,7 +2599,7 @@ index 3ac3b56..581433f 100644
                      }
                  }
              }
-@@ -1055,7 +1040,316 @@ public class CraftWorld implements World {
+@@ -1062,7 +1047,316 @@ public class CraftWorld implements World {
          return this.spawnFallingBlock(location, Material.getMaterial(blockId), blockData);
      }
  
@@ -2917,7 +2917,7 @@ index 3ac3b56..581433f 100644
  
      public <T extends Entity> T addEntity(net.minecraft.entity.Entity entity, SpawnReason reason) throws IllegalArgumentException {
          return (T) this.addEntity(entity, reason, (Consumer) null);
-@@ -1071,7 +1365,7 @@ public class CraftWorld implements World {
+@@ -1078,7 +1372,7 @@ public class CraftWorld implements World {
          }
  
          if (function != null) {
@@ -3025,7 +3025,7 @@ index e0c4e88..40c9279 100644
      }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 6db0e6c..6c99bd3 100644
+index c507749..8778ab8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -118,6 +118,14 @@ import org.bukkit.plugin.messaging.StandardMessenger;
@@ -3072,7 +3072,7 @@ index 6db0e6c..6c99bd3 100644
                  }
  
                  public void sendMessage(ChatMessageType position, BaseComponent... components) {
-@@ -1568,7 +1576,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1566,7 +1574,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.getHandle().language;
      }
  
@@ -3200,5 +3200,5 @@ index 0c40ff9..1931031 100644
      }
  }
 -- 
-2.14.2
+2.15.0.windows.1
 

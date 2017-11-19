@@ -1,4 +1,4 @@
-From 5a2b42b8f6c2e51a6bbeaa04a35ec34cfde36e72 Mon Sep 17 00:00:00 2001
+From 15979976e2f747bc632f9105dee15e5e53d27cea Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 17:16:08 -0600
 Subject: [PATCH] Setup Gradle config
@@ -101,10 +101,10 @@ index 00000000..36e69a8a
 +artifactId = paper-api
 diff --git a/pom.xml b/pom.xml
 deleted file mode 100644
-index 4221e017..00000000
+index 8ee129d9..00000000
 --- a/pom.xml
 +++ /dev/null
-@@ -1,160 +0,0 @@
+@@ -1,170 +0,0 @@
 -
 -<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 -         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -226,26 +226,6 @@ index 4221e017..00000000
 -                </dependencies>
 -            </plugin>
 -            <plugin>
--                <groupId>org.codehaus.mojo</groupId>
--                <artifactId>animal-sniffer-maven-plugin</artifactId>
--                <version>1.16</version>
--                <executions>
--                    <execution>
--                        <phase>process-classes</phase>
--                        <goals>
--                            <goal>check</goal>
--                        </goals>
--                    </execution>
--                </executions>
--                <configuration>
--                    <signature>
--                        <groupId>org.codehaus.mojo.signature</groupId>
--                        <artifactId>java16</artifactId>
--                        <version>1.1</version>
--                    </signature>
--                </configuration>
--            </plugin>
--            <plugin>
 -                <groupId>org.apache.maven.plugins</groupId>
 -                <artifactId>maven-shade-plugin</artifactId>
 -                <version>3.1.0</version>
@@ -264,7 +244,37 @@ index 4221e017..00000000
 -            </plugin>
 -        </plugins>
 -    </build>
+-
+-    <profiles>
+-        <profile>
+-            <id>development</id>
+-            <build>
+-                <plugins>
+-                    <plugin>
+-                        <groupId>org.codehaus.mojo</groupId>
+-                        <artifactId>animal-sniffer-maven-plugin</artifactId>
+-                        <version>1.16</version>
+-                        <executions>
+-                            <execution>
+-                                <phase>process-classes</phase>
+-                                <goals>
+-                                    <goal>check</goal>
+-                                </goals>
+-                            </execution>
+-                        </executions>
+-                        <configuration>
+-                            <signature>
+-                                <groupId>org.codehaus.mojo.signature</groupId>
+-                                <artifactId>java16</artifactId>
+-                                <version>1.1</version>
+-                            </signature>
+-                        </configuration>
+-                    </plugin>
+-                </plugins>
+-            </build>
+-        </profile>
+-    </profiles>
 -</project>
 -- 
-2.14.2
+2.15.0.windows.1
 

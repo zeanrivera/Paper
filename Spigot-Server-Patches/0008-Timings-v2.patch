@@ -1,4 +1,4 @@
-From 9852a1b8a33d2e475648693f282ba93094f50d96 Mon Sep 17 00:00:00 2001
+From 0ea94489998592a73afe6ad6815c05bea6f92ba4 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 3 Mar 2016 04:00:11 -0600
 Subject: [PATCH] Timings v2
@@ -1372,11 +1372,11 @@ index c3685f8..124256d 100644
          return flag;
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index a193282..410520a 100644
+index f852108..0f55482 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -246,10 +246,29 @@ public final class CraftServer implements Server {
-         this.invalidUserUUID = UUID.nameUUIDFromBytes("InvalidUsername".getBytes(Charsets.UTF_8));
+@@ -241,10 +241,29 @@ public final class CraftServer implements Server {
+         this.overrideAllCommandBlockCommands = false;
          this.spigot =
                  new Spigot() {
 +                    @Deprecated
@@ -1606,7 +1606,7 @@ index 8097d0b..89948dc 100644
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 6c99bd3..53e5373 100644
+index 8778ab8..9d1919b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -275,6 +275,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
@@ -1826,5 +1826,5 @@ index 2fca21e..f1e5ea3 100644
          }
      }
 -- 
-2.14.2
+2.15.0.windows.1
 

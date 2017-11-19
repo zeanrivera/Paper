@@ -1,4 +1,4 @@
-From 07aef0537b3630b915e28f195dcec60b9926e921 Mon Sep 17 00:00:00 2001
+From b976c77aa5fc64df02048467c8d210a690e251df Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 28 Mar 2016 20:55:47 -0400
 Subject: [PATCH] MC Utils
@@ -6,10 +6,10 @@ Subject: [PATCH] MC Utils
 
 diff --git a/src/main/java/com/destroystokyo/paper/util/MCUtil.java b/src/main/java/com/destroystokyo/paper/util/MCUtil.java
 new file mode 100644
-index 0000000..7eae351
+index 0000000..b50f274
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/util/MCUtil.java
-@@ -0,0 +1,241 @@
+@@ -0,0 +1,245 @@
 +package com.destroystokyo.paper.util;
 +
 +import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -250,6 +250,10 @@ index 0000000..7eae351
 +    public static World getNMSWorld(@Nonnull org.bukkit.entity.Entity entity) {
 +        return getNMSWorld(entity.getWorld());
 +    }
++
++    public static Long getChunkPos(BlockPos pos) {
++        return ChunkPos.asLong(pos.getX() >> 4, pos.getZ() >> 4);
++    }
 +}
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
 index 70a954b..6553927 100644
@@ -269,5 +273,5 @@ index 70a954b..6553927 100644
      public TileEntity getTileEntity(BlockPos pos, Chunk.EnumCreateEntityType p_177424_2_) {
          TileEntity tileentity = null;
 -- 
-2.14.2.windows.2
+2.15.0.windows.1
 

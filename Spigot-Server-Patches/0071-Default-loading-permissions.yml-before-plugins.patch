@@ -1,4 +1,4 @@
-From f2ca240e1bf3e6338f80af84832d66e0fdad4a10 Mon Sep 17 00:00:00 2001
+From ea1e3b86d27d8e8cb0f30cf08441fb0845979f12 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 22:26:41 -0400
 Subject: [PATCH] Default loading permissions.yml before plugins
@@ -30,10 +30,10 @@ index 3898ad8..2f6e169 100644
 +    }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index cc2438a..e52f056 100644
+index d5c292f..c05dfa4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -437,6 +437,7 @@ public final class CraftServer implements Server {
+@@ -432,6 +432,7 @@ public final class CraftServer implements Server {
          if (type == PluginLoadOrder.STARTUP) {
              this.helpMap.clear();
              this.helpMap.initializeGeneralTopics();
@@ -41,7 +41,7 @@ index cc2438a..e52f056 100644
          }
  
          Plugin[] plugins = this.pluginManager.getPlugins();
-@@ -452,7 +453,7 @@ public final class CraftServer implements Server {
+@@ -447,7 +448,7 @@ public final class CraftServer implements Server {
              this.commandMap.setFallbackCommands();
              this.setVanillaCommands(false);
              this.commandMap.registerServerAliases();
@@ -51,5 +51,5 @@ index cc2438a..e52f056 100644
              CraftDefaultPermissions.registerCorePermissions();
              this.helpMap.initializeCommands();
 -- 
-2.14.1.windows.1
+2.15.0.windows.1
 

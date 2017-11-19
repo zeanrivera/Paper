@@ -1,4 +1,4 @@
-From 48aeacc3b3e793657771a6a07118c5b40ff59626 Mon Sep 17 00:00:00 2001
+From cfe6b1caaf803d83677ef44b7bdd10491751206a Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 23 Sep 2017 22:54:04 -0400
 Subject: [PATCH] Further improve server tick loop
@@ -154,10 +154,10 @@ index 42d541e..78141f8 100644
              } else {
                  this.finalTick((CrashReport) null);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index d188056..e004ab0 100644
+index ce4bb9a..e448ed2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1858,5 +1858,14 @@ public final class CraftServer implements Server {
+@@ -1853,5 +1853,14 @@ public final class CraftServer implements Server {
              return false;
          }
      }
@@ -208,5 +208,5 @@ index 4edd104..35b7c73 100644
      }
  }
 -- 
-2.14.1
+2.15.0.windows.1
 

@@ -1,4 +1,4 @@
-From 6e30b5edb200cabdc72b8780ec6c1dcaca3c8006 Mon Sep 17 00:00:00 2001
+From 957112b1f99f0dc58846ac760f3ea984798a4ae1 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 15:10:23 -0400
 Subject: [PATCH] Delay Chunk Unloads based on Player Movement
@@ -35,10 +35,10 @@ index 696dee3..94eb221 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
-index 20a1fca..2b251e2 100644
+index b9755d4..56efabd 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
-@@ -482,7 +482,13 @@ public class PlayerChunkMap {
+@@ -490,7 +490,13 @@ public class PlayerChunkMap {
          Chunk chunk = entry.getChunk();
  
          if (chunk != null) {
@@ -129,10 +129,10 @@ index 6ce7c1a..6d9bce4 100644
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index deffab3..0afb29d 100644
+index 0380cc7..8e70399 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -1722,9 +1722,19 @@ public class CraftWorld implements World {
+@@ -1729,9 +1729,19 @@ public class CraftWorld implements World {
          while (var2.hasNext()) {
              net.minecraft.world.chunk.Chunk chunk = (net.minecraft.world.chunk.Chunk) var2.next();
  
@@ -155,5 +155,5 @@ index deffab3..0afb29d 100644
      }
  
 -- 
-2.14.2.windows.2
+2.15.0.windows.1
 

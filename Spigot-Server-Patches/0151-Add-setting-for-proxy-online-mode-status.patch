@@ -1,4 +1,4 @@
-From f0fcd27f492f5491cfbd9b6787cd6679ed46c0bb Mon Sep 17 00:00:00 2001
+From b2ace27416dc323d05021c14d92049379750208c Mon Sep 17 00:00:00 2001
 From: Gabriele C <sgdc3.mail@gmail.com>
 Date: Tue, 10 Oct 2017 15:52:46 -0400
 Subject: [PATCH] Add setting for proxy online mode status
@@ -32,10 +32,10 @@ index 6818ce9..9ca2d7e 100644
                  UUID uuid = EntityPlayer.getUUID(new GameProfile((UUID) null, s));
                  GameProfile gameprofile = new GameProfile(uuid, s);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index aad129a..ff6b441 100644
+index 19e5e99..e0201d8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1443,7 +1443,8 @@ public final class CraftServer implements Server {
+@@ -1438,7 +1438,8 @@ public final class CraftServer implements Server {
          if (result == null) {
              GameProfile profile = null;
  
@@ -46,5 +46,5 @@ index aad129a..ff6b441 100644
              }
  
 -- 
-2.14.2.windows.2
+2.15.0.windows.1
 

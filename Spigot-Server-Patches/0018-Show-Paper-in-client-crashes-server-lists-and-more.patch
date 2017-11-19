@@ -1,4 +1,4 @@
-From 86bacef3595b6001f05c167907ea5161c10c44bd Mon Sep 17 00:00:00 2001
+From 650c66cbf481cf87e4b474bdd6943b35d1d16c5f Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 21:21:28 -0400
 Subject: [PATCH] Show Paper in client crashes, server lists, and more
@@ -32,10 +32,10 @@ index db1df3f..a97a668 100644
              LOG.warn("Failed to save {}", this.eulaFile, var6);
          } finally {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 410520a..d188056 100644
+index 0f55482..ce4bb9a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -184,7 +184,7 @@ import org.yaml.snakeyaml.error.MarkedYAMLException;
+@@ -183,7 +183,7 @@ import org.yaml.snakeyaml.error.MarkedYAMLException;
  
  public final class CraftServer implements Server {
      private static final Player[] EMPTY_PLAYER_ARRAY = new Player[0];
@@ -92,5 +92,5 @@ index 3b3a7eb..2738156 100644
                          ManagementFactory.getThreadMXBean()
                                  .getThreadInfo(MinecraftServer.getServer().primaryThread.getId(), Integer.MAX_VALUE),
 -- 
-2.14.1
+2.15.0.windows.1
 

@@ -1,4 +1,4 @@
-From e7e284657c69de18b35c0b1b8077d718887afaf0 Mon Sep 17 00:00:00 2001
+From 522700a6356ba3ff4e6cc218c59bcbbc02efd573 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 27 Sep 2017 15:04:41 -0400
 Subject: [PATCH] Ensure commands are not ran async
@@ -48,10 +48,10 @@ index 96dea1c..1db8de2 100644
              } else if (this.player.getChatVisibility() != EntityPlayer.EnumChatVisibility.SYSTEM) {
                  Player player = this.getPlayer();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index e004ab0..0b0a0fc 100644
+index e448ed2..819d495 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -733,6 +733,29 @@ public final class CraftServer implements Server {
+@@ -728,6 +728,29 @@ public final class CraftServer implements Server {
          Validate.notNull(sender, "Sender cannot be null");
          Validate.notNull(commandLine, "CommandLine cannot be null");
  
@@ -82,5 +82,5 @@ index e004ab0..0b0a0fc 100644
              return true;
          } else {
 -- 
-2.14.2
+2.15.0.windows.1
 

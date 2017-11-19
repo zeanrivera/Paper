@@ -1,14 +1,14 @@
-From 19bd829373eed846cdcfc586cdc49bef462d2f57 Mon Sep 17 00:00:00 2001
+From 81e1edebaff0ebe8c0c06ff1fb92b4b5bc8ecb6b Mon Sep 17 00:00:00 2001
 From: Sweepyoface <github@sweepy.pw>
 Date: Sun, 29 Oct 2017 20:17:41 -0400
 Subject: [PATCH] Add UnknownCommandEvent
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 583c2b3..da5c498 100644
+index ece95f5..9a283e3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -141,6 +141,7 @@ import org.bukkit.craftbukkit.util.permissions.CraftDefaultPermissions;
+@@ -140,6 +140,7 @@ import org.bukkit.craftbukkit.util.permissions.CraftDefaultPermissions;
  import org.bukkit.enchantments.Enchantment;
  import org.bukkit.entity.Entity;
  import org.bukkit.entity.Player;
@@ -16,7 +16,7 @@ index 583c2b3..da5c498 100644
  import org.bukkit.event.inventory.InventoryType;
  import org.bukkit.event.player.PlayerChatTabCompleteEvent;
  import org.bukkit.event.server.BroadcastMessageEvent;
-@@ -760,9 +761,13 @@ public final class CraftServer implements Server {
+@@ -755,9 +756,13 @@ public final class CraftServer implements Server {
          if (this.commandMap.dispatch(sender, commandLine)) {
              return true;
          } else {
@@ -33,5 +33,5 @@ index 583c2b3..da5c498 100644
              return false;
          }
 -- 
-2.14.3.windows.1
+2.15.0.windows.1
 
