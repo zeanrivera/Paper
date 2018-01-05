@@ -1,14 +1,14 @@
-From fedaef32b577d21778b5932c4e283e344b49ef9a Mon Sep 17 00:00:00 2001
+From 32ec615236c35a2e68623ed21f31fc1ede0be60e Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 22:34:59 -0400
 Subject: [PATCH] Don't tick Skulls - unused code
 
 
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntitySkull.java b/src/main/java/net/minecraft/tileentity/TileEntitySkull.java
-index 6e4379c..5031d12 100644
+index d42ee6e..14f6a8a 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntitySkull.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntitySkull.java
-@@ -30,7 +30,7 @@ import net.minecraft.util.Mirror;
+@@ -33,7 +33,7 @@ import net.minecraft.util.Mirror;
  import net.minecraft.util.Rotation;
  import net.minecraft.util.StringUtils;
  
@@ -18,5 +18,5 @@ index 6e4379c..5031d12 100644
      public int skullRotation;
      private GameProfile playerProfile;
 -- 
-2.14.1.windows.1
+2.15.1.windows.2
 

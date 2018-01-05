@@ -1,4 +1,4 @@
-From 12344dffe65fbefed27d20b3de81b49ff91bd869 Mon Sep 17 00:00:00 2001
+From 7ba043f4e1bc1284517a0ebfffd77f496a60e062 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Tue, 1 Mar 2016 14:47:52 -0600
 Subject: [PATCH] Affects spawning API
@@ -31,10 +31,10 @@ index 81e317d..e5c0b5c 100644
              return false;
          }
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-index ba7e58a..b64ac3c 100644
+index 5e317ee..4233ff6 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-@@ -152,6 +152,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -153,6 +153,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
      public boolean fauxSleeping;
      public String spawnWorld = "";
      public int oldLevel = -1;
@@ -43,7 +43,7 @@ index ba7e58a..b64ac3c 100644
      public CraftHumanEntity getBukkitEntity() {
          return (CraftHumanEntity) super.getBukkitEntity();
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 0616f49..a2c550a 100644
+index f1f385c..115c9ea 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -2804,7 +2804,7 @@ public abstract class World implements IBlockAccess {
@@ -69,10 +69,10 @@ index 0294aae..6a92597 100644
                      int j = MathHelper.floor(entityhuman.posZ / 16.0D);
                      boolean flag3 = true;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 9d1919b..5a31815 100644
+index 6ff4ec7..62fd7f3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1579,6 +1579,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1624,6 +1624,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.getHandle().language;
      }
  
@@ -92,5 +92,5 @@ index 9d1919b..5a31815 100644
          return this.spigot;
      }
 -- 
-2.15.0.windows.1
+2.15.1.windows.2
 

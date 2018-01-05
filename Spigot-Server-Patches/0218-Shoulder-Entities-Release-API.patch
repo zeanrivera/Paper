@@ -1,14 +1,14 @@
-From ab2017c39190ccd37cff4c24e0686b98cfb0fb95 Mon Sep 17 00:00:00 2001
+From 484d20a385abdffec4d3c7511179a97117751886 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 20:28:11 -0400
 Subject: [PATCH] Shoulder Entities Release API
 
 
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-index a40efbe..8178f70 100644
+index 7737dae..caa3f72 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-@@ -1885,29 +1885,61 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -1892,29 +1892,61 @@ public abstract class EntityPlayer extends EntityLivingBase {
      }
  
      public void spawnShoulderEntities() {
@@ -115,5 +115,5 @@ index e4f1466..6cc8b82 100644
          if (!this.getHandle().getLeftShoulderEntity().hasNoTags()) {
              net.minecraft.entity.Entity shoulder =
 -- 
-2.15.0.windows.1
+2.15.1.windows.2
 

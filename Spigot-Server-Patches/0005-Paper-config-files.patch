@@ -1,4 +1,4 @@
-From 94e91ef96cde7e712fc219a8550ea9d22079410e Mon Sep 17 00:00:00 2001
+From d51e17c2f62874b4f5f271965f430afe695343fa Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 17:43:51 -0400
 Subject: [PATCH] Paper config files
@@ -475,7 +475,7 @@ index 84b159e..be657e0 100644
              this.setKeyPair(CryptManager.generateKeyPair());
              LOGGER.info(
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 11750dd..898fcaf 100644
+index f286ada..93ffc38 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -182,6 +182,7 @@ public abstract class World implements IBlockAccess {
@@ -495,10 +495,10 @@ index 11750dd..898fcaf 100644
          this.world = new CraftWorld((WorldServer) this, p_i71_6_, p_i71_7_);
          this.ticksPerAnimalSpawns = (long) this.getServer().getTicksPerAnimalSpawns();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 2e746bf..f852108 100644
+index 18ea8cf..58d72d7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -762,6 +762,7 @@ public final class CraftServer implements Server {
+@@ -761,6 +761,7 @@ public final class CraftServer implements Server {
          }
  
          SpigotConfig.init((File) this.console.options.valueOf("spigot-settings"));
@@ -506,7 +506,7 @@ index 2e746bf..f852108 100644
  
          for (WorldServer world : this.console.worlds) {
              world.worldInfo.setDifficulty(difficulty);
-@@ -780,6 +781,7 @@ public final class CraftServer implements Server {
+@@ -779,6 +780,7 @@ public final class CraftServer implements Server {
              }
  
              world.spigotConfig.init();
@@ -514,7 +514,7 @@ index 2e746bf..f852108 100644
          }
  
          this.pluginManager.clearPlugins();
-@@ -787,6 +789,7 @@ public final class CraftServer implements Server {
+@@ -786,6 +788,7 @@ public final class CraftServer implements Server {
          this.resetRecipes();
          this.reloadData();
          SpigotConfig.registerCommands();
@@ -522,7 +522,7 @@ index 2e746bf..f852108 100644
          this.overrideAllCommandBlockCommands = this.commandsConfiguration.getStringList("command-block-overrides").contains("*");
  
          for (int pollCount = 0; pollCount < 50 && this.getScheduler().getActiveWorkers().size() > 0; ++pollCount) {
-@@ -1810,4 +1813,26 @@ public final class CraftServer implements Server {
+@@ -1809,4 +1812,26 @@ public final class CraftServer implements Server {
              this.value = true;
          }
      }
@@ -568,5 +568,5 @@ index 2a6c4fc..208b94e 100644
                  };
          OptionSet options = null;
 -- 
-2.15.0.windows.1
+2.15.1.windows.2
 

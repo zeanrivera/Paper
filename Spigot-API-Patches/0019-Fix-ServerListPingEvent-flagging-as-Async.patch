@@ -1,4 +1,4 @@
-From ab851ba1c8408c7d747de36c4a6f44ad272db595 Mon Sep 17 00:00:00 2001
+From 6396c18875043dd83a01171d3d1124f72616f1af Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 29 Feb 2016 20:26:39 -0600
 Subject: [PATCH] Fix ServerListPingEvent flagging as Async
@@ -50,5 +50,5 @@ index 343f238f..3c38d857 100644
          this.address = address;
          this.motd = motd;
 -- 
-2.14.1
+2.15.1.windows.2
 

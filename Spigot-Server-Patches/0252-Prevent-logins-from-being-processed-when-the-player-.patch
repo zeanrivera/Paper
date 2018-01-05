@@ -1,4 +1,4 @@
-From ecd94105ba581acf93b92b58127ada0a4ed4ede3 Mon Sep 17 00:00:00 2001
+From cded6e8c196bde41025fc5b1290d81f5447e4882 Mon Sep 17 00:00:00 2001
 From: killme <killme-git@ibts.me>
 Date: Sun, 12 Nov 2017 19:40:01 +0100
 Subject: [PATCH] Prevent logins from being processed when the player has
@@ -40,5 +40,5 @@ index 578d68c..293f4cf 100644
              EntityPlayerMP entityplayer = this.server.getPlayerList().getPlayerByUUID(this.loginGameProfile.getId());
  
 -- 
-2.15.0.windows.1
+2.15.1.windows.2
 

@@ -1,4 +1,4 @@
-From 8ee8e663c9b7aac34ad2c7b169aa17011e35f800 Mon Sep 17 00:00:00 2001
+From 2593892b00d536f0ff67d7cf347166207a9c8a97 Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Thu, 16 Nov 2017 12:12:41 +0000
 Subject: [PATCH] Use CB BlockState implementations for captured blocks
@@ -18,7 +18,7 @@ the blockstate that will be valid for restoration, as opposed to dropping
 information on restoration when the event is cancelled.
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 3eb2cc6..55e6c31 100644
+index 7ba2838..1bc8341 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -441,7 +441,8 @@ public abstract class World implements IBlockAccess {
@@ -32,5 +32,5 @@ index 3eb2cc6..55e6c31 100644
              }
  
 -- 
-2.15.0.windows.1
+2.15.1.windows.2
 

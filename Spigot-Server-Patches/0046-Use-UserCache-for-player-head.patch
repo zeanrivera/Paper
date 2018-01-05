@@ -1,18 +1,19 @@
-From 47ac7003023fc3c0c2a19d442751ef235cb1b6d3 Mon Sep 17 00:00:00 2001
+From 642dee0fe7f619ff93905e3ce33ae0bbca035a6f Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Wed, 27 Sep 2017 14:39:52 -0400
 Subject: [PATCH] Use UserCache for player head
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
-index 9712750..a57f3de 100644
+index 29bd40b..dc0eb6e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
-@@ -6,9 +6,12 @@ import com.mojang.authlib.GameProfile;
- import java.util.Locale;
- import java.util.Map;
- import java.util.UUID;
-+
+@@ -4,11 +4,11 @@ import com.google.common.base.Predicates;
+ import com.google.common.collect.ImmutableMap.Builder;
+ import com.google.common.util.concurrent.Futures;
+ import com.mojang.authlib.GameProfile;
+-import java.util.Map;
+-import java.util.UUID;
 +import net.minecraft.entity.player.EntityPlayerMP;
  import net.minecraft.nbt.NBTBase;
  import net.minecraft.nbt.NBTTagCompound;
@@ -21,19 +22,29 @@ index 9712750..a57f3de 100644
  import net.minecraft.tileentity.TileEntitySkull;
  import org.bukkit.Bukkit;
  import org.bukkit.Material;
-@@ -134,7 +137,11 @@ class CraftMetaSkull extends CraftMetaItem implements SkullMeta {
+@@ -16,6 +16,9 @@ import org.bukkit.OfflinePlayer;
+ import org.bukkit.configuration.serialization.DelegateDeserialization;
+ import org.bukkit.inventory.meta.SkullMeta;
+ 
++import java.util.Map;
++import java.util.UUID;
++
+ @DelegateDeserialization(CraftMetaItem.SerializableMeta.class)
+ class CraftMetaSkull extends CraftMetaItem implements SkullMeta {
+     static final CraftMetaItem.ItemMetaKey SKULL_PROFILE = new CraftMetaItem.ItemMetaKey("SkullProfile");
+@@ -125,7 +128,11 @@ class CraftMetaSkull extends CraftMetaItem implements SkullMeta {
              if (name == null) {
                  this.profile = null;
              } else {
--                this.profile = (GameProfile) TileEntitySkull.skinCache.getIfPresent(name.toLowerCase(Locale.ROOT));
+-                this.profile = new GameProfile((UUID) null, name);
 +                // Paper start - Use Online Players Skull
 +                EntityPlayerMP player = MinecraftServer.getServer().getPlayerList().getPlayerByUsername(name);
 +                if (profile == null && player != null) profile = player.getGameProfile();
++                if (profile == null) profile = new GameProfile(null, name);
 +                // Paper end
-+                if (profile == null) this.profile = (GameProfile) TileEntitySkull.skinCache.getIfPresent(name.toLowerCase(Locale.ROOT));
+             }
  
-                 if (this.profile == null) {
-                     this.profile = new GameProfile((UUID) null, name);
+             return true;
 -- 
-2.14.1.windows.1
+2.15.1.windows.2
 

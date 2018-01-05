@@ -1,4 +1,4 @@
-From 4faaa9a1ca965ad69bb4eee5982911b97103483b Mon Sep 17 00:00:00 2001
+From 47dd350cf8d83c48da2a9b46444622ec6c665ab9 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 8 Oct 2017 01:06:09 -0400
 Subject: [PATCH] Improve Maps (in item frames) performance and bug fixes
@@ -31,10 +31,10 @@ index 7548865..133f4e1 100644
  
                  for (EntityPlayer entityhuman : this.trackingPlayers) {
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-index 0e4ec7b..d231f68 100644
+index 4233ff6..f54cb68 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-@@ -629,6 +629,13 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -630,6 +630,13 @@ public abstract class EntityPlayer extends EntityLivingBase {
              this.world.getServer().getPluginManager().callEvent(event);
  
              if (!event.isCancelled()) {
@@ -49,7 +49,7 @@ index 0e4ec7b..d231f68 100644
  
                  if (traceItem) {
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 79f157c..3b875cc 100644
+index 487f2ae..f743116 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1243,6 +1243,7 @@ public abstract class World implements IBlockAccess {
@@ -118,5 +118,5 @@ index 0b5202d..c910ac4 100644
              for (MapCursor cursor : render.cursors) {
                  if (cursor.isVisible()) {
 -- 
-2.14.1.windows.1
+2.15.1.windows.2
 

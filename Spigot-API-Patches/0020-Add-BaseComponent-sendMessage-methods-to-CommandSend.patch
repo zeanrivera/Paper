@@ -1,4 +1,4 @@
-From 32d4844f2f9fc69b5aa5dbf4a0e276475fad2257 Mon Sep 17 00:00:00 2001
+From 22584451c1bf88488f7996580667151d2bef6195 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Tue, 8 Mar 2016 13:05:59 -0800
 Subject: [PATCH] Add BaseComponent sendMessage methods to CommandSender
@@ -40,10 +40,10 @@ index abf68a2c..fcb03b83 100644
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index eecbe47b..fdee4725 100644
+index 1a172aa1..32b495fd 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -400,6 +400,7 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
+@@ -401,6 +401,7 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
       *
       * @param component the components to send
       */
@@ -51,7 +51,7 @@ index eecbe47b..fdee4725 100644
      public default void sendMessage(net.md_5.bungee.api.chat.BaseComponent component) {
          spigot().sendMessage(component);
      }
-@@ -409,6 +410,7 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
+@@ -410,6 +411,7 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
       *
       * @param components the components to send
       */
@@ -60,5 +60,5 @@ index eecbe47b..fdee4725 100644
          spigot().sendMessage(components);
      }
 -- 
-2.14.1
+2.15.1.windows.2
 

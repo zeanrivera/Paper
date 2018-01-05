@@ -1,4 +1,4 @@
-From c6d071d91e8410a4ba1111c8b3e9eec8b9520c95 Mon Sep 17 00:00:00 2001
+From a3b8878fc558c44410db9cd4982242398bb03637 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Sun, 29 Oct 2017 18:09:57 -0400
 Subject: [PATCH] Fix NFE when attempting to read EMPTY ItemStack
@@ -6,10 +6,10 @@ Subject: [PATCH] Fix NFE when attempting to read EMPTY ItemStack
 Thanks @gabizou
 
 diff --git a/src/main/java/net/minecraft/item/ItemStack.java b/src/main/java/net/minecraft/item/ItemStack.java
-index 478febf..8361ff5 100644
+index d75f8da..0db4cac 100644
 --- a/src/main/java/net/minecraft/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/item/ItemStack.java
-@@ -147,7 +147,7 @@ public final class ItemStack {
+@@ -163,7 +163,7 @@ public final class ItemStack {
      }
  
      public void load(NBTTagCompound nbttagcompound) {
@@ -19,5 +19,5 @@ index 478febf..8361ff5 100644
          this.setItemDamage(nbttagcompound.getShort("Damage"));
  
 -- 
-2.14.3.windows.1
+2.15.1.windows.2
 

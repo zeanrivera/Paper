@@ -1,4 +1,4 @@
-From 3f48219ced7ebc7e3037b939eca50a3198cf3fe9 Mon Sep 17 00:00:00 2001
+From 846a4968f038aba13abdb0938eb3306479ff3ab4 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 17:45:45 -0400
 Subject: [PATCH] Cap Entity Collisions
@@ -12,7 +12,7 @@ just as it does in Vanilla, but entity pushing logic will be capped.
 You can set this to 0 to disable collisions.
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index bc76cf9..8aa8bdf 100644
+index e452e8d..b12f483 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -412,4 +412,10 @@ public class PaperWorldConfig {
@@ -39,10 +39,10 @@ index 2651f1d..e4045f4 100644
      static boolean isLevelAtLeast(NBTTagCompound tag, int level) {
          return tag.hasKey("Bukkit.updateLevel") && tag.getInteger("Bukkit.updateLevel") >= level;
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index 2ddf22d..1e80cef 100644
+index 1e8ddd8..f2915b9 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-@@ -2256,8 +2256,11 @@ public abstract class EntityLivingBase extends Entity {
+@@ -2257,8 +2257,11 @@ public abstract class EntityLivingBase extends Entity {
                  }
              }
  
@@ -56,5 +56,5 @@ index 2ddf22d..1e80cef 100644
              }
          }
 -- 
-2.14.2
+2.15.1.windows.2
 

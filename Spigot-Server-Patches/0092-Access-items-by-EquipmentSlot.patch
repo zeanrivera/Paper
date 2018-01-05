@@ -1,4 +1,4 @@
-From f3ed52d6d02d54c849bedb1dbb1898b03f559ed8 Mon Sep 17 00:00:00 2001
+From b46c2264f39116adfb477c147d9191ed64ac5264 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Sun, 1 Oct 2017 01:04:28 -0400
 Subject: [PATCH] Access items by EquipmentSlot
@@ -64,5 +64,5 @@ index a841ba8..bee84d9 100644
 +    // Paper end
  }
 -- 
-2.14.1.windows.1
+2.15.1.windows.2
 

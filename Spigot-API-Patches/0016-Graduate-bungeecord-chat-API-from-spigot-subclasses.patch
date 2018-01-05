@@ -1,4 +1,4 @@
-From 7a02fb01159415ad481405d8c3e4edd69cb8de8c Mon Sep 17 00:00:00 2001
+From f345f44da2d6e3e017e6c6dcf45562573cebd35f Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 19:54:32 -0600
 Subject: [PATCH] Graduate bungeecord chat API from spigot subclasses
@@ -68,10 +68,10 @@ index 8e01099a..55cc6ec7 100644
       * Gets the name of the update folder. The update folder is used to safely
       * update plugins at the right moment on a plugin load.
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index c54b6b0f..b821d338 100644
+index 5a02b2e8..52e11da5 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -393,6 +393,36 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
+@@ -394,6 +394,36 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
       */
      public void sendMap(MapView map);
  
@@ -109,5 +109,5 @@ index c54b6b0f..b821d338 100644
       * Forces an update of the player's entire inventory.
       *
 -- 
-2.14.1.windows.1
+2.15.1.windows.2
 

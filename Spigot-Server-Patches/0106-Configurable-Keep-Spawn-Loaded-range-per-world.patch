@@ -1,4 +1,4 @@
-From d427138e3ee5693ae9a010c12cff524ca31e2ec6 Mon Sep 17 00:00:00 2001
+From b6a0fcb0b18d64313db1dec200d020a5ff8c5a11 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 21:33:22 -0400
 Subject: [PATCH] Configurable Keep Spawn Loaded range per world
@@ -39,7 +39,7 @@ index c673a81..6229b76 100644
  
                          if (i1 - j > 1000L) {
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 17a7989..f09f17f 100644
+index d98029b..c843fc7 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -3184,7 +3184,8 @@ public abstract class World implements IBlockAccess {
@@ -53,10 +53,10 @@ index 17a7989..f09f17f 100644
  
      public void sendPacketToServer(Packet<?> packetIn) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 16a24ed..19e5e99 100644
+index 73674ad..a60ce20 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1070,7 +1070,7 @@ public final class CraftServer implements Server {
+@@ -1069,7 +1069,7 @@ public final class CraftServer implements Server {
                          "Preparing start region for level " + (this.console.worlds.size() - 1) + " (Seed: " + internal.getSeed() + ")");
  
                  if (internal.getWorld().getKeepSpawnInMemory()) {
@@ -84,5 +84,5 @@ index c14d3e1..0380cc7 100644
                      this.loadChunk(chunkCoordX + x, chunkCoordZ + z);
                  } else if (this.isChunkLoaded(chunkCoordX + x, chunkCoordZ + z)) {
 -- 
-2.15.0.windows.1
+2.15.1.windows.2
 

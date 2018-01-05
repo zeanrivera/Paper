@@ -1,4 +1,4 @@
-From c7739c93e91b3aa7aa939cd0ebed32a55e0829d7 Mon Sep 17 00:00:00 2001
+From 500fefb2a63027b928ca72b0a86fc5b6072a807c Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 18:41:48 -0400
 Subject: [PATCH] Add option to make parrots stay on shoulders despite movement
@@ -10,7 +10,7 @@ To be removed in the future (1.13?)
 This can be accomplished via plugins
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 8aa8bdf..a579239 100644
+index b12f483..9ed3e10 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -418,4 +418,10 @@ public class PaperWorldConfig {
@@ -25,10 +25,10 @@ index 8aa8bdf..a579239 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-index aab5e18..a40efbe 100644
+index f54cb68..7737dae 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-@@ -495,7 +495,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -496,7 +496,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
          this.playShoulderEntityAmbientSound(this.getRightShoulderEntity());
  
          if (!this.world.isRemote && (this.fallDistance > 0.5F || this.isInWater() || this.isRiding()) || this.capabilities.isFlying) {
@@ -54,5 +54,5 @@ index 8f29f19..8d5b5fd 100644
                      break;
                  case STOP_SNEAKING:
 -- 
-2.14.2
+2.15.1.windows.2
 

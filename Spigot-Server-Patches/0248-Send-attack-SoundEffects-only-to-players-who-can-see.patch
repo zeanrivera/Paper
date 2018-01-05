@@ -1,4 +1,4 @@
-From 64fd7d6a069551d070156a28c91a9366016cd01b Mon Sep 17 00:00:00 2001
+From ae70dd42f258a41953fe0b9abd4a866af9d955f5 Mon Sep 17 00:00:00 2001
 From: Brokkonaut <hannos17@gmx.de>
 Date: Tue, 31 Oct 2017 03:26:18 +0100
 Subject: [PATCH] Send attack SoundEffects only to players who can see the
@@ -6,7 +6,7 @@ Subject: [PATCH] Send attack SoundEffects only to players who can see the
 
 
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-index 8178f70..acd60ae 100644
+index caa3f72..4b13cc0 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 @@ -52,6 +52,7 @@ import net.minecraft.network.datasync.DataParameter;
@@ -17,7 +17,7 @@ index 8178f70..acd60ae 100644
  import net.minecraft.scoreboard.ScorePlayerTeam;
  import net.minecraft.scoreboard.Scoreboard;
  import net.minecraft.stats.StatBase;
-@@ -1014,6 +1015,15 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -1018,6 +1019,15 @@ public abstract class EntityPlayer extends EntityLivingBase {
          this.rideCooldown = 0;
      }
  
@@ -33,7 +33,7 @@ index 8178f70..acd60ae 100644
      public void attackTargetEntityWithCurrentItem(Entity targetEntity) {
          if (targetEntity.canBeAttackedWithItem() && !targetEntity.hitByEntity(this)) {
              float f = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
-@@ -1039,8 +1049,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -1043,8 +1053,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
                  int i = b0 + EnchantmentHelper.getKnockbackModifier(this);
  
                  if (this.isSprinting() && flag) {
@@ -46,7 +46,7 @@ index 8178f70..acd60ae 100644
                              this.posX,
                              this.posY,
                              this.posZ,
-@@ -1143,8 +1155,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -1147,8 +1159,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
                              }
                          }
  
@@ -59,7 +59,7 @@ index 8178f70..acd60ae 100644
                                  this.posX,
                                  this.posY,
                                  this.posZ,
-@@ -1178,8 +1192,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -1182,8 +1196,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
                      }
  
                      if (flag2) {
@@ -72,7 +72,7 @@ index 8178f70..acd60ae 100644
                                  this.posX,
                                  this.posY,
                                  this.posZ,
-@@ -1192,8 +1208,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -1196,8 +1212,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
  
                      if (!flag2 && !flag3) {
                          if (flag) {
@@ -85,7 +85,7 @@ index 8178f70..acd60ae 100644
                                      this.posX,
                                      this.posY,
                                      this.posZ,
-@@ -1202,8 +1220,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -1206,8 +1224,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
                                      1.0F,
                                      1.0F);
                          } else {
@@ -98,7 +98,7 @@ index 8178f70..acd60ae 100644
                                      this.posX,
                                      this.posY,
                                      this.posZ,
-@@ -1276,8 +1296,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -1280,8 +1300,10 @@ public abstract class EntityPlayer extends EntityLivingBase {
  
                      this.addExhaustion(this.world.spigotConfig.combatExhaustion);
                  } else {
@@ -112,5 +112,5 @@ index 8178f70..acd60ae 100644
                              this.posY,
                              this.posZ,
 -- 
-2.14.2
+2.15.1.windows.2
 

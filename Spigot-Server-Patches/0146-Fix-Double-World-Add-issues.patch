@@ -1,4 +1,4 @@
-From dfe2dd0fc063a8f9c52ef6e0f7b057be243fef5c Mon Sep 17 00:00:00 2001
+From 9afc638986e0d256457d796ee1354b368939bd97 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 15:22:57 -0400
 Subject: [PATCH] Fix Double World Add issues
@@ -8,7 +8,7 @@ Vanilla will double add Spider Jockeys to the world, so ignore already added.
 Also add debug if something else tries to, and abort before world gets bad state
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 3b875cc..7d86f5b 100644
+index f743116..830a339 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1123,6 +1123,11 @@ public abstract class World implements IBlockAccess {
@@ -21,8 +21,8 @@ index 3b875cc..7d86f5b 100644
 +            return true;
 +            // Paper end
          } else {
-             int i = MathHelper.floor(entity.posX / 16.0D);
-             int j = MathHelper.floor(entity.posZ / 16.0D);
+             Cancellable event = null;
+ 
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 index e4e54d5..711fb47 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
@@ -38,5 +38,5 @@ index e4e54d5..711fb47 100644
                  spawnEntity(entity1, world);
              }
 -- 
-2.14.2.windows.2
+2.15.1.windows.2
 

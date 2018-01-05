@@ -1,4 +1,4 @@
-From 3974f6279aa3b2138f13131fb16daced7ca4b1fa Mon Sep 17 00:00:00 2001
+From 7fb21db5a7e3ea0a89d34fc15715947b1a57a148 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 20:56:59 -0400
 Subject: [PATCH] Fix Anvil Level sync to client
@@ -27,10 +27,10 @@ index f7dbb89..171ef3c 100644
  
          this.lastLevelCost = this.maximumCost;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 2350f62..aad4fd9 100644
+index a708215..7f5451a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -36,6 +36,7 @@ import net.minecraft.entity.ai.attributes.RangedAttribute;
+@@ -41,6 +41,7 @@ import net.minecraft.entity.ai.attributes.RangedAttribute;
  import net.minecraft.entity.player.EntityPlayer;
  import net.minecraft.entity.player.EntityPlayerMP;
  import net.minecraft.inventory.Container;
@@ -38,7 +38,7 @@ index 2350f62..aad4fd9 100644
  import net.minecraft.nbt.NBTTagCompound;
  import net.minecraft.network.NetHandlerPlayServer;
  import net.minecraft.network.Packet;
-@@ -1280,10 +1281,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1325,10 +1326,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
          if (container.getBukkitView().getType() != prop.getType()) {
              return false;
@@ -59,5 +59,5 @@ index 2350f62..aad4fd9 100644
  
      public void disconnect(String reason) {
 -- 
-2.14.3.windows.1
+2.15.1.windows.2
 

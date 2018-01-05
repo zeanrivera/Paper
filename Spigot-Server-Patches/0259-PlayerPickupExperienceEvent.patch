@@ -1,0 +1,31 @@
+From ec8bb7b2a58ef3e7d90d540c6fb4f32bc291e814 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Thu, 4 Jan 2018 21:23:52 -0600
+Subject: [PATCH] PlayerPickupExperienceEvent
+
+Allows plugins to cancel a player picking up an experience orb
+
+diff --git a/src/main/java/net/minecraft/entity/item/EntityXPOrb.java b/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
+index 3ee4c2f..fc691d9 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
++++ b/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
+@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
+ import net.minecraft.entity.EntityLivingBase;
+ import net.minecraft.entity.MoverType;
+ import net.minecraft.entity.player.EntityPlayer;
++import net.minecraft.entity.player.EntityPlayerMP;
+ import net.minecraft.init.Enchantments;
+ import net.minecraft.init.SoundEvents;
+ import net.minecraft.item.ItemStack;
+@@ -233,7 +234,7 @@ public class EntityXPOrb extends Entity {
+     }
+ 
+     public void onCollideWithPlayer(EntityPlayer entityIn) {
+-        if (!this.world.isRemote && this.delayBeforeCanPickup == 0 && entityIn.xpCooldown == 0) {
++        if (!this.world.isRemote && this.delayBeforeCanPickup == 0 && entityIn.xpCooldown == 0  && new com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent(((EntityPlayerMP) entityIn).getBukkitEntity(), (org.bukkit.entity.ExperienceOrb) this.getBukkitEntity()).callEvent()) { // Paper
+             entityIn.xpCooldown = 2;
+             entityIn.onItemPickup(this, 1);
+             ItemStack itemstack = EnchantmentHelper.getEnchantedItem(Enchantments.MENDING, entityIn);
+-- 
+2.15.1.windows.2
+

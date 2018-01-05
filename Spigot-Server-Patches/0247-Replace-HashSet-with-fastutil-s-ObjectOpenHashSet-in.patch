@@ -1,4 +1,4 @@
-From 7350d14913b98e6f7dcea34a0b3b41a6076aead5 Mon Sep 17 00:00:00 2001
+From e29853f836b827a335fe8d273dde0f39256a3beb Mon Sep 17 00:00:00 2001
 From: Brokkonaut <hannos17@gmx.de>
 Date: Fri, 20 Oct 2017 04:33:45 +0200
 Subject: [PATCH] Replace HashSet with fastutil's ObjectOpenHashSet in
@@ -26,5 +26,5 @@ index d819516..24d570d 100644
  
      public int size() {
 -- 
-2.14.3.windows.1
+2.15.1.windows.2
 

@@ -1,4 +1,4 @@
-From 9453ef0ed0da7986f07b298adcd441500b1e1d2b Mon Sep 17 00:00:00 2001
+From f6b51a8693980c6a0fb13da8ea1d053a917c574e Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Mon, 29 Feb 2016 20:02:40 -0600
 Subject: [PATCH] Player Tab List and Title APIs
@@ -369,7 +369,7 @@ index 00000000..3c2b63db
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index b821d338..eecbe47b 100644
+index 52e11da5..1a172aa1 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -2,6 +2,7 @@ package org.bukkit.entity;
@@ -380,7 +380,7 @@ index b821d338..eecbe47b 100644
  import org.bukkit.Achievement;
  import org.bukkit.ChatColor;
  import org.bukkit.Effect;
-@@ -421,6 +422,116 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
+@@ -422,6 +423,116 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
      public default void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent... components) {
          spigot().sendMessage(position, components);
      }
@@ -498,5 +498,5 @@ index b821d338..eecbe47b 100644
  
      /**
 -- 
-2.14.2.windows.2
+2.15.1.windows.2
 

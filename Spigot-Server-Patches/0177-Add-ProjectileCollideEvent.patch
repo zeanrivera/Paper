@@ -1,4 +1,4 @@
-From 23ee99197acfe5b39db19c6fbc86b5e52b5228bd Mon Sep 17 00:00:00 2001
+From a96cde4f1b2652e15370dfef3a7e870f23540459 Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Fri, 20 Oct 2017 19:29:09 -0400
 Subject: [PATCH] Add ProjectileCollideEvent
@@ -125,10 +125,10 @@ index 380dbba..0c5e97a 100644
              if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK
                      && this.world.getBlockState(movingobjectposition.getBlockPos()).getBlock() == Blocks.PORTAL) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 96609da..74a1ade 100644
+index bd92f0d..b666b2e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -931,6 +931,16 @@ public class CraftEventFactory {
+@@ -958,6 +958,16 @@ public class CraftEventFactory {
          return CraftItemStack.asNMSCopy(bitem);
      }
  
@@ -146,5 +146,5 @@ index 96609da..74a1ade 100644
          Projectile bukkitEntity = (Projectile) entity.getBukkitEntity();
          ProjectileLaunchEvent event = new ProjectileLaunchEvent(bukkitEntity);
 -- 
-2.14.2.windows.2
+2.15.1.windows.2
 

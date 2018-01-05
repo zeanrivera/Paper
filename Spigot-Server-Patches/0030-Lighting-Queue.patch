@@ -1,4 +1,4 @@
-From 8d4d59f800b6c81f15622e12c71c499cb111e4a5 Mon Sep 17 00:00:00 2001
+From f3cf6cca57e554a6daceb3325c8237e73dea7395 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sun, 24 Sep 2017 16:16:38 -0400
 Subject: [PATCH] Lighting Queue
@@ -42,10 +42,10 @@ index e524a46..fd606ee 100644
  }
 diff --git a/src/main/java/com/destroystokyo/paper/lighting/PaperLightingQueue.java b/src/main/java/com/destroystokyo/paper/lighting/PaperLightingQueue.java
 new file mode 100644
-index 0000000..50b790c
+index 0000000..aecdce1
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/lighting/PaperLightingQueue.java
-@@ -0,0 +1,106 @@
+@@ -0,0 +1,97 @@
 +package com.destroystokyo.paper.lighting;
 +
 +import co.aikar.timings.Timing;
@@ -90,15 +90,6 @@ index 0000000..50b790c
 +        public LightingQueue(Chunk chunk) {
 +            super();
 +            this.chunk = chunk;
-+        }
-+
-+        @Override
-+        public boolean add(Runnable runnable) {
-+            if (chunk.world.paperConfig.queueLightUpdates) {
-+                return super.add(runnable);
-+            }
-+            runnable.run();
-+            return true;
 +        }
 +
 +        /**
@@ -187,8 +178,21 @@ index 78141f8..09890c8 100644
          this.slackActivityAccountant.tickEnded(tickNanos);
          co.aikar.timings.TimingsManager.FULL_SERVER_TICK.stopTiming(); // Paper
      }
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 92c9b41..97279b8 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -476,7 +476,7 @@ public abstract class World implements IBlockAccess {
+                 if (newState.getLightOpacity() != iblockdata1.getLightOpacity()
+                         || newState.getLightValue() != iblockdata1.getLightValue()) {
+                     this.profiler.startSection("checkLight");
+-                    this.checkLight(pos);
++                    chunk.runOrQueueLightUpdate(() -> this.checkLight(pos)); // Paper - Queue light updates
+                     this.profiler.endSection();
+                 }
+ 
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 220cc2e..8ef14dd 100644
+index 1a062b5..912d746 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -1,5 +1,6 @@
@@ -211,7 +215,7 @@ index 220cc2e..8ef14dd 100644
  
          if (this.world.isAreaLoaded(new BlockPos(this.x * 16 + 8, 0, this.z * 16 + 8), 16)) {
 +            // Paper start - Queue light updates
-+            lightingQueue.add(() -> recheckGapsVanilla(onlyOne));
++             this.runOrQueueLightUpdate(() -> recheckGapsVanilla(onlyOne));
 +        }
 +    }
 +
@@ -226,7 +230,7 @@ index 220cc2e..8ef14dd 100644
                  if (flag) {
                      this.generateSkylightMap();
 -                } else {
-+                } else { lightingQueue.add(() -> { // paper - Queue light updates
++                } else { this.runOrQueueLightUpdate(() -> { // paper - Queue light updates
                      int j1 = state.getLightOpacity();
                      int k1 = iblockdata1.getLightOpacity();
  
@@ -238,6 +242,22 @@ index 220cc2e..8ef14dd 100644
                  }
  
                  if (block1 instanceof ITileEntityProvider) {
+@@ -1336,6 +1347,15 @@ public class Chunk {
+         this.inhabitedTime = newInhabitedTime;
+     }
+ 
++    // Paper start - Lighting queue
++    public void runOrQueueLightUpdate(Runnable runnable) {
++        if (this.world.paperConfig.queueLightUpdates) {
++            this.lightingQueue.add(runnable);
++        } else {
++            runnable.run();
++        }
++    }
++
+     public static enum EnumCreateEntityType {
+         IMMEDIATE,
+         QUEUED,
 diff --git a/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java b/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
 index f4c54e7..ee6744a 100644
 --- a/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
@@ -251,5 +271,5 @@ index f4c54e7..ee6744a 100644
              for (int x = -2; x < 3; ++x) {
                  for (int z = -2; z < 3; ++z) {
 -- 
-2.14.1
+2.15.1.windows.2
 

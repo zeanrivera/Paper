@@ -1,4 +1,4 @@
-From 236100eb57b24a6c329862e96bb850683ae32ace Mon Sep 17 00:00:00 2001
+From 05fcef874acf92430d541ad29e0f0900c83336a9 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -1065,7 +1065,7 @@ index a878ff8..ee64344 100644
  
              OLD_NAMES.set(id, oldName);
 diff --git a/src/main/java/net/minecraft/entity/EntityTracker.java b/src/main/java/net/minecraft/entity/EntityTracker.java
-index 8bf5235..f347063 100644
+index 68b1fa2..ddbf59f 100644
 --- a/src/main/java/net/minecraft/entity/EntityTracker.java
 +++ b/src/main/java/net/minecraft/entity/EntityTracker.java
 @@ -140,7 +140,7 @@ public class EntityTracker {
@@ -1464,7 +1464,7 @@ index 4cde97f..652b68c 100644
          for (EnumDyeColor enumcolor : EnumDyeColor.values()) {
              DYE_TO_RGB.put(enumcolor, createSheepColor(enumcolor));
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-index b3dd695..3b32efd 100644
+index 0d0c7bb..8da9289 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 @@ -1019,10 +1019,6 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
@@ -2152,7 +2152,7 @@ index a7ad04f..27ee629 100644
      }
  }
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index d85aaa2..11750dd 100644
+index ae5aedb..f286ada 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -2527,7 +2527,7 @@ public abstract class World implements IBlockAccess {
@@ -3025,10 +3025,10 @@ index e0c4e88..40c9279 100644
      }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index c507749..8778ab8 100644
+index 9025cd7..037cc01 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -118,6 +118,14 @@ import org.bukkit.plugin.messaging.StandardMessenger;
+@@ -123,6 +123,14 @@ import org.bukkit.plugin.messaging.StandardMessenger;
  import org.bukkit.scoreboard.Scoreboard;
  import org.spigotmc.AsyncCatcher;
  
@@ -3043,7 +3043,7 @@ index c507749..8778ab8 100644
  @DelegateDeserialization(CraftOfflinePlayer.class)
  public class CraftPlayer extends CraftHumanEntity implements Player {
      private long firstPlayed = 0L;
-@@ -130,8 +138,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -136,8 +144,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      private double health = 20.0D;
      private boolean scaledHealth = false;
      private double healthScale = 20.0D;
@@ -3054,7 +3054,7 @@ index c507749..8778ab8 100644
                  public InetSocketAddress getRawAddress() {
                      return (InetSocketAddress) CraftPlayer.this.getHandle().connection.netManager.getRawAddress();
                  }
-@@ -240,7 +248,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -246,7 +254,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                  }
  
                  public void sendMessage(BaseComponent component) {
@@ -3063,7 +3063,7 @@ index c507749..8778ab8 100644
                  }
  
                  public void sendMessage(BaseComponent... components) {
-@@ -252,7 +260,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -258,7 +266,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                  }
  
                  public void sendMessage(ChatMessageType position, BaseComponent component) {
@@ -3072,7 +3072,7 @@ index c507749..8778ab8 100644
                  }
  
                  public void sendMessage(ChatMessageType position, BaseComponent... components) {
-@@ -1566,7 +1574,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1611,7 +1619,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.getHandle().language;
      }
  
@@ -3094,6 +3094,53 @@ index be71a29..c7fce37 100644
                      .add("generic.armor")
                      .add("generic.armorToughness")
                      .add("generic.attackDamage")
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
+index d3739a1..b047b4b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
+@@ -36,13 +36,13 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+     protected String author;
+     public List<ITextComponent> pages;
+     protected Integer generation;
+-    private final Spigot spigot;
++    private final BookMeta.Spigot spigot;
+ 
+     CraftMetaBook(CraftMetaItem meta) {
+         super(meta);
+         this.pages = new ArrayList<ITextComponent>();
+         this.spigot =
+-                new Spigot() {
++                new BookMeta.Spigot() {
+                     public BaseComponent[] getPage(int page) {
+                         Validate.isTrue(CraftMetaBook.this.isValidPage(page), "Invalid page number");
+                         return ComponentSerializer.parse(ITextComponent.Serializer.componentToJson(CraftMetaBook.this.pages.get(page - 1)));
+@@ -116,7 +116,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+         super(tag);
+         this.pages = new ArrayList<ITextComponent>();
+         this.spigot =
+-                new Spigot() {
++                new BookMeta.Spigot() {
+                     public BaseComponent[] getPage(int page) {
+                         Validate.isTrue(CraftMetaBook.this.isValidPage(page), "Invalid page number");
+                         return ComponentSerializer.parse(ITextComponent.Serializer.componentToJson(CraftMetaBook.this.pages.get(page - 1)));
+@@ -214,7 +214,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+         super(map);
+         this.pages = new ArrayList<ITextComponent>();
+         this.spigot =
+-                new Spigot() {
++                new BookMeta.Spigot() {
+                     public BaseComponent[] getPage(int page) {
+                         Validate.isTrue(CraftMetaBook.this.isValidPage(page), "Invalid page number");
+                         return ComponentSerializer.parse(ITextComponent.Serializer.componentToJson(CraftMetaBook.this.pages.get(page - 1)));
+@@ -565,7 +565,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+         return builder;
+     }
+ 
+-    public Spigot spigot() {
++    public BookMeta.Spigot spigot() {
+         return this.spigot;
+     }
+ }
 diff --git a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
 index dfac15a..56f3713 100644
 --- a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
@@ -3200,5 +3247,5 @@ index 0c40ff9..1931031 100644
      }
  }
 -- 
-2.15.0.windows.1
+2.15.1.windows.2
 

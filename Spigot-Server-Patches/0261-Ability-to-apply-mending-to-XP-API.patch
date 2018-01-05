@@ -1,0 +1,81 @@
+From 18eff908427ab3e19dfa29b72c4c4f27026cfd53 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Thu, 4 Jan 2018 21:42:15 -0600
+Subject: [PATCH] Ability to apply mending to XP API
+
+This allows plugins that give players the ability to apply the experience
+points to the Item Mending formula, which will repair an item instead
+of giving the player experience points.
+
+Both an API To standalone mend, and apply mending logic to .giveExp has been added.
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index abcb405..b681c43 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -30,6 +30,7 @@ import net.md_5.bungee.api.ChatMessageType;
+ import net.md_5.bungee.api.chat.BaseComponent;
+ import net.md_5.bungee.api.chat.TextComponent;
+ import net.minecraft.advancements.PlayerAdvancements;
++import net.minecraft.enchantment.EnchantmentHelper;
+ import net.minecraft.entity.EntityLivingBase;
+ import net.minecraft.entity.EntityTracker;
+ import net.minecraft.entity.EntityTrackerEntry;
+@@ -38,10 +39,13 @@ import net.minecraft.entity.ai.attributes.IAttribute;
+ import net.minecraft.entity.ai.attributes.IAttributeInstance;
+ import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+ import net.minecraft.entity.ai.attributes.RangedAttribute;
++import net.minecraft.entity.item.EntityXPOrb;
+ import net.minecraft.entity.player.EntityPlayer;
+ import net.minecraft.entity.player.EntityPlayerMP;
++import net.minecraft.init.Enchantments;
+ import net.minecraft.inventory.Container;
+ import net.minecraft.inventory.ContainerRepair;
++import net.minecraft.item.ItemStack;
+ import net.minecraft.nbt.NBTTagCompound;
+ import net.minecraft.network.NetHandlerPlayServer;
+ import net.minecraft.network.Packet;
+@@ -942,7 +946,39 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         return GameMode.getByValue(this.getHandle().interactionManager.getGameType().getID());
+     }
+ 
+-    public void giveExp(int exp) {
++    // Paper start
++    @Override
++    public int applyMending(int amount) {
++        EntityPlayer handle = getHandle();
++        // Logic copied from EntityExperienceOrb and remapped to unobfuscated methods/properties
++        ItemStack itemstack = EnchantmentHelper.getEnchantedItem(Enchantments.MENDING, handle);
++        if (!itemstack.isEmpty() && itemstack.isItemDamaged()) {
++
++            EntityXPOrb orb = new EntityXPOrb(handle.world);
++            orb.xpValue = amount;
++            orb.spawnReason = org.bukkit.entity.ExperienceOrb.SpawnReason.CUSTOM;
++            orb.posX = handle.posX;
++            orb.posY = handle.posY;
++            orb.posZ = handle.posZ;
++
++            int i = Math.min(orb.durabilityToXp(amount), itemstack.getItemDamage());
++            org.bukkit.event.player.PlayerItemMendEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerItemMendEvent(handle, orb, itemstack, i);
++            i = event.getRepairAmount();
++            orb.isDead = true;
++            if (!event.isCancelled()) {
++                amount -= orb.durabilityToXp(i);
++                itemstack.setItemDamage(itemstack.getItemDamage() - i);
++            }
++        }
++        return amount;
++    }
++
++    @Override
++    public void giveExp(int exp, boolean applyMending) {
++        if (applyMending) {
++            exp = this.applyMending(exp);
++        }
++        // Paper end
+         this.getHandle().addExperience(exp);
+     }
+ 
+-- 
+2.15.1.windows.2
+

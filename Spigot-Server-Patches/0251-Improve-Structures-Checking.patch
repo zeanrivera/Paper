@@ -1,4 +1,4 @@
-From e7e200ebed1c20febe98866e52fb2274da24d411 Mon Sep 17 00:00:00 2001
+From 68fb7079027b5fc4d539e0d97816b8135a59cb46 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 11 Nov 2017 17:57:39 -0500
 Subject: [PATCH] Improve Structures Checking
@@ -136,5 +136,5 @@ index cfb1a73..5b6b1cf 100644
          this.structureData.writeInstance(start.writeStructureComponentsToNBT(chunkX, chunkZ), chunkX, chunkZ);
          this.structureData.markDirty();
 -- 
-2.15.0.windows.1
+2.15.1.windows.2
 

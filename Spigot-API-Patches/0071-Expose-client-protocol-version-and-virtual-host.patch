@@ -1,4 +1,4 @@
-From 09098c2efea89dbf283492b18f9f4e2f09e4a33d Mon Sep 17 00:00:00 2001
+From 83e1cd51e44c74c8bf2af93c59c1bbaccfd4f13e Mon Sep 17 00:00:00 2001
 From: Minecrell <minecrell@minecrell.net>
 Date: Tue, 10 Oct 2017 18:44:42 +0200
 Subject: [PATCH] Expose client protocol version and virtual host
@@ -55,10 +55,10 @@ index 00000000..9072e384
 +
 +}
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 0c3eb03f..611a5be2 100644
+index 39684300..23cc8b5e 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -29,7 +29,7 @@ import org.bukkit.scoreboard.Scoreboard;
+@@ -30,7 +30,7 @@ import org.bukkit.scoreboard.Scoreboard;
  /**
   * Represents a player, connected or not
   */
@@ -68,5 +68,5 @@ index 0c3eb03f..611a5be2 100644
      /**
       * Gets the "friendly" name to display of this player. This may include
 -- 
-2.14.3.windows.1
+2.15.1.windows.2
 

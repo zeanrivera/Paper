@@ -1,4 +1,4 @@
-From 4d5dd10ca539ccebac747ae49283a272ca1c3efa Mon Sep 17 00:00:00 2001
+From 1b91ae4b79a25a7b8b8bdea9fbab7800d40ba97f Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 20 Oct 2017 19:40:03 -0400
 Subject: [PATCH] Vanished players don't have rights
@@ -18,7 +18,7 @@ index d2c7dd1..cb9e3cc 100644
              IBlockState iblockdata1 = this.block.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, i, player);
  
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index ea4ea3c..8494ba5 100644
+index f77159b..f1e7fea 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1819,6 +1819,31 @@ public abstract class World implements IBlockAccess {
@@ -63,10 +63,10 @@ index ea4ea3c..8494ba5 100644
                          : (iblockdata.getMaterial() == Material.CIRCUITS && blockIn == Blocks.ANVIL
                                  ? true
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 74a1ade..e5a9f28 100644
+index b666b2e..4eea96d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -936,6 +936,13 @@ public class CraftEventFactory {
+@@ -963,6 +963,13 @@ public class CraftEventFactory {
          Projectile projectile = (Projectile) entity.getBukkitEntity();
          org.bukkit.entity.Entity collided = position.entityHit.getBukkitEntity();
          com.destroystokyo.paper.event.entity.ProjectileCollideEvent event = new com.destroystokyo.paper.event.entity.ProjectileCollideEvent(projectile, collided);
@@ -81,5 +81,5 @@ index 74a1ade..e5a9f28 100644
          return event;
      }
 -- 
-2.14.2.windows.2
+2.15.1.windows.2
 

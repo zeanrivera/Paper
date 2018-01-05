@@ -1,4 +1,4 @@
-From 37fb20d2cf941a9018a9c9402a84b7027fe7a88d Mon Sep 17 00:00:00 2001
+From 8faceb050cfe1e32d353d2fb4170bdd448c88ce8 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 17:01:59 -0400
 Subject: [PATCH] Prevent Auto Save if Save Queue is full
@@ -7,21 +7,19 @@ If the save queue already has 50 (configurable) of chunks pending,
 then avoid processing auto save (which would add more)
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 7b92f53..2b42aa1 100644
+index 7b92f53..543a95f 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -379,6 +379,11 @@ public class PaperWorldConfig {
-         maxAutoSaveChunksPerTick = getInt("max-auto-save-chunks-per-tick", 24);
-     }
- 
-+    public int queueSizeAutoSaveThreshold = 50;
-+    private void queueSizeAutoSaveThreshold() {
-+        queueSizeAutoSaveThreshold = getInt("save-queue-limit-for-auto-save", 50);
-+    }
-+
-     public boolean removeCorruptTEs = false;
+@@ -383,4 +383,9 @@ public class PaperWorldConfig {
      private void removeCorruptTEs() {
          removeCorruptTEs = getBoolean("remove-corrupt-tile-entities", false);
+     }
++
++    public int queueSizeAutoSaveThreshold = 50;
++    private void queueSizeAutoSaveThreshold() {
++       queueSizeAutoSaveThreshold = getInt("save-queue-limit-for-auto-save", 50);
++    }
+ }
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 index 711fb47..1eca92d 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
@@ -69,5 +67,5 @@ index 2574147..c03a7f6 100644
                  }
              }
 -- 
-2.14.2.windows.2
+2.15.1.windows.2
 

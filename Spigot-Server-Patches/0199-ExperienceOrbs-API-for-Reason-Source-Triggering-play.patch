@@ -1,0 +1,262 @@
+From 46541f5c4d00e3acb99b1f7e72bbf619d0f877cb Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Tue, 19 Dec 2017 16:31:46 -0500
+Subject: [PATCH] ExperienceOrbs API for Reason/Source/Triggering player
+
+Adds lots of information about why this orb exists.
+
+Replaces isFromBottle() with logic that persists entity reloads too.
+
+diff --git a/src/main/java/net/minecraft/block/Block.java b/src/main/java/net/minecraft/block/Block.java
+index c571e05..b137bc3 100644
+--- a/src/main/java/net/minecraft/block/Block.java
++++ b/src/main/java/net/minecraft/block/Block.java
+@@ -20,6 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
+ import net.minecraft.entity.item.EntityItem;
+ import net.minecraft.entity.item.EntityXPOrb;
+ import net.minecraft.entity.player.EntityPlayer;
++import net.minecraft.entity.player.EntityPlayerMP;
+ import net.minecraft.init.Blocks;
+ import net.minecraft.init.Enchantments;
+ import net.minecraft.init.Items;
+@@ -444,13 +445,13 @@ public class Block {
+         }
+     }
+ 
+-    public void dropXpOnBlockBreak(World worldIn, BlockPos pos, int amount) {
++    public void dropXpOnBlockBreak(World worldIn, BlockPos pos, int amount, EntityPlayerMP player) { // Paper
+         if (!worldIn.isRemote && worldIn.getGameRules().getBoolean("doTileDrops")) {
+             while (amount > 0) {
+                 int j = EntityXPOrb.getXPSplit(amount);
+                 amount -= j;
+                 worldIn.spawnEntity(
+-                        new EntityXPOrb(worldIn, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, j));
++                        new EntityXPOrb(worldIn, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, j, org.bukkit.entity.ExperienceOrb.SpawnReason.BLOCK_BREAK, player)); // Paper
+             }
+         }
+     }
+diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
+index 2ddf22d..1e8ddd8 100644
+--- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
++++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
+@@ -431,7 +431,8 @@ public abstract class EntityLivingBase extends Entity {
+             while (i > 0) {
+                 int j = EntityXPOrb.getXPSplit(i);
+                 i -= j;
+-                this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
++                EntityLivingBase attacker = attackingPlayer != null ? attackingPlayer : revengeTarget; // Paper
++                this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j, this instanceof Player ? org.bukkit.entity.ExperienceOrb.SpawnReason.PLAYER_DEATH : org.bukkit.entity.ExperienceOrb.SpawnReason.ENTITY_DEATH, attacker, this)); // Paper
+             }
+ 
+             this.expToDrop = 0;
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
+index bca298a..f8ac78d 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
+@@ -129,7 +129,7 @@ public class EntityAIMate extends EntityAIBase {
+             }
+ 
+             if (this.world.getGameRules().getBoolean("doMobLoot") && experience > 0) {
+-                this.world.spawnEntity(new EntityXPOrb(this.world, this.animal.posX, this.animal.posY, this.animal.posZ, experience));
++                this.world.spawnEntity(new EntityXPOrb(this.world, this.animal.posX, this.animal.posY, this.animal.posZ, experience, org.bukkit.entity.ExperienceOrb.SpawnReason.BREED, entityplayer, entityageable)); // Paper
+             }
+         }
+     }
+diff --git a/src/main/java/net/minecraft/entity/boss/EntityDragon.java b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
+index 84ac723..73a2aae 100644
+--- a/src/main/java/net/minecraft/entity/boss/EntityDragon.java
++++ b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
+@@ -737,7 +737,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
+         while (p_184668_1_ > 0) {
+             int j = EntityXPOrb.getXPSplit(p_184668_1_);
+             p_184668_1_ -= j;
+-            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
++            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j, org.bukkit.entity.ExperienceOrb.SpawnReason.ENTITY_DEATH, this.attackingPlayer, this)); // Paper
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/entity/item/EntityExpBottle.java b/src/main/java/net/minecraft/entity/item/EntityExpBottle.java
+index daba9d6..3bfb2f5 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityExpBottle.java
++++ b/src/main/java/net/minecraft/entity/item/EntityExpBottle.java
+@@ -45,7 +45,7 @@ public class EntityExpBottle extends EntityThrowable {
+             while (i > 0) {
+                 int j = EntityXPOrb.getXPSplit(i);
+                 i -= j;
+-                this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
++                this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j, org.bukkit.entity.ExperienceOrb.SpawnReason.EXP_BOTTLE, getThrower(), this)); // Paper
+             }
+ 
+             this.setDead();
+diff --git a/src/main/java/net/minecraft/entity/item/EntityXPOrb.java b/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
+index 7198306..3ee4c2f 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
++++ b/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
+@@ -29,8 +29,55 @@ public class EntityXPOrb extends Entity {
+     private EntityPlayer closestPlayer;
+     private int xpTargetColor;
+ 
+-    public EntityXPOrb(World worldIn, double x, double y, double z, int expValue) {
++    // Paper start
++    public java.util.UUID sourceEntityId;
++    public java.util.UUID triggerEntityId;
++    public org.bukkit.entity.ExperienceOrb.SpawnReason spawnReason = org.bukkit.entity.ExperienceOrb.SpawnReason.UNKNOWN;
++
++    private void loadPaperNBT(NBTTagCompound nbttagcompound) {
++        if (!nbttagcompound.hasKey("Paper.ExpData", 10)) { // 10 = compound
++            return;
++        }
++        NBTTagCompound comp = nbttagcompound.getCompoundTag("Paper.ExpData");
++        if (comp.hasUniqueId("source")) {
++            this.sourceEntityId = comp.getUniqueId("source");
++        }
++        if (comp.hasUniqueId("trigger")) {
++            this.triggerEntityId = comp.getUniqueId("trigger");
++        }
++        if (comp.hasKey("reason")) {
++            String reason = comp.getString("reason");
++            try {
++                spawnReason = org.bukkit.entity.ExperienceOrb.SpawnReason.valueOf(reason);
++            } catch (Exception e) {
++                this.world.getServer().getLogger().warning("Invalid spawnReason set for experience orb: " + e.getMessage() + " - " + reason);
++            }
++        }
++    }
++    private void savePaperNBT(NBTTagCompound nbttagcompound) {
++        NBTTagCompound comp = new NBTTagCompound();
++        if (sourceEntityId != null) {
++            comp.setUniqueId("source", sourceEntityId);
++        }
++        if (triggerEntityId != null) {
++            comp.setUniqueId("trigger", triggerEntityId);
++        }
++        if (spawnReason != null && spawnReason != org.bukkit.entity.ExperienceOrb.SpawnReason.UNKNOWN) {
++            comp.setString("reason", spawnReason.name());
++        }
++        nbttagcompound.setTag("Paper.ExpData", comp);
++    }
++
++    public EntityXPOrb(World worldIn, double x, double y, double z, int expValue, org.bukkit.entity.ExperienceOrb.SpawnReason reason, Entity triggerId) {
++        this(worldIn, x, y, z, expValue, reason, triggerId, null);
++    }
++
++    public EntityXPOrb(World worldIn, double x, double y, double z, int expValue, org.bukkit.entity.ExperienceOrb.SpawnReason reason, Entity triggerId, Entity sourceId) {
+         super(worldIn);
++        this.sourceEntityId = sourceId != null ? sourceId.getUniqueID() : null;
++        this.triggerEntityId = triggerId != null ? triggerId.getUniqueID() : null;
++        this.spawnReason = reason != null ? reason : org.bukkit.entity.ExperienceOrb.SpawnReason.UNKNOWN;
++        // Paper end
+         this.setSize(0.5F, 0.5F);
+         this.setPosition(x, y, z);
+         this.rotationYaw = (float) (Math.random() * 360.0D);
+@@ -175,12 +222,14 @@ public class EntityXPOrb extends Entity {
+         compound.setShort("Health", (short) this.xpOrbHealth);
+         compound.setShort("Age", (short) this.xpOrbAge);
+         compound.setShort("Value", (short) this.xpValue);
++        savePaperNBT(compound); // Paper
+     }
+ 
+     public void readEntityFromNBT(NBTTagCompound compound) {
+         this.xpOrbHealth = compound.getShort("Health");
+         this.xpOrbAge = compound.getShort("Age");
+         this.xpValue = compound.getShort("Value");
++        loadPaperNBT(compound); // Paper
+     }
+ 
+     public void onCollideWithPlayer(EntityPlayer entityIn) {
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
+index 715be38..5917328 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
+@@ -721,7 +721,7 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
+         }
+ 
+         if (recipe.getRewardsExp()) {
+-            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i));
++            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i, org.bukkit.entity.ExperienceOrb.SpawnReason.VILLAGER_TRADE, buyingPlayer, this)); // Paper
+         }
+ 
+         if (this.buyingPlayer instanceof EntityPlayerMP) {
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+index 4f18929..9030d01 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+@@ -521,7 +521,12 @@ public class EntityFishHook extends Entity {
+                                         this.angler.posX,
+                                         this.angler.posY + 0.5D,
+                                         this.angler.posZ + 0.5D,
+-                                        playerFishEvent.getExpToDrop()));
++                                        playerFishEvent.getExpToDrop(),
++                                        // Paper start
++                                        org.bukkit.entity.ExperienceOrb.SpawnReason.FISHING,
++                                        this.angler,
++                                        this));
++                                        // Paper end
+                     }
+ 
+                     Item item = itemstack.getItem();
+diff --git a/src/main/java/net/minecraft/inventory/SlotFurnaceOutput.java b/src/main/java/net/minecraft/inventory/SlotFurnaceOutput.java
+index b7c4be5..08b9520 100644
+--- a/src/main/java/net/minecraft/inventory/SlotFurnaceOutput.java
++++ b/src/main/java/net/minecraft/inventory/SlotFurnaceOutput.java
+@@ -77,7 +77,7 @@ public class SlotFurnaceOutput extends Slot {
+                 int j = EntityXPOrb.getXPSplit(i);
+                 i -= j;
+                 this.player.world.spawnEntity(
+-                        new EntityXPOrb(this.player.world, this.player.posX, this.player.posY + 0.5D, this.player.posZ + 0.5D, j));
++                        new EntityXPOrb(this.player.world, this.player.posX, this.player.posY + 0.5D, this.player.posZ + 0.5D, j, org.bukkit.entity.ExperienceOrb.SpawnReason.FURNACE, this.player)); // Paper
+             }
+         }
+ 
+diff --git a/src/main/java/net/minecraft/server/management/PlayerInteractionManager.java b/src/main/java/net/minecraft/server/management/PlayerInteractionManager.java
+index 7b507b1..8b2f882 100644
+--- a/src/main/java/net/minecraft/server/management/PlayerInteractionManager.java
++++ b/src/main/java/net/minecraft/server/management/PlayerInteractionManager.java
+@@ -394,7 +394,7 @@ public class PlayerInteractionManager {
+                 }
+ 
+                 if (flag && event != null) {
+-                    iblockdata.getBlock().dropXpOnBlockBreak(this.world, pos, event.getExpToDrop());
++                    iblockdata.getBlock().dropXpOnBlockBreak(this.world, pos, event.getExpToDrop(), this.player); // Paper
+                 }
+ 
+                 return flag;
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index b051881..12a0c55 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -1371,7 +1371,7 @@ public class CraftWorld implements World {
+         } else if (TNTPrimed.class.isAssignableFrom(param2)) {
+             entity = new EntityTNTPrimed(world, x, y, z, null);
+         } else if (ExperienceOrb.class.isAssignableFrom(param2)) {
+-            entity = new EntityXPOrb(world, x, y, z, 0);
++            entity = new EntityXPOrb(world, x, y, z, 0, org.bukkit.entity.ExperienceOrb.SpawnReason.CUSTOM, null, null); // Paper
+         } else if (Weather.class.isAssignableFrom(param2)) {
+             // not sure what this can do
+             if (LightningStrike.class.isAssignableFrom(param2)) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftExperienceOrb.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftExperienceOrb.java
+index 19e13a2..35f7be7 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftExperienceOrb.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftExperienceOrb.java
+@@ -18,6 +18,18 @@ public class CraftExperienceOrb extends CraftEntity implements ExperienceOrb {
+         this.getHandle().xpValue = value;
+     }
+ 
++    // Paper start
++    public java.util.UUID getTriggerEntityId() {
++        return getHandle().triggerEntityId;
++    }
++    public java.util.UUID getSourceEntityId() {
++        return getHandle().sourceEntityId;
++    }
++    public SpawnReason getSpawnReason() {
++        return getHandle().spawnReason;
++    }
++    // Paper end
++
+     public EntityXPOrb getHandle() {
+         return (EntityXPOrb) this.entity;
+     }
+-- 
+2.15.1.windows.2
+

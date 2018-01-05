@@ -1,4 +1,4 @@
-From 1718e918e7ed54b5a3022ef5ffcf3147e15338e3 Mon Sep 17 00:00:00 2001
+From cf4d4c5ee9b76777ef5c9a2b7ea99e46f8590538 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 23:04:12 -0400
 Subject: [PATCH] Handle Item Meta Inconsistencies
@@ -17,6 +17,74 @@ was added, resulting in 2 different ways to modify an items enchantments.
 For consistency, the old API methods now forward to use the
 ItemMeta API equivalents, and should deprecate the old API's.
 
+diff --git a/src/main/java/net/minecraft/item/ItemStack.java b/src/main/java/net/minecraft/item/ItemStack.java
+index e386a7e..33438ef 100644
+--- a/src/main/java/net/minecraft/item/ItemStack.java
++++ b/src/main/java/net/minecraft/item/ItemStack.java
+@@ -102,6 +102,22 @@ public final class ItemStack {
+         this(itemIn, amount, 0);
+     }
+ 
++    // Paper start
++    private static final java.util.Comparator<NBTTagCompound> enchantSorter = java.util.Comparator.comparingInt(o -> o.getShort("id"));
++    private void processEnchantOrder(NBTTagCompound tag) {
++        if (tag == null || !tag.hasKey("ench", 9)) {
++            return;
++        }
++        NBTTagList list = tag.getTagList("ench", 10);
++        if (list.tagCount() < 2) {
++            return;
++        }
++        try {
++            list.sort(enchantSorter); // Paper
++        } catch (Exception ignored) {}
++    }
++    // Paper end
++
+     public ItemStack(Item itemIn, int amount, int meta) {
+         this(itemIn, amount, meta, true);
+     }
+@@ -153,6 +169,7 @@ public final class ItemStack {
+ 
+         if (nbttagcompound.hasKey("tag", 10)) {
+             this.stackTagCompound = (NBTTagCompound) nbttagcompound.getCompoundTag("tag").copy();
++            processEnchantOrder(this.stackTagCompound); // Paper
+ 
+             if (this.item != null) {
+                 this.item.updateItemStackNBT(this.stackTagCompound);
+@@ -650,6 +667,7 @@ public final class ItemStack {
+ 
+     public void setTagCompound(@Nullable NBTTagCompound nbt) {
+         this.stackTagCompound = nbt;
++        processEnchantOrder(this.stackTagCompound);
+     }
+ 
+     public String getDisplayName() {
+@@ -721,6 +739,7 @@ public final class ItemStack {
+         nbttagcompound.setShort("id", (short) Enchantment.getEnchantmentID(ench));
+         nbttagcompound.setShort("lvl", (short) ((byte) level));
+         nbttaglist.appendTag(nbttagcompound);
++        processEnchantOrder(nbttagcompound); // Paper
+     }
+ 
+     public boolean isItemEnchanted() {
+diff --git a/src/main/java/net/minecraft/nbt/NBTTagList.java b/src/main/java/net/minecraft/nbt/NBTTagList.java
+index b23a913..52cddec 100644
+--- a/src/main/java/net/minecraft/nbt/NBTTagList.java
++++ b/src/main/java/net/minecraft/nbt/NBTTagList.java
+@@ -12,6 +12,12 @@ import org.apache.logging.log4j.Logger;
+ public class NBTTagList extends NBTBase {
+     private static final Logger LOGGER = LogManager.getLogger();
+     private List<NBTBase> tagList = Lists.<NBTBase>newArrayList();
++    // Paper start
++    public void sort(java.util.Comparator<? extends NBTBase> comparator) {
++        //noinspection unchecked
++        java.util.Collections.sort(tagList, (java.util.Comparator<NBTBase>) comparator);
++    }
++    // Paper end
+     private byte tagType = 0;
+ 
+     void write(DataOutput output) throws IOException {
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
 index 0f8cd04..90cf90c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
@@ -287,5 +355,5 @@ index a37245d..547087d 100644
          return this.spigot;
      }
 -- 
-2.14.1.windows.1
+2.15.1.windows.2
 

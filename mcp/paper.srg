@@ -58,3 +58,4 @@ MD: net/minecraft/server/WorldData$7/call ()Ljava/lang/Object; net/minecraft/ser
 MD: net/minecraft/server/WorldData$8/call ()Ljava/lang/Object; net/minecraft/server/WorldData$8/__clashing_call ()Ljava/lang/Object;
 MD: net/minecraft/server/WorldData$9/call ()Ljava/lang/Object; net/minecraft/server/WorldData$9/__clashing_call ()Ljava/lang/Object;
 MD: net/minecraft/server/WorldData$10/call ()Ljava/lang/Object; net/minecraft/server/WorldData$10/__clashing_call ()Ljava/lang/Object;
+

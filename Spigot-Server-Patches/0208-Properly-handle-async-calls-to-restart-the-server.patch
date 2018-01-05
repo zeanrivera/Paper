@@ -1,4 +1,4 @@
-From 87f85d9c04a40cc9a4fe4c77b7bb6bb7b4afb2a8 Mon Sep 17 00:00:00 2001
+From e760f2c969e0ced0f274904d68d0642cecf115d2 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 18:29:50 -0400
 Subject: [PATCH] Properly handle async calls to restart the server
@@ -30,7 +30,7 @@ will have plugins and worlds saving to the disk has a high potential to result
 in corruption/dataloss.
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 388018d..9996dd6 100644
+index 388018d..3ec0ce1 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -128,6 +128,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -50,7 +50,7 @@ index 388018d..9996dd6 100644
  
              try {
                  Thread.sleep(100L);
-@@ -585,9 +586,16 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+@@ -585,8 +586,14 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
          return this.serverRunning;
      }
  
@@ -63,10 +63,16 @@ index 388018d..9996dd6 100644
          this.serverRunning = false;
 +        this.isRestarting = isRestarting;
      }
-+    // Paper end
  
      // Paper start - Further improve server tick loop
-     public static final int TPS = 20;
+@@ -734,6 +741,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+             }
+         }
+     }
++    // Paper end
+ 
+     public void applyServerIconToResponse(ServerStatusResponse response) {
+         File file = this.getFile("server-icon.png");
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
 index a363c2c..c8495b2 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
@@ -241,5 +247,5 @@ index d8a5b9f..a489b87 100644
      }
  }
 -- 
-2.14.3.windows.1
+2.15.1.windows.2
 

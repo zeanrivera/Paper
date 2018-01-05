@@ -1,4 +1,4 @@
-From c004fc1f4cc46d43c9519c9479dd5ce31dc99e30 Mon Sep 17 00:00:00 2001
+From 9aa44ba37b454fe4a696f93bf39e4a2fe56173ea Mon Sep 17 00:00:00 2001
 From: Minecrell <minecrell@minecrell.net>
 Date: Tue, 31 Oct 2017 20:59:10 -0400
 Subject: [PATCH] Expose client protocol version and virtual host
@@ -92,10 +92,10 @@ index 26afaf2..f25f48f 100644
  
      public void onDisconnect(ITextComponent reason) {}
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 83af401..57fdc11 100644
+index 7f5451a..abcb405 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1745,6 +1745,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1790,6 +1790,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public void setResourcePackStatus(org.bukkit.event.player.PlayerResourcePackStatusEvent.Status status) {
          this.resourcePackStatus = status;
      }
@@ -115,5 +115,5 @@ index 83af401..57fdc11 100644
  
      public Player.Spigot spigot() { // Paper - Decompile fix
 -- 
-2.15.0.windows.1
+2.15.1.windows.2
 
