@@ -1,0 +1,110 @@
+From 94cf41c50524a6a3058c74ba88a625a3718bd814 Mon Sep 17 00:00:00 2001
+From: CullanP <cullanpage@gmail.com>
+Date: Wed, 27 Sep 2017 15:35:42 -0400
+Subject: [PATCH] Avoid hopper searches if there are no items
+
+Hoppers searching for items and minecarts is the most expensive part of
+hopper ticking.
+We keep track of the number of minecarts and items in a chunk.
+If there are no items in the chunk, we skip searching for items.
+If there are no minecarts in the chunk, we skip searching for them.
+
+Usually hoppers aren't near items, so we can skip most item searches.
+And since minecart hoppers are used _very_ rarely near we can avoid alot
+of searching there.
+
+Combined, this adds up a lot.
+
+diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
+index 912d746..2dae9cd 100644
+--- a/src/main/java/net/minecraft/world/chunk/Chunk.java
++++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
+@@ -32,6 +32,7 @@ import net.minecraft.inventory.IInventory;
+ import net.minecraft.server.MinecraftServer;
+ import net.minecraft.tileentity.TileEntity;
+ import net.minecraft.tileentity.TileEntityMobSpawner;
++import net.minecraft.util.EntitySelectors;
+ import net.minecraft.util.EnumFacing;
+ import net.minecraft.util.ReportedException;
+ import net.minecraft.util.math.AxisAlignedBB;
+@@ -90,6 +91,12 @@ public class Chunk {
+     public org.bukkit.Chunk bukkitChunk;
+     public boolean mustSave;
+     public final PaperLightingQueue.LightingQueue lightingQueue = new PaperLightingQueue.LightingQueue(this); // Paper
++    // Paper start
++    // Track the number of minecarts and items
++    // Keep this synced with entityLists.add() and entityLists.remove()
++    private final int[] itemCounts = new int[16];
++    private final int[] inventoryEntityCounts = new int[16];
++    // Paper end
+ 
+     public boolean areNeighborsLoaded(int radius) {
+         switch (radius) {
+@@ -650,6 +657,13 @@ public class Chunk {
+         entityIn.chunkCoordY = k;
+         entityIn.chunkCoordZ = this.z;
+         this.entityLists[k].add(entityIn);
++        // Paper start - update count
++        if (entityIn instanceof net.minecraft.entity.item.EntityItem) {
++            itemCounts[k]++;
++        } else if (entityIn instanceof IInventory) {
++            inventoryEntityCounts[k]++;
++        }
++        // Paper end
+ 
+         if (entityIn instanceof EntityLiving) {
+             EntityLiving entityinsentient = (EntityLiving) entityIn;
+@@ -681,6 +695,14 @@ public class Chunk {
+ 
+         this.entityLists[index].remove(entityIn);
+ 
++        // Paper start - update counts
++        if (entityIn instanceof net.minecraft.entity.item.EntityItem) {
++            itemCounts[index]--;
++        } else if (entityIn instanceof IInventory) {
++            inventoryEntityCounts[index]--;
++        }
++        // Paper end
++
+         if (entityIn instanceof EntityLiving) {
+             EntityLiving entityinsentient = (EntityLiving) entityIn;
+ 
+@@ -861,6 +883,16 @@ public class Chunk {
+         for (int k = i; k <= j; ++k) {
+             if (!this.entityLists[k].isEmpty()) {
+                 for (Entity entity1 : this.entityLists[k]) {
++                    // Paper start - Don't search for inventories if we have none, and that is all we want
++                    /*
++                     * We check if they want inventories by seeing if the filter is "EntitySelectors.HAS_INVENTORY`
++                     *
++                     * Make sure the inventory selector stays in sync.
++                     * It should be the one that checks `var1 instanceof IInventory && var1.isEntityAlive()`
++                     */
++                    if (filter == EntitySelectors.HAS_INVENTORY && inventoryEntityCounts[k] <= 0) continue;
++                    // Paper end
++
+                     if (entity1.getEntityBoundingBox().intersects(aabb) && entity1 != entityIn) {
+                         if (filter == null || filter.apply(entity1)) {
+                             listToFill.add(entity1);
+@@ -890,7 +922,18 @@ public class Chunk {
+         i = MathHelper.clamp(i, 0, this.entityLists.length - 1);
+         j = MathHelper.clamp(j, 0, this.entityLists.length - 1);
+ 
++        // Paper start
++        int[] counts;
++        if (net.minecraft.entity.item.EntityItem.class.isAssignableFrom(entityClass)) {
++            counts = itemCounts;
++        } else if (IInventory.class.isAssignableFrom(entityClass)) {
++            counts = inventoryEntityCounts;
++        } else {
++            counts = null;
++        }
++        // Paper end
+         for (int k = i; k <= j; ++k) {
++            if (counts != null && counts[k] <= 0) continue; // Paper - Don't check a chunk if it doesn't have the type we are looking for
+             for (Entity entity : this.entityLists[k]) {
+                 if (entityClass.isInstance(entity)
+                         && entity.getEntityBoundingBox().intersects(aabb)
+-- 
+2.14.3
+

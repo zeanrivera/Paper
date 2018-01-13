@@ -1,0 +1,38 @@
+From 8e8f92e5082a45e473fda1af95aa4fbe4178ada3 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 8 Oct 2017 00:46:45 -0400
+Subject: [PATCH] Remove null possibility for getServer singleton
+
+to stop IDE complaining about potential NPE
+
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index e66eac8..6cfdb90 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -110,6 +110,7 @@ import org.spigotmc.SpigotConfig;
+ import org.spigotmc.WatchdogThread;
+ 
+ public abstract class MinecraftServer implements ICommandSender, Runnable, IThreadListener, ISnooperInfo {
++    private static MinecraftServer SERVER; // Paper
+     public static final Logger LOGGER = LogManager.getLogger();
+     public static final File USER_CACHE_FILE = new File("usercache.json");
+     public ISaveFormat anvilConverterForAnvilFile;
+@@ -186,6 +187,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+             MinecraftSessionService p_i35_5_,
+             GameProfileRepository p_i35_6_,
+             PlayerProfileCache p_i35_7_) {
++        SERVER = this; // Paper - Better singleton
+         ResourceLeakDetector.setEnabled(false);
+         this.serverProxy = p_i35_2_;
+         this.authService = p_i35_4_;
+@@ -1524,6 +1526,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+ 
+     @Deprecated
+     public static MinecraftServer getServer() {
+-        return Bukkit.getServer() instanceof CraftServer ? ((CraftServer) Bukkit.getServer()).getServer() : null;
++        return SERVER; // Paper - Better singleton
+     }
+ }
+-- 
+2.14.3
+

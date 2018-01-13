@@ -1,4 +1,4 @@
-From 05fcef874acf92430d541ad29e0f0900c83336a9 Mon Sep 17 00:00:00 2001
+From 681717103db77fce687118c57e04ee901f2280ae Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -382,7 +382,7 @@ index 0520dc2..97ba404 100644
              for (ICriterionTrigger.Listener var6 : this.listeners) {
                  if (((VillagerTradeTrigger.Instance) var6.getCriterionInstance()).test(player, villager, item)) {
 diff --git a/src/main/java/net/minecraft/block/BlockCauldron.java b/src/main/java/net/minecraft/block/BlockCauldron.java
-index 35a925e..3b5e2ad 100644
+index 6cda84e..d41cd23 100644
 --- a/src/main/java/net/minecraft/block/BlockCauldron.java
 +++ b/src/main/java/net/minecraft/block/BlockCauldron.java
 @@ -239,7 +239,7 @@ public class BlockCauldron extends Block {
@@ -475,15 +475,15 @@ index 630d0fe..4c990de 100644
          if (!list.isEmpty()) {
              for (Entity entity : list) {
 diff --git a/src/main/java/net/minecraft/block/properties/PropertyEnum.java b/src/main/java/net/minecraft/block/properties/PropertyEnum.java
-index 97fecb6..17268fa 100644
+index c6086f2..4b70166 100644
 --- a/src/main/java/net/minecraft/block/properties/PropertyEnum.java
 +++ b/src/main/java/net/minecraft/block/properties/PropertyEnum.java
-@@ -26,7 +26,7 @@ public class PropertyEnum<T extends Enum<T> & IStringSerializable> extends Prope
-                 throw new IllegalArgumentException("Multiple values have the same name '" + var6 + "'");
+@@ -27,7 +27,7 @@ public class PropertyEnum<T extends Enum<T> & IStringSerializable> extends Prope
+                 throw new IllegalArgumentException("Multiple values have the same name '" + s1 + "'");
              }
  
--            this.nameToValue.put(var6, var5);
-+            this.nameToValue.put(var6, (T) var5);
+-            this.nameToValue.put(s1, oenum);
++            this.nameToValue.put(s1, (T) oenum);
          }
      }
  
@@ -1904,10 +1904,10 @@ index fdc8f55..84b159e 100644
          return this.settings;
      }
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
-index 584daf5..8eb3dd3 100644
+index aff527d..123ea0b 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerList.java
-@@ -477,7 +477,7 @@ public abstract class PlayerList {
+@@ -479,7 +479,7 @@ public abstract class PlayerList {
  
      public EntityPlayerMP attemptLogin(NetHandlerLoginServer loginlistener, GameProfile gameprofile, String hostname) {
          UUID uuid = EntityPlayer.getUUID(gameprofile);
@@ -2958,7 +2958,7 @@ index a0dab98..c77617a 100644
              }
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
-index 97df85d..6dfea75 100644
+index ede368b..4fa1f79 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftArrow.java
 @@ -12,8 +12,8 @@ import org.bukkit.entity.Arrow.Spigot;
@@ -2972,8 +2972,8 @@ index 97df85d..6dfea75 100644
                  public double getDamage() {
                      return CraftArrow.this.getHandle().getDamage();
                  }
-@@ -89,7 +89,7 @@ public class CraftArrow extends AbstractProjectile implements Arrow {
-         this.getHandle().shootingEntity = ((CraftLivingEntity) shooter).getHandle();
+@@ -79,7 +79,7 @@ public class CraftArrow extends AbstractProjectile implements Arrow {
+         return EntityType.ARROW;
      }
  
 -    public Spigot spigot() {
@@ -3247,5 +3247,5 @@ index 0c40ff9..1931031 100644
      }
  }
 -- 
-2.15.1.windows.2
+2.14.3
 

@@ -1,0 +1,42 @@
+From 45326cb0ac192b9e8b9375150455a9f6d974c983 Mon Sep 17 00:00:00 2001
+From: kashike <kashike@vq.lc>
+Date: Sun, 29 Oct 2017 21:42:50 -0400
+Subject: [PATCH] Avoid NPE during CraftBlockEntityState load
+
+
+diff --git a/src/main/java/net/minecraft/tileentity/TileEntitySign.java b/src/main/java/net/minecraft/tileentity/TileEntitySign.java
+index 10a1d20..e1b6b9c 100644
+--- a/src/main/java/net/minecraft/tileentity/TileEntitySign.java
++++ b/src/main/java/net/minecraft/tileentity/TileEntitySign.java
+@@ -81,7 +81,7 @@ public class TileEntitySign extends TileEntity {
+                     }
+ 
+                     public MinecraftServer getMcpServer() {
+-                        return TileEntitySign.this.world.getMinecraftServer();
++                        return MinecraftServer.getServer(); // Paper - world may be null
+                     }
+                 };
+         boolean oldSign = Boolean.getBoolean("convertLegacySigns") && !compound.getBoolean("Bukkit.isConverted");
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
+index c77617a..b3ba34e 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
+@@ -19,6 +19,7 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
+         CraftWorld world = (CraftWorld) this.getWorld();
+         this.tileEntity = tileEntityClass.cast(world.getTileEntityAt(this.getX(), this.getY(), this.getZ()));
+         this.snapshot = this.createSnapshot(this.tileEntity);
++        if(this.snapshot != null) // Paper - avoid NPE during load
+         this.load(this.snapshot);
+     }
+ 
+@@ -27,6 +28,7 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
+         this.tileEntityClass = (Class<T>) tileEntity.getClass();
+         this.tileEntity = tileEntity;
+         this.snapshot = this.createSnapshot(tileEntity);
++        if(this.snapshot != null) // Paper - avoid NPE during load
+         this.load(this.snapshot);
+     }
+ 
+-- 
+2.14.3
+

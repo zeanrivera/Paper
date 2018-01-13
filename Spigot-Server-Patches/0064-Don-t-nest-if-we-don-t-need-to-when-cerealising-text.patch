@@ -1,0 +1,29 @@
+From f49782918be048a1df3f9cbc3b80047d4429bf01 Mon Sep 17 00:00:00 2001
+From: kashike <kashike@vq.lc>
+Date: Sat, 30 Sep 2017 21:31:01 -0400
+Subject: [PATCH] Don't nest if we don't need to when cerealising text
+ components
+
+
+diff --git a/src/main/java/net/minecraft/network/play/server/SPacketChat.java b/src/main/java/net/minecraft/network/play/server/SPacketChat.java
+index 7fe0b81..2100728 100644
+--- a/src/main/java/net/minecraft/network/play/server/SPacketChat.java
++++ b/src/main/java/net/minecraft/network/play/server/SPacketChat.java
+@@ -32,7 +32,13 @@ public class SPacketChat implements Packet<INetHandlerPlayClient> {
+ 
+     public void writePacketData(PacketBuffer buf) throws IOException {
+         if (this.components != null) {
+-            buf.writeString(ComponentSerializer.toString(this.components));
++            // Paper start - don't nest if we don't need to so that we can preserve formatting
++            if (this.components.length == 1) {
++                buf.writeString(net.md_5.bungee.chat.ComponentSerializer.toString(this.components[0]));
++            } else {
++                buf.writeString(net.md_5.bungee.chat.ComponentSerializer.toString(this.components));
++            }
++            // Paper end
+         } else {
+             buf.writeTextComponent(this.chatComponent);
+         }
+-- 
+2.14.3
+

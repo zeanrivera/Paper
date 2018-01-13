@@ -1,0 +1,97 @@
+From 060328fd9ba9baee1f823086d0c31976fe55e6f2 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Tue, 10 Oct 2017 17:05:36 -0400
+Subject: [PATCH] Chunk Save Stats Debug Option
+
+Adds a command line flag to enable stats on how chunk saves are processing.
+
+Stats on current queue, how many was processed and how many were queued.
+
+diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
+index 1eca92d..9bbd780 100644
+--- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
++++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
+@@ -168,6 +168,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+         synchronized (lock) {
+             this.chunksToSave.put(chunkcoordintpair, nbttagcompound);
+         }
++        queuedSaves++; // Paper
+         queue.add(new QueuedChunk(chunkcoordintpair, nbttagcompound));
+         // Paper end
+ 
+@@ -190,6 +191,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+             return false;
+         } else {
+             ChunkPos chunkcoordintpair = chunk.coords; // Paper - Chunk queue improvements
++            processedSaves.incrementAndGet(); // Paper
+ 
+             boolean flag;
+             try {
+@@ -566,6 +568,17 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+         return queue.size();
+     }
+ 
++    // Paper start
++    private long queuedSaves = 0;
++    private final java.util.concurrent.atomic.AtomicLong processedSaves = new java.util.concurrent.atomic.AtomicLong(0L);
++    public long getQueuedSaves() {
++        return queuedSaves;
++    }
++    public long getProcessedSaves() {
++        return processedSaves.longValue();
++    }
++    // Paper end
++
+     // Paper start - Chunk queue improvements
+     private static class QueuedChunk {
+         public ChunkPos coords;
+diff --git a/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java b/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
+index c03a7f6..3d2d00c 100644
+--- a/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
++++ b/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
+@@ -36,6 +36,11 @@ public class ChunkProviderServer implements IChunkProvider {
+     public final Set<Long> droppedChunksSet = Sets.<Long>newHashSet();
+     public final IChunkGenerator chunkGenerator;
+     private final IChunkLoader chunkLoader;
++    // Paper start - chunk save stats
++    private long lastQueuedSaves = 0L; // Paper
++    private long lastProcessedSaves = 0L; // Paper
++    private long lastSaveStatPrinted = System.currentTimeMillis();
++    // Paper end
+     // Paper start
+     protected Chunk lastChunkbyPos = null;
+     public final Long2ObjectMap<Chunk> id2ChunkMap = new Long2ObjectOpenHashMap<Chunk>(8192) {
+@@ -243,6 +248,30 @@ public class ChunkProviderServer implements IChunkProvider {
+         // Paper start
+         final AnvilChunkLoader chunkLoader = (AnvilChunkLoader) world.getChunkProvider().chunkLoader;
+         final int queueSize = chunkLoader.getQueueSize();
++
++        final long now = System.currentTimeMillis();
++        final long timeSince = (now - lastSaveStatPrinted) / 1000;
++        final Integer printRateSecs = Integer.getInteger("printSaveStats");
++        if (printRateSecs != null && timeSince >= printRateSecs) {
++            final String timeStr = "/" + timeSince  +"s";
++            final long queuedSaves = chunkLoader.getQueuedSaves();
++            long queuedDiff = queuedSaves - lastQueuedSaves;
++            lastQueuedSaves = queuedSaves;
++
++            final long processedSaves = chunkLoader.getProcessedSaves();
++            long processedDiff = processedSaves - lastProcessedSaves;
++            lastProcessedSaves = processedSaves;
++
++            lastSaveStatPrinted = now;
++            if (processedDiff > 0 || queueSize > 0 || queuedDiff > 0) {
++                System.out.println("[Chunk Save Stats] " + world.worldInfo.getWorldName() +
++                    " - Current: " + queueSize +
++                    " - Queued: " + queuedDiff + timeStr +
++                    " - Processed: " +processedDiff + timeStr
++                );
++            }
++        }
++
+         if (queueSize > world.paperConfig.queueSizeAutoSaveThreshold){
+             return false;
+         }
+-- 
+2.14.3
+

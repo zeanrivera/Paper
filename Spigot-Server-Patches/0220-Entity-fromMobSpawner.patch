@@ -1,0 +1,68 @@
+From c82937456587c7a673221aea6495ffcc2fb6ad4d Mon Sep 17 00:00:00 2001
+From: BillyGalbreath <Blake.Galbreath@GMail.com>
+Date: Sun, 29 Oct 2017 20:53:22 -0400
+Subject: [PATCH] Entity#fromMobSpawner()
+
+
+diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
+index e4045f4..ad2992b 100644
+--- a/src/main/java/net/minecraft/entity/Entity.java
++++ b/src/main/java/net/minecraft/entity/Entity.java
+@@ -224,6 +224,7 @@ public abstract class Entity implements ICommandSender {
+     public final boolean defaultActivationState;
+     public long activatedTick = -2147483648L;
+     public boolean fromMobSpawner;
++    public boolean spawnedViaMobSpawner; // Paper - Yes this name is similar to above, upstream took the better one
+     public Location origin; // Paper
+     public static final Random SHARED_RANDOM = new Random(); // Paper
+     EntityTrackerEntry tracker; // Paper
+@@ -1618,6 +1619,10 @@ public abstract class Entity implements ICommandSender {
+             if (origin != null) {
+                 compound.setTag("Paper.Origin", this.newDoubleNBTList(origin.getX(), origin.getY(), origin.getZ()));
+             }
++            // Save entity's from mob spawner status
++            if (spawnedViaMobSpawner) {
++                compound.setBoolean("Paper.FromMobSpawner", true);
++            }
+             // Paper end
+ 
+             return compound;
+@@ -1747,6 +1752,7 @@ public abstract class Entity implements ICommandSender {
+             if (!originTag.hasNoTags()) {
+                 origin = new Location(world.getWorld(), originTag.getDoubleAt(0), originTag.getDoubleAt(1), originTag.getDoubleAt(2));
+             }
++            spawnedViaMobSpawner = compound.getBoolean("Paper.FromMobSpawner"); // Restore entity's from mob spawner status
+             // Paper end
+         } catch (Throwable var9) {
+             CrashReport crashreport = CrashReport.makeCrashReport(var9, "Loading entity NBT");
+diff --git a/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java b/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
+index 2e50695..1a9f8fe 100644
+--- a/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
++++ b/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
+@@ -142,6 +142,7 @@ public abstract class MobSpawnerBaseLogic {
+                         if (this.spawnData.getNbt().getSize() == 1
+                                 && this.spawnData.getNbt().hasKey("id", 8)
+                                 && entity instanceof EntityLiving) {
++                            entity.spawnedViaMobSpawner = true; // Paper
+                             ((EntityLiving) entity)
+                                     .onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), (IEntityLivingData) null);
+                         }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index f9a2704..5b35c71 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1084,6 +1084,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+ 
+         return false;
+     }
++
++    @Override
++    public boolean fromMobSpawner() {
++        return getHandle().spawnedViaMobSpawner;
++    }
+     // Paper end
+ 
+     public Spigot spigot() {
+-- 
+2.14.3
+

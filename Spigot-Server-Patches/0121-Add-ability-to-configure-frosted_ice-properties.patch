@@ -1,0 +1,46 @@
+From b7c6b40eef16845a5b3627b492b30925500070aa Mon Sep 17 00:00:00 2001
+From: kashike <kashike@vq.lc>
+Date: Sun, 8 Oct 2017 00:26:03 -0400
+Subject: [PATCH] Add ability to configure frosted_ice properties
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 93d478d..d9784df 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -289,4 +289,14 @@ public class PaperWorldConfig {
+     private void useVanillaScoreboardColoring() {
+         useVanillaScoreboardColoring = getBoolean("use-vanilla-world-scoreboard-name-coloring", false);
+     }
++
++    public boolean frostedIceEnabled = true;
++    public int frostedIceDelayMin = 20;
++    public int frostedIceDelayMax = 40;
++    private void frostedIce() {
++        this.frostedIceEnabled = this.getBoolean("frosted-ice.enabled", this.frostedIceEnabled);
++        this.frostedIceDelayMin = this.getInt("frosted-ice.delay.min", this.frostedIceDelayMin);
++        this.frostedIceDelayMax = this.getInt("frosted-ice.delay.max", this.frostedIceDelayMax);
++        log("Frosted Ice: " + (this.frostedIceEnabled ? "enabled" : "disabled") + " / delay: min=" + this.frostedIceDelayMin + ", max=" + this.frostedIceDelayMax);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/block/BlockFrostedIce.java b/src/main/java/net/minecraft/block/BlockFrostedIce.java
+index e8cdfd2..e6ed9b8 100644
+--- a/src/main/java/net/minecraft/block/BlockFrostedIce.java
++++ b/src/main/java/net/minecraft/block/BlockFrostedIce.java
+@@ -27,11 +27,12 @@ public class BlockFrostedIce extends BlockIce {
+     }
+ 
+     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
++        if (!worldIn.paperConfig.frostedIceEnabled) return; // Paper - add ability to disable frosted ice
+         if ((rand.nextInt(3) == 0 || this.countNeighbors(worldIn, pos) < 4)
+                 && worldIn.getLightFromNeighbors(pos) > 11 - ((Integer) state.getValue(AGE)).intValue() - state.getLightOpacity()) {
+             this.slightlyMelt(worldIn, pos, state, rand, true);
+         } else {
+-            worldIn.scheduleUpdate(pos, this, MathHelper.getInt(rand, 20, 40));
++            worldIn.scheduleUpdate(pos, this, MathHelper.getInt(rand, worldIn.paperConfig.frostedIceDelayMin, worldIn.paperConfig.frostedIceDelayMax)); // Paper
+         }
+     }
+ 
+-- 
+2.14.3
+

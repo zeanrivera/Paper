@@ -1,0 +1,25 @@
+From 167b993b03866ab4af85e05c6b8ad8b086eed7e2 Mon Sep 17 00:00:00 2001
+From: kashike <kashike@vq.lc>
+Date: Wed, 27 Sep 2017 15:41:24 -0400
+Subject: [PATCH] Be a bit more informative in maxHealth exception
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index c432161..056c7d7 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -100,7 +100,10 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+                 this.getHandle().onDeath(DamageSource.GENERIC);
+             }
+         } else {
+-            throw new IllegalArgumentException("Health must be between 0 and " + this.getMaxHealth() + "(" + health + ")");
++            // Paper - Be more informative
++            throw new IllegalArgumentException("Health must be between 0 and " + getMaxHealth() + ", but was " + health
++                    + ". (attribute base value: " + this.getHandle().getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()
++                    + (this instanceof CraftPlayer ? ", player: " + this.getName() + ')' : ')'));
+         }
+     }
+ 
+-- 
+2.14.3
+

@@ -1,0 +1,47 @@
+From 44a258c6b539a0613a903ce8b05eb1b925e61a9c Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Mon, 9 Oct 2017 18:30:37 -0400
+Subject: [PATCH] Avoid blocking on Network Manager creation
+
+Per Paper issue 294
+
+diff --git a/src/main/java/net/minecraft/network/NetworkSystem.java b/src/main/java/net/minecraft/network/NetworkSystem.java
+index 01449a5..380757c 100644
+--- a/src/main/java/net/minecraft/network/NetworkSystem.java
++++ b/src/main/java/net/minecraft/network/NetworkSystem.java
+@@ -75,6 +75,15 @@ public class NetworkSystem {
+     public volatile boolean isAlive;
+     private final List<ChannelFuture> endpoints = Collections.<ChannelFuture>synchronizedList(Lists.newArrayList());
+     private final List<NetworkManager> networkManagers = Collections.<NetworkManager>synchronizedList(Lists.newArrayList());
++    // Paper start - prevent blocking on adding a new network manager while the server is ticking
++    private final List<NetworkManager> pending = Collections.synchronizedList(Lists.<NetworkManager>newArrayList());
++    private void addPending() {
++        synchronized (pending) {
++            this.networkManagers.addAll(pending);
++            pending.clear();
++        }
++    }
++    // Paper end
+ 
+     public NetworkSystem(MinecraftServer server) {
+         this.mcServer = server;
+@@ -122,7 +131,7 @@ public class NetworkSystem {
+                                                                             new NettyPacketEncoder(EnumPacketDirection.CLIENTBOUND));
+                                                             NetworkManager networkmanager =
+                                                                     new NetworkManager(EnumPacketDirection.SERVERBOUND);
+-                                                            NetworkSystem.this.networkManagers.add(networkmanager);
++                                                            pending.add(networkmanager); // Paper
+                                                             channel.pipeline().addLast("packet_handler", networkmanager);
+                                                             networkmanager.setNetHandler(
+                                                                     new NetHandlerHandshakeTCP(
+@@ -151,6 +160,7 @@ public class NetworkSystem {
+     public void networkTick() {
+         List var2 = this.networkManagers;
+         synchronized (this.networkManagers) {
++            addPending(); // Paper
+             if (SpigotConfig.playerShuffle > 0 && MinecraftServer.currentTick % SpigotConfig.playerShuffle == 0) {
+                 Collections.shuffle(this.networkManagers);
+             }
+-- 
+2.14.3
+

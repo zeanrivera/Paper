@@ -1,0 +1,29 @@
+From 97d691c199daabe63b8fa64e87fc0b508ae614e7 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 29 Oct 2017 21:11:56 -0400
+Subject: [PATCH] Implement ensureServerConversions API
+
+This will take a Bukkit ItemStack and run it through any conversions a server process would perform on it,
+to ensure it meets latest minecraft expectations.
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
+index c7fce37..09a82c1 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
+@@ -177,6 +177,13 @@ public final class CraftItemFactory implements ItemFactory {
+         return DEFAULT_LEATHER_COLOR;
+     }
+ 
++    // Paper start
++    @Override
++    public ItemStack ensureServerConversions(ItemStack item) {
++        return CraftItemStack.asCraftMirror(CraftItemStack.asNMSCopy(item));
++    }
++    // Paper end
++
+     static {
+         ConfigurationSerialization.registerClass(CraftMetaItem.SerializableMeta.class);
+     }
+-- 
+2.14.3
+

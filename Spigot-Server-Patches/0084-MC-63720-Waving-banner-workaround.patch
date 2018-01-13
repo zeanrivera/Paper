@@ -1,0 +1,22 @@
+From 44741fedd73bbaa5a34d1704516cca37e9d48d65 Mon Sep 17 00:00:00 2001
+From: Gabscap <sonstige.netzwerke@gabriel-paradzik.de>
+Date: Sun, 1 Oct 2017 00:26:43 -0400
+Subject: [PATCH] MC-63720 Waving banner workaround
+
+
+diff --git a/src/main/java/net/minecraft/network/play/server/SPacketTimeUpdate.java b/src/main/java/net/minecraft/network/play/server/SPacketTimeUpdate.java
+index bc326c0..5ade4ef 100644
+--- a/src/main/java/net/minecraft/network/play/server/SPacketTimeUpdate.java
++++ b/src/main/java/net/minecraft/network/play/server/SPacketTimeUpdate.java
+@@ -22,6 +22,8 @@ public class SPacketTimeUpdate implements Packet<INetHandlerPlayClient> {
+                 this.worldTime = -1L;
+             }
+         }
++
++        this.totalWorldTime %= 192000; // Paper - Workaround for MC-63720
+     }
+ 
+     public void readPacketData(PacketBuffer buf) throws IOException {
+-- 
+2.14.3
+

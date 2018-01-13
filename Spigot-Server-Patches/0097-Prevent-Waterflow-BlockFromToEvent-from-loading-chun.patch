@@ -1,0 +1,52 @@
+From 21f6619550311c56add5a966b6d0063d1a8a4ad9 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 7 Oct 2017 20:19:52 -0400
+Subject: [PATCH] Prevent Waterflow BlockFromToEvent from loading chunks
+
+Many protection plugins would unintentionally trigger chunk loads
+by calling .getToBlock() on an unloaded chunk, killing performance.
+
+Simply skip the event call. as CraftBukkit blocks changing the block
+of unloaded chunks anyways.
+
+This keeps behavior consistent, vs inconsistent flowing based on plugin triggered loads.
+
+diff --git a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
+index fd1a3cd..e860391 100644
+--- a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
++++ b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
+@@ -98,6 +98,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+         IBlockState iblockdata2 = worldIn.getBlockState(pos.down());
+ 
+         if (this.canFlowInto(worldIn, pos.down(), iblockdata2)) {
++            if (!isChunkLoaded(source, BlockFace.DOWN)) { return; } // Paper
+             BlockFromToEvent event = new BlockFromToEvent(source, BlockFace.DOWN);
+             worldIn.getServer().getPluginManager().callEvent(event);
+ 
+@@ -131,6 +132,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+             }
+ 
+             for (EnumFacing enumdirection1 : set) {
++                if (!isChunkLoaded(source, org.bukkit.craftbukkit.block.CraftBlock.notchToBlockFace(enumdirection1))) { continue; } // Paper
+                 BlockFromToEvent event = new BlockFromToEvent(source, CraftBlock.notchToBlockFace(enumdirection1));
+                 worldIn.getServer().getPluginManager().callEvent(event);
+ 
+@@ -141,8 +143,14 @@ public class BlockDynamicLiquid extends BlockLiquid {
+         }
+     }
+ 
++    // Paper start
++    private boolean isChunkLoaded(org.bukkit.block.Block source, BlockFace face) {
++        return source.getWorld().isChunkLoaded((source.getX() + face.getModX()) >> 4, (source.getZ() + face.getModZ()) >> 4);
++    }
++    // Paper end
++
+     private void tryFlowInto(World worldIn, BlockPos pos, IBlockState state, int level) {
+-        if (worldIn.isBlockLoaded(pos) && this.canFlowInto(worldIn, pos, state)) {
++        if (/*worldIn.isBlockLoaded(pos) &&*/ this.canFlowInto(worldIn, pos, state)) { // Paper - Checked earlier
+             if (state.getMaterial() != Material.AIR) {
+                 if (this.blockMaterial == Material.LAVA) {
+                     this.triggerMixEffects(worldIn, pos);
+-- 
+2.14.3
+

@@ -1,0 +1,212 @@
+From 06e205b7540c85f9c1aed0c7787fe265c4d0abb9 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 23 Sep 2017 22:54:04 -0400
+Subject: [PATCH] Further improve server tick loop
+
+Improves how the catchup buffer is handled, allowing it to roll both ways
+increasing the effeciency of the thread sleep so it only will sleep once.
+
+Also increases the buffer of the catchup to ensure server stays at 20 TPS unless extreme conditions
+
+Previous implementation did not calculate TPS correctly.
+Switch to a realistic rolling average and factor in std deviation as an extra reporting variable
+
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 42d541e..78141f8 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -169,13 +169,10 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+     public ConsoleCommandSender console;
+     public RemoteConsoleCommandSender remoteConsole;
+     public ConsoleReader reader;
+-    public static int currentTick = (int) (System.currentTimeMillis() / 50L);
++    public static int currentTick = 0; // Paper - Further improve tick loop
+     public final Thread primaryThread;
+     public Queue<Runnable> processQueue = new ConcurrentLinkedQueue<Runnable>();
+     public int autosavePeriod;
+-    public static final int TPS = 20;
+-    public static final int TICK_TIME = 50000000;
+-    private static final int SAMPLE_INTERVAL = 100;
+     public final double[] recentTps = new double[3];
+     public final SlackActivityAccountant slackActivityAccountant = new SlackActivityAccountant();
+     private boolean hasStopped = false;
+@@ -575,9 +572,53 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+         this.serverRunning = false;
+     }
+ 
+-    private static double calcTps(double avg, double exp, double tps) {
+-        return avg * exp + tps * (1.0D - exp);
++    // Paper start - Further improve server tick loop
++    public static final int TPS = 20;
++    private static final long SEC_IN_NANO = 1000000000;
++    public static final long TICK_TIME = SEC_IN_NANO / TPS;
++    private static final long MAX_CATCHUP_BUFFER = TICK_TIME * TPS * 60L;
++    private static final int SAMPLE_INTERVAL = 20;
++    public final RollingAverage tps1 = new RollingAverage(60);
++    public final RollingAverage tps5 = new RollingAverage(60 * 5);
++    public final RollingAverage tps15 = new RollingAverage(60 * 15);
++
++    public static class RollingAverage {
++        private final int size;
++        private long time;
++        private double total;
++        private int index = 0;
++        private final double[] samples;
++        private final long[] times;
++
++        RollingAverage(int size) {
++            this.size = size;
++            this.time = size * SEC_IN_NANO;
++            this.total = TPS * SEC_IN_NANO * size;
++            this.samples = new double[size];
++            this.times = new long[size];
++            for(int i = 0; i < size;  i++) {
++                this.samples[i] = TPS;
++                this.times[i] = SEC_IN_NANO;
++            }
++        }
++
++        public void add(double x, long t) {
++            time -= times[index];
++            total -= samples[index] * times[index];
++            samples[index] = x;
++            times[index] = t;
++            time += t;
++            total += x * t;
++            if (++index == size) {
++                index = 0;
++            }
++        }
++
++        public double getAverage() {
++            return total / time;
++        }
+     }
++    // Paper end
+ 
+     public void run() {
+         try {
+@@ -588,32 +629,46 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+                 this.statusResponse.setVersion(new ServerStatusResponse.Version("1.12.2", 340));
+                 this.applyServerIconToResponse(this.statusResponse);
+                 Arrays.fill(this.recentTps, 20.0D);
+-                long lastTick = System.nanoTime();
+-                long catchupTime = 0L;
+-                long tickSection = lastTick;
+-
++                // Paper Start - Further improve server tick loop
++                long start = System.nanoTime(), lastTick = start - TICK_TIME, catchupTime = 0, curTime, wait, tickSection = start; // Paper - Further improve server tick loop
+                 while (this.serverRunning) {
+-                    long curTime = System.nanoTime();
+-                    long wait = 50000000L - (curTime - lastTick) - catchupTime;
++                    curTime = System.nanoTime();
++                    wait = TICK_TIME - (curTime - lastTick);
++                    if (wait > 0) {
++                        if (catchupTime < 2E6) {
++                            wait += Math.abs(catchupTime);
++                        } else if (wait < catchupTime) {
++                            catchupTime -= wait;
++                        } else {
++                            wait -= catchupTime;
++                            catchupTime = 0;
++                        }
++                    }
+ 
+                     if (wait > 0L) {
+                         Thread.sleep(wait / 1000000L);
+-                        catchupTime = 0L;
+-                    } else {
+-                        catchupTime = Math.min(1000000000L, Math.abs(wait));
+-
+-                        if (currentTick++ % 100 == 0) {
+-                            double currentTps = 1.0E9D / (double) (curTime - tickSection) * 100.0D;
+-                            this.recentTps[0] = calcTps(this.recentTps[0], 0.92D, currentTps);
+-                            this.recentTps[1] = calcTps(this.recentTps[1], 0.9835D, currentTps);
+-                            this.recentTps[2] = calcTps(this.recentTps[2], 0.9945D, currentTps);
+-                            tickSection = curTime;
+-                        }
++                        curTime = System.nanoTime();
++                        wait = TICK_TIME - (curTime - lastTick);
++                    }
+ 
+-                        lastTick = curTime;
+-                        this.tick();
+-                        this.serverIsRunning = true;
++                    catchupTime = Math.min(MAX_CATCHUP_BUFFER, catchupTime - wait);
++                    if ( ++MinecraftServer.currentTick % SAMPLE_INTERVAL == 0 ) {
++                        final long diff = curTime - tickSection;
++                        double currentTps = 1E9 / diff * SAMPLE_INTERVAL;
++                        tps1.add(currentTps, diff);
++                        tps5.add(currentTps, diff);
++                        tps15.add(currentTps, diff);
++                        // Backwards compat with bad plugins
++                        recentTps[0] = tps1.getAverage();
++                        recentTps[1] = tps5.getAverage();
++                        recentTps[2] = tps15.getAverage();
++                        // Paper end
++                        tickSection = curTime;
+                     }
++                    lastTick = curTime;
++
++                    this.tick();
++                    this.serverIsRunning = true;
+                 }
+             } else {
+                 this.finalTick((CrashReport) null);
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 4d1932a..1fea7b2 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -1852,5 +1852,14 @@ public final class CraftServer implements Server {
+             return false;
+         }
+     }
++
++    @Override
++    public double[] getTPS() {
++        return new double[] {
++                console.tps1.getAverage(),
++                console.tps5.getAverage(),
++                console.tps15.getAverage()
++        };
++    }
+     // Paper end
+ }
+diff --git a/src/main/java/org/spigotmc/TicksPerSecondCommand.java b/src/main/java/org/spigotmc/TicksPerSecondCommand.java
+index 4edd104..35b7c73 100644
+--- a/src/main/java/org/spigotmc/TicksPerSecondCommand.java
++++ b/src/main/java/org/spigotmc/TicksPerSecondCommand.java
+@@ -17,21 +17,23 @@ public class TicksPerSecondCommand extends Command {
+         if (!this.testPermission(sender)) {
+             return true;
+         } else {
+-            StringBuilder sb = new StringBuilder(ChatColor.GOLD + "TPS from last 1m, 5m, 15m: ");
++            // Paper start - Further improve server tick loop
++            double[] tps = org.bukkit.Bukkit.getTPS();
++            String[] tpsAvg = new String[tps.length];
+ 
+-            for (double tps : MinecraftServer.getServer().recentTps) {
+-                sb.append(this.format(tps));
+-                sb.append(", ");
++            for (int i = 0; i < tps.length; i++) {
++                tpsAvg[i] = format(tps[i]);
+             }
+ 
+-            sender.sendMessage(sb.substring(0, sb.length() - 2));
++            sender.sendMessage( ChatColor.GOLD + "TPS from last 1m, 5m, 15m: " + org.apache.commons.lang.StringUtils.join(tpsAvg, ", "));
+             return true;
+         }
+     }
+ 
+-    private String format(double tps) {
++    private static String format(double tps) {
++        final double displayCap = (double) MinecraftServer.TPS;
+         return (tps > 18.0D ? ChatColor.GREEN : (tps > 16.0D ? ChatColor.YELLOW : ChatColor.RED)).toString()
+                 + (tps > 20.0D ? "*" : "")
+-                + Math.min((double) Math.round(tps * 100.0D) / 100.0D, 20.0D);
++                + Math.min((double) Math.round(tps * 100.0D) / 100.0D, displayCap);
+     }
+ }
+-- 
+2.14.3
+

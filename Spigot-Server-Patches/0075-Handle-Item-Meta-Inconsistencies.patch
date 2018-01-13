@@ -1,0 +1,359 @@
+From bf69be6bc467a3524283f2dd64b3a8b73169354c Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 30 Sep 2017 23:04:12 -0400
+Subject: [PATCH] Handle Item Meta Inconsistencies
+
+First, Enchantment order would blow away seeing 2 items as the same,
+however the Client forces enchantment list in a certain order, as well
+as does the /enchant command. Anvils can insert it into forced order,
+causing 2 same items to be considered different.
+
+This change makes unhandled NBT Tags and Enchantments use a sorted tree map,
+so they will always be in a consistent order.
+
+Additionally, the old enchantment API was never updated when ItemMeta
+was added, resulting in 2 different ways to modify an items enchantments.
+
+For consistency, the old API methods now forward to use the
+ItemMeta API equivalents, and should deprecate the old API's.
+
+diff --git a/src/main/java/net/minecraft/item/ItemStack.java b/src/main/java/net/minecraft/item/ItemStack.java
+index e386a7e..33438ef 100644
+--- a/src/main/java/net/minecraft/item/ItemStack.java
++++ b/src/main/java/net/minecraft/item/ItemStack.java
+@@ -102,6 +102,22 @@ public final class ItemStack {
+         this(itemIn, amount, 0);
+     }
+ 
++    // Paper start
++    private static final java.util.Comparator<NBTTagCompound> enchantSorter = java.util.Comparator.comparingInt(o -> o.getShort("id"));
++    private void processEnchantOrder(NBTTagCompound tag) {
++        if (tag == null || !tag.hasKey("ench", 9)) {
++            return;
++        }
++        NBTTagList list = tag.getTagList("ench", 10);
++        if (list.tagCount() < 2) {
++            return;
++        }
++        try {
++            list.sort(enchantSorter); // Paper
++        } catch (Exception ignored) {}
++    }
++    // Paper end
++
+     public ItemStack(Item itemIn, int amount, int meta) {
+         this(itemIn, amount, meta, true);
+     }
+@@ -153,6 +169,7 @@ public final class ItemStack {
+ 
+         if (nbttagcompound.hasKey("tag", 10)) {
+             this.stackTagCompound = (NBTTagCompound) nbttagcompound.getCompoundTag("tag").copy();
++            processEnchantOrder(this.stackTagCompound); // Paper
+ 
+             if (this.item != null) {
+                 this.item.updateItemStackNBT(this.stackTagCompound);
+@@ -650,6 +667,7 @@ public final class ItemStack {
+ 
+     public void setTagCompound(@Nullable NBTTagCompound nbt) {
+         this.stackTagCompound = nbt;
++        processEnchantOrder(this.stackTagCompound);
+     }
+ 
+     public String getDisplayName() {
+@@ -721,6 +739,7 @@ public final class ItemStack {
+         nbttagcompound.setShort("id", (short) Enchantment.getEnchantmentID(ench));
+         nbttagcompound.setShort("lvl", (short) ((byte) level));
+         nbttaglist.appendTag(nbttagcompound);
++        processEnchantOrder(nbttagcompound); // Paper
+     }
+ 
+     public boolean isItemEnchanted() {
+diff --git a/src/main/java/net/minecraft/nbt/NBTTagList.java b/src/main/java/net/minecraft/nbt/NBTTagList.java
+index b23a913..52cddec 100644
+--- a/src/main/java/net/minecraft/nbt/NBTTagList.java
++++ b/src/main/java/net/minecraft/nbt/NBTTagList.java
+@@ -12,6 +12,12 @@ import org.apache.logging.log4j.Logger;
+ public class NBTTagList extends NBTBase {
+     private static final Logger LOGGER = LogManager.getLogger();
+     private List<NBTBase> tagList = Lists.<NBTBase>newArrayList();
++    // Paper start
++    public void sort(java.util.Comparator<? extends NBTBase> comparator) {
++        //noinspection unchecked
++        java.util.Collections.sort(tagList, (java.util.Comparator<NBTBase>) comparator);
++    }
++    // Paper end
+     private byte tagType = 0;
+ 
+     void write(DataOutput output) throws IOException {
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+index 0f8cd04..90cf90c 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+@@ -2,6 +2,8 @@ package org.bukkit.craftbukkit.inventory;
+ 
+ import com.google.common.collect.ImmutableMap;
+ import com.google.common.collect.ImmutableMap.Builder;
++
++import java.util.Iterator;
+ import java.util.Map;
+ import net.minecraft.enchantment.EnchantmentHelper;
+ import net.minecraft.item.Item;
+@@ -162,32 +164,11 @@ public final class CraftItemStack extends ItemStack {
+ 
+     public void addUnsafeEnchantment(Enchantment ench, int level) {
+         Validate.notNull(ench, "Cannot add null enchantment");
+-
+-        if (makeTag(this.handle)) {
+-            NBTTagList list = getEnchantmentList(this.handle);
+-
+-            if (list == null) {
+-                list = new NBTTagList();
+-                this.handle.getTagCompound().setTag(CraftMetaItem.ENCHANTMENTS.NBT, list);
+-            }
+-
+-            int size = list.tagCount();
+-
+-            for (int i = 0; i < size; ++i) {
+-                NBTTagCompound tag = list.getCompoundTagAt(i);
+-                short id = tag.getShort(CraftMetaItem.ENCHANTMENTS_ID.NBT);
+-
+-                if (id == ench.getId()) {
+-                    tag.setShort(CraftMetaItem.ENCHANTMENTS_LVL.NBT, (short) level);
+-                    return;
+-                }
+-            }
+-
+-            NBTTagCompound tag = new NBTTagCompound();
+-            tag.setShort(CraftMetaItem.ENCHANTMENTS_ID.NBT, (short) ench.getId());
+-            tag.setShort(CraftMetaItem.ENCHANTMENTS_LVL.NBT, (short) level);
+-            list.appendTag(tag);
+-        }
++        // Paper start - Replace whole method
++        final ItemMeta itemMeta = getItemMeta();
++        itemMeta.addEnchant(ench, level, true);
++        setItemMeta(itemMeta);
++        // Paper end
+     }
+ 
+     static boolean makeTag(net.minecraft.item.ItemStack item) {
+@@ -203,63 +184,32 @@ public final class CraftItemStack extends ItemStack {
+     }
+ 
+     public boolean containsEnchantment(Enchantment ench) {
+-        return this.getEnchantmentLevel(ench) > 0;
++        return hasItemMeta() && getItemMeta().hasEnchant(ench); // Paper - use meta
+     }
+ 
+     public int getEnchantmentLevel(Enchantment ench) {
+-        Validate.notNull(ench, "Cannot find null enchantment");
+-        return this.handle == null ? 0 : EnchantmentHelper.getEnchantmentLevel(CraftEnchantment.getRaw(ench), this.handle);
++        return hasItemMeta() ? getItemMeta().getEnchantLevel(ench) : 0; // Paper - replace entire method with meta
+     }
+ 
+     public int removeEnchantment(Enchantment ench) {
+         Validate.notNull(ench, "Cannot remove null enchantment");
+-        NBTTagList list = getEnchantmentList(this.handle);
+-
+-        if (list == null) {
+-            return 0;
+-        } else {
+-            int index = Integer.MIN_VALUE;
+-            int level = Integer.MIN_VALUE;
+-            int size = list.tagCount();
+-
+-            for (int i = 0; i < size; ++i) {
+-                NBTTagCompound enchantment = list.getCompoundTagAt(i);
+-                int id = 65535 & enchantment.getShort(CraftMetaItem.ENCHANTMENTS_ID.NBT);
+-
+-                if (id == ench.getId()) {
+-                    index = i;
+-                    level = 65535 & enchantment.getShort(CraftMetaItem.ENCHANTMENTS_LVL.NBT);
+-                    break;
+-                }
+-            }
+-
+-            if (index == Integer.MIN_VALUE) {
+-                return 0;
+-            } else if (size == 1) {
+-                this.handle.getTagCompound().removeTag(CraftMetaItem.ENCHANTMENTS.NBT);
+-
+-                if (this.handle.getTagCompound().hasNoTags()) {
+-                    this.handle.setTagCompound((NBTTagCompound) null);
+-                }
+-
+-                return level;
+-            } else {
+-                NBTTagList listCopy = new NBTTagList();
+-
+-                for (int i = 0; i < size; ++i) {
+-                    if (i != index) {
+-                        listCopy.appendTag(list.getCompoundTagAt(i));
+-                    }
+-                }
+-
+-                this.handle.getTagCompound().setTag(CraftMetaItem.ENCHANTMENTS.NBT, listCopy);
+-                return level;
++        // Paper start - Replace entire method, maintains backwards compat of returning previous level.
++        final ItemMeta itemMeta = getItemMeta();
++        final Iterator<Enchantment> iterator = itemMeta.getEnchants().keySet().iterator();
++        for (int i = 0; iterator.hasNext(); i++) {
++            if (iterator.next().equals(ench)) {
++                itemMeta.removeEnchant(ench);
++                setItemMeta(itemMeta);
++                return i;
+             }
+         }
++
++        return 0;
++        // Paper end
+     }
+ 
+     public Map<Enchantment, Integer> getEnchantments() {
+-        return getEnchantments(this.handle);
++        return hasItemMeta() ? getItemMeta().getEnchants() : ImmutableMap.of(); // Paper - use Item Meta
+     }
+ 
+     static Map<Enchantment, Integer> getEnchantments(net.minecraft.item.ItemStack item) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
+index a37245d..547087d 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
+@@ -1,10 +1,7 @@
+ package org.bukkit.craftbukkit.inventory;
+ 
+ import com.google.common.base.Strings;
+-import com.google.common.collect.ImmutableList;
+-import com.google.common.collect.ImmutableMap;
+-import com.google.common.collect.Sets;
+-import com.google.common.collect.UnmodifiableIterator;
++import com.google.common.collect.*;
+ import com.google.common.collect.ImmutableMap.Builder;
+ import gnu.trove.map.hash.TObjectDoubleHashMap;
+ import java.io.ByteArrayInputStream;
+@@ -16,16 +13,7 @@ import java.lang.annotation.RetentionPolicy;
+ import java.lang.annotation.Target;
+ import java.lang.reflect.Constructor;
+ import java.lang.reflect.InvocationTargetException;
+-import java.util.ArrayList;
+-import java.util.Arrays;
+-import java.util.Collection;
+-import java.util.EnumSet;
+-import java.util.HashMap;
+-import java.util.Iterator;
+-import java.util.List;
+-import java.util.Map;
+-import java.util.NoSuchElementException;
+-import java.util.Set;
++import java.util.*;
+ import java.util.Map.Entry;
+ import java.util.logging.Level;
+ import java.util.logging.Logger;
+@@ -72,13 +60,13 @@ class CraftMetaItem implements ItemMeta, Repairable {
+     private String displayName;
+     private String locName;
+     private List<String> lore;
+-    private Map<Enchantment, Integer> enchantments;
++    private EnchantmentMap enchantments; // Paper
+     private int repairCost;
+     private int hideFlag;
+     private boolean unbreakable;
+     private static final Set<String> HANDLED_TAGS = Sets.<String>newHashSet();
+     private NBTTagCompound internalTag;
+-    private final Map<String, NBTBase> unhandledTags = new HashMap<String, NBTBase>();
++    private final Map<String, NBTBase> unhandledTags = new TreeMap<>(); // Paper
+     private final Spigot spigot =
+             new Spigot() {
+                 public void setUnbreakable(boolean setUnbreakable) {
+@@ -100,7 +88,7 @@ class CraftMetaItem implements ItemMeta, Repairable {
+             }
+ 
+             if (meta.enchantments != null) {
+-                this.enchantments = new HashMap<Enchantment, Integer>(meta.enchantments);
++                this.enchantments = new EnchantmentMap(meta.enchantments); // Paper
+             }
+ 
+             this.repairCost = meta.repairCost;
+@@ -331,12 +319,12 @@ class CraftMetaItem implements ItemMeta, Repairable {
+         }
+     }
+ 
+-    static Map<Enchantment, Integer> buildEnchantments(NBTTagCompound tag, CraftMetaItem.ItemMetaKey key) {
++    static EnchantmentMap buildEnchantments(NBTTagCompound tag, CraftMetaItem.ItemMetaKey key) { // Paper
+         if (!tag.hasKey(key.NBT)) {
+             return null;
+         } else {
+             NBTTagList ench = tag.getTagList(key.NBT, 10);
+-            Map<Enchantment, Integer> enchantments = new HashMap<Enchantment, Integer>(ench.tagCount());
++            EnchantmentMap enchantments = new EnchantmentMap(); // Paper
+ 
+             for (int i = 0; i < ench.tagCount(); ++i) {
+                 int id = 65535 & ench.getCompoundTagAt(i).getShort(ENCHANTMENTS_ID.NBT);
+@@ -410,13 +398,13 @@ class CraftMetaItem implements ItemMeta, Repairable {
+ 
+     void deserializeInternal(NBTTagCompound tag) {}
+ 
+-    static Map<Enchantment, Integer> buildEnchantments(Map<String, Object> map, CraftMetaItem.ItemMetaKey key) {
++    static EnchantmentMap buildEnchantments(Map<String, Object> map, CraftMetaItem.ItemMetaKey key) {
+         Map<?, ?> ench = (Map) CraftMetaItem.SerializableMeta.getObject(Map.class, map, key.BUKKIT, true);
+ 
+         if (ench == null) {
+             return null;
+         } else {
+-            Map<Enchantment, Integer> enchantments = new HashMap<Enchantment, Integer>(ench.size());
++            EnchantmentMap enchantments = new EnchantmentMap();
+ 
+             for (Entry<?, ?> entry : ench.entrySet()) {
+                 String enchantKey = entry.getKey().toString();
+@@ -569,14 +557,14 @@ class CraftMetaItem implements ItemMeta, Repairable {
+     }
+ 
+     public Map<Enchantment, Integer> getEnchants() {
+-        return this.hasEnchants() ? ImmutableMap.copyOf(this.enchantments) : ImmutableMap.of();
++        return hasEnchants() ? ImmutableSortedMap.copyOfSorted(enchantments) : ImmutableMap.of(); // Paper
+     }
+ 
+     public boolean addEnchant(Enchantment ench, int level, boolean ignoreRestrictions) {
+         Validate.notNull(ench, "Enchantment cannot be null");
+ 
+         if (this.enchantments == null) {
+-            this.enchantments = new HashMap<Enchantment, Integer>(4);
++            enchantments = new EnchantmentMap(); // Paper
+         }
+ 
+         if (ignoreRestrictions || level >= ench.getStartLevel() && level <= ench.getMaxLevel()) {
+@@ -770,7 +758,7 @@ class CraftMetaItem implements ItemMeta, Repairable {
+             }
+ 
+             if (this.enchantments != null) {
+-                clone.enchantments = new HashMap<Enchantment, Integer>(this.enchantments);
++                clone.enchantments = new EnchantmentMap(this.enchantments); // Paper
+             }
+ 
+             clone.hideFlag = this.hideFlag;
+@@ -932,6 +920,23 @@ class CraftMetaItem implements ItemMeta, Repairable {
+         }
+     }
+ 
++    // Paper start
++    private static class EnchantmentMap extends TreeMap<Enchantment, Integer> {
++        private EnchantmentMap(Map<Enchantment, Integer> enchantments) {
++            this();
++            putAll(enchantments);
++        }
++
++        private EnchantmentMap() {
++            super((o1, o2) -> ((Integer) o1.getId()).compareTo(o2.getId()));
++        }
++
++        public EnchantmentMap clone() {
++            return (EnchantmentMap) super.clone();
++        }
++    }
++    // Paper end
++
+     public Spigot spigot() {
+         return this.spigot;
+     }
+-- 
+2.14.3
+

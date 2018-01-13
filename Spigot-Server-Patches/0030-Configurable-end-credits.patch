@@ -1,0 +1,36 @@
+From 2302ecda4f5163352d4c7640399631da825a69aa Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 24 Sep 2017 16:29:18 -0400
+Subject: [PATCH] Configurable end credits
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index b46f505..2026b83 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -141,4 +141,10 @@ public class PaperWorldConfig {
+         queueLightUpdates = getBoolean("queue-light-updates", false);
+         log("Lighting Queue enabled: " + queueLightUpdates);
+     }
++
++    public boolean disableEndCredits;
++    private void disableEndCredits() {
++        disableEndCredits = getBoolean("game-mechanics.disable-end-credits", false);
++        log("End credits disabled: " + disableEndCredits);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+index 760269e..fc405f6 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -713,6 +713,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+ 
+                 if (!this.queuedEndExit) {
+                     this.queuedEndExit = true;
++                    if (world.paperConfig.disableEndCredits) this.seenCredits = true; // Paper - Toggle to always disable end credits
+                     this.connection.sendPacket(new SPacketChangeGameState(4, this.seenCredits ? 0.0F : 1.0F));
+                     this.seenCredits = true;
+                 }
+-- 
+2.14.3
+

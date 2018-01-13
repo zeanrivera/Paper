@@ -1,0 +1,43 @@
+From 796512b9cf737e86b80751ae6678a199309af350 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sat, 7 Oct 2017 23:34:38 -0400
+Subject: [PATCH] Water mobs should only spawn in the water
+
+
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityWaterMob.java b/src/main/java/net/minecraft/entity/passive/EntityWaterMob.java
+index 1c9489f..25b2893 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityWaterMob.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityWaterMob.java
+@@ -1,8 +1,12 @@
+ package net.minecraft.entity.passive;
+ 
++import net.minecraft.block.Block;
+ import net.minecraft.entity.EntityLiving;
+ import net.minecraft.entity.player.EntityPlayer;
++import net.minecraft.init.Blocks;
+ import net.minecraft.util.DamageSource;
++import net.minecraft.util.math.BlockPos;
++import net.minecraft.util.math.MathHelper;
+ import net.minecraft.world.World;
+ 
+ public abstract class EntityWaterMob extends EntityLiving implements IAnimals {
+@@ -15,7 +19,15 @@ public abstract class EntityWaterMob extends EntityLiving implements IAnimals {
+     }
+ 
+     public boolean getCanSpawnHere() {
+-        return true;
++        // Paper start - Don't let water mobs spawn in non-water blocks
++        // Based around EntityAnimal's implementation
++        int x = MathHelper.floor(this.posX);
++        int y = MathHelper.floor(this.getEntityBoundingBox().minY);
++        int z = MathHelper.floor(this.posZ);
++        Block block = this.world.getBlockState(new BlockPos(x, y, z)).getBlock();
++
++        return block == Blocks.WATER || block == Blocks.FLOWING_WATER;
++        // Paper end
+     }
+ 
+     public boolean isNotColliding() {
+-- 
+2.14.3
+

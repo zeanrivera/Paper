@@ -1,0 +1,22 @@
+From 3022b70bdab326c17827ddb9792bb0dc43cda800 Mon Sep 17 00:00:00 2001
+From: BillyGalbreath <Blake.Galbreath@GMail.com>
+Date: Sun, 29 Oct 2017 21:30:07 -0400
+Subject: [PATCH] Ocelot despawns should honor nametags and leash
+
+
+diff --git a/src/main/java/net/minecraft/entity/passive/EntityOcelot.java b/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
+index d44dfa4..48c5b7c 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
++++ b/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
+@@ -98,7 +98,7 @@ public class EntityOcelot extends EntityTameable {
+     }
+ 
+     public boolean canDespawn() {
+-        return !this.isTamed();
++        return !this.isTamed() && !this.hasCustomName() && !this.getLeashed(); // Paper - Honor name and leash status
+     }
+ 
+     protected void applyEntityAttributes() {
+-- 
+2.14.3
+

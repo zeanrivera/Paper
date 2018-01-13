@@ -1,0 +1,71 @@
+From a089e5ab00a6eeb4d879c0272f1eef6a2f9cc70a Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 29 Oct 2017 17:59:21 -0400
+Subject: [PATCH] Remove HTTP downloader threadpool from BlockBeacon
+
+Shame on you Mojang
+
+Someone wrote some horrible code that throws a world accessing task
+onto the HTTP DOWNLOADER Thread Pool, for an activity that is not even
+heavy enough to warrant async operation.
+
+This then triggers async chunk loads!
+
+What in the hell were you thinking?
+
+diff --git a/src/main/java/net/minecraft/block/BlockBeacon.java b/src/main/java/net/minecraft/block/BlockBeacon.java
+index 6e55de8..498a1e0 100644
+--- a/src/main/java/net/minecraft/block/BlockBeacon.java
++++ b/src/main/java/net/minecraft/block/BlockBeacon.java
+@@ -89,36 +89,38 @@ public class BlockBeacon extends BlockContainer {
+     }
+ 
+     public static void updateColorAsync(final World worldIn, final BlockPos glassPos) {
+-        HttpUtil.DOWNLOADER_EXECUTOR.submit(
++        // Paper start - Remove HTTP downloader thread pool
++        /*HttpUtil.DOWNLOADER_EXECUTOR.submit(
+                 new Runnable() {
+-                    public void run() {
+-                        Chunk var1 = worldIn.getChunkFromBlockCoords(glassPos);
++                    public void run() {*/
++                        Chunk chunk = worldIn.getChunkFromBlockCoords(glassPos); // Paper - rename var
+ 
+                         for (int var2 = glassPos.getY() - 1; var2 >= 0; --var2) {
+                             final BlockPos var3 = new BlockPos(glassPos.getX(), var2, glassPos.getZ());
+ 
+-                            if (!var1.canSeeSky(var3)) {
++                            if (!chunk.canSeeSky(var3)) { // Paper rename var
+                                 break;
+                             }
+ 
+                             IBlockState var4 = worldIn.getBlockState(var3);
+ 
+                             if (var4.getBlock() == Blocks.BEACON) {
+-                                ((WorldServer) worldIn)
++                                /*((WorldServer) worldIn)
+                                         .addScheduledTask(
+                                                 new Runnable() {
+-                                                    public void run() {
++                                                    public void run() {*/
+                                                         TileEntity var1 = worldIn.getTileEntity(var3);
+ 
+                                                         if (var1 instanceof TileEntityBeacon) {
+                                                             ((TileEntityBeacon) var1).updateBeacon();
+                                                             worldIn.addBlockEvent(var3, Blocks.BEACON, 1, 0);
+                                                         }
+-                                                    }
+-                                                });
++                                                    /*}
++                                                });*/
+                             }
+                         }
+-                    }
+-                });
++                    /*}
++                });*/
++                // Paper end
+     }
+ }
+-- 
+2.14.3
+

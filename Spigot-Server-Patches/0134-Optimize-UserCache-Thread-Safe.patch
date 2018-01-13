@@ -1,0 +1,109 @@
+From bf0c358200366a3a2f0c9761b838673716e875db Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Mon, 9 Oct 2017 18:27:35 -0400
+Subject: [PATCH] Optimize UserCache / Thread Safe
+
+Because Techable keeps complaining about how this isn't thread safe,
+easier to do this than replace the entire thing.
+
+Additionally, move Saving of the User cache to be done async, incase
+the user never changed the default setting for Spigot's save on stop only.
+
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 6cfdb90..4436721 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -568,7 +568,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+ 
+         if (SpigotConfig.saveUserCacheOnStopOnly) {
+             LOGGER.info("Saving usercache.json");
+-            this.profileCache.save();
++            this.profileCache.save(false); // Paper
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
+index 4a1fa01..be40e36 100644
+--- a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
++++ b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server.management;
+ 
++import com.destroystokyo.paper.util.MCUtil;
+ import com.google.common.collect.Iterators;
+ import com.google.common.collect.Lists;
+ import com.google.common.collect.Maps;
+@@ -115,7 +116,7 @@ public class PlayerProfileCache {
+         this.addEntry(gameProfile, (Date) null);
+     }
+ 
+-    private void addEntry(GameProfile gameProfile, Date expirationDate) {
++    private synchronized void addEntry(GameProfile gameProfile, Date expirationDate) { // Paper - Synchronize
+         UUID uuid = gameProfile.getId();
+ 
+         if (expirationDate == null) {
+@@ -129,8 +130,9 @@ public class PlayerProfileCache {
+         PlayerProfileCache.ProfileEntry usercache_usercacheentry =
+                 new PlayerProfileCache.ProfileEntry(gameProfile, expirationDate, (Object) null);
+ 
+-        if (this.uuidToProfileEntryMap.containsKey(uuid)) {
++        //if (this.uuidToProfileEntryMap.containsKey(uuid)) { // Paper
+             PlayerProfileCache.ProfileEntry usercache_usercacheentry1 = this.uuidToProfileEntryMap.get(uuid);
++        if (usercache_usercacheentry1 != null) { // Paper
+             this.usernameToProfileEntryMap.remove(usercache_usercacheentry1.getGameProfile().getName().toLowerCase(Locale.ROOT));
+             this.gameProfiles.remove(gameProfile);
+         }
+@@ -145,7 +147,7 @@ public class PlayerProfileCache {
+     }
+ 
+     @Nullable
+-    public GameProfile getGameProfileForUsername(String username) {
++    public synchronized GameProfile getGameProfileForUsername(String username) { // Paper - Synchronize
+         String s1 = username.toLowerCase(Locale.ROOT);
+         PlayerProfileCache.ProfileEntry usercache_usercacheentry = this.usernameToProfileEntryMap.get(s1);
+ 
+@@ -176,7 +178,7 @@ public class PlayerProfileCache {
+         return usercache_usercacheentry == null ? null : usercache_usercacheentry.getGameProfile();
+     }
+ 
+-    public String[] getUsernames() {
++    public synchronized String[] getUsernames() { // Paper - Synchronize
+         ArrayList arraylist = Lists.newArrayList(this.usernameToProfileEntryMap.keySet());
+         return (String[]) arraylist.toArray(new String[arraylist.size()]);
+     }
+@@ -226,8 +228,16 @@ public class PlayerProfileCache {
+         }
+     }
+ 
++    // Paper start
+     public void save() {
++        save(true);
++    }
++
++    public void save(boolean asyncSave) {
++        // Paper end
+         String s = this.gson.toJson(this.getEntriesWithLimit(SpigotConfig.userCacheCap));
++        Runnable save = () -> { // Paper
++
+         BufferedWriter bufferedwriter = null;
+ 
+         try {
+@@ -240,6 +250,15 @@ public class PlayerProfileCache {
+         } finally {
+             IOUtils.closeQuietly((Writer) bufferedwriter);
+         }
++
++        // Paper start
++        };
++        if (asyncSave) {
++            MCUtil.scheduleAsyncTask(save);
++        } else {
++            save.run();
++        }
++        // Paper end
+     }
+ 
+     private List<PlayerProfileCache.ProfileEntry> getEntriesWithLimit(int limitSize) {
+-- 
+2.14.3
+

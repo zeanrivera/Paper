@@ -1,0 +1,70 @@
+From 113f07fec763a4e5ded9fe6d5510e34425d52495 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 29 Oct 2017 21:11:09 -0400
+Subject: [PATCH] Improve the Saddle API for Horses
+
+Not all horses with Saddles have armor. This lets us break up the horses with saddles
+and access their saddle state separately from an interface shared with Armor.
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftAbstractHorse.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftAbstractHorse.java
+index 4160ed6..e837ac0 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftAbstractHorse.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftAbstractHorse.java
+@@ -6,6 +6,7 @@ import net.minecraft.entity.passive.EntityHorse;
+ import org.apache.commons.lang.Validate;
+ import org.bukkit.craftbukkit.CraftServer;
+ import org.bukkit.craftbukkit.inventory.CraftInventory;
++import org.bukkit.craftbukkit.inventory.CraftSaddledInventory;
+ import org.bukkit.entity.AbstractHorse;
+ import org.bukkit.entity.AnimalTamer;
+ import org.bukkit.entity.Horse.Variant;
+@@ -85,6 +86,6 @@ public abstract class CraftAbstractHorse extends CraftAnimals implements Abstrac
+     }
+ 
+     public Inventory getInventory() {
+-        return new CraftInventory(this.getHandle().horseChest);
++        return new CraftSaddledInventory(getHandle().horseChest);
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryHorse.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryHorse.java
+index 31de1f6..1d3a5d1 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryHorse.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryHorse.java
+@@ -4,7 +4,7 @@ import net.minecraft.inventory.IInventory;
+ import org.bukkit.inventory.HorseInventory;
+ import org.bukkit.inventory.ItemStack;
+ 
+-public class CraftInventoryHorse extends CraftInventory implements HorseInventory {
++public class CraftInventoryHorse extends CraftSaddledInventory implements HorseInventory { // Paper - Extend CraftSaddledInventory
+     public CraftInventoryHorse(IInventory inventory) {
+         super(inventory);
+     }
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftSaddledInventory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftSaddledInventory.java
+new file mode 100644
+index 0000000..b969b3b
+--- /dev/null
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftSaddledInventory.java
+@@ -0,0 +1,20 @@
++package org.bukkit.craftbukkit.inventory;
++
++import net.minecraft.inventory.IInventory;
++import org.bukkit.inventory.ItemStack;
++import org.bukkit.inventory.SaddledHorseInventory;
++
++public class CraftSaddledInventory extends CraftInventory implements SaddledHorseInventory {
++
++    public CraftSaddledInventory(IInventory inventory) {
++        super(inventory);
++    }
++
++    public ItemStack getSaddle() {
++        return getItem(0);
++    }
++
++    public void setSaddle(ItemStack stack) {
++        setItem(0, stack);
++    }
++}
+-- 
+2.14.3
+

@@ -1,0 +1,43 @@
+From 833815ce1d341433f354cd4f055b245bc7f0b80e Mon Sep 17 00:00:00 2001
+From: kashike <kashike@vq.lc>
+Date: Fri, 20 Oct 2017 20:08:37 -0400
+Subject: [PATCH] Option to prevent armor stands from doing entity lookups
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 1b993d7..a02fa01 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -399,4 +399,9 @@ public class PaperWorldConfig {
+             log("Treasure Maps will return already discovered locations");
+         }
+     }
++
++    public boolean armorStandEntityLookups = true;
++    private void armorStandEntityLookups() {
++        armorStandEntityLookups = getBoolean("armor-stands-do-collision-entity-lookups", true);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index f1e7fea..35f622a 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -22,6 +22,7 @@ import net.minecraft.entity.Entity;
+ import net.minecraft.entity.EntityLiving;
+ import net.minecraft.entity.EntityLivingBase;
+ import net.minecraft.entity.INpc;
++import net.minecraft.entity.item.EntityArmorStand;
+ import net.minecraft.entity.item.EntityItem;
+ import net.minecraft.entity.item.EntityXPOrb;
+ import net.minecraft.entity.monster.EntityGhast;
+@@ -1363,6 +1364,7 @@ public abstract class World implements IBlockAccess {
+         this.getCollisionBoxes(entityIn, aabb, false, arraylist);
+ 
+         if (entityIn != null) {
++            if (entityIn instanceof EntityArmorStand && !entityIn.world.paperConfig.armorStandEntityLookups) return arraylist; // Paper
+             List list = this.getEntitiesWithinAABBExcludingEntity(entityIn, aabb.grow(0.25D));
+ 
+             for (int i = 0; i < list.size(); ++i) {
+-- 
+2.14.3
+

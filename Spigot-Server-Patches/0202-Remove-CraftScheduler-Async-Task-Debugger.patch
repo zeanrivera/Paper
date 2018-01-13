@@ -1,0 +1,87 @@
+From 547b2e78f24f11bba36f5114b8c3d9f0fb493df5 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 29 Oct 2017 17:54:31 -0400
+Subject: [PATCH] Remove CraftScheduler Async Task Debugger
+
+I have not once ever seen this system help debug a crash.
+One report of a suspected memory leak with the system.
+
+This adds additional overhead to asynchronous task dispatching
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
+index 15713c5..e0acbee 100644
+--- a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
++++ b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
+@@ -35,8 +35,8 @@ public class CraftScheduler implements BukkitScheduler {
+     private final ConcurrentHashMap<Integer, CraftTask> runners;
+     private volatile int currentTick;
+     private final Executor executor;
+-    private CraftAsyncDebugger debugHead;
+-    private CraftAsyncDebugger debugTail;
++    //private CraftAsyncDebugger debugHead; // Paper
++    //private CraftAsyncDebugger debugTail; // Paper
+     private static final int RECENT_TICKS = 30;
+ 
+     public CraftScheduler() {
+@@ -54,6 +54,8 @@ public class CraftScheduler implements BukkitScheduler {
+         this.runners = new ConcurrentHashMap<Integer, CraftTask>();
+         this.currentTick = -1;
+         this.executor = Executors.newCachedThreadPool((new ThreadFactoryBuilder()).setNameFormat("Craft Scheduler Thread - %1$d").build());
++        // Paper start - Remove debug
++        /*
+         this.debugHead =
+                 new CraftAsyncDebugger(-1, (Plugin) null, (Class) null) {
+                     StringBuilder debugTo(StringBuilder string) {
+@@ -61,6 +63,8 @@ public class CraftScheduler implements BukkitScheduler {
+                     }
+                 };
+         this.debugTail = this.debugHead;
++        */
++        // Paper end
+     }
+ 
+     public int scheduleSyncDelayedTask(Plugin plugin, Runnable task) {
+@@ -371,9 +375,13 @@ public class CraftScheduler implements BukkitScheduler {
+ 
+                     this.parsePending();
+                 } else {
++                    // Paper start - Remove debug
++                    /*
+                     this.debugTail =
+                             this.debugTail.setNext(
+                                     new CraftAsyncDebugger(currentTick + RECENT_TICKS, task.getOwner(), task.getTaskClass()));
++                    */
++                    // Paper end
+                     this.executor.execute(new ServerSchedulerReportingWrapper(task)); // Paper
+                 }
+ 
+@@ -390,7 +398,7 @@ public class CraftScheduler implements BukkitScheduler {
+ 
+         this.pending.addAll(temp);
+         temp.clear();
+-        this.debugHead = this.debugHead.getNextHead(currentTick);
++        //this.debugHead = this.debugHead.getNextHead(currentTick); // Paper - Remove debug
+     }
+ 
+     private void addTask(CraftTask task) {
+@@ -452,6 +460,8 @@ public class CraftScheduler implements BukkitScheduler {
+         return !this.pending.isEmpty() && ((CraftTask) this.pending.peek()).getNextRun() <= (long) currentTick;
+     }
+ 
++    // Paper start - Remove debug
++    /*
+     public String toString() {
+         int debugTick = this.currentTick;
+         StringBuilder string =
+@@ -459,6 +469,8 @@ public class CraftScheduler implements BukkitScheduler {
+         this.debugHead.debugTo(string);
+         return string.append('}').toString();
+     }
++    */
++    // Paper end
+ 
+     @Deprecated
+     public int scheduleSyncDelayedTask(Plugin plugin, BukkitRunnable task, long delay) {
+-- 
+2.14.3
+

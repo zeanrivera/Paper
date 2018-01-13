@@ -1,0 +1,33 @@
+From f0e2e042312a4d890303ed799126e70a50703787 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Fri, 20 Oct 2017 22:05:05 -0400
+Subject: [PATCH] Enforce Sync Chunk Unloads
+
+Unloading Chunks async is extremely dangerous. This will force it to main
+the same way we handle async chunk loads.
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index bfb38de..b051881 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -1,5 +1,6 @@
+ package org.bukkit.craftbukkit;
+ 
++import com.destroystokyo.paper.util.MCUtil;
+ import com.google.common.base.Preconditions;
+ import com.google.common.base.Predicate;
+ import it.unimi.dsi.fastutil.objects.ObjectIterator;
+@@ -371,8 +372,10 @@ public class CraftWorld implements World {
+     }
+ 
+     private boolean unloadChunk0(int x, int z, boolean save) {
++        Boolean result = MCUtil.ensureMain("Unload Chunk", () -> { // Paper - Ensure never async
+         net.minecraft.world.chunk.Chunk chunk = this.world.getChunkProvider().getChunkIfLoaded(x, z);
+         return chunk == null ? true : this.world.getChunkProvider().unloadChunk(chunk, chunk.mustSave || save);
++        }); return result != null ? result : false; // Paper - Ensure never async
+     }
+ 
+     public boolean regenerateChunk(int x, int z) {
+-- 
+2.14.3
+

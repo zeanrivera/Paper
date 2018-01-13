@@ -1,0 +1,22 @@
+From 657c6d673faf6aea526b8be496930b2585575019 Mon Sep 17 00:00:00 2001
+From: Brokkonaut <hannos17@gmx.de>
+Date: Tue, 10 Oct 2017 15:59:19 -0400
+Subject: [PATCH] Fix AIOOBE in inventory handling
+
+
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index 60a10b0..58f2988 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -2045,7 +2045,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+                         if (packetIn.getUsedButton() == 2) {
+                             click = ClickType.MIDDLE;
+ 
+-                            if (packetIn.getSlotId() == -999) {
++                            if (packetIn.getSlotId() < 0) { // Paper - GH-404
+                                 action = InventoryAction.NOTHING;
+                                 break;
+                             }
+-- 
+2.14.3
+

@@ -1,0 +1,82 @@
+From 241733e9fb63cb95e4ff69b9be4d55bc18103639 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 1 Oct 2017 01:14:19 -0400
+Subject: [PATCH] Option to disable BlockPhysicsEvent for Redstone
+
+Not sure of any reason a plugin would need to act on a Physics event
+for redstone. There is a BlockRedstoneEvent that plugins can also use
+for accessing redstone activity.
+
+Defaulting this to false will provide substantial performance improvement
+by saving millions of event calls on redstone heavy servers.
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 1e91623..ed860b1 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -262,4 +262,9 @@ public class PaperWorldConfig {
+     private void skeleHorseSpawnChance() {
+         skeleHorseSpawnChance = getDouble("skeleton-horse-thunder-spawn-chance", 0.01D);
+     }
++
++    public boolean firePhysicsEventForRedstone = false;
++    private void firePhysicsEventForRedstone() {
++        firePhysicsEventForRedstone = getBoolean("fire-physics-event-for-redstone", firePhysicsEventForRedstone);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 0411b85..0cff92f 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -604,7 +604,7 @@ public abstract class World implements IBlockAccess {
+             try {
+                 CraftWorld world = ((WorldServer) this).getWorld();
+ 
+-                if (world != null) {
++                if (world != null && !((WorldServer) this).stopPhysicsEvent) { // Paper
+                     BlockPhysicsEvent event =
+                             new BlockPhysicsEvent(world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), CraftMagicNumbers.getId(blockIn));
+                     this.getServer().getPluginManager().callEvent(event);
+diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
+index b44560a..8d47390 100644
+--- a/src/main/java/net/minecraft/world/WorldServer.java
++++ b/src/main/java/net/minecraft/world/WorldServer.java
+@@ -17,10 +17,7 @@ import java.util.stream.Collectors;
+ import javax.annotation.Nullable;
+ import net.minecraft.advancements.AdvancementManager;
+ import net.minecraft.advancements.FunctionManager;
+-import net.minecraft.block.Block;
+-import net.minecraft.block.BlockEventData;
+-import net.minecraft.block.BlockJukebox;
+-import net.minecraft.block.ITileEntityProvider;
++import net.minecraft.block.*;
+ import net.minecraft.block.state.IBlockState;
+ import net.minecraft.crash.CrashReport;
+ import net.minecraft.crash.CrashReportCategory;
+@@ -135,6 +132,7 @@ public class WorldServer extends World implements IThreadListener {
+     private int blockEventCacheIndex;
+     private final List<NextTickListEntry> pendingTickListEntriesThisTick = Lists.<NextTickListEntry>newArrayList();
+     public final int dimension;
++    boolean stopPhysicsEvent = false; // Paper
+ 
+     public WorldServer(
+             MinecraftServer p_i74_1_,
+@@ -849,12 +847,15 @@ public class WorldServer extends World implements IThreadListener {
+                     if (iblockdata.getMaterial() != net.minecraft.block.material.Material.AIR
+                             && Block.isEqualTo(iblockdata.getBlock(), nextticklistentry.getBlock())) {
+                         try {
++                            stopPhysicsEvent = !paperConfig.firePhysicsEventForRedstone && (iblockdata.getBlock() instanceof BlockRedstoneDiode || iblockdata.getBlock() instanceof BlockRedstoneTorch); // Paper
+                             iblockdata.getBlock().updateTick(this, nextticklistentry.position, iblockdata, this.rand);
+                         } catch (Throwable var10) {
+                             CrashReport crashreport = CrashReport.makeCrashReport(var10, "Exception while ticking a block");
+                             CrashReportCategory crashreportsystemdetails = crashreport.makeCategory("Block being ticked");
+                             CrashReportCategory.addBlockInfo(crashreportsystemdetails, nextticklistentry.position, iblockdata);
+                             throw new ReportedException(crashreport);
++                        } finally {
++                            stopPhysicsEvent = false; // Paper
+                         }
+                     }
+                     timing.stopTiming(); // Paper
+-- 
+2.14.3
+

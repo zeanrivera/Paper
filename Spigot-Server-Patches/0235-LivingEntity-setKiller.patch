@@ -1,0 +1,30 @@
+From d61c7e346876ee9a13699159dcd4eaa2df9b53ea Mon Sep 17 00:00:00 2001
+From: BillyGalbreath <Blake.Galbreath@GMail.com>
+Date: Sun, 29 Oct 2017 21:41:04 -0400
+Subject: [PATCH] LivingEntity#setKiller
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index 4b95979..3389c08 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -253,6 +253,16 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+         return this.getHandle().attackingPlayer == null ? null : (Player) this.getHandle().attackingPlayer.getBukkitEntity();
+     }
+ 
++    // Paper start
++    @Override
++    public void setKiller(Player killer) {
++        EntityPlayer entityPlayer = killer == null ? null : ((CraftPlayer) killer).getHandle();
++        getHandle().attackingPlayer = entityPlayer;
++        getHandle().revengeTarget = entityPlayer;
++        getHandle().recentlyHit = entityPlayer == null ? 0 : 100; // 100 value taken from EntityLiving#damageEntity
++    }
++    // Paper end
++
+     public boolean addPotionEffect(PotionEffect effect) {
+         return this.addPotionEffect(effect, false);
+     }
+-- 
+2.14.3
+

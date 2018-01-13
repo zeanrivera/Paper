@@ -1,0 +1,28 @@
+From dcd15b888aac4486b1ab3dc1b2d53507189d451c Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Tue, 10 Oct 2017 15:43:14 -0400
+Subject: [PATCH] Re-track players that dismount from other players
+
+
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+index d13cc0a..3b47f9d 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -822,6 +822,14 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+         if (entity1 != entity && this.connection != null) {
+             this.connection.setPlayerLocation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+         }
++
++        // Paper start - "Fixes" an issue in which the vehicle player would not be notified that the passenger dismounted
++        if (entity instanceof EntityPlayer) {
++            WorldServer worldServer = (WorldServer) entity.getEntityWorld();
++            worldServer.entityTracker.untrack(this);
++            worldServer.entityTracker.track(this);
++        }
++        // Paper end
+     }
+ 
+     public boolean isEntityInvulnerable(DamageSource source) {
+-- 
+2.14.3
+

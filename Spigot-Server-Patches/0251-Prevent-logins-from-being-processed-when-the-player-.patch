@@ -1,0 +1,44 @@
+From 08472fd469edb3d5a7ababde79bdf29e2cd30833 Mon Sep 17 00:00:00 2001
+From: killme <killme-git@ibts.me>
+Date: Sun, 12 Nov 2017 19:40:01 +0100
+Subject: [PATCH] Prevent logins from being processed when the player has
+ disconnected
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/util/MCUtil.java b/src/main/java/com/destroystokyo/paper/util/MCUtil.java
+index 7eae351..45e9880 100644
+--- a/src/main/java/com/destroystokyo/paper/util/MCUtil.java
++++ b/src/main/java/com/destroystokyo/paper/util/MCUtil.java
+@@ -8,10 +8,12 @@ import net.minecraft.tileentity.TileEntity;
+ import net.minecraft.tileentity.TileEntityHopper;
+ import net.minecraft.util.math.BlockPos;
+ import net.minecraft.util.math.ChunkPos;
++import net.minecraft.util.math.Vec3i;
+ import net.minecraft.world.World;
+ import net.minecraft.world.chunk.Chunk;
+ import net.minecraft.world.chunk.IChunkProvider;
+ import net.minecraft.world.gen.ChunkProviderServer;
++import net.minecraft.world.gen.structure.StructureBoundingBox;
+ import org.apache.commons.lang.exception.ExceptionUtils;
+ import org.bukkit.Location;
+ import org.bukkit.craftbukkit.CraftWorld;
+diff --git a/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java b/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
+index 578d68c..293f4cf 100644
+--- a/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
++++ b/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
+@@ -71,7 +71,11 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
+         }
+         // Paper end
+         if (this.currentLoginState == NetHandlerLoginServer.LoginState.READY_TO_ACCEPT) {
+-            this.tryAcceptPlayer();
++            // Paper start - prevent logins to be processed even though disconnect was called
++            if (networkManager.isChannelOpen()) {
++                this.tryAcceptPlayer();
++            }
++            // Paper end
+         } else if (this.currentLoginState == NetHandlerLoginServer.LoginState.DELAY_ACCEPT) {
+             EntityPlayerMP entityplayer = this.server.getPlayerList().getPlayerByUUID(this.loginGameProfile.getId());
+ 
+-- 
+2.14.3
+

@@ -1,0 +1,26 @@
+From 0c01325b397a6ebbb9ef090bcfaa3b560bc78ed1 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 29 Oct 2017 17:51:04 -0400
+Subject: [PATCH] Do not allow a zero max height in BiomeJungle
+
+
+diff --git a/src/main/java/net/minecraft/world/biome/BiomeJungle.java b/src/main/java/net/minecraft/world/biome/BiomeJungle.java
+index a3c7086..e1e9045 100644
+--- a/src/main/java/net/minecraft/world/biome/BiomeJungle.java
++++ b/src/main/java/net/minecraft/world/biome/BiomeJungle.java
+@@ -81,7 +81,11 @@ public class BiomeJungle extends Biome {
+         super.decorate(worldIn, rand, pos);
+         int var4 = rand.nextInt(16) + 8;
+         int var5 = rand.nextInt(16) + 8;
+-        int var6 = rand.nextInt(worldIn.getHeight(pos.add(var4, 0, var5)).getY() * 2);
++        // Paper start - Don't allow a 0 height
++        int height = worldIn.getHeight(pos.add(var4, 0, var5)).getY() * 2;
++        if (height < 1) height = 1;
++        int var6 = rand.nextInt(height);
++        // Paper end
+         (new WorldGenMelon()).generate(worldIn, rand, pos.add(var4, var6, var5));
+         WorldGenVines var9 = new WorldGenVines();
+ 
+-- 
+2.14.3
+

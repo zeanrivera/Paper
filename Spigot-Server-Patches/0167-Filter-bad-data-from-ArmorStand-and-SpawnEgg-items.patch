@@ -1,0 +1,73 @@
+From f9479f7192cc3210a7a704efafb21deca0df04a4 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Tue, 10 Oct 2017 17:25:10 -0400
+Subject: [PATCH] Filter bad data from ArmorStand and SpawnEgg items
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index de6d542..e516144 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -3,6 +3,7 @@ package com.destroystokyo.paper;
+ import java.util.List;
+ 
+ import net.minecraft.server.MinecraftServer;
++import org.bukkit.Bukkit;
+ import org.bukkit.configuration.file.YamlConfiguration;
+ import org.spigotmc.SpigotWorldConfig;
+ 
+@@ -380,4 +381,12 @@ public class PaperWorldConfig {
+     private void queueSizeAutoSaveThreshold() {
+        queueSizeAutoSaveThreshold = getInt("save-queue-limit-for-auto-save", 50);
+     }
++
++    public boolean filterNBTFromSpawnEgg = true;
++    private void fitlerNBTFromSpawnEgg() {
++        filterNBTFromSpawnEgg = getBoolean("filter-nbt-data-from-spawn-eggs-and-related", true);
++        if (!filterNBTFromSpawnEgg) {
++            Bukkit.getLogger().warning("Spawn Egg and Armor Stand NBT filtering disabled, this is a potential security risk");
++        }
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
+index eddb849..12aeb02 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
++++ b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
+@@ -276,6 +276,14 @@ public class EntityFallingBlock extends Entity {
+             this.fallTile = Block.getBlockById(compound.getByte("Tile") & 255).getStateFromMeta(i);
+         }
+ 
++        // Paper start - Block FallingBlocks with Command Blocks
++        // Check mappings on update - dc = "repeating_command_block" - dd = "chain_command_block"
++        final Block b = this.fallTile.getBlock();
++        if (this.world.paperConfig.filterNBTFromSpawnEgg && (b == Blocks.COMMAND_BLOCK || b == Blocks.REPEATING_COMMAND_BLOCK || b == Blocks.CHAIN_COMMAND_BLOCK)) {
++            this.fallTile = Blocks.STONE.getDefaultState();
++        }
++        // Paper end
++
+         this.fallTime = compound.getInteger("Time");
+         Block block = this.fallTile.getBlock();
+ 
+diff --git a/src/main/java/net/minecraft/item/ItemMonsterPlacer.java b/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
+index 1105916..da6fa4b 100644
+--- a/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
++++ b/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
+@@ -138,7 +138,14 @@ public class ItemMonsterPlacer extends Item {
+ 
+                 NBTTagCompound nbttagcompound1 = targetEntity.writeToNBT(new NBTTagCompound());
+                 UUID uuid = targetEntity.getUniqueID();
+-                nbttagcompound1.merge(nbttagcompound.getCompoundTag("EntityTag"));
++                // Paper start - Filter out position and motion information
++                final NBTTagCompound entityTag = nbttagcompound.getCompoundTag("EntityTag");
++                if (entityWorld.paperConfig.filterNBTFromSpawnEgg) {
++                    entityTag.removeTag("Pos");
++                    entityTag.removeTag("Motion");
++                }
++                nbttagcompound1.merge(entityTag);
++                // Paper end
+                 targetEntity.setUniqueId(uuid);
+                 targetEntity.readFromNBT(nbttagcompound1);
+             }
+-- 
+2.14.3
+

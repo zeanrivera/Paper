@@ -1,0 +1,21 @@
+From 4ebf661d284d83635db99cc092427a76a925b849 Mon Sep 17 00:00:00 2001
+From: Minecrell <dev@minecrell.net>
+Date: Tue, 31 Oct 2017 20:21:01 -0400
+Subject: [PATCH] Include Log4J2 SLF4J implementation
+
+
+diff --git a/build.gradle b/build.gradle
+index e27b5b5..52095ba 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -32,6 +32,7 @@ dependencies {
+     compile "net.minecrell:terminalconsoleappender:1.0.0"
+     compile "org.apache.logging.log4j:log4j-iostreams:2.8.1"
+     runtime "net.java.dev.jna:jna:4.4.0"
++    runtime "org.apache.logging.log4j:log4j-slf4j-impl:2.8.1"
+     /*
+       Required to add the missing Log4j2Plugins.dat file from log4j-core
+       which has been removed by Mojang. Without it, log4j has to classload
+-- 
+2.14.3
+

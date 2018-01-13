@@ -1,0 +1,180 @@
+From eeb28d282a91e8574d41d0ec4772eaa1ff173907 Mon Sep 17 00:00:00 2001
+From: Byteflux <byte@byteflux.net>
+Date: Sun, 24 Sep 2017 18:18:58 -0400
+Subject: [PATCH] Add player view distance API
+
+
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+index fc405f6..ea6e99b 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -190,6 +190,15 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+     public WeatherType weather = null;
+     private float pluginRainPosition;
+     private float pluginRainPositionPrevious;
++    // Paper start - Player view distance API
++    private int viewDistance = -1;
++    public int getViewDistance() {
++        return viewDistance == -1 ? ((WorldServer) world).getPlayerChunkMap().playerViewRadius : viewDistance;
++    }
++    public void setViewDistance(int viewDistance) {
++        this.viewDistance = viewDistance;
++    }
++    // Paper end
+ 
+     public EntityPlayerMP(MinecraftServer server, WorldServer worldIn, GameProfile profile, PlayerInteractionManager interactionManagerIn) {
+         super(worldIn, profile);
+diff --git a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
+index 13b1dbe..f605080 100644
+--- a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
++++ b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
+@@ -291,8 +291,11 @@ public class PlayerChunkMap {
+         player.managedPosZ = player.posZ;
+         List<ChunkPos> chunkList = new LinkedList<ChunkPos>();
+ 
+-        for (int k = i - this.playerViewRadius; k <= i + this.playerViewRadius; ++k) {
+-            for (int l = j - this.playerViewRadius; l <= j + this.playerViewRadius; ++l) {
++        // Paper start - Player view distance API
++        final int viewDistance = player.getViewDistance();
++        for (int k = i - viewDistance; k <= i + viewDistance; ++k) {
++            for (int l = j - viewDistance; l <= j + viewDistance; ++l) {
++                // Paper end
+                 chunkList.add(new ChunkPos(k, l));
+             }
+         }
+@@ -311,8 +314,11 @@ public class PlayerChunkMap {
+         int i = (int) player.managedPosX >> 4;
+         int j = (int) player.managedPosZ >> 4;
+ 
+-        for (int k = i - this.playerViewRadius; k <= i + this.playerViewRadius; ++k) {
+-            for (int l = j - this.playerViewRadius; l <= j + this.playerViewRadius; ++l) {
++        // Paper start - Player view distance API
++        final int viewDistance = player.getViewDistance();
++        for (int k = i - viewDistance; k <= i + viewDistance; ++k) {
++            for (int l = j - viewDistance; l <= j + viewDistance; ++l) {
++                // Paper end
+                 PlayerChunkMapEntry playerchunk = this.getEntry(k, l);
+ 
+                 if (playerchunk != null) {
+@@ -341,7 +347,10 @@ public class PlayerChunkMap {
+         if (d2 >= 64.0D) {
+             int k = (int) player.managedPosX >> 4;
+             int l = (int) player.managedPosZ >> 4;
+-            int i1 = this.playerViewRadius;
++            // Paper start - Player view distance API
++            final int viewDistance = player.getViewDistance();
++            int i1 = Math.max(playerViewRadius, viewDistance);
++            // Paper end
+             int j1 = i - k;
+             int k1 = j - l;
+             List<ChunkPos> chunksToLoad = new LinkedList<ChunkPos>();
+@@ -387,34 +396,68 @@ public class PlayerChunkMap {
+             int j = radius - this.playerViewRadius;
+ 
+             for (EntityPlayerMP entityplayer : Lists.newArrayList(this.players)) {
+-                int k = (int) entityplayer.posX >> 4;
+-                int l = (int) entityplayer.posZ >> 4;
++                this.setViewDistance(entityplayer, radius);
++            }
+ 
+-                if (j > 0) {
+-                    for (int i1 = k - radius; i1 <= k + radius; ++i1) {
+-                        for (int j1 = l - radius; j1 <= l + radius; ++j1) {
+-                            PlayerChunkMapEntry playerchunk = this.getOrCreateEntry(i1, j1);
++            this.playerViewRadius = radius;
++            this.markSortPending();
++        }
++    }
+ 
+-                            if (!playerchunk.containsPlayer(entityplayer)) {
+-                                playerchunk.addPlayer(entityplayer);
+-                            }
++    // Paper start - Split from above with minor changes
++    private void setViewDistance(EntityPlayerMP entityplayer, int radius) {
++        radius = MathHelper.clamp(radius, 3, 32);
++        int oldViewDistance = entityplayer.getViewDistance();
++        if (oldViewDistance != radius) {
++            int k = (int) entityplayer.posX >> 4;
++            int l = (int) entityplayer.posZ >> 4;
++            int j = radius - oldViewDistance;
++
++            if (j > 0) {
++                for (int i1 = k - radius; i1 <= k + radius; ++i1) {
++                    for (int j1 = l - radius; j1 <= l + radius; ++j1) {
++                        PlayerChunkMapEntry playerchunk = this.getOrCreateEntry(i1, j1);
++
++                        if (!playerchunk.containsPlayer(entityplayer)) {
++                            playerchunk.addPlayer(entityplayer);
+                         }
+                     }
+-                } else {
+-                    for (int i1 = k - this.playerViewRadius; i1 <= k + this.playerViewRadius; ++i1) {
+-                        for (int j1 = l - this.playerViewRadius; j1 <= l + this.playerViewRadius; ++j1) {
+-                            if (!this.overlaps(i1, j1, k, l, radius)) {
+-                                this.getOrCreateEntry(i1, j1).removePlayer(entityplayer);
+-                            }
++                }
++            } else {
++                for (int i1 = k - oldViewDistance; i1 <= k + oldViewDistance; ++i1) {
++                    for (int j1 = l - oldViewDistance; j1 <= l + oldViewDistance; ++j1) {
++                        if (!this.overlaps(i1, j1, k, l, radius)) {
++                            this.getOrCreateEntry(i1, j1).removePlayer(entityplayer);
+                         }
+                     }
+                 }
+             }
++        }
+ 
+-            this.playerViewRadius = radius;
+-            this.markSortPending();
++        this.markSortPending();
++    }
++
++    public void updateViewDistance(EntityPlayerMP player, int distanceIn) {
++        // This represents the view distance that we will set on the player
++        // It can exist as a negative value
++        int newViewDistance = MathHelper.clamp(distanceIn, 3, 32);
++
++        // This value is the one we actually use to update the chunk map
++        // We don't ever want this to be a negative
++        int toSet = newViewDistance;
++
++        if (distanceIn < 0) {
++            newViewDistance = -1;
++            toSet = world.getPlayerChunkMap().playerViewRadius;
++        }
++
++        if (toSet != player.getViewDistance()) {
++            // Order matters
++            this.setViewDistance(player, toSet);
++            player.setViewDistance(newViewDistance);
+         }
+     }
++    // Paper end
+ 
+     private void markSortPending() {
+         this.sortMissingChunks = true;
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 7bff040..70ff32a 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -1635,6 +1635,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     public boolean getAffectsSpawning() {
+         return this.getHandle().affectsSpawning;
+     }
++
++    @Override
++    public int getViewDistance() {
++        return getHandle().getViewDistance();
++    }
++
++    @Override
++    public void setViewDistance(int viewDistance) {
++        ((WorldServer) getHandle().world).getPlayerChunkMap().updateViewDistance(getHandle(), viewDistance);
++    }
+     // Paper end
+ 
+     public Player.Spigot spigot() { // Paper - Decompile fix
+-- 
+2.14.3
+
