@@ -1,0 +1,57 @@
+From f66e6925459a97bdb2dd22f55514cd5a07a76e8c Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Tue, 31 Oct 2017 20:24:09 -0400
+Subject: [PATCH] Add PlayerJumpEvent
+
+
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index 8d5b5fd..6a725fc 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -1,6 +1,7 @@
+ package net.minecraft.network;
+ 
+ import com.destroystokyo.paper.event.player.IllegalPacketEvent;
++import com.destroystokyo.paper.event.player.PlayerJumpEvent; // Paper
+ import com.google.common.base.Charsets;
+ import com.google.common.collect.Lists;
+ import com.google.common.primitives.Doubles;
+@@ -789,7 +790,34 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+                             d9 = d6 - this.lastGoodZ;
+ 
+                             if (this.player.onGround && !packetIn.isOnGround() && d8 > 0.0D) {
+-                                this.player.jump();
++                                // Paper start - Add player jump event
++                                Player player = this.getPlayer();
++                                Location from = new Location(player.getWorld(), lastPosX, lastPosY, lastPosZ, lastYaw, lastPitch); // Get the Players previous Event location.
++                                Location to = player.getLocation().clone(); // Start off the To location as the Players current location.
++
++                                // If the packet contains movement information then we update the To location with the correct XYZ.
++                                if (packetIn.moving) {
++                                    to.setX(packetIn.x);
++                                    to.setY(packetIn.y);
++                                    to.setZ(packetIn.z);
++                                }
++
++                                // If the packet contains look information then we update the To location with the correct Yaw & Pitch.
++                                if (packetIn.rotating) {
++                                    to.setYaw(packetIn.yaw);
++                                    to.setPitch(packetIn.pitch);
++                                }
++
++                                PlayerJumpEvent event = new PlayerJumpEvent(player, from, to);
++
++                                if (event.callEvent()) {
++                                    this.player.jump();
++                                } else {
++                                    from = event.getFrom();
++                                    this.internalTeleport(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch(), Collections.emptySet());
++                                    return;
++                                }
++                                // Paper end
+                             }
+ 
+                             this.player.move(MoverType.PLAYER, d7, d8, d9);
+-- 
+2.18.0
+

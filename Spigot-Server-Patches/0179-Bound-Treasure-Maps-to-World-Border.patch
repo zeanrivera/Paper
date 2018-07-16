@@ -1,4 +1,4 @@
-From 768137e90a44420efc679d0c5e53089f74709f91 Mon Sep 17 00:00:00 2001
+From a2f165af7f1b7341eedb75cba4b54f7866feddee Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 19:54:33 -0400
 Subject: [PATCH] Bound Treasure Maps to World Border
@@ -34,7 +34,7 @@ index 97e570a..e6ebbfb 100644
          return (double) (pos.getX() + 1) > this.minX()
                  && (double) pos.getX() < this.maxX()
 diff --git a/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java b/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
-index cdc992f..cfb1a73 100644
+index 7afa3ac..294cb95 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
 @@ -262,6 +262,8 @@ public abstract class MapGenStructure extends MapGenBase {
@@ -47,5 +47,5 @@ index cdc992f..cfb1a73 100644
                              if (!findUnexplored || !worldIn.isChunkGeneratedAt(l2, i3)) {
                                  return new BlockPos((l2 << 4) + 8, 64, (i3 << 4) + 8);
 -- 
-2.14.3
+2.18.0
 

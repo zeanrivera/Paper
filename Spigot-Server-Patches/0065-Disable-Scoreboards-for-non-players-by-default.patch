@@ -1,4 +1,4 @@
-From 2c600291d87fba11b246e869a18ad56e467c84d8 Mon Sep 17 00:00:00 2001
+From 034ec8181e6f8423d64dba32cb536fe0baf67fd6 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 21:36:53 -0400
 Subject: [PATCH] Disable Scoreboards for non players by default
@@ -37,7 +37,7 @@ index 576ef0e..4596a65 100644
  
                          if (var5.addPlayerToTeam(var13, var6)) {
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index d10c8ec..8b7936b 100644
+index 37cd0bd..6f66400 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
 @@ -2095,6 +2095,7 @@ public abstract class Entity implements ICommandSender {
@@ -49,5 +49,5 @@ index d10c8ec..8b7936b 100644
      }
  
 -- 
-2.14.3
+2.18.0
 

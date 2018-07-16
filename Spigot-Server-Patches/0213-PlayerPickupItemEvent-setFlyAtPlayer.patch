@@ -1,0 +1,49 @@
+From eb0d050497202c9cfbed525e69ab693a8787c117 Mon Sep 17 00:00:00 2001
+From: BillyGalbreath <Blake.Galbreath@GMail.com>
+Date: Sun, 29 Oct 2017 20:13:31 -0400
+Subject: [PATCH] PlayerPickupItemEvent#setFlyAtPlayer
+
+
+diff --git a/src/main/java/net/minecraft/entity/item/EntityItem.java b/src/main/java/net/minecraft/entity/item/EntityItem.java
+index 9f30ede..b1cafee 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityItem.java
++++ b/src/main/java/net/minecraft/entity/item/EntityItem.java
+@@ -361,6 +361,7 @@ public class EntityItem extends Entity implements HopperPusher {
+             int i = itemstack.getCount();
+             int canHold = entityIn.inventory.canHold(itemstack);
+             int remaining = i - canHold;
++            boolean flyAtPlayer = false; // Paper
+ 
+             if (this.pickupDelay <= 0 && canHold > 0) {
+                 itemstack.setCount(canHold);
+@@ -369,8 +370,14 @@ public class EntityItem extends Entity implements HopperPusher {
+                                 (Player) entityIn.getBukkitEntity(), (org.bukkit.entity.Item) this.getBukkitEntity(), remaining);
+                 playerEvent.setCancelled(!entityIn.canPickUpLoot);
+                 this.world.getServer().getPluginManager().callEvent(playerEvent);
++                flyAtPlayer = playerEvent.getFlyAtPlayer(); // Paper
+ 
+                 if (playerEvent.isCancelled()) {
++                    // Paper Start
++                    if (flyAtPlayer) {
++                        entityIn.onItemPickup(this, i);
++                    }
++                    // Paper End
+                     return;
+                 }
+ 
+@@ -391,7 +398,11 @@ public class EntityItem extends Entity implements HopperPusher {
+             if (this.pickupDelay == 0
+                     && (this.owner == null || 6000 - this.age <= 200 || this.owner.equals(entityIn.getName()))
+                     && entityIn.inventory.addItemStackToInventory(itemstack)) {
+-                entityIn.onItemPickup(this, i);
++                // Paper Start
++                if (flyAtPlayer) {
++                    entityIn.onItemPickup(this, i);
++                }
++                // Paper End
+ 
+                 if (itemstack.isEmpty()) {
+                     this.setDead();
+-- 
+2.18.0
+

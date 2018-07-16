@@ -1,4 +1,4 @@
-From 97fa6af014540c54079846f4b734333125719aa9 Mon Sep 17 00:00:00 2001
+From acba9a732261f225d636b16237f548e4725cece4 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sun, 24 Sep 2017 17:08:31 -0400
 Subject: [PATCH] Generator Settings
@@ -262,7 +262,7 @@ index 5759aa5..c992431 100644
              }
          }
 diff --git a/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java b/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
-index 124256d..cdc992f 100644
+index 306756c..7afa3ac 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/MapGenStructure.java
 @@ -150,6 +150,7 @@ public abstract class MapGenStructure extends MapGenBase {
@@ -274,5 +274,5 @@ index 124256d..cdc992f 100644
          ObjectIterator objectiterator = this.structureMap.values().iterator();
  
 -- 
-2.14.3
+2.18.0
 

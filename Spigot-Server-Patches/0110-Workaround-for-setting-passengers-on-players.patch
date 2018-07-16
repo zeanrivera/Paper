@@ -1,4 +1,4 @@
-From 2c16a4f874530c7d9297b5195fbd9de88e8d5f72 Mon Sep 17 00:00:00 2001
+From 332c0c48cd81f70b79b295e0d38b0e3d3f7ae2aa Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 7 Oct 2017 22:28:52 -0400
 Subject: [PATCH] Workaround for setting passengers on players
@@ -28,5 +28,5 @@ index fa21f8c..ea18f09 100644
      public boolean getAffectsSpawning() {
          return this.getHandle().affectsSpawning;
 -- 
-2.14.3
+2.18.0
 

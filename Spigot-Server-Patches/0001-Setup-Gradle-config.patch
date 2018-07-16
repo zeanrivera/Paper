@@ -1,4 +1,4 @@
-From 7b81cd515997d0d01c9ec5d231a41eae9a831c2a Mon Sep 17 00:00:00 2001
+From 88a90c06d74bea561041db021b04ab9f569646d1 Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 27 Nov 2016 08:01:04 -0600
 Subject: [PATCH] Setup Gradle config
@@ -15,10 +15,10 @@ index 0000000..ce8fb16
 +.cache
 diff --git a/build.gradle b/build.gradle
 new file mode 100644
-index 0000000..0dc2cad
+index 0000000..e1f5854
 --- /dev/null
 +++ b/build.gradle
-@@ -0,0 +1,52 @@
+@@ -0,0 +1,54 @@
 +repositories {
 +    maven {
 +        name "minecraft"
@@ -71,7 +71,8 @@ index 0000000..0dc2cad
 +    relocate "org.ibex", "org.bukkit.craftbukkit.libs.org.ibex"
 +    relocate "org.gjt", "org.bukkit.craftbukkit.libs.org.gjt"
 +}
-\ No newline at end of file
++
++tasks.build.dependsOn shadowJar
 diff --git a/gradle.properties b/gradle.properties
 new file mode 100644
 index 0000000..5f7e198
@@ -80,5 +81,5 @@ index 0000000..5f7e198
 @@ -0,0 +1 @@
 +artifactId = paper
 -- 
-2.14.2
+2.18.0
 

@@ -1,4 +1,4 @@
-From 7b9fd3eab2703e3a0e7a02731321b2631a08cdf8 Mon Sep 17 00:00:00 2001
+From dc356c23f37a401d716ceef16d601a3f745c6061 Mon Sep 17 00:00:00 2001
 From: Alfie Cleveland <alfeh@me.com>
 Date: Fri, 20 Oct 2017 20:19:22 -0400
 Subject: [PATCH] Stricter isDisconnected and isMovementBlocked checks
@@ -31,5 +31,5 @@ index 7622a21..a132a27 100644
      }
  }
 -- 
-2.14.3
+2.18.0
 

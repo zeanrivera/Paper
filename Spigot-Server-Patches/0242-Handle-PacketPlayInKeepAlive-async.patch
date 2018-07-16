@@ -1,0 +1,44 @@
+From a0e9e25f0af63f86dd8b9ba3c866ec46a1096baf Mon Sep 17 00:00:00 2001
+From: Shane Freeder <theboyetronic@gmail.com>
+Date: Tue, 31 Oct 2017 20:49:29 -0400
+Subject: [PATCH] Handle PacketPlayInKeepAlive async
+
+In 1.12.2, Mojang moved the processing of PacketPlayInKeepAlive off the main
+thread, while entirely correct for the server, this causes issues with
+plugins which are expecting the PlayerQuitEvent on the main thread.
+
+In order to counteract some bad behavior, we will post handling of the
+disconnection to the main thread, but leave the actual processing of the packet
+off the main thread.
+
+also adding some additional logging in order to help work out what is causing
+random disconnections for clients.
+
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index 6a725fc..6529507 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -2475,14 +2475,18 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+     }
+ 
+     public void processKeepAlive(CPacketKeepAlive packetIn) {
+-        PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.player.getServerWorld());
++        //PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.player.getServerWorld()); // Paper - This shouldn't be on the main thread
+ 
+         if (this.field_194403_g && packetIn.getKey() == this.field_194404_h) {
+             int i = (int) (this.currentTimeMillis() - this.field_194402_f);
+             this.player.ping = (this.player.ping * 3 + i) / 4;
+             this.field_194403_g = false;
+         } else if (!this.player.getName().equals(this.serverController.getServerOwner())) {
+-            this.disconnect(new TextComponentTranslation("disconnect.timeout", new Object[0]));
++            // Paper start - This needs to be handled on the main thread for plugins
++            LOGGER.warn("{} sent an invalid keepalive! pending keepalive: {} got id: {} expected id: {}",
++                    this.player.getName(), this.field_194403_g, packetIn.getKey(), this.field_194404_h);
++            serverController.addScheduledTask(() -> this.disconnect(new TextComponentTranslation("disconnect.timeout", new Object[0])));
++            // Paper end
+         }
+     }
+ 
+-- 
+2.18.0
+

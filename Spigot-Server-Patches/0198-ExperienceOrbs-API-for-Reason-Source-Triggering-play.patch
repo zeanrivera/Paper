@@ -1,4 +1,4 @@
-From 8048991b840382488593fe8b0451e3e516f2b3d7 Mon Sep 17 00:00:00 2001
+From 33075cfd71a7406a670674dd5875446af8292192 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 19 Dec 2017 16:31:46 -0500
 Subject: [PATCH] ExperienceOrbs API for Reason/Source/Triggering player
@@ -36,7 +36,7 @@ index c571e05..b137bc3 100644
          }
      }
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index 2ddf22d..1e8ddd8 100644
+index 5685b4b..fafd6ab 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
 @@ -431,7 +431,8 @@ public abstract class EntityLivingBase extends Entity {
@@ -165,7 +165,7 @@ index 7198306..3ee4c2f 100644
  
      public void onCollideWithPlayer(EntityPlayer entityIn) {
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-index 715be38..5917328 100644
+index aec4acc..4a999df 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 @@ -721,7 +721,7 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
@@ -258,5 +258,5 @@ index 19e13a2..35f7be7 100644
          return (EntityXPOrb) this.entity;
      }
 -- 
-2.14.3
+2.18.0
 

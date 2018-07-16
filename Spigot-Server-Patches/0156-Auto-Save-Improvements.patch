@@ -1,4 +1,4 @@
-From 5c7756e2db1f285cb9ebbac5997ff291cad3183a Mon Sep 17 00:00:00 2001
+From 5db82662b033438a105fb4db2a4e737c7ccbc9fb Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 16:31:05 -0400
 Subject: [PATCH] Auto Save Improvements
@@ -70,7 +70,7 @@ index 3b47f9d..0bb0378 100644
      public EntityPlayerMP(MinecraftServer server, WorldServer worldIn, GameProfile profile, PlayerInteractionManager interactionManagerIn) {
          super(worldIn, profile);
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 4436721..70172aa 100644
+index e06bc5b..db4ab61 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -178,6 +178,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -205,5 +205,5 @@ index 6d9bce4..2574147 100644
              }
          }
 -- 
-2.14.3
+2.18.0
 

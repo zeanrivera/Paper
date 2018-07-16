@@ -1,4 +1,4 @@
-From 7f50d71063893d693bdb3bb8a92a733fe6d10f69 Mon Sep 17 00:00:00 2001
+From 4c42f7ef7b5782ff19273e9963d90c665066d123 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 18:29:50 -0400
 Subject: [PATCH] Properly handle async calls to restart the server
@@ -30,7 +30,7 @@ will have plugins and worlds saving to the disk has a high potential to result
 in corruption/dataloss.
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 388018d..3ec0ce1 100644
+index 897a16d..2fd8d81 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -128,6 +128,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -247,5 +247,5 @@ index d8a5b9f..a489b87 100644
      }
  }
 -- 
-2.14.3
+2.18.0
 

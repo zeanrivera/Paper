@@ -1,4 +1,4 @@
-From e8a53a8b9418a477c0d655911400b1791ac8e280 Mon Sep 17 00:00:00 2001
+From 044293d2dcfdaf581677695d121143d9637320bc Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 21:49:54 -0400
 Subject: [PATCH] PlayerTeleportEndGatewayEvent
@@ -28,5 +28,5 @@ index 93dffda..292327d 100644
  
                      if (teleEvent.isCancelled()) {
 -- 
-2.14.3
+2.18.0
 

@@ -1,4 +1,4 @@
-From 22dea85fd26299a9e7b8f0e9bf5053e637b32899 Mon Sep 17 00:00:00 2001
+From 7082a99f849ec7e6cb0b0fac88a9e214ae8369e6 Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Mon, 9 Oct 2017 19:35:54 -0400
 Subject: [PATCH] Make entities look for hoppers
@@ -14,7 +14,7 @@ This patch may causes a decrease in the performance of dropped items, which is w
 
 diff --git a/src/main/java/com/destroystokyo/paper/HopperPusher.java b/src/main/java/com/destroystokyo/paper/HopperPusher.java
 new file mode 100644
-index 0000000..e11034a
+index 0000000..f9d30db
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/HopperPusher.java
 @@ -0,0 +1,60 @@
@@ -42,7 +42,7 @@ index 0000000..e11034a
 +            for (int y = startY; y <= endY; y++) {
 +                for (int z = startZ; z <= endZ; z++) {
 +                    adjacentPos.setPos(x, y, z);
-+                    TileEntityHopper hopper = MCUtil.getHopper(getEntityWorld(), adjacentPos);
++                    TileEntityHopper hopper = MCUtil.getHopper(getEntityWorldPaper(), adjacentPos);
 +                    if (hopper == null) continue; // Avoid playing with the bounding boxes, if at all possible
 +                    AxisAlignedBB hopperBoundingBox = hopper.getHopperLookupBoundingBox();
 +                    /*
@@ -63,14 +63,14 @@ index 0000000..e11034a
 +    boolean acceptItem(TileEntityHopper hopper);
 +
 +    default boolean tryPutInHopper() {
-+        if (!getEntityWorld().paperConfig.isHopperPushBased) return false;
++        if (!getEntityWorldPaper().paperConfig.isHopperPushBased) return false;
 +        TileEntityHopper hopper = findHopper();
 +        return hopper != null && hopper.canAcceptItems() && acceptItem(hopper);
 +    }
 +
 +    AxisAlignedBB getEntityBoundingBox();
 +
-+    World getEntityWorld();
++    World getEntityWorldPaper();
 +
 +    double getX();
 +
@@ -93,7 +93,7 @@ index 4cf01a9..d9b2031 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index e653c61..23a9916 100644
+index fa06c44..d6b805c 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
 @@ -136,6 +136,19 @@ public abstract class Entity implements ICommandSender {
@@ -116,6 +116,15 @@ index e653c61..23a9916 100644
      public double motionX;
      public double motionY;
      public double motionZ;
+@@ -2654,6 +2667,8 @@ public abstract class Entity implements ICommandSender {
+         return this.world;
+     }
+ 
++    public World getEntityWorldPaper() { return getEntityWorld(); } // Paper - implement for HopperPusher
++
+     public Entity getCommandSenderEntity() {
+         return this;
+     }
 diff --git a/src/main/java/net/minecraft/entity/item/EntityItem.java b/src/main/java/net/minecraft/entity/item/EntityItem.java
 index c190b2a..739ae0b 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityItem.java
@@ -343,5 +352,5 @@ index e404d7c..9da7ede 100644
                          worldIn.getEntitiesInAABBexcluding(
                                  (Entity) null,
 -- 
-2.14.3
+2.18.0
 

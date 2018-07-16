@@ -1,4 +1,4 @@
-From 0c01325b397a6ebbb9ef090bcfaa3b560bc78ed1 Mon Sep 17 00:00:00 2001
+From 78974fd8da752bedde721e2291af6a1ae156334f Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 17:51:04 -0400
 Subject: [PATCH] Do not allow a zero max height in BiomeJungle
@@ -22,5 +22,5 @@ index a3c7086..e1e9045 100644
          WorldGenVines var9 = new WorldGenVines();
  
 -- 
-2.14.3
+2.18.0
 

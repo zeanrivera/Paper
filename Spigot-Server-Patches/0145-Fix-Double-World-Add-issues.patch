@@ -1,4 +1,4 @@
-From 36367ca3c540ddac63cab2fb69bf2cb769c7a96d Mon Sep 17 00:00:00 2001
+From 45412fffb3f0ab0121807fae2553d2805913cd81 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 15:22:57 -0400
 Subject: [PATCH] Fix Double World Add issues
@@ -8,7 +8,7 @@ Vanilla will double add Spider Jockeys to the world, so ignore already added.
 Also add debug if something else tries to, and abort before world gets bad state
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index f743116..830a339 100644
+index 0d14804..ff50eca 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1123,6 +1123,11 @@ public abstract class World implements IBlockAccess {
@@ -38,5 +38,5 @@ index e4e54d5..711fb47 100644
                  spawnEntity(entity1, world);
              }
 -- 
-2.14.3
+2.18.0
 

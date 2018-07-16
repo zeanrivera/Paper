@@ -1,4 +1,4 @@
-From dd8e8c8abf11e7824b952c364ab6a489fbc34c1c Mon Sep 17 00:00:00 2001
+From bbdc10f5567f4d347cb20679da503b7aea3e5da3 Mon Sep 17 00:00:00 2001
 From: kashike <kasike@vq.lc>
 Date: Wed, 27 Sep 2017 15:37:17 -0400
 Subject: [PATCH] Expose server CommandMap
@@ -17,5 +17,5 @@ index 18a6493..6dee270 100644
          return this.commandMap;
      }
 -- 
-2.14.3
+2.18.0
 

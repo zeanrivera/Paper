@@ -1,4 +1,4 @@
-From 8956b33457169187939f5423bf1ed99aaefa5fb1 Mon Sep 17 00:00:00 2001
+From 2ceed5ca274f37259a24169cd8c0efd6f41f6d82 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 9 Oct 2017 18:50:13 -0400
 Subject: [PATCH] Only send Dragon/Wither Death sounds to same world
@@ -44,5 +44,5 @@ index ac375c6..9dc5799 100644
                      double deltaZ = this.posZ - player.posZ;
                      double distanceSquared = deltaX * deltaX + deltaZ * deltaZ;
 -- 
-2.14.3
+2.18.0
 

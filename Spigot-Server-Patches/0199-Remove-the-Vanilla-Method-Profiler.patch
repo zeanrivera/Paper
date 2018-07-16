@@ -1,4 +1,4 @@
-From cf19b5882ca7c7ee8c15f23675b19b0c5520e20a Mon Sep 17 00:00:00 2001
+From 06f99bd6681d9c25dd8ff88dcc8ecdc7de036f6f Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 17:35:20 -0400
 Subject: [PATCH] Remove the Vanilla Method Profiler
@@ -80,5 +80,5 @@ index 0bb36f1..73a444f 100644
      public static final class Result implements Comparable<Profiler.Result> {
          public double usePercentage;
 -- 
-2.14.3
+2.18.0
 

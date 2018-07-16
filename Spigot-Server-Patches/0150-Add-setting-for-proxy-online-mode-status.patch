@@ -1,4 +1,4 @@
-From 4d1127a1bbd319533af79812f0a560f57505f864 Mon Sep 17 00:00:00 2001
+From 4b4d305d3c5078f1d24c2821065e80b3e23aea6b Mon Sep 17 00:00:00 2001
 From: Gabriele C <sgdc3.mail@gmail.com>
 Date: Tue, 10 Oct 2017 15:52:46 -0400
 Subject: [PATCH] Add setting for proxy online mode status
@@ -46,5 +46,5 @@ index a60ce20..6620ef8 100644
              }
  
 -- 
-2.14.3
+2.18.0
 

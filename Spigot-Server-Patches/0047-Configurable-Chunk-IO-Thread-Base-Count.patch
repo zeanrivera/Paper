@@ -1,4 +1,4 @@
-From 9c07780b2a4ff6e568a14af0b975161c1aae50a8 Mon Sep 17 00:00:00 2001
+From 42c1d8f95f4f3e08ddfc429dc7c5d6565ddf4b9c Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 27 Sep 2017 14:49:06 -0400
 Subject: [PATCH] Configurable Chunk IO Thread Base Count
@@ -32,5 +32,5 @@ index a2b4ebf..53c9945 100644
      private static final AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException> instance =
              new AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException>(new ChunkIOProvider(), 1);
 -- 
-2.14.3
+2.18.0
 

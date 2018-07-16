@@ -1,4 +1,4 @@
-From 95e10f261251cb45700329491006e4a65fc82e85 Mon Sep 17 00:00:00 2001
+From 30b3bcdb81dc92f78edb00df42ac03fff951abd2 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Sat, 30 Sep 2017 21:49:16 -0400
 Subject: [PATCH] Complete resource pack API
@@ -72,5 +72,5 @@ index 1bd1a43..0dc6fde 100644
  
      public Player.Spigot spigot() { // Paper - Decompile fix
 -- 
-2.14.3
+2.18.0
 

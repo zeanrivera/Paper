@@ -1,11 +1,11 @@
-From b358b391cb3039d6a2f438184135502889794b9f Mon Sep 17 00:00:00 2001
+From 393d3904881c76ccbdeedbf3e780a222205d1e26 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Wed, 27 Sep 2017 14:43:33 -0400
 Subject: [PATCH] Disable spigot tick limiters
 
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 6a9b4e0..abd2d9e 100644
+index 94c2089..1174eef 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1539,9 +1539,9 @@ public abstract class World implements IBlockAccess {
@@ -33,5 +33,5 @@ index 6a9b4e0..abd2d9e 100644
              TileEntity tileentity = this.tickableTileEntities.get(this.tileTickPosition);
  
 -- 
-2.14.3
+2.18.0
 

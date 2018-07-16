@@ -1,11 +1,11 @@
-From 52736207f0c5972a100872762e8367f203a3c341 Mon Sep 17 00:00:00 2001
+From afb482af6652970079a68e037d09e50f8ba2261e Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 16:46:53 -0400
 Subject: [PATCH] Change implementation of (tile)entity removal list
 
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index abd2d9e..b136c42 100644
+index 1174eef..8097b4c 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -9,6 +9,8 @@ import com.google.common.collect.Maps;
@@ -56,5 +56,5 @@ index abd2d9e..b136c42 100644
          this.unloadedEntityList.clear();
          this.tickPlayers();
 -- 
-2.14.3
+2.18.0
 

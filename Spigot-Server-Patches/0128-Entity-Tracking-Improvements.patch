@@ -1,4 +1,4 @@
-From 9997bae05d1ff66116b04ff3332e8e69007403bc Mon Sep 17 00:00:00 2001
+From 68b7f7062b3072fc75c58354e5e2ac3c5425bc36 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 9 Oct 2017 17:35:19 -0400
 Subject: [PATCH] Entity Tracking Improvements
@@ -7,7 +7,7 @@ If any part of a Vehicle/Passenger relationship is visible to a player,
 send all passenger/vehicles to the player in the chain.
 
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index 7a031f4..e653c61 100644
+index 8911dd2..fa06c44 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
 @@ -213,6 +213,7 @@ public abstract class Entity implements ICommandSender {
@@ -98,5 +98,5 @@ index 133f4e1..6a81ba9 100644
      }
  
 -- 
-2.14.3
+2.18.0
 

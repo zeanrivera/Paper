@@ -1,0 +1,41 @@
+From f2745d4dfeab1ed405fe91bd59215a4877e9c9c6 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Thu, 11 Jan 2018 16:47:28 -0600
+Subject: [PATCH] Make max squid spawn height configurable
+
+I don't know why upstream made only the minimum height configurable but
+whatever
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 0e3079e..c7f576e 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -473,4 +473,9 @@ public class PaperWorldConfig {
+         }
+     }
+ 
++    public double squidMaxSpawnHeight;
++    private void squidMaxSpawnHeight() {
++        squidMaxSpawnHeight = getDouble("squid-spawn-height.maximum", 0.0D);
++    }
++
+ }
+diff --git a/src/main/java/net/minecraft/entity/passive/EntitySquid.java b/src/main/java/net/minecraft/entity/passive/EntitySquid.java
+index 03bea08..37b6d81 100644
+--- a/src/main/java/net/minecraft/entity/passive/EntitySquid.java
++++ b/src/main/java/net/minecraft/entity/passive/EntitySquid.java
+@@ -156,8 +156,10 @@ public class EntitySquid extends EntityWaterMob {
+     }
+ 
+     public boolean getCanSpawnHere() {
++        // Paper - Make max spawn height configurable
++        final double maxHeight = world.paperConfig.squidMaxSpawnHeight > 0 ? world.paperConfig.squidMaxSpawnHeight : world.getSeaLevel();
+         return this.posY > this.world.spigotConfig.squidSpawnRangeMin
+-                && this.posY < (double) this.world.getSeaLevel()
++                && this.posY < maxHeight
+                 && super.getCanSpawnHere();
+     }
+ 
+-- 
+2.18.0
+

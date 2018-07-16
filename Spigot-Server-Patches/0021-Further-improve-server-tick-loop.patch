@@ -1,4 +1,4 @@
-From 06e205b7540c85f9c1aed0c7787fe265c4d0abb9 Mon Sep 17 00:00:00 2001
+From 843ae01ee6f972ed85d79fa4529727ee2da176c1 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 23 Sep 2017 22:54:04 -0400
 Subject: [PATCH] Further improve server tick loop
@@ -12,7 +12,7 @@ Previous implementation did not calculate TPS correctly.
 Switch to a realistic rolling average and factor in std deviation as an extra reporting variable
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 42d541e..78141f8 100644
+index 96fe79b..985fdfd 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -169,13 +169,10 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -208,5 +208,5 @@ index 4edd104..35b7c73 100644
      }
  }
 -- 
-2.14.3
+2.18.0
 

@@ -1,0 +1,1 @@
+FD: net/minecraft/entity/EntityLiving/field_82172_bs net/minecraft/entity/EntityLivingBase/field_82172_bs # Spigot moves this field

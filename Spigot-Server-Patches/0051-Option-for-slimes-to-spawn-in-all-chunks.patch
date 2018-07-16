@@ -1,4 +1,4 @@
-From 66ce3c6a39d3904f593e3ef7d2210a9c8145787f Mon Sep 17 00:00:00 2001
+From acbf87a0ffb4ba71cdd09cd09f794071ea5fc4a9 Mon Sep 17 00:00:00 2001
 From: vemacs <d@nkmem.es>
 Date: Wed, 27 Sep 2017 15:21:09 -0400
 Subject: [PATCH] Option for slimes to spawn in all chunks
@@ -39,5 +39,5 @@ index 97f1b99..9905de0 100644
  
              return false;
 -- 
-2.14.3
+2.18.0
 

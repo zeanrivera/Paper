@@ -1,4 +1,4 @@
-From c699f609140f260254c34e44c159f2cd2af20a4e Mon Sep 17 00:00:00 2001
+From 8747e192ac589b0b553dec1e1eb19f0530652cbf Mon Sep 17 00:00:00 2001
 From: AlphaBlend <whizkid3000@hotmail.com>
 Date: Tue, 10 Oct 2017 16:53:27 -0400
 Subject: [PATCH] Add EntityZapEvent
@@ -22,7 +22,7 @@ index 6c24b67..740365a 100644
                  return;
              }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-index 8da9289..5bce765 100644
+index de97aed..761aa63 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 @@ -909,6 +909,13 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
@@ -68,5 +68,5 @@ index ae4861d..4d555d3 100644
          HorseJumpEvent event = new HorseJumpEvent((AbstractHorse) horse.getBukkitEntity(), power);
          horse.getBukkitEntity().getServer().getPluginManager().callEvent(event);
 -- 
-2.14.3
+2.18.0
 

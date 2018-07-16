@@ -1,4 +1,4 @@
-From 741e60687441f82d6ef9c949197866770f99f7a9 Mon Sep 17 00:00:00 2001
+From 224fd9ed786ffb5802ac2ba68ef2d557e49556c2 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 9 Oct 2017 18:21:03 -0400
 Subject: [PATCH] Optimize EAR
@@ -37,5 +37,5 @@ index ce0f63c..260d202 100644
                  }
              }
 -- 
-2.14.3
+2.18.0
 

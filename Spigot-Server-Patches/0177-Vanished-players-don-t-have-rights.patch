@@ -1,4 +1,4 @@
-From c232153f801d34494eeddca3fa64d2ce61bb0f17 Mon Sep 17 00:00:00 2001
+From 5c68eadb754cee114ea4e090dd6a6055ed6501f8 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 20 Oct 2017 19:40:03 -0400
 Subject: [PATCH] Vanished players don't have rights
@@ -18,7 +18,7 @@ index d2c7dd1..cb9e3cc 100644
              IBlockState iblockdata1 = this.block.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, i, player);
  
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index f77159b..f1e7fea 100644
+index 8a626a1..b8a6d71 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1819,6 +1819,31 @@ public abstract class World implements IBlockAccess {
@@ -81,5 +81,5 @@ index b666b2e..4eea96d 100644
          return event;
      }
 -- 
-2.14.3
+2.18.0
 

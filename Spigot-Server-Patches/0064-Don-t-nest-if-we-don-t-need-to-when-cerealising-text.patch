@@ -1,4 +1,4 @@
-From f49782918be048a1df3f9cbc3b80047d4429bf01 Mon Sep 17 00:00:00 2001
+From e896741d82f047328f5b7c142f7501740388c54d Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Sat, 30 Sep 2017 21:31:01 -0400
 Subject: [PATCH] Don't nest if we don't need to when cerealising text
@@ -25,5 +25,5 @@ index 7fe0b81..2100728 100644
              buf.writeTextComponent(this.chatComponent);
          }
 -- 
-2.14.3
+2.18.0
 

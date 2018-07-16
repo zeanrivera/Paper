@@ -1,0 +1,22 @@
+From cdf853e0c85927b242732fb04f66d29df0dd54cc Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Thu, 4 Jan 2018 20:52:28 -0600
+Subject: [PATCH] Avoid NPE in EntityAITempt
+
+
+diff --git a/src/main/java/net/minecraft/entity/ai/EntityAITempt.java b/src/main/java/net/minecraft/entity/ai/EntityAITempt.java
+index 5d8d4ee..0724307 100644
+--- a/src/main/java/net/minecraft/entity/ai/EntityAITempt.java
++++ b/src/main/java/net/minecraft/entity/ai/EntityAITempt.java
+@@ -65,7 +65,7 @@ public class EntityAITempt extends EntityAIBase {
+                 this.temptingPlayer = event.getTarget() == null ? null : ((CraftLivingEntity) event.getTarget()).getHandle();
+             }
+ 
+-            return tempt;
++            return tempt && this.temptedEntity != null; // Paper - must have target - plugin might of cancelled
+         }
+     }
+ 
+-- 
+2.18.0
+

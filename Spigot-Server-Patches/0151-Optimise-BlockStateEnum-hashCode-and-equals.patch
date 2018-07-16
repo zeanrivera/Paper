@@ -1,4 +1,4 @@
-From 16ad61471252a52e2c2b093d05505385f95433a0 Mon Sep 17 00:00:00 2001
+From 5cc88a2b11820c660c449dd8544d591c9e3b39b6 Mon Sep 17 00:00:00 2001
 From: Alfie Cleveland <alfeh@me.com>
 Date: Tue, 10 Oct 2017 15:55:21 -0400
 Subject: [PATCH] Optimise BlockStateEnum hashCode and equals
@@ -63,5 +63,5 @@ index 4b70166..5240bb1 100644
  
      public static <T extends Enum<T> & IStringSerializable> PropertyEnum<T> create(String name, Class<T> clazz) {
 -- 
-2.14.3
+2.18.0
 

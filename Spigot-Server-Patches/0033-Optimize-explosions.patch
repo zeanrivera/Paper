@@ -1,4 +1,4 @@
-From 9bfca7e457e61a3390e92aa7256a2134a20b669c Mon Sep 17 00:00:00 2001
+From 56d3540c06efd34d94711fdd44facc48673038d4 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Wed, 2 Mar 2016 11:59:48 -0600
 Subject: [PATCH] Optimize explosions
@@ -25,7 +25,7 @@ index 188a276..9734e6c 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 09890c8..c673a81 100644
+index 4aa18db..1dfcc57 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -904,6 +904,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -136,7 +136,7 @@ index 19dfc82..a8c66d8 100644
 +    // Paper end
  }
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 97279b8..6a9b4e0 100644
+index c7432c6..94c2089 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -5,15 +5,8 @@ import com.google.common.base.MoreObjects;
@@ -166,5 +166,5 @@ index 97279b8..6a9b4e0 100644
      public CraftWorld getWorld() {
          return this.world;
 -- 
-2.14.3
+2.18.0
 

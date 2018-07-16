@@ -1,4 +1,4 @@
-From 472cd71827078f05742b232d2418265f1759e42c Mon Sep 17 00:00:00 2001
+From 75c8c3a63e7a920daa9fe2031107e549ee6b91e3 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 21:30:11 -0400
 Subject: [PATCH] Activation Range Improvements
@@ -18,7 +18,7 @@ index 3468585..4dbd036 100644
      public EntityCreature(World worldIn) {
          super(worldIn);
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIMoveToBlock.java b/src/main/java/net/minecraft/entity/ai/EntityAIMoveToBlock.java
-index 0e5e3f7..b2122c7 100644
+index d5e6a91..d99914d 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIMoveToBlock.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIMoveToBlock.java
 @@ -85,7 +85,7 @@ public abstract class EntityAIMoveToBlock extends EntityAIBase {
@@ -33,7 +33,7 @@ index 0e5e3f7..b2122c7 100644
 @@ -97,4 +97,17 @@ public abstract class EntityAIMoveToBlock extends EntityAIBase {
      }
  
-     protected abstract boolean shouldMoveTo(World worldIn, BlockPos pos);
+     protected abstract boolean shouldMoveTo(World var1, BlockPos var2);
 +
 +    // Paper start - Activation range improvements
 +    public void setDestinationBlock(BlockPos pos) {
@@ -94,5 +94,5 @@ index 260d202..639e7d1 100644
                      EntityAnimal animal = (EntityAnimal) entity;
  
 -- 
-2.14.3
+2.18.0
 

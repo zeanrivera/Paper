@@ -1,4 +1,4 @@
-From 2de8286b756fa3e1e32f30efc5587b26efb7745c Mon Sep 17 00:00:00 2001
+From b4c86d1d551dd262b5b94a0178b8522b31a48132 Mon Sep 17 00:00:00 2001
 From: Isaac Moore <rmsy@me.com>
 Date: Sun, 8 Oct 2017 00:08:08 -0400
 Subject: [PATCH] Implement PlayerLocaleChangeEvent
@@ -69,5 +69,5 @@ index ea18f09..323cc58 100644
  
      // Paper start
 -- 
-2.14.3
+2.18.0
 

@@ -1,0 +1,31 @@
+From 13020e98183d11d376cce9d7177304a612cffc65 Mon Sep 17 00:00:00 2001
+From: BillyGalbreath <Blake.Galbreath@GMail.com>
+Date: Sun, 29 Oct 2017 21:32:26 -0400
+Subject: [PATCH] Reset spawner timer when spawner event is cancelled
+
+
+diff --git a/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java b/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
+index db47ce4..104e27f 100644
+--- a/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
++++ b/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
+@@ -151,6 +151,8 @@ public abstract class MobSpawnerBaseLogic {
+                             entity.fromMobSpawner = true;
+                         }
+ 
++                        flag = true; // Paper - Moved up from below
++
+                         if (!CraftEventFactory.callSpawnerSpawnEvent(entity, blockposition).isCancelled()) {
+                             AnvilChunkLoader.a(entity, world, SpawnReason.SPAWNER);
+                             world.playEvent(2004, blockposition, 0);
+@@ -159,7 +161,7 @@ public abstract class MobSpawnerBaseLogic {
+                                 entityinsentient.spawnExplosionParticle();
+                             }
+ 
+-                            flag = true;
++                            //flag = true; // Paper - Moved up
+                         }
+                     }
+                 }
+-- 
+2.18.0
+

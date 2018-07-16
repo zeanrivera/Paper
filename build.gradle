@@ -14,7 +14,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:2.3.11"
+        classpath "gradle.plugin.com.destroystokyo.papergradle:PaperGradle:2.3.12"
         classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
 }
@@ -101,6 +101,7 @@ minecraft {
         mcpRewritesFile = "mcp/mcp-rewrites.txt"
         preMapSrg = "mcp/paper.srg"
         removeList = "mcp/remove-list.txt"
+        memberMoveList = "mcp/member-moves.txt"
     }
 }
 

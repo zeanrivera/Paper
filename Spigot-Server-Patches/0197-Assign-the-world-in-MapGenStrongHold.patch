@@ -1,4 +1,4 @@
-From 393959f8d36f5eb203bbfa7bf81a8bf132439ae5 Mon Sep 17 00:00:00 2001
+From eb93819554c259760592f3608607479ec6fb5187 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 20 Oct 2017 22:10:29 -0400
 Subject: [PATCH] Assign the world in MapGenStrongHold
@@ -17,5 +17,5 @@ index f79ff3d..d376fe1 100644
              this.generatePositions();
              this.ranBiomeCheck = true;
 -- 
-2.14.3
+2.18.0
 

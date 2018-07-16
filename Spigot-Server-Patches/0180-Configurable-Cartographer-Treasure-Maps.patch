@@ -1,4 +1,4 @@
-From 677dc56cce96fad9ceccdaf8b9413c201a01e427 Mon Sep 17 00:00:00 2001
+From c43f5d12ea27b0d9f36a2e6f6ab3f7fb66a8260f Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 19:57:48 -0400
 Subject: [PATCH] Configurable Cartographer Treasure Maps
@@ -28,7 +28,7 @@ index e516144..1b993d7 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-index 5bce765..715be38 100644
+index 761aa63..aec4acc 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 @@ -1193,7 +1193,8 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
@@ -42,5 +42,5 @@ index 5bce765..715be38 100644
              if (blockposition != null) {
                  ItemStack itemstack =
 -- 
-2.14.3
+2.18.0
 

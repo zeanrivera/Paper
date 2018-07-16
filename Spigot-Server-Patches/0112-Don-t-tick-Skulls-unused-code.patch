@@ -1,4 +1,4 @@
-From a62afd1691766fce79cc26de44c46d3b1ce0e464 Mon Sep 17 00:00:00 2001
+From f0286a04a9d23146f4d39ec2c8d0c3497e8b1d7d Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 22:34:59 -0400
 Subject: [PATCH] Don't tick Skulls - unused code
@@ -18,5 +18,5 @@ index d42ee6e..14f6a8a 100644
      public int skullRotation;
      private GameProfile playerProfile;
 -- 
-2.14.3
+2.18.0
 

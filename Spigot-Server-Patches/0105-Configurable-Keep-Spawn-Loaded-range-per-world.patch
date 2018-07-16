@@ -1,4 +1,4 @@
-From e0ce06cc100f7cbf2b685f254dddea176e027bde Mon Sep 17 00:00:00 2001
+From 65da40b3ed3990267c391392f60236fad6c07d4b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 21:33:22 -0400
 Subject: [PATCH] Configurable Keep Spawn Loaded range per world
@@ -21,7 +21,7 @@ index 06be217..33bc34f 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index c673a81..6229b76 100644
+index 1dfcc57..c5a3991 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -415,8 +415,11 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -39,7 +39,7 @@ index c673a81..6229b76 100644
  
                          if (i1 - j > 1000L) {
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index d98029b..c843fc7 100644
+index 475f8db..79ee564 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -3184,7 +3184,8 @@ public abstract class World implements IBlockAccess {
@@ -84,5 +84,5 @@ index c14d3e1..0380cc7 100644
                      this.loadChunk(chunkCoordX + x, chunkCoordZ + z);
                  } else if (this.isChunkLoaded(chunkCoordX + x, chunkCoordZ + z)) {
 -- 
-2.14.3
+2.18.0
 

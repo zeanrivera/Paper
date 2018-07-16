@@ -1,4 +1,4 @@
-From f0e2e042312a4d890303ed799126e70a50703787 Mon Sep 17 00:00:00 2001
+From 34f2343000251ec34c595195390e5b767ddcc432 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 22:05:05 -0400
 Subject: [PATCH] Enforce Sync Chunk Unloads
@@ -29,5 +29,5 @@ index bfb38de..b051881 100644
  
      public boolean regenerateChunk(int x, int z) {
 -- 
-2.14.3
+2.18.0
 

@@ -37,6 +37,7 @@ work/test-server
 work/MCP
 
 # Mac filesystem dust
+.DS_Store
 .DS_Store/
 
 # intellij

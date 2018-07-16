@@ -1,0 +1,73 @@
+From a235c930c0a1d2f04fcb2948bc655857834b2a52 Mon Sep 17 00:00:00 2001
+From: willies952002 <admin@domnian.com>
+Date: Sun, 29 Oct 2017 21:08:41 -0400
+Subject: [PATCH] Allow changing of player sample in ServerListPingEvent
+
+
+diff --git a/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java b/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java
+index 95f63b1..8261b68 100644
+--- a/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java
++++ b/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java
+@@ -2,11 +2,8 @@ package net.minecraft.server.network;
+ 
+ import com.mojang.authlib.GameProfile;
+ import java.net.InetSocketAddress;
+-import java.util.ArrayList;
+-import java.util.Collections;
+-import java.util.Iterator;
+-import java.util.List;
+-import java.util.NoSuchElementException;
++import java.util.*;
++
+ import net.minecraft.entity.player.EntityPlayerMP;
+ import net.minecraft.network.NetworkManager;
+ import net.minecraft.network.ServerStatusResponse;
+@@ -114,22 +111,44 @@ public class NetHandlerStatusServer implements INetHandlerStatusServer {
+                 }
+             }
+ 
++            // Paper start
++            java.util.List<String> sample = new java.util.ArrayList<>(players.length);
++            for (Object player : players) {
++                if (player != null) sample.add(((EntityPlayerMP) player).getName());
++            }
++            if (!sample.isEmpty()) {
++                java.util.Collections.shuffle(sample);
++                sample = sample.subList(0, Math.min(sample.size(), org.spigotmc.SpigotConfig.playerSample));
++            }
++            // Paper end
++
+             ServerListPingEvent event = new ServerListPingEvent();
++            event.setSampleText(sample); // Paper
+             this.server.server.getPluginManager().callEvent(event);
+             List<GameProfile> profiles = new ArrayList<GameProfile>(players.length);
++            // Paper start
++            if (event.getSampleText() != sample) sample = event.getSampleText();
++            sample.forEach(line -> profiles.add(new GameProfile(UUID.randomUUID(), line)));
++            /*
+ 
+             for (Object player : players) {
+                 if (player != null) {
+                     profiles.add(((EntityPlayerMP) player).getGameProfile());
+                 }
+             }
++            */
++            // Paper end
+ 
+-            ServerStatusResponse.Players playerSample = new ServerStatusResponse.Players(event.getMaxPlayers(), profiles.size());
++            ServerStatusResponse.Players playerSample = new ServerStatusResponse.Players(event.getMaxPlayers(), server.getPlayerList().getCurrentPlayerCount()); // Paper
+ 
++            // Paper start - Move up
++            /*
+             if (!profiles.isEmpty()) {
+                 Collections.shuffle(profiles);
+                 profiles = profiles.subList(0, Math.min(profiles.size(), SpigotConfig.playerSample));
+             }
++            */
++            // Paper end
+ 
+             playerSample.setPlayers((GameProfile[]) profiles.toArray(new GameProfile[profiles.size()]));
+             ServerStatusResponse ping = new ServerStatusResponse();
+-- 
+2.18.0
+
