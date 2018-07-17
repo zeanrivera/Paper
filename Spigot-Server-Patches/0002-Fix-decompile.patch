@@ -1,4 +1,4 @@
-From 681717103db77fce687118c57e04ee901f2280ae Mon Sep 17 00:00:00 2001
+From 3cba1af9b7228e45185935bea04fd483b0a3cf4b Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
@@ -994,7 +994,7 @@ index a2e71b4..4db50e2 100644
  
      public String getDescription() {
 diff --git a/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java b/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
-index db076a3..6a9015b 100644
+index d75cc78..68a883f 100644
 --- a/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
 +++ b/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
 @@ -161,7 +161,7 @@ public class EnchantmentHelper {
@@ -1464,7 +1464,7 @@ index 4cde97f..652b68c 100644
          for (EnumDyeColor enumcolor : EnumDyeColor.values()) {
              DYE_TO_RGB.put(enumcolor, createSheepColor(enumcolor));
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-index 0d0c7bb..8da9289 100644
+index 1e58dd9..de97aed 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 @@ -1019,10 +1019,6 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
@@ -1700,7 +1700,7 @@ index b23ae9f..aae4dc6 100644
                          throw new Error(
                                  "Packet "
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 821e9da..6b29855 100644
+index 821e9da..b842f0d 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -194,7 +194,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
@@ -1708,7 +1708,7 @@ index 821e9da..6b29855 100644
      private volatile int chatSpamThresholdCount;
      private static final AtomicIntegerFieldUpdater chatSpamField =
 -            AtomicIntegerFieldUpdater.newUpdater(NetHandlerPlayServer.class, "chatThrottle");
-+            AtomicIntegerFieldUpdater.newUpdater(NetHandlerPlayServer.class, "chatSpamThresholdCount");
++            AtomicIntegerFieldUpdater.newUpdater(NetHandlerPlayServer.class, "field_147374_l"); // chatSpamThresholdCount, SRG as reobf doesn't pick this field up
      private int itemDropThreshold;
      private final IntHashMap<Short> pendingTransactions = new IntHashMap<Short>();
      private double firstGoodX;
@@ -1868,7 +1868,7 @@ index d45f937..cf751ae 100644
          for (EntityPlayerMP entityplayer : this.scoreboardMCServer.getPlayerList().getPlayers()) {
              if (entityplayer.getBukkitEntity().getScoreboard().getHandle() == this) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 3c48d81..9c0835f 100644
+index 3a2196b..ff0c405 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -36,7 +36,6 @@ import java.util.concurrent.Callable;
@@ -2152,7 +2152,7 @@ index a7ad04f..27ee629 100644
      }
  }
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index ae5aedb..f286ada 100644
+index 07f11d9..2a65e96 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -2527,7 +2527,7 @@ public abstract class World implements IBlockAccess {
@@ -2293,7 +2293,7 @@ index 758b1b0..375b380 100644
                  if (!var5.isEmpty()) {
                      var1.append("(");
 diff --git a/src/main/java/net/minecraft/world/gen/layer/GenLayer.java b/src/main/java/net/minecraft/world/gen/layer/GenLayer.java
-index d3fbe84..ddede5b 100644
+index f2da85c..74aae33 100644
 --- a/src/main/java/net/minecraft/world/gen/layer/GenLayer.java
 +++ b/src/main/java/net/minecraft/world/gen/layer/GenLayer.java
 @@ -49,7 +49,7 @@ public abstract class GenLayer {
@@ -2319,7 +2319,7 @@ index 28dd30c..3021c6a 100644
                      for (Entry entry : map.entrySet()) {
                          if ("chest".equals(entry.getValue())) {
 diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java b/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java
-index ed4ecb2..82d2e57 100644
+index 27e92f1..a303ded 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/StructureComponentTemplate.java
 @@ -50,7 +50,7 @@ public abstract class StructureComponentTemplate extends StructureComponent {
@@ -2332,7 +2332,7 @@ index ed4ecb2..82d2e57 100644
          for (Entry var6 : var4.entrySet()) {
              String var7 = (String) var6.getValue();
 diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java b/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
-index 6f40f0c..0e4ca8c 100644
+index de95e61..753a2f3 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
 @@ -404,7 +404,7 @@ public class StructureEndCityPieces {
@@ -2345,7 +2345,7 @@ index 6f40f0c..0e4ca8c 100644
              if (p_191088_1_.generate(p_191088_0_, p_191088_2_, p_191088_3_, p_191088_4_, var7, p_191088_6_)) {
                  boolean var8 = false;
 diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java b/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
-index 239535f..552efea 100644
+index 1b441d1..5ab02ca 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
 @@ -689,7 +689,7 @@ public class StructureOceanMonumentPieces {
@@ -2367,7 +2367,7 @@ index 239535f..552efea 100644
              for (StructureOceanMonumentPieces.RoomDefinition var37 : var2) {
                  if (var37 != null) {
 diff --git a/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java b/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
-index bd6190f..ee7bf64 100644
+index 5cef6b0..e337b7e 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
 @@ -291,7 +291,7 @@ public class WoodlandMansionPieces {
@@ -3247,5 +3247,5 @@ index 0c40ff9..1931031 100644
      }
  }
 -- 
-2.14.3
+2.18.0
 

@@ -1,0 +1,48 @@
+From 465706adba417c5cf9911bf1413a20539ca139b0 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Mon, 9 Oct 2017 18:50:13 -0400
+Subject: [PATCH] Only send Dragon/Wither Death sounds to same world
+
+Also fix view distance lookup
+
+diff --git a/src/main/java/net/minecraft/entity/boss/EntityDragon.java b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
+index b8d8e0f..84ac723 100644
+--- a/src/main/java/net/minecraft/entity/boss/EntityDragon.java
++++ b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
+@@ -687,9 +687,11 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
+             }
+ 
+             if (this.deathTicks == 1) {
+-                int viewDistance = ((WorldServer) this.world).getServer().getViewDistance() * 16;
+-
+-                for (EntityPlayerMP player : MinecraftServer.getServer().getPlayerList().playerEntityList) {
++                // Paper start
++                for (EntityPlayer human : world.playerEntities) {
++                    EntityPlayerMP player = (EntityPlayerMP) human;
++                    int viewDistance = player.getViewDistance();
++                    // Paper end
+                     double deltaX = this.posX - player.posX;
+                     double deltaZ = this.posZ - player.posZ;
+                     double distanceSquared = deltaX * deltaX + deltaZ * deltaZ;
+diff --git a/src/main/java/net/minecraft/entity/boss/EntityWither.java b/src/main/java/net/minecraft/entity/boss/EntityWither.java
+index ac375c6..9dc5799 100644
+--- a/src/main/java/net/minecraft/entity/boss/EntityWither.java
++++ b/src/main/java/net/minecraft/entity/boss/EntityWither.java
+@@ -274,9 +274,11 @@ public class EntityWither extends EntityMob implements IRangedAttackMob {
+                             this.world.getGameRules().getBoolean("mobGriefing"));
+                 }
+ 
+-                int viewDistance = ((WorldServer) this.world).getServer().getViewDistance() * 16;
+-
+-                for (EntityPlayerMP player : MinecraftServer.getServer().getPlayerList().playerEntityList) {
++                // Paper start
++                for (EntityPlayer human : world.playerEntities) {
++                    EntityPlayerMP player = (EntityPlayerMP) human;
++                    int viewDistance = player.getViewDistance();
++                    // Paper end
+                     double deltaX = this.posX - player.posX;
+                     double deltaZ = this.posZ - player.posZ;
+                     double distanceSquared = deltaX * deltaX + deltaZ * deltaZ;
+-- 
+2.18.0
+

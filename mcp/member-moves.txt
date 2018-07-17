@@ -1,1 +1,3 @@
-FD: net/minecraft/entity/EntityLiving/field_82172_bs net/minecraft/entity/EntityLivingBase/field_82172_bs # Spigot moves this field
+FD: net/minecraft/entity/EntityLiving/field_82172_bs net/minecraft/entity/EntityLivingBase/field_82172_bs # canPickUpLoot (field_82172_bs) moved by spigot (SRG mapping move)
+FD: net/minecraft/entity/EntityLiving/canPickUpLoot net/minecraft/entity/EntityLivingBase/canPickUpLoot   # (MCP mapping move)
+FD: net/minecraft/server/EntityInsentient/canPickUpLoot net/minecraft/server/EntityLiving/canPickUpLoot   # (Spigot mapping move)

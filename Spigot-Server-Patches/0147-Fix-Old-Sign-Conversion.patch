@@ -1,0 +1,60 @@
+From 0966c5812b1c9f76b8a9fe6ae194b4e42d1b0839 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Tue, 10 Oct 2017 15:37:11 -0400
+Subject: [PATCH] Fix Old Sign Conversion
+
+1) Sign loading code was trying to parse the JSON before the check for oldSign.
+   That code could then skip the old sign converting code if it triggers a JSON parse exception.
+2) New Mojang Schematic system has Tile Entities in the new converted format, but missing the Bukkit.isConverted flag
+   This causes Igloos and such to render broken signs. We fix this by ignoring sign conversion for Defined Structures
+
+diff --git a/src/main/java/net/minecraft/tileentity/TileEntity.java b/src/main/java/net/minecraft/tileentity/TileEntity.java
+index baafd88..4d55bb9 100644
+--- a/src/main/java/net/minecraft/tileentity/TileEntity.java
++++ b/src/main/java/net/minecraft/tileentity/TileEntity.java
+@@ -27,6 +27,7 @@ import org.bukkit.inventory.InventoryHolder;
+ 
+ public abstract class TileEntity {
+     public Timing tickTimer = MinecraftTimings.getTileEntityTimings(this); // Paper
++    public boolean isLoadingStructure = false; // Paper
+     private static final Logger LOGGER = LogManager.getLogger();
+     private static final RegistryNamespaced<ResourceLocation, Class<? extends TileEntity>> REGISTRY =
+             new RegistryNamespaced<ResourceLocation, Class<? extends TileEntity>>();
+diff --git a/src/main/java/net/minecraft/tileentity/TileEntitySign.java b/src/main/java/net/minecraft/tileentity/TileEntitySign.java
+index cb51ab2..10a1d20 100644
+--- a/src/main/java/net/minecraft/tileentity/TileEntitySign.java
++++ b/src/main/java/net/minecraft/tileentity/TileEntitySign.java
+@@ -94,11 +94,12 @@ public class TileEntitySign extends TileEntity {
+             }
+ 
+             try {
+-                ITextComponent ichatbasecomponent = ITextComponent.Serializer.jsonToComponent(s);
++                //ITextComponent ichatbasecomponent = ITextComponent.Serializer.jsonToComponent(s); // Paper - Move down - The old format might throw a json error
+ 
+-                if (oldSign) {
++                if (oldSign && !isLoadingStructure) { // Paper - saved structures will be in the new format, but will not have isConverted
+                     this.signText[i] = CraftChatMessage.fromString(s)[0];
+                 } else {
++                    ITextComponent ichatbasecomponent = ITextComponent.Serializer.jsonToComponent(s); // Paper - after old sign
+                     try {
+                         this.signText[i] = TextComponentUtils.processComponent(icommandlistener, ichatbasecomponent, (Entity) null);
+                     } catch (CommandException var8) {
+diff --git a/src/main/java/net/minecraft/world/gen/structure/template/Template.java b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
+index 060182b..d8cba4f 100644
+--- a/src/main/java/net/minecraft/world/gen/structure/template/Template.java
++++ b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
+@@ -228,9 +228,11 @@ public class Template {
+                                 var11.tileentityData.setInteger("x", var10.getX());
+                                 var11.tileentityData.setInteger("y", var10.getY());
+                                 var11.tileentityData.setInteger("z", var10.getZ());
++                                var20.isLoadingStructure = true; // Paper
+                                 var20.readFromNBT(var11.tileentityData);
+                                 var20.mirror(placementIn.getMirror());
+                                 var20.rotate(placementIn.getRotation());
++                                var20.isLoadingStructure = false; // Paper
+                             }
+                         }
+                     }
+-- 
+2.18.0
+

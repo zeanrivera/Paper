@@ -1,0 +1,53 @@
+From c31e92bd798897413906cb2e4c559b12d6d246c3 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sat, 23 Sep 2017 20:49:37 -0400
+Subject: [PATCH] Configurable cactus and reed natural growth heights
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 621bf70..c17d71c 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -63,4 +63,13 @@ public class PaperWorldConfig {
+         config.addDefault("world-settings.default." + path, def);
+         return config.getString("world-settings." + worldName + "." + path, config.getString("world-settings.default." + path));
+     }
++
++    public int cactusMaxHeight;
++    public int reedMaxHeight;
++    private void blowGrowthHeight() {
++        cactusMaxHeight = getInt("max-growth-height.cactus", 3);
++        reedMaxHeight = getInt("max-growth-height.reeds", 3);
++        log("Max height for cactus growth " + cactusMaxHeight + ". Max height for reed growth " + reedMaxHeight);
++
++    }
+ }
+diff --git a/src/main/java/net/minecraft/block/BlockCactus.java b/src/main/java/net/minecraft/block/BlockCactus.java
+index 28e988c..16438f6 100644
+--- a/src/main/java/net/minecraft/block/BlockCactus.java
++++ b/src/main/java/net/minecraft/block/BlockCactus.java
+@@ -38,7 +38,7 @@ public class BlockCactus extends Block {
+             for (i = 1; worldIn.getBlockState(pos.down(i)).getBlock() == this; ++i) {;
+             }
+ 
+-            if (i < 3) {
++            if (i < worldIn.paperConfig.cactusMaxHeight) { // Paper - Configurable growth height
+                 int j = ((Integer) state.getValue(AGE)).intValue();
+ 
+                 if (j >= (byte) ((int) range(3.0F, 100.0F / (float) worldIn.spigotConfig.cactusModifier * 15.0F + 0.5F, 15.0F))) {
+diff --git a/src/main/java/net/minecraft/block/BlockReed.java b/src/main/java/net/minecraft/block/BlockReed.java
+index 5faa542..c9d7915 100644
+--- a/src/main/java/net/minecraft/block/BlockReed.java
++++ b/src/main/java/net/minecraft/block/BlockReed.java
+@@ -40,7 +40,7 @@ public class BlockReed extends Block {
+             for (i = 1; worldIn.getBlockState(pos.down(i)).getBlock() == this; ++i) {;
+             }
+ 
+-            if (i < 3) {
++            if (i < worldIn.paperConfig.reedMaxHeight) { // Paper - Configurable growth height
+                 int j = ((Integer) state.getValue(AGE)).intValue();
+ 
+                 if (j >= (byte) ((int) range(3.0F, 100.0F / (float) worldIn.spigotConfig.caneModifier * 15.0F + 0.5F, 15.0F))) {
+-- 
+2.18.0
+

@@ -1,0 +1,29 @@
+From d6041f86364e11686c1fd98d9be97427cbb8b2e3 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 24 Sep 2017 15:45:03 -0400
+Subject: [PATCH] Always tick falling blocks
+
+
+diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
+index f1e5ea3..ce0f63c 100644
+--- a/src/main/java/org/spigotmc/ActivationRange.java
++++ b/src/main/java/org/spigotmc/ActivationRange.java
+@@ -9,6 +9,7 @@ import net.minecraft.entity.boss.EntityDragon;
+ import net.minecraft.entity.boss.EntityWither;
+ import net.minecraft.entity.effect.EntityWeatherEffect;
+ import net.minecraft.entity.item.EntityEnderCrystal;
++import net.minecraft.entity.item.EntityFallingBlock; // Paper
+ import net.minecraft.entity.item.EntityFireworkRocket;
+ import net.minecraft.entity.item.EntityTNTPrimed;
+ import net.minecraft.entity.monster.EntityCreeper;
+@@ -55,6 +56,7 @@ public class ActivationRange {
+                 || entity instanceof EntityFireball
+                 || entity instanceof EntityWeatherEffect
+                 || entity instanceof EntityTNTPrimed
++                || entity instanceof EntityFallingBlock // Paper - Always tick
+                 || entity instanceof EntityEnderCrystal
+                 || entity instanceof EntityFireworkRocket;
+     }
+-- 
+2.18.0
+

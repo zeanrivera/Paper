@@ -1,0 +1,107 @@
+From 56ca4ee6efd7c5c12466dcde6c758b41d4940953 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Thu, 4 Jan 2018 20:27:28 -0600
+Subject: [PATCH] API to get a BlockState without a snapshot
+
+This allows you to get a BlockState without creating a snapshot, operating
+on the real tile entity.
+
+This is useful for where performance is needed
+
+diff --git a/src/main/java/net/minecraft/tileentity/TileEntity.java b/src/main/java/net/minecraft/tileentity/TileEntity.java
+index 4d55bb9..92d2d0e 100644
+--- a/src/main/java/net/minecraft/tileentity/TileEntity.java
++++ b/src/main/java/net/minecraft/tileentity/TileEntity.java
+@@ -257,7 +257,13 @@ public abstract class TileEntity {
+ 
+     public void mirror(Mirror mirrorIn) {}
+ 
++    // Paper start
+     public InventoryHolder getOwner() {
++        return getOwner(true);
++    }
++
++    public InventoryHolder getOwner(boolean useSnapshot) {
++        // Paper end
+         if (this.world == null) {
+             return null;
+         } else {
+@@ -271,7 +277,7 @@ public abstract class TileEntity {
+                                 new Object[] {this.world.getWorld(), this.pos.getX(), this.pos.getY(), this.pos.getZ()});
+                 return null;
+             } else {
+-                BlockState state = block.getState();
++                BlockState state = block.getState(useSnapshot); // Paper
+                 return state instanceof InventoryHolder ? (InventoryHolder) state : null;
+             }
+         }
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
+index 5d59651..9fd6fea 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
+@@ -280,6 +280,22 @@ public class CraftBlock implements Block {
+     }
+ 
+     public BlockState getState() {
++        // Paper start - allow disabling the use of snapshots
++        return getState(true);
++    }
++
++    public BlockState getState(boolean useSnapshot) {
++        boolean prev = CraftBlockEntityState.DISABLE_SNAPSHOT;
++        CraftBlockEntityState.DISABLE_SNAPSHOT = !useSnapshot;
++        try {
++            return getState0();
++        } finally {
++            CraftBlockEntityState.DISABLE_SNAPSHOT = prev;
++        }
++    }
++
++    public BlockState getState0() {
++        // Paper end
+         Material material = this.getType();
+         switch (material) {
+             case SIGN:
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
+index b3ba34e..e27343b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
+@@ -13,11 +13,21 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
+     private final T tileEntity;
+     private final T snapshot;
+ 
++    public final boolean snapshotDisabled; // Paper
++    public static boolean DISABLE_SNAPSHOT = false; // Paper
++
+     public CraftBlockEntityState(Block block, Class<T> tileEntityClass) {
+         super(block);
+         this.tileEntityClass = tileEntityClass;
+         CraftWorld world = (CraftWorld) this.getWorld();
+         this.tileEntity = tileEntityClass.cast(world.getTileEntityAt(this.getX(), this.getY(), this.getZ()));
++        // Paper start
++        this.snapshotDisabled = DISABLE_SNAPSHOT;
++        if (DISABLE_SNAPSHOT) {
++            this.snapshot = tileEntity;
++            return;
++        }
++        // Paper end
+         this.snapshot = this.createSnapshot(this.tileEntity);
+         if(this.snapshot != null) // Paper - avoid NPE during load
+         this.load(this.snapshot);
+@@ -27,6 +37,13 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
+         super(material);
+         this.tileEntityClass = (Class<T>) tileEntity.getClass();
+         this.tileEntity = tileEntity;
++        // Paper start
++        this.snapshotDisabled = DISABLE_SNAPSHOT;
++        if (DISABLE_SNAPSHOT) {
++            this.snapshot = tileEntity;
++            return;
++        }
++        // Paper end
+         this.snapshot = this.createSnapshot(tileEntity);
+         if(this.snapshot != null) // Paper - avoid NPE during load
+         this.load(this.snapshot);
+-- 
+2.18.0
+

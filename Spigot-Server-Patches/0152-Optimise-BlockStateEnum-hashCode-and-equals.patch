@@ -1,0 +1,67 @@
+From c37beca5c5be82a985a6fc65029505cb1ce0e0e1 Mon Sep 17 00:00:00 2001
+From: Alfie Cleveland <alfeh@me.com>
+Date: Tue, 10 Oct 2017 15:55:21 -0400
+Subject: [PATCH] Optimise BlockStateEnum hashCode and equals
+
+
+diff --git a/src/main/java/net/minecraft/block/properties/PropertyEnum.java b/src/main/java/net/minecraft/block/properties/PropertyEnum.java
+index 4b70166..5240bb1 100644
+--- a/src/main/java/net/minecraft/block/properties/PropertyEnum.java
++++ b/src/main/java/net/minecraft/block/properties/PropertyEnum.java
+@@ -14,7 +14,11 @@ import net.minecraft.util.IStringSerializable;
+ public class PropertyEnum<T extends Enum<T> & IStringSerializable> extends PropertyHelper<T> {
+     private final ImmutableSet<T> allowedValues;
+     private final Map<String, T> nameToValue = Maps.<String, T>newHashMap();
++
++    // Paper start - BlockStateEnum is a singleton, so we can use our own hashCode
++    private static int hashId = 0;
+     private int hashCode;
++    // Paper end
+ 
+     protected PropertyEnum(String name, Class<T> valueClass, Collection<T> allowedValues) {
+         super(name, valueClass);
+@@ -29,6 +33,7 @@ public class PropertyEnum<T extends Enum<T> & IStringSerializable> extends Prope
+ 
+             this.nameToValue.put(s1, (T) oenum);
+         }
++        this.hashCode = hashId++; // Paper
+     }
+ 
+     public Collection<T> getAllowedValues() {
+@@ -43,29 +48,14 @@ public class PropertyEnum<T extends Enum<T> & IStringSerializable> extends Prope
+         return ((IStringSerializable) value).getName();
+     }
+ 
++    @Override // Paper - override equals as BlockStateEnum is a singleton
+     public boolean equals(Object object) {
+-        if (this == object) {
+-            return true;
+-        } else if (object instanceof PropertyEnum && super.equals(object)) {
+-            PropertyEnum blockstateenum = (PropertyEnum) object;
+-            return this.allowedValues.equals(blockstateenum.allowedValues) && this.nameToValue.equals(blockstateenum.nameToValue);
+-        } else {
+-            return false;
+-        }
++        return this == object;
+     }
+ 
++    @Override // Paper - override hashCode as BlockStateEnum is a singleton
+     public int hashCode() {
+-        int hash = this.hashCode;
+-
+-        if (hash == 0) {
+-            int i = super.hashCode();
+-            i = 31 * i + this.allowedValues.hashCode();
+-            i = 31 * i + this.nameToValue.hashCode();
+-            hash = i;
+-            this.hashCode = i;
+-        }
+-
+-        return hash;
++        return hashCode;
+     }
+ 
+     public static <T extends Enum<T> & IStringSerializable> PropertyEnum<T> create(String name, Class<T> clazz) {
+-- 
+2.18.0
+

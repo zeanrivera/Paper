@@ -1,0 +1,38 @@
+From 998da8c3131848ff512947d06281bd2e274c8f04 Mon Sep 17 00:00:00 2001
+From: Shane Freeder <theboyetronic@gmail.com>
+Date: Sun, 29 Oct 2017 20:06:08 -0400
+Subject: [PATCH] Configurable option to disable creeper lingering effect
+ spawns
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index c05afe0..c927557 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -416,4 +416,10 @@ public class PaperWorldConfig {
+         parrotsHangOnBetter = getBoolean("parrots-are-unaffected-by-player-movement", false);
+         log("Parrots are unaffected by player movement: " + parrotsHangOnBetter);
+     }
++
++    public boolean disableCreeperLingeringEffect;
++    private void setDisableCreeperLingeringEffect() {
++        disableCreeperLingeringEffect = getBoolean("disable-creeper-lingering-effect", false);
++        log("Creeper lingering effect: " + disableCreeperLingeringEffect);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/monster/EntityCreeper.java b/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
+index 0c45b37..76b473a 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
++++ b/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
+@@ -260,7 +260,7 @@ public class EntityCreeper extends EntityMob {
+     private void spawnLingeringCloud() {
+         Collection<PotionEffect> collection = this.getActivePotionEffects();
+ 
+-        if (!collection.isEmpty()) {
++        if (!collection.isEmpty() && !world.paperConfig.disableCreeperLingeringEffect) { // Paper
+             EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
+             entityareaeffectcloud.setOwner(this);
+             entityareaeffectcloud.setRadius(2.5F);
+-- 
+2.18.0
+

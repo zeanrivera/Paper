@@ -1,0 +1,21 @@
+From 71759ae5da97dd6138dadbc416d1aca56db9ebd4 Mon Sep 17 00:00:00 2001
+From: Michael Himing <mhiming@gmail.com>
+Date: Fri, 20 Oct 2017 22:08:10 -0400
+Subject: [PATCH] Fix block break desync
+
+
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index b86b8fd..929312b 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -1070,6 +1070,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+                     double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+ 
+                     if (d3 > 36.0D) {
++                        this.sendPacket(new SPacketBlockChange(worldserver, blockposition)); // Paper - Fix block break desync
+                         return;
+                     } else if (blockposition.getY() >= this.serverController.getBuildLimit()) {
+                         return;
+-- 
+2.18.0
+

@@ -1,4 +1,4 @@
-From 88a90c06d74bea561041db021b04ab9f569646d1 Mon Sep 17 00:00:00 2001
+From c2f2bff7c1cff4b0d1a87ec7a1cb1f187835253c Mon Sep 17 00:00:00 2001
 From: DemonWav <demonwav@gmail.com>
 Date: Sun, 27 Nov 2016 08:01:04 -0600
 Subject: [PATCH] Setup Gradle config

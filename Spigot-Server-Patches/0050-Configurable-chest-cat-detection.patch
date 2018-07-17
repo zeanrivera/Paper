@@ -1,0 +1,39 @@
+From a0388e6199993894cc94c117c5c0b65d1a37c005 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Wed, 27 Sep 2017 15:01:12 -0400
+Subject: [PATCH] Configurable chest cat detection
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 56e49f4..095c7fb 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -218,4 +218,9 @@ public class PaperWorldConfig {
+     private void containerUpdateTickRate() {
+         containerUpdateTickRate = getInt("container-update-tick-rate", 1);
+     }
++
++    public boolean disableChestCatDetection;
++    private void disableChestCatDetection() {
++        disableChestCatDetection = getBoolean("game-mechanics.disable-chest-cat-detection", false);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/block/BlockChest.java b/src/main/java/net/minecraft/block/BlockChest.java
+index cb15d59..a7da4ea 100644
+--- a/src/main/java/net/minecraft/block/BlockChest.java
++++ b/src/main/java/net/minecraft/block/BlockChest.java
+@@ -430,6 +430,11 @@ public class BlockChest extends BlockContainer {
+     }
+ 
+     private boolean isOcelotSittingOnChest(World worldIn, BlockPos pos) {
++        // Paper start - Option to disable chest cat detection
++        if (worldIn.paperConfig.disableChestCatDetection) {
++            return false;
++        }
++        // Paper end
+         for (Entity var4 :
+                 worldIn.getEntitiesWithinAABB(
+                         EntityOcelot.class,
+-- 
+2.18.0
+

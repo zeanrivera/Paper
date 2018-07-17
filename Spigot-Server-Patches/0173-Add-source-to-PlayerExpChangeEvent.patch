@@ -1,0 +1,45 @@
+From cce0a946bd31af0169c2c9fe6d3ed0ffb937bf2f Mon Sep 17 00:00:00 2001
+From: AlphaBlend <whizkid3000@hotmail.com>
+Date: Fri, 20 Oct 2017 18:36:49 -0400
+Subject: [PATCH] Add source to PlayerExpChangeEvent
+
+
+diff --git a/src/main/java/net/minecraft/entity/item/EntityXPOrb.java b/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
+index 364524f..7198306 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
++++ b/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
+@@ -201,7 +201,7 @@ public class EntityXPOrb extends Entity {
+             }
+ 
+             if (this.xpValue > 0) {
+-                entityIn.addExperience(CraftEventFactory.callPlayerExpChangeEvent(entityIn, this.xpValue).getAmount());
++                entityIn.addExperience(CraftEventFactory.callPlayerExpChangeEvent(entityIn, this).getAmount()); // Paper - supply experience orb object
+             }
+ 
+             this.setDead();
+diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+index 4d555d3..bd92f0d 100644
+--- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+@@ -807,6 +807,18 @@ public class CraftEventFactory {
+         return event;
+     }
+ 
++    // Paper start - Add orb
++    public static PlayerExpChangeEvent callPlayerExpChangeEvent(EntityPlayer entity, EntityXPOrb entityOrb) {
++        Player player = (Player) entity.getBukkitEntity();
++        ExperienceOrb source = (ExperienceOrb) entityOrb.getBukkitEntity();
++        int expAmount = source.getExperience();
++        PlayerExpChangeEvent event = new PlayerExpChangeEvent(player, source, expAmount);
++        Bukkit.getPluginManager().callEvent(event);
++        return event;
++    }
++    // Paper end
++
++
+     public static boolean handleBlockGrowEvent(World world, int x, int y, int z, net.minecraft.block.Block type, int data) {
+         Block block = world.getWorld().getBlockAt(x, y, z);
+         CraftBlockState state = (CraftBlockState) block.getState();
+-- 
+2.18.0
+

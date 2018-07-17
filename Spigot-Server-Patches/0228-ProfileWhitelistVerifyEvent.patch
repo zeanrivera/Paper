@@ -1,0 +1,50 @@
+From 58045d2846f59e1d3fe1d1a4d95165e251108ca4 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 29 Oct 2017 21:25:37 -0400
+Subject: [PATCH] ProfileWhitelistVerifyEvent
+
+
+diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
+index cb88426..4c9bdd7 100644
+--- a/src/main/java/net/minecraft/server/management/PlayerList.java
++++ b/src/main/java/net/minecraft/server/management/PlayerList.java
+@@ -562,8 +562,8 @@ public abstract class PlayerList {
+             if (!gameprofilebanentry.hasBanExpired()) {
+                 event.disallow(Result.KICK_BANNED, s);
+             }
+-        } else if (!this.canJoin(gameprofile)) {
+-            event.disallow(Result.KICK_WHITELIST, SpigotConfig.whitelistMessage);
++        } else if (!this.canJoin(gameprofile, event)) { // Paper
++            //event.disallow(Result.KICK_WHITELIST, SpigotConfig.whitelistMessage);
+         } else if (this.getBannedIPs().isBanned(socketaddress) && !this.getBannedIPs().getBanEntry(socketaddress).hasBanExpired()) {
+             UserListIPBansEntry ipbanentry = this.bannedIPs.getBanEntry(socketaddress);
+             String s = "Your IP address is banned from this server!\nReason: " + ipbanentry.getBanReason();
+@@ -1093,8 +1093,24 @@ public abstract class PlayerList {
+         }
+     }
+ 
++    // Paper start
+     public boolean canJoin(GameProfile profile) {
+-        return !this.whiteListEnforced || this.ops.hasEntry(profile) || this.whiteListedPlayers.hasEntry(profile);
++        return canJoin(profile, null);
++    }
++
++    public boolean canJoin(GameProfile profile, @Nullable org.bukkit.event.player.PlayerLoginEvent loginEvent) {
++        boolean isOp = this.ops.bypassesPlayerLimit(profile);
++        boolean isWhiteListed = !this.whiteListEnforced || isOp || this.whiteListedPlayers.isWhitelisted(profile);
++        final com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent event;
++        event = new com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent(profile, this.whiteListEnforced, isWhiteListed, isOp, org.spigotmc.SpigotConfig.whitelistMessage);
++        event.callEvent();
++        if (!event.isWhitelisted()) {
++            if (loginEvent != null) {
++                loginEvent.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, event.getKickMessage() == null ? org.spigotmc.SpigotConfig.whitelistMessage : event.getKickMessage());
++            }
++            return false;
++        }
++        return true;
+     }
+ 
+     public boolean canSendCommands(GameProfile profile) {
+-- 
+2.18.0
+

@@ -1,0 +1,26 @@
+From 364122236d6f034684b33ac9d2477e2dbba24de2 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Fri, 20 Oct 2017 19:18:07 -0400
+Subject: [PATCH] Don't fishinghooks use portals
+
+
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+index 5ab8513..e86b45e 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityFishHook.java
+@@ -208,6 +208,12 @@ public class EntityFishHook extends Entity {
+             this.motionY *= 0.92D;
+             this.motionZ *= 0.92D;
+             this.setPosition(this.posX, this.posY, this.posZ);
++
++            // Paper start - These shouldn't be going through portals
++            if (this.inPortal) {
++                this.setDead();
++            }
++            // Paper end
+         }
+     }
+ 
+-- 
+2.18.0
+

@@ -1,0 +1,46 @@
+From 9e5f54dd6f2250c4e4c2b30b20c9a8e64d5f1bbd Mon Sep 17 00:00:00 2001
+From: kashike <kashike@vq.lc>
+Date: Sun, 29 Oct 2017 21:39:09 -0400
+Subject: [PATCH] Allow specifying a custom "authentication servers down" kick
+ message
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
+index f4b2370..f5cb979 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
+@@ -1,5 +1,6 @@
+ package com.destroystokyo.paper;
+ 
++import com.google.common.base.Strings;
+ import com.google.common.base.Throwables;
+ 
+ import java.io.File;
+@@ -270,4 +271,9 @@ public class PaperConfig {
+     private static void suggestPlayersWhenNull() {
+         suggestPlayersWhenNullTabCompletions = getBoolean("settings.suggest-player-names-when-null-tab-completions", suggestPlayersWhenNullTabCompletions);
+     }
++
++    public static String authenticationServersDownKickMessage = ""; // empty = use translatable message
++    private static void authenticationServersDownKickMessage() {
++        authenticationServersDownKickMessage = Strings.emptyToNull(getString("messages.kick.authentication-servers-down", authenticationServersDownKickMessage));
++    }
+ }
+diff --git a/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java b/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
+index 66b2315..578d68c 100644
+--- a/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
++++ b/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
+@@ -260,6 +260,10 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
+                                     NetHandlerLoginServer.this.loginGameProfile = NetHandlerLoginServer.this.getOfflineProfile(gameprofile);
+                                     NetHandlerLoginServer.this.currentLoginState = NetHandlerLoginServer.LoginState.READY_TO_ACCEPT;
+                                 } else {
++                                    // Paper start
++                                    if (com.destroystokyo.paper.PaperConfig.authenticationServersDownKickMessage != null) {
++                                        NetHandlerLoginServer.this.disconnect(new TextComponentString(com.destroystokyo.paper.PaperConfig.authenticationServersDownKickMessage));
++                                    } else // Paper end
+                                     NetHandlerLoginServer.this.disconnect(
+                                             new TextComponentTranslation("multiplayer.disconnect.authservers_down", new Object[0]));
+                                     NetHandlerLoginServer.LOGGER.error("Couldn't verify username because servers are unavailable");
+-- 
+2.18.0
+

@@ -1,0 +1,35 @@
+From e4a977dd321cc474bbb06e765cd078cf646a6744 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Wed, 27 Sep 2017 16:36:26 -0400
+Subject: [PATCH] Vehicle Event Cancellation Changes
+
+
+diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
+index 6cd2d97..37cd0bd 100644
+--- a/src/main/java/net/minecraft/entity/Entity.java
++++ b/src/main/java/net/minecraft/entity/Entity.java
+@@ -1953,6 +1953,7 @@ public abstract class Entity implements ICommandSender {
+         if (passenger.getRidingEntity() == this) {
+             throw new IllegalStateException("Use x.stopRiding(y), not y.removePassenger(x)");
+         } else {
++            passenger.ridingEntity = this; // Paper - Set the vehicle back for the event
+             CraftEntity craft = (CraftEntity) passenger.getBukkitEntity().getVehicle();
+             Entity orig = craft == null ? null : craft.getHandle();
+ 
+@@ -1967,7 +1968,12 @@ public abstract class Entity implements ICommandSender {
+                 }
+             }
+ 
+-            Bukkit.getPluginManager().callEvent(new EntityDismountEvent(passenger.getBukkitEntity(), this.getBukkitEntity()));
++            // Paper start - make EntityDismountEvent cancellable
++            if (!new org.spigotmc.event.entity.EntityDismountEvent(passenger.getBukkitEntity(), this.getBukkitEntity()).callEvent()) {
++                return;
++            }
++            passenger.ridingEntity = null;
++            // Paper end
+             this.riddenByEntities.remove(passenger);
+             passenger.rideCooldown = 60;
+         }
+-- 
+2.18.0
+

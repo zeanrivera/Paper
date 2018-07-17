@@ -1,0 +1,49 @@
+From 8f29699aba2c63ced871541426317d884090d90d Mon Sep 17 00:00:00 2001
+From: BillyGalbreath <Blake.Galbreath@GMail.com>
+Date: Sun, 29 Oct 2017 20:15:50 -0400
+Subject: [PATCH] PlayerAttemptPickupItemEvent
+
+
+diff --git a/src/main/java/net/minecraft/entity/item/EntityItem.java b/src/main/java/net/minecraft/entity/item/EntityItem.java
+index b1cafee..6e7795e 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityItem.java
++++ b/src/main/java/net/minecraft/entity/item/EntityItem.java
+@@ -31,6 +31,7 @@ import org.apache.logging.log4j.Logger;
+ import org.bukkit.craftbukkit.event.CraftEventFactory;
+ import org.bukkit.entity.Player;
+ import org.bukkit.event.entity.EntityPickupItemEvent;
++import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
+ import org.bukkit.event.player.PlayerPickupItemEvent;
+ 
+ // Paper start - implement HopperPusher
+@@ -359,10 +360,27 @@ public class EntityItem extends Entity implements HopperPusher {
+             ItemStack itemstack = this.getItem();
+             Item item = itemstack.getItem();
+             int i = itemstack.getCount();
++
+             int canHold = entityIn.inventory.canHold(itemstack);
+             int remaining = i - canHold;
+             boolean flyAtPlayer = false; // Paper
+ 
++            // Paper start
++            if (this.pickupDelay <= 0) {
++                PlayerAttemptPickupItemEvent attemptEvent = new PlayerAttemptPickupItemEvent((org.bukkit.entity.Player) entityIn.getBukkitEntity(), (org.bukkit.entity.Item) this.getBukkitEntity(), remaining);
++                this.world.getServer().getPluginManager().callEvent(attemptEvent);
++
++                flyAtPlayer = attemptEvent.getFlyAtPlayer();
++                if (attemptEvent.isCancelled()) {
++                    if (flyAtPlayer) {
++                        entityIn.onItemPickup(this, i);
++                    }
++
++                    return;
++                }
++            }
++            // Paper end
++
+             if (this.pickupDelay <= 0 && canHold > 0) {
+                 itemstack.setCount(canHold);
+                 PlayerPickupItemEvent playerEvent =
+-- 
+2.18.0
+

@@ -1,0 +1,65 @@
+From b3257d3e0e644be06fde7f0f9d5a2464db19dccf Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 24 Sep 2017 15:39:35 -0400
+Subject: [PATCH] Configurable top of nether void damage
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 413fc57..aa38baf 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -129,4 +129,10 @@ public class PaperWorldConfig {
+         waterOverLavaFlowSpeed = getInt("water-over-lava-flow-speed", 5);
+         log("Water over lava flow speed: " + waterOverLavaFlowSpeed);
+     }
++
++    public boolean netherVoidTopDamage;
++    private void netherVoidTopDamage() {
++        netherVoidTopDamage = getBoolean( "nether-ceiling-void-damage", false );
++        log("Top of the nether void damage: " + netherVoidTopDamage);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
+index 5b839b7..6cd2d97 100644
+--- a/src/main/java/net/minecraft/entity/Entity.java
++++ b/src/main/java/net/minecraft/entity/Entity.java
+@@ -483,7 +483,7 @@ public abstract class Entity implements ICommandSender {
+             this.fallDistance *= 0.5F;
+         }
+ 
+-        if (this.posY < -64.0D) {
++        if (this.posY < -64.0D || this.paperNetherCheck()) {
+             this.outOfWorld();
+         }
+ 
+@@ -495,6 +495,14 @@ public abstract class Entity implements ICommandSender {
+         this.world.profiler.endSection();
+     }
+ 
++    // Paper start - Configurable top of nether void damage
++    protected boolean paperNetherCheck() {
++        return this.world.paperConfig.netherVoidTopDamage
++                && this.world.getWorld().getEnvironment() == org.bukkit.World.Environment.NETHER
++                && this.posY >= 128.0D;
++    }
++    // Paper end
++
+     protected void decrementTimeUntilPortal() {
+         if (this.timeUntilPortal > 0) {
+             --this.timeUntilPortal;
+diff --git a/src/main/java/net/minecraft/entity/item/EntityMinecart.java b/src/main/java/net/minecraft/entity/item/EntityMinecart.java
+index fc1d434..cc5ca50 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityMinecart.java
++++ b/src/main/java/net/minecraft/entity/item/EntityMinecart.java
+@@ -243,7 +243,7 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
+             this.setDamage(this.getDamage() - 1.0F);
+         }
+ 
+-        if (this.posY < -64.0D) {
++        if (this.posY < -64.0D || this.paperNetherCheck()) { // Paper - Configurable top of nether void damage
+             this.outOfWorld();
+         }
+ 
+-- 
+2.18.0
+

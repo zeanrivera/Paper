@@ -1,0 +1,51 @@
+From 3050d1ea54a28c1313a92c247f978e7a75a24772 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sat, 7 Oct 2017 22:25:05 -0400
+Subject: [PATCH] Option to use vanilla per-world scoreboard coloring on names
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 33bc34f..93d478d 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -284,4 +284,9 @@ public class PaperWorldConfig {
+         keepLoadedRange = (short) (getInt("keep-spawn-loaded-range", Math.min(spigotConfig.viewDistance, 8)) * 16);
+         log( "Keep Spawn Loaded Range: " + (keepLoadedRange/16));
+     }
++
++    public boolean useVanillaScoreboardColoring;
++    private void useVanillaScoreboardColoring() {
++        useVanillaScoreboardColoring = getBoolean("use-vanilla-world-scoreboard-name-coloring", false);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index 08fc8e9..c80ccf7 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -98,6 +98,8 @@ import net.minecraft.network.play.server.SPacketPlayerPosLook;
+ import net.minecraft.network.play.server.SPacketSetSlot;
+ import net.minecraft.network.play.server.SPacketSpawnPosition;
+ import net.minecraft.network.play.server.SPacketTabComplete;
++import net.minecraft.scoreboard.ScorePlayerTeam;
++import net.minecraft.scoreboard.Team;
+ import net.minecraft.server.MinecraftServer;
+ import net.minecraft.tileentity.CommandBlockBaseLogic;
+ import net.minecraft.tileentity.TileEntity;
+@@ -1567,7 +1569,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+                         return;
+                     }
+ 
+-                    s = String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage());
++                    // Paper start - (Meh) Support for vanilla world scoreboard name coloring
++                    String displayName = event.getPlayer().getDisplayName();
++                    if (this.player.world.paperConfig.useVanillaScoreboardColoring) {
++                        displayName = ScorePlayerTeam.formatPlayerName(this.player.getTeam(), player.getDisplayName());
++                    }
++                    s = String.format(event.getFormat(), displayName, event.getMessage());
++                    // Paper end
+                     this.serverController.console.sendMessage(s);
+ 
+                     if (((LazyPlayerSet) event.getRecipients()).isLazy()) {
+-- 
+2.18.0
+

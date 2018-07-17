@@ -1,0 +1,22 @@
+From 61107fe80430c0795a3c5b8fabbc57040d73de29 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 24 Sep 2017 15:43:23 -0400
+Subject: [PATCH] Check online mode before converting and renaming player data
+
+
+diff --git a/src/main/java/net/minecraft/world/storage/SaveHandler.java b/src/main/java/net/minecraft/world/storage/SaveHandler.java
+index 7b8c227..b27f8bc 100644
+--- a/src/main/java/net/minecraft/world/storage/SaveHandler.java
++++ b/src/main/java/net/minecraft/world/storage/SaveHandler.java
+@@ -178,7 +178,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {
+             File file = new File(this.playersDirectory, mcpPlayer.getCachedUniqueIdString() + ".dat");
+             boolean usingWrongFile = false;
+ 
+-            if (!file.exists()) {
++            if (!file.exists() && org.bukkit.Bukkit.getOnlineMode()) { // Paper - Check online mode before converting data
+                 file =
+                         new File(
+                                 this.playersDirectory,
+-- 
+2.18.0
+
