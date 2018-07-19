@@ -1,0 +1,48 @@
+From f4a7ff2f8b995a87884fc10673e3b45b138a1c62 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Mon, 29 Feb 2016 17:24:57 -0600
+Subject: [PATCH] Add getTPS method
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index b7a6f2c3..89d90dc6 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -1160,6 +1160,15 @@ public final class Bukkit {
+     public static CommandMap getCommandMap() {
+         return server.getCommandMap();
+     }
++
++    /**
++     * Gets the current server TPS
++     *
++     * @return current server TPS (1m, 5m, 15m in Paper-Server)
++     */
++    public static double[] getTPS() {
++        return server.getTPS();
++    }
+     // Paper end
+ 
+     public static Server.Spigot spigot()
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 6b4e39ec..8e01099a 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -924,6 +924,14 @@ public interface Server extends PluginMessageRecipient {
+      */
+     CommandMap getCommandMap();
+ 
++    /**
++     * Gets the current server TPS
++     *
++     * @return current server TPS (1m, 5m, 15m in Paper-Server)
++     */
++    double[] getTPS();
++    // Paper end
++
+     /**
+      * Get the advancement specified by this key.
+      *
+-- 
+2.18.0
+

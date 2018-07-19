@@ -1,0 +1,76 @@
+From 4b4cbae66ae1750316f6ec9c45df22ac2a779292 Mon Sep 17 00:00:00 2001
+From: Jedediah Smith <jedediah@silencegreys.com>
+Date: Sat, 30 Sep 2017 21:49:16 -0400
+Subject: [PATCH] Complete resource pack API
+
+
+diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+index 78c2c7b..b04f4cb 100644
+--- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
++++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
+@@ -1265,9 +1265,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+ 
+     public void handleResourcePackStatus(CPacketResourcePackStatus packetIn) {
+         PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.player.getServerWorld());
+-        this.server
+-                .getPluginManager()
+-                .callEvent(new PlayerResourcePackStatusEvent(this.getPlayer(), Status.values()[packetIn.action.ordinal()]));
++        // Paper start
++        final PlayerResourcePackStatusEvent.Status status = PlayerResourcePackStatusEvent.Status.values()[packetIn.action.ordinal()];
++        this.getPlayer().setResourcePackStatus(status);
++        this.server.getPluginManager().callEvent(new PlayerResourcePackStatusEvent(getPlayer(), status));
++        // Paper end
+     }
+ 
+     public void processSteerBoat(CPacketSteerBoat packetIn) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 1bd1a43..0dc6fde 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -289,6 +289,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+                     return getHandle().ping;
+                 }
+             };
++    // Paper start
++    private org.bukkit.event.player.PlayerResourcePackStatusEvent.Status resourcePackStatus;
++    private String resourcePackHash;
++    // Paper end
+ 
+     public CraftPlayer(CraftServer server, EntityPlayerMP entity) {
+         super(server, entity);
+@@ -1725,6 +1729,32 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     public void hideTitle() {
+         getHandle().connection.sendPacket(new SPacketTitle(SPacketTitle.Type.CLEAR, (BaseComponent[]) null, 0, 0, 0));
+     }
++
++    @Override
++    public void setResourcePack(String url, String hash) {
++        Validate.notNull(url, "Resource pack URL cannot be null");
++        Validate.notNull(hash, "Hash cannot be null");
++        this.getHandle().loadResourcePack(url, hash);
++    }
++
++    @Override
++    public org.bukkit.event.player.PlayerResourcePackStatusEvent.Status getResourcePackStatus() {
++        return this.resourcePackStatus;
++    }
++
++    @Override
++    public String getResourcePackHash() {
++        return this.resourcePackHash;
++    }
++
++    @Override
++    public boolean hasResourcePack() {
++        return this.resourcePackStatus == org.bukkit.event.player.PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED;
++    }
++
++    public void setResourcePackStatus(org.bukkit.event.player.PlayerResourcePackStatusEvent.Status status) {
++        this.resourcePackStatus = status;
++    }
+     // Paper end
+ 
+     public Player.Spigot spigot() { // Paper - Decompile fix
+-- 
+2.18.0
+

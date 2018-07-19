@@ -1,0 +1,25 @@
+From 03f9f6f0824f9d7696f996e3a13b984d2ca9695b Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Thu, 4 Jan 2018 21:26:54 -0600
+Subject: [PATCH] ExperienceOrbMergeEvent
+
+Fired when the server is about to merge 2 experience orbs
+Plugins can cancel this if they want to ensure experience orbs do not lose important
+metadata such as spawn reason, or conditionally move data from source to target.
+
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index c5be4eb..ffd3915 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -1175,7 +1175,7 @@ public abstract class World implements IBlockAccess {
+                         if (e instanceof EntityXPOrb) {
+                             EntityXPOrb loopItem = (EntityXPOrb) e;
+ 
+-                            if (!loopItem.isDead && !(maxValue > 0 && loopItem.xpValue >= maxValue)) { // Paper
++                            if (!loopItem.isDead && !(maxValue > 0 && loopItem.xpValue >= maxValue && new com.destroystokyo.paper.event.entity.ExperienceOrbMergeEvent((org.bukkit.entity.ExperienceOrb) entity.getBukkitEntity(), (org.bukkit.entity.ExperienceOrb) loopItem.getBukkitEntity()).callEvent())) { // Paper
+                                 xp.xpValue += loopItem.xpValue;
+                                 // Paper start
+                                 if (!mergeUnconditionally && xp.xpValue > maxValue) {
+-- 
+2.18.0
+

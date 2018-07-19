@@ -1,0 +1,373 @@
+From 105ea914915592fe49ccb0bc3eb814dfc64a7732 Mon Sep 17 00:00:00 2001
+From: Nick Conde <nick@budgiehouse.com>
+Date: Wed, 18 Jul 2018 23:27:52 -0500
+Subject: [PATCH] Add class transformer system.
+
+Supports applying class transformers for advaced runtime code modification
+of both server classes and plugin classes.
+
+diff --git a/src/main/java/com/destroystokyo/paper/transformer/ClassTransformer.java b/src/main/java/com/destroystokyo/paper/transformer/ClassTransformer.java
+new file mode 100644
+index 00000000..ee026130
+--- /dev/null
++++ b/src/main/java/com/destroystokyo/paper/transformer/ClassTransformer.java
+@@ -0,0 +1,7 @@
++package com.destroystokyo.paper.transformer;
++
++public interface ClassTransformer {
++
++    byte[] transform(String name, byte[] classBytes);
++
++}
+diff --git a/src/main/java/com/destroystokyo/paper/transformer/TransformingClassLoader.java b/src/main/java/com/destroystokyo/paper/transformer/TransformingClassLoader.java
+new file mode 100644
+index 00000000..8e0d4049
+--- /dev/null
++++ b/src/main/java/com/destroystokyo/paper/transformer/TransformingClassLoader.java
+@@ -0,0 +1,196 @@
++package com.destroystokyo.paper.transformer;
++
++import java.io.IOException;
++import java.io.InputStream;
++import java.net.JarURLConnection;
++import java.net.URL;
++import java.net.URLClassLoader;
++import java.net.URLConnection;
++import java.security.CodeSigner;
++import java.security.CodeSource;
++import java.security.cert.Certificate;
++import java.util.ArrayList;
++import java.util.Arrays;
++import java.util.Collection;
++import java.util.HashSet;
++import java.util.List;
++import java.util.Map;
++import java.util.Set;
++import java.util.concurrent.ConcurrentHashMap;
++import java.util.jar.JarEntry;
++import java.util.jar.JarFile;
++import java.util.jar.Manifest;
++
++public class TransformingClassLoader extends URLClassLoader {
++
++    static {
++        try {
++            java.lang.reflect.Method method = ClassLoader.class.getDeclaredMethod("registerAsParallelCapable");
++            if (method != null) {
++                boolean oldAccessible = method.isAccessible();
++                method.setAccessible(true);
++                method.invoke(null);
++                method.setAccessible(oldAccessible);
++            }
++        } catch (NoSuchMethodException ex) {
++            // Ignore
++        } catch (Exception ex) {
++            System.err.println("Error setting TransformingClassLoader as parallel capable");
++            ex.printStackTrace();
++        }
++    }
++
++    private static final int BUFFER_SIZE = 4096;
++
++    private final ClassLoader parent;
++
++    private final List<ClassTransformer> transformers = new ArrayList<ClassTransformer>();
++    private final List<String> classloaderExclusions = new ArrayList<String>();
++    private final List<String> transformerExclusions = new ArrayList<String>();
++
++    private final Set<String> invalid = new HashSet<String>(1000);
++    private final Map<String, Class<?>> classes = new ConcurrentHashMap<String, Class<?>>();
++
++    private final ThreadLocal<byte[]> loadCache = new ThreadLocal<byte[]>();
++
++    public TransformingClassLoader(URL[] urls, ClassLoader parent) {
++        super(urls, null);
++        this.parent = parent;
++    }
++
++    @Override
++    public Class<?> findClass(final String name) throws ClassNotFoundException {
++        if (this.invalid.contains(name)) {
++            throw new ClassNotFoundException(name);
++        }
++
++        for (String ex : this.classloaderExclusions) {
++            if (name.startsWith(ex)) {
++                return this.parent.loadClass(name);
++            }
++        }
++
++        Class<?> clz = this.classes.get(name);
++        if (clz != null) {
++            return clz;
++        }
++
++        for (String ex : this.transformerExclusions) {
++            if (name.startsWith(ex)) {
++                try {
++                    clz = super.findClass(name);
++                    this.classes.put(name, clz);
++                    return clz;
++                } catch (ClassNotFoundException e) {
++                    this.invalid.add(name);
++                    throw e;
++                }
++            }
++        }
++
++        try {
++            byte[] classBytes = loadClassBytes(name);
++            for (ClassTransformer transformer : this.transformers) {
++                classBytes = transformer.transform(name, classBytes);
++            }
++
++            final int lastDot = name.lastIndexOf('.');
++            final String packageName = lastDot == -1 ? "" : name.substring(0, lastDot);
++            final String fileName = name.replace('.', '/').concat(".class");
++            URLConnection urlConnection = getResource(fileName).openConnection();
++
++            CodeSigner[] signers = null;
++
++            if (lastDot > -1) {
++                if (urlConnection instanceof JarURLConnection) {
++                    final JarURLConnection jarURLConnection = (JarURLConnection) urlConnection;
++                    final JarFile jarFile = jarURLConnection.getJarFile();
++
++                    if (jarFile != null && jarFile.getManifest() != null) {
++                        final Manifest manifest = jarFile.getManifest();
++                        final JarEntry entry = jarFile.getJarEntry(fileName);
++
++                        Package pkg = getPackage(packageName);
++                        signers = entry.getCodeSigners();
++                        if (pkg == null) {
++                            pkg = definePackage(packageName, manifest, jarURLConnection.getJarFileURL());
++                        }
++                    }
++                } else {
++                    Package pkg = getPackage(packageName);
++                    if (pkg == null) {
++                        pkg = definePackage(packageName, null, null, null, null, null, null, null);
++                    }
++                }
++            }
++            CodeSource codeSource = new CodeSource(urlConnection.getURL(), signers);
++            clz = defineClass(name, classBytes, 0, classBytes.length, codeSource);
++            this.classes.put(name, clz);
++            return clz;
++        } catch (Throwable e) {
++            this.invalid.add(name);
++            throw new ClassNotFoundException(name, e);
++        }
++    }
++
++    public void addClassloaderExclusion(String ex) {
++        if (!this.classloaderExclusions.contains(ex)) {
++            this.classloaderExclusions.add(ex);
++        }
++    }
++
++    public void addTransformerExclusion(String ex) {
++        if (!this.transformerExclusions.contains(ex)) {
++            this.transformerExclusions.add(ex);
++        }
++    }
++
++    public void addClassTransformer(String clz) {
++        try {
++            ClassTransformer transformer = (ClassTransformer) loadClass(clz).newInstance();
++            this.transformers.add(transformer);
++        } catch (Exception e) {
++            System.err.println("Error loading class transformer: " + clz);
++            e.printStackTrace();
++        }
++    }
++
++    private byte[] loadClassBytes(final String name) throws IOException {
++        // TODO: do we need to cache these resources?
++        String path = name.replace('.', '/') + ".class";
++        InputStream resource = null;
++        try {
++            resource = findResource(path).openStream();
++            byte[] buffer = this.loadCache.get();
++            if (buffer == null) {
++                buffer = new byte[BUFFER_SIZE];
++                this.loadCache.set(buffer);
++            }
++
++            int read;
++            int length = 0;
++            while ((read = resource.read(buffer, length, buffer.length - length)) != -1) {
++                length += read;
++                if (length > buffer.length - 1) {
++                    buffer = Arrays.copyOf(buffer, buffer.length + BUFFER_SIZE);
++                }
++            }
++
++            byte[] classBytes = new byte[length];
++            System.arraycopy(buffer, 0, classBytes, 0, length);
++            return classBytes;
++        } finally {
++            if (resource != null) {
++                try {
++                    resource.close();
++                } catch (IOException ignored) {
++                }
++            }
++        }
++    }
++
++    public Collection<Class<?>> getCachedClasses() {
++        return this.classes.values();
++    }
++
++}
+diff --git a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
+index 80c6a72e..0c5fe12a 100644
+--- a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
++++ b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
+@@ -49,9 +49,10 @@ import org.yaml.snakeyaml.error.YAMLException;
+ public final class JavaPluginLoader implements PluginLoader {
+     final Server server;
+     private final Pattern[] fileFilters = new Pattern[] { Pattern.compile("\\.jar$"), };
+-    private final Map<String, Class<?>> classes = new java.util.concurrent.ConcurrentHashMap<String, Class<?>>(); // Spigot
+-    private final List<PluginClassLoader> loaders = new CopyOnWriteArrayList<PluginClassLoader>();
++    //private final Map<String, Class<?>> classes = new java.util.concurrent.ConcurrentHashMap<String, Class<?>>(); // Spigot // Paper no double class cache
++    //private final List<PluginClassLoader> loaders = new CopyOnWriteArrayList<PluginClassLoader>(); // Paper Only one classloader
+     public static final CustomTimingsHandler pluginParentTimer = new CustomTimingsHandler("** Plugins"); // Spigot
++    private PluginClassLoader loader; // Paper
+ 
+     /**
+      * This class was not meant to be constructed explicitly
+@@ -124,7 +125,7 @@ public final class JavaPluginLoader implements PluginLoader {
+             }
+         }
+ 
+-        final PluginClassLoader loader;
++        //final PluginClassLoader loader; // Paper
+         try {
+             loader = new PluginClassLoader(this, getClass().getClassLoader(), description, dataFolder, file);
+         } catch (InvalidPluginException ex) {
+@@ -133,7 +134,7 @@ public final class JavaPluginLoader implements PluginLoader {
+             throw new InvalidPluginException(ex);
+         }
+ 
+-        loaders.add(loader);
++        //loaders.add(loader); // Ppper
+ 
+         return loader.plugin;
+     }
+@@ -180,6 +181,8 @@ public final class JavaPluginLoader implements PluginLoader {
+         return fileFilters.clone();
+     }
+ 
++    // Paper start
++    /*
+     Class<?> getClassByName(final String name) {
+         Class<?> cachedClass = classes.get(name);
+ 
+@@ -222,6 +225,8 @@ public final class JavaPluginLoader implements PluginLoader {
+             // (Native methods throwing NPEs is not fun when you can't stop it before-hand)
+         }
+     }
++    */
++    // Paper end
+ 
+     public Map<Class<? extends Event>, Set<RegisteredListener>> createRegisteredListeners(Listener listener, final Plugin plugin) {
+         Validate.notNull(plugin, "Plugin can not be null");
+@@ -328,10 +333,12 @@ public final class JavaPluginLoader implements PluginLoader {
+ 
+             PluginClassLoader pluginLoader = (PluginClassLoader) jPlugin.getClassLoader();
+ 
+-            if (!loaders.contains(pluginLoader)) {
+-                loaders.add(pluginLoader);
+-                server.getLogger().log(Level.WARNING, "Enabled plugin with unregistered PluginClassLoader " + plugin.getDescription().getFullName());
+-            }
++            // Paper start no double class cache
++            //if (!loaders.contains(pluginLoader)) {
++            //    loaders.add(pluginLoader);
++            //    server.getLogger().log(Level.WARNING, "Enabled plugin with unregistered PluginClassLoader " + plugin.getDescription().getFullName());
++            //}
++            // Paper end
+ 
+             try {
+                 jPlugin.setEnabled(true);
+@@ -363,16 +370,30 @@ public final class JavaPluginLoader implements PluginLoader {
+                 server.getLogger().log(Level.SEVERE, "Error occurred while disabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+             }
+ 
++            // Paper start
+             if (cloader instanceof PluginClassLoader) {
+                 PluginClassLoader loader = (PluginClassLoader) cloader;
+-                loaders.remove(loader);
++                //loaders.remove(loader);
+ 
+-                Set<String> names = loader.getClasses();
++                //Set<String> names = loader.getClasses();
+ 
+-                for (String name : names) {
+-                    removeClass(name);
++                //for (String name : names) {
++                //    removeClass(name);
++                //}
++                java.util.Collection<Class<?>> classes = loader.getCachedClasses();
++                for (final Class<?> clazz : classes) {
++                    try {
++                        if ((clazz != null) && (ConfigurationSerializable.class.isAssignableFrom(clazz))) {
++                            Class<? extends ConfigurationSerializable> serializable = clazz.asSubclass(ConfigurationSerializable.class);
++                            ConfigurationSerialization.unregisterClass(serializable);
++                        }
++                    } catch (final NullPointerException e) {
++                        // Boggle!
++                        // (Native methods throwing NPEs is not fun when you can't stop it before-hand)
++                    }
+                 }
+             }
++            // Paper end
+         }
+     }
+ }
+diff --git a/src/main/java/org/bukkit/plugin/java/PluginClassLoader.java b/src/main/java/org/bukkit/plugin/java/PluginClassLoader.java
+index e43db9da..6328aa81 100644
+--- a/src/main/java/org/bukkit/plugin/java/PluginClassLoader.java
++++ b/src/main/java/org/bukkit/plugin/java/PluginClassLoader.java
+@@ -23,9 +23,9 @@ import org.bukkit.plugin.PluginDescriptionFile;
+ /**
+  * A ClassLoader for plugins, to allow shared classes across multiple plugins
+  */
+-final class PluginClassLoader extends URLClassLoader {
++final class PluginClassLoader extends com.destroystokyo.paper.transformer.TransformingClassLoader { // Paper TransformingClassLoader
+     private final JavaPluginLoader loader;
+-    private final Map<String, Class<?>> classes = new java.util.concurrent.ConcurrentHashMap<String, Class<?>>(); // Spigot
++    //private final Map<String, Class<?>> classes = new java.util.concurrent.ConcurrentHashMap<String, Class<?>>(); // Spigot // Paper classloading is in parent
+     private final PluginDescriptionFile description;
+     private final File dataFolder;
+     private final File file;
+@@ -75,7 +75,7 @@ final class PluginClassLoader extends URLClassLoader {
+         try {
+             Class<?> jarClass;
+             try {
+-                jarClass = Class.forName(description.getMain(), true, this);
++                jarClass = super.loadClass(description.getMain()); // Paper classloading is in parent
+             } catch (ClassNotFoundException ex) {
+                 throw new InvalidPluginException("Cannot find main class `" + description.getMain() + "'", ex);
+             }
+@@ -95,6 +95,8 @@ final class PluginClassLoader extends URLClassLoader {
+         }
+     }
+ 
++    // Paper start use TransformingClassLoader
++    /*
+     @Override
+     protected Class<?> findClass(String name) throws ClassNotFoundException {
+         return findClass(name, true);
+@@ -175,6 +177,7 @@ final class PluginClassLoader extends URLClassLoader {
+     Set<String> getClasses() {
+         return classes.keySet();
+     }
++    */
+ 
+     synchronized void initialize(JavaPlugin javaPlugin) {
+         Validate.notNull(javaPlugin, "Initializing plugin cannot be null");
+-- 
+2.18.0
+

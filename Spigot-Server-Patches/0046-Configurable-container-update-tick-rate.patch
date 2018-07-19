@@ -1,0 +1,49 @@
+From 19e4d0e7e2b08938cf85ef0140e57f27e8cd0107 Mon Sep 17 00:00:00 2001
+From: Sudzzy <originmc@outlook.com>
+Date: Wed, 27 Sep 2017 14:39:45 -0400
+Subject: [PATCH] Configurable container update tick rate
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 5c643cd..56e49f4 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -213,4 +213,9 @@ public class PaperWorldConfig {
+     private void mobSpawnerTickRate() {
+         mobSpawnerTickRate = getInt("mob-spawner-tick-rate", 1);
+     }
++
++    public int containerUpdateTickRate;
++    private void containerUpdateTickRate() {
++        containerUpdateTickRate = getInt("container-update-tick-rate", 1);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+index ea6e99b..82ade90 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -199,6 +199,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+         this.viewDistance = viewDistance;
+     }
+     // Paper end
++    private int containerUpdateDelay; // Paper
+ 
+     public EntityPlayerMP(MinecraftServer server, WorldServer worldIn, GameProfile profile, PlayerInteractionManager interactionManagerIn) {
+         super(worldIn, profile);
+@@ -387,7 +388,12 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+             --this.hurtResistantTime;
+         }
+ 
+-        this.openContainer.detectAndSendChanges();
++        // Paper start - Configurable container update tick rate
++        if (--containerUpdateDelay <= 0) {
++            this.openContainer.detectAndSendChanges();
++            containerUpdateDelay = this.world.paperConfig.containerUpdateTickRate;
++        }
++        // Paper end
+ 
+         if (!this.world.isRemote && !this.openContainer.canInteractWith(this)) {
+             this.closeScreen();
+-- 
+2.18.0
+

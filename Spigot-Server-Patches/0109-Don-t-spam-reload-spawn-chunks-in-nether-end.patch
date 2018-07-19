@@ -1,0 +1,21 @@
+From 22b2a4e94f47f207a029bc77428f266139fdc7d3 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 7 Oct 2017 21:38:10 -0400
+Subject: [PATCH] Don't spam reload spawn chunks in nether/end
+
+
+diff --git a/src/main/java/net/minecraft/world/WorldProvider.java b/src/main/java/net/minecraft/world/WorldProvider.java
+index 7dd47b8..74d8e27 100644
+--- a/src/main/java/net/minecraft/world/WorldProvider.java
++++ b/src/main/java/net/minecraft/world/WorldProvider.java
+@@ -156,6 +156,6 @@ public abstract class WorldProvider {
+     public void onWorldUpdateEntities() {}
+ 
+     public boolean canDropChunk(int x, int z) {
+-        return true;
++        return !world.isSpawnChunk(x, z); // Paper - Use isSpawnChunk for all worlds
+     }
+ }
+-- 
+2.18.0
+

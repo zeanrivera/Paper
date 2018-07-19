@@ -1,0 +1,57 @@
+From 34fd411c62abd70f00e63298d6489bbfbabd4cc3 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Fri, 20 Oct 2017 20:12:10 -0400
+Subject: [PATCH] Add option to remove invalid statistics
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
+index da0984a..28917f6 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
+@@ -256,4 +256,13 @@ public class PaperConfig {
+     private static void playerAutoSaveRate() {
+         playerAutoSaveRate = getInt("settings.player-auto-save-rate", -1);
+     }
++
++    public static boolean removeInvalidStatistics = false;
++    private static void removeInvalidStatistics() {
++        if (version < 12) {
++            boolean oldValue = getBoolean("remove-invalid-statistics", false);
++            set("settings.remove-invalid-statistics", oldValue);
++        }
++        removeInvalidStatistics = getBoolean("settings.remove-invalid-statistics", false);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/stats/StatisticsManagerServer.java b/src/main/java/net/minecraft/stats/StatisticsManagerServer.java
+index 5b94d77..ae97a10 100644
+--- a/src/main/java/net/minecraft/stats/StatisticsManagerServer.java
++++ b/src/main/java/net/minecraft/stats/StatisticsManagerServer.java
+@@ -87,6 +87,7 @@ public class StatisticsManagerServer extends StatisticsManager {
+         } else {
+             JsonObject jsonobject = jsonelement.getAsJsonObject();
+             HashMap hashmap = Maps.newHashMap();
++            java.util.List<String> invalidStats = com.google.common.collect.Lists.newArrayList(); // Paper
+ 
+             for (Entry entry : jsonobject.entrySet()) {
+                 StatBase statistic = StatList.getOneShotStat((String) entry.getKey());
+@@ -121,9 +122,17 @@ public class StatisticsManagerServer extends StatisticsManager {
+                     hashmap.put(statistic, statisticwrapper);
+                 } else {
+                     LOGGER.warn("Invalid statistic in {}: Don't know what {} is", this.statsFile, entry.getKey());
++                    if (com.destroystokyo.paper.PaperConfig.removeInvalidStatistics) invalidStats.add((String) entry.getKey()); // Paper
+                 }
+             }
+ 
++            // Paper start - Remove invalid statistics
++            for (String invalid : invalidStats) {
++                jsonobject.remove(invalid);
++                LOGGER.info("Removing invalid statistic: " + invalid);
++            }
++            // Paper end
++
+             return hashmap;
+         }
+     }
+-- 
+2.18.0
+

@@ -1,0 +1,148 @@
+From 3a12a9aec08bac10de2a0c1812f4263cdd2139de Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 30 Sep 2017 23:53:03 -0400
+Subject: [PATCH] Optimized Light Level Comparisons
+
+Use an optimized method to test if a block position meets a desired light level.
+
+This method benefits from returning as soon as the desired light level matches.
+
+diff --git a/src/main/java/net/minecraft/block/BlockCrops.java b/src/main/java/net/minecraft/block/BlockCrops.java
+index bf955f6..1633022 100644
+--- a/src/main/java/net/minecraft/block/BlockCrops.java
++++ b/src/main/java/net/minecraft/block/BlockCrops.java
+@@ -71,7 +71,7 @@ public class BlockCrops extends BlockBush implements IGrowable {
+     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+         super.updateTick(worldIn, pos, state, rand);
+ 
+-        if (worldIn.getLightFromNeighbors(pos.up()) >= 9) {
++        if (worldIn.isLightLevel(pos.up(), 9)) { // Paper
+             int i = this.getAge(state);
+ 
+             if (i < this.getMaxAge()) {
+diff --git a/src/main/java/net/minecraft/block/BlockGrass.java b/src/main/java/net/minecraft/block/BlockGrass.java
+index 81ba1ca..6362b05 100644
+--- a/src/main/java/net/minecraft/block/BlockGrass.java
++++ b/src/main/java/net/minecraft/block/BlockGrass.java
+@@ -35,7 +35,8 @@ public class BlockGrass extends Block implements IGrowable {
+ 
+     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+         if (!worldIn.isRemote) {
+-            if (worldIn.getLightFromNeighbors(pos.up()) < 4 && worldIn.getBlockState(pos.up()).getLightOpacity() > 2) {
++            int lightLevel = -1; // Paper
++            if (worldIn.getBlockState(pos.up()).getLightOpacity() > 2 && (lightLevel = worldIn.getLightFromNeighbors(pos.up())) < 4) { // Paper - move light check to end to avoid unneeded light lookups
+                 org.bukkit.World bworld = worldIn.getWorld();
+                 BlockState blockState = bworld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getState();
+                 blockState.setType(CraftMagicNumbers.getMaterial(Blocks.DIRT));
+@@ -45,21 +46,29 @@ public class BlockGrass extends Block implements IGrowable {
+                 if (!event.isCancelled()) {
+                     blockState.update(true);
+                 }
+-            } else if (worldIn.getLightFromNeighbors(pos.up()) >= 9) {
++            } else {
++                // Paper start
++                // If light was calculated above, reuse it, else grab it
++                if (lightLevel == -1) {
++                    lightLevel = worldIn.getLightFromNeighbors(pos.up());
++                }
++                if (lightLevel >= 9) {
++                // Paper end
+                 for (int i = 0; i < 4; ++i) {
+                     BlockPos blockposition1 = pos.add(rand.nextInt(3) - 1, rand.nextInt(5) - 3, rand.nextInt(3) - 1);
+ 
+-                    if (blockposition1.getY() >= 0 && blockposition1.getY() < 256 && !worldIn.isBlockLoaded(blockposition1)) {
++                    IBlockState iblockdata2 = worldIn.getStateIfLoaded(blockposition1); // Paper - Moved up
++                    if (iblockdata2 != null) {
+                         return;
+                     }
+ 
+                     IBlockState iblockdata1 = worldIn.getBlockState(blockposition1.up());
+-                    IBlockState iblockdata2 = worldIn.getBlockState(blockposition1);
++                    //IBlockState iblockdata2 = worldIn.getStateIfLoaded(blockposition1); // Paper - Moved up
+ 
+                     if (iblockdata2.getBlock() == Blocks.DIRT
+                             && iblockdata2.getValue(BlockDirt.VARIANT) == BlockDirt.DirtType.DIRT
+-                            && worldIn.getLightFromNeighbors(blockposition1.up()) >= 4
+-                            && iblockdata1.getLightOpacity() <= 2) {
++                            && iblockdata1.getLightOpacity() <= 2
++                            && worldIn.isLightLevel(blockposition1.up(), 4)) { // Paper - move last check before isLightLevel to avoid unneeded light checks
+                         org.bukkit.World bworld = worldIn.getWorld();
+                         BlockState blockState =
+                                 bworld.getBlockAt(blockposition1.getX(), blockposition1.getY(), blockposition1.getZ()).getState();
+@@ -75,6 +84,7 @@ public class BlockGrass extends Block implements IGrowable {
+                     }
+                 }
+             }
++            } // Paper
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/block/BlockSapling.java b/src/main/java/net/minecraft/block/BlockSapling.java
+index 5672f75..28b9bb2 100644
+--- a/src/main/java/net/minecraft/block/BlockSapling.java
++++ b/src/main/java/net/minecraft/block/BlockSapling.java
+@@ -59,7 +59,7 @@ public class BlockSapling extends BlockBush implements IGrowable {
+         if (!worldIn.isRemote) {
+             super.updateTick(worldIn, pos, state, rand);
+ 
+-            if (worldIn.getLightFromNeighbors(pos.up()) >= 9
++            if (worldIn.isLightLevel(pos.up(), 9) // Paper
+                     && rand.nextInt(Math.max(2, (int) (100.0F / (float) worldIn.spigotConfig.saplingModifier * 7.0F + 0.5F))) == 0) {
+                 worldIn.captureTreeGeneration = true;
+                 this.grow(worldIn, pos, state, rand);
+diff --git a/src/main/java/net/minecraft/block/BlockStem.java b/src/main/java/net/minecraft/block/BlockStem.java
+index c53e3ea..41e90b0 100644
+--- a/src/main/java/net/minecraft/block/BlockStem.java
++++ b/src/main/java/net/minecraft/block/BlockStem.java
+@@ -69,7 +69,7 @@ public class BlockStem extends BlockBush implements IGrowable {
+     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+         super.updateTick(worldIn, pos, state, rand);
+ 
+-        if (worldIn.getLightFromNeighbors(pos.up()) >= 9) {
++        if (worldIn.isLightLevel(pos.up(), 9)) { // Paper
+             float f = BlockCrops.getGrowthChance(this, worldIn, pos);
+ 
+             if (rand.nextInt(
+diff --git a/src/main/java/net/minecraft/entity/monster/EntityMob.java b/src/main/java/net/minecraft/entity/monster/EntityMob.java
+index d4ba8fd..344424b 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntityMob.java
++++ b/src/main/java/net/minecraft/entity/monster/EntityMob.java
+@@ -143,16 +143,19 @@ public abstract class EntityMob extends EntityCreature implements IMob {
+         if (this.world.getLightFor(EnumSkyBlock.SKY, blockposition) > this.rand.nextInt(32)) {
+             return false;
+         } else {
+-            int i = this.world.getLightFromNeighbors(blockposition);
++            //int i = this.world.getLightFromNeighbors(blockposition); // Paper
++            boolean passes; // Paper
+ 
+             if (this.world.isThundering()) {
+                 int j = this.world.getSkylightSubtracted();
+                 this.world.setSkylightSubtracted(10);
+-                i = this.world.getLightFromNeighbors(blockposition);
++                passes = this.world.isLightLevel(blockposition, this.rand.nextInt(9)); // Paper
+                 this.world.setSkylightSubtracted(j);
++            } else {
++                passes = !world.isLightLevel(blockposition, this.rand.nextInt(9)); // Paper
+             }
+ 
+-            return i <= this.rand.nextInt(8);
++            return passes;
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/entity/monster/EntityZombie.java b/src/main/java/net/minecraft/entity/monster/EntityZombie.java
+index 8999e3e..ce428fb 100644
+--- a/src/main/java/net/minecraft/entity/monster/EntityZombie.java
++++ b/src/main/java/net/minecraft/entity/monster/EntityZombie.java
+@@ -234,7 +234,7 @@ public class EntityZombie extends EntityMob {
+                     int k1 = k + MathHelper.getInt(this.rand, 7, 40) * MathHelper.getInt(this.rand, -1, 1);
+ 
+                     if (this.world.getBlockState(new BlockPos(i1, j1 - 1, k1)).isTopSolid()
+-                            && this.world.getLightFromNeighbors(new BlockPos(i1, j1, k1)) < 10) {
++                            && this.world.isLightLevel(new BlockPos(i1, j1, k1),  10)) { // Paper
+                         entityzombie.setPosition((double) i1, (double) j1, (double) k1);
+ 
+                         if (!this.world.isAnyPlayerWithinRangeAt((double) i1, (double) j1, (double) k1, 7.0D)
+-- 
+2.18.0
+

@@ -1,0 +1,45 @@
+From f8ec1e67124b127f14a881da0ea798a4c751289d Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 8 Oct 2017 00:25:24 -0400
+Subject: [PATCH] EntityRegainHealthEvent isFastRegen API
+
+Don't even get me started
+
+diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
+index e77b982..8145d70 100644
+--- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
++++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
+@@ -834,10 +834,16 @@ public abstract class EntityLivingBase extends Entity {
+     }
+ 
+     public void heal(float f, RegainReason regainReason) {
++        // Paper start - Forward
++        heal(f, regainReason, false);
++    }
++
++    public void heal(float f, RegainReason regainReason, boolean isFastRegen) {
++        // Paper end
+         float f1 = this.getHealth();
+ 
+         if (f1 > 0.0F) {
+-            EntityRegainHealthEvent event = new EntityRegainHealthEvent(this.getBukkitEntity(), (double) f, regainReason);
++            EntityRegainHealthEvent event = new EntityRegainHealthEvent(this.getBukkitEntity(), (double) f, regainReason, isFastRegen);
+             this.world.getServer().getPluginManager().callEvent(event);
+ 
+             if (!event.isCancelled()) {
+diff --git a/src/main/java/net/minecraft/util/FoodStats.java b/src/main/java/net/minecraft/util/FoodStats.java
+index ee371cd..b455e0d 100644
+--- a/src/main/java/net/minecraft/util/FoodStats.java
++++ b/src/main/java/net/minecraft/util/FoodStats.java
+@@ -79,7 +79,7 @@ public class FoodStats {
+ 
+             if (this.foodTimer >= 10) {
+                 float f = Math.min(this.foodSaturationLevel, 6.0F);
+-                player.heal(f / 6.0F, RegainReason.SATIATED);
++                player.heal(f / 6.0F, RegainReason.SATIATED, true); // Paper - This is fast regen
+                 this.addExhaustion(f);
+                 this.foodTimer = 0;
+             }
+-- 
+2.18.0
+

@@ -1,0 +1,160 @@
+From 6970b3c3f9eb5a23bc36ac17c3df7d96a3b95f5e Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sat, 23 Sep 2017 22:24:50 -0400
+Subject: [PATCH] Disable chest ticking
+
+
+diff --git a/src/main/java/net/minecraft/tileentity/TileEntityChest.java b/src/main/java/net/minecraft/tileentity/TileEntityChest.java
+index 4f3e850..96aadc7 100644
+--- a/src/main/java/net/minecraft/tileentity/TileEntityChest.java
++++ b/src/main/java/net/minecraft/tileentity/TileEntityChest.java
+@@ -29,7 +29,7 @@ import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+ import org.bukkit.craftbukkit.event.CraftEventFactory;
+ import org.bukkit.entity.HumanEntity;
+ 
+-public class TileEntityChest extends TileEntityLockableLoot implements ITickable {
++public class TileEntityChest extends TileEntityLockableLoot { // Paper - Remove ITickable
+     private NonNullList<ItemStack> chestContents = NonNullList.<ItemStack>withSize(27, ItemStack.EMPTY);
+     public boolean adjacentChestChecked;
+     public TileEntityChest adjacentChestZNeg;
+@@ -194,7 +194,9 @@ public class TileEntityChest extends TileEntityLockableLoot implements ITickable
+     }
+ 
+     public void update() {
++        // Paper start - Nothing vanilla will call this anymore, leave adjacent check for forcing
+         this.checkForAdjacentChests();
++        /*
+         int i = this.pos.getX();
+         int j = this.pos.getY();
+         int k = this.pos.getZ();
+@@ -293,6 +295,8 @@ public class TileEntityChest extends TileEntityLockableLoot implements ITickable
+                 this.lidAngle = 0.0F;
+             }
+         }
++        */
++        // Paper end
+     }
+ 
+     public boolean receiveClientEvent(int id, int type) {
+@@ -317,6 +321,27 @@ public class TileEntityChest extends TileEntityLockableLoot implements ITickable
+                 return;
+             }
+ 
++            // Paper start - Move open sound out of the tick loop
++            this.checkForAdjacentChests();
++
++            if (this.numPlayersUsing > 0 && this.lidAngle == 0.0F && this.adjacentChestZNeg == null && this.adjacentChestXNeg == null) {
++                this.lidAngle = 0.7F;
++                double d1 = (double) pos.getX() + 0.5D;
++                double d0 = (double) pos.getZ() + 0.5D;
++
++                if (this.adjacentChestZPos != null) {
++                    d0 += 0.5D;
++                }
++
++                if (this.adjacentChestXPos != null) {
++                    d1 += 0.5D;
++                }
++
++                this.world.playSound((EntityPlayer) null, d1, (double) pos.getY() + 0.5D, d0, SoundEvents.BLOCK_CHEST_OPEN,
++                        SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
++            }
++            // Paper end
++
+             this.world.addBlockEvent(this.pos, this.getBlockType(), 1, this.numPlayersUsing);
+ 
+             if (this.getBlockType() == Blocks.TRAPPED_CHEST) {
+@@ -339,6 +364,26 @@ public class TileEntityChest extends TileEntityLockableLoot implements ITickable
+         if (!player.isSpectator() && this.getBlockType() instanceof BlockChest) {
+             int oldPower = Math.max(0, Math.min(15, this.numPlayersUsing));
+             --this.numPlayersUsing;
++
++            // Paper start - Move close sound out of the tick loo
++            if (this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F) {
++                double d0 = (double) pos.getX() + 0.5D;
++                double d2 = (double) pos.getZ() + 0.5D;
++
++                if (this.adjacentChestZPos != null) {
++                    d2 += 0.5D;
++                }
++
++                if (this.adjacentChestXPos != null) {
++                    d0 += 0.5D;
++                }
++
++                this.world.playSound((EntityPlayer) null, d0, (double) pos.getY() + 0.5D, d2, SoundEvents.BLOCK_CHEST_CLOSE,
++                        SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
++                this.lidAngle = 0.0F;
++            }
++            // Paper end
++
+             this.world.addBlockEvent(this.pos, this.getBlockType(), 1, this.numPlayersUsing);
+             this.world.notifyNeighborsOfStateChange(this.pos, this.getBlockType(), false);
+ 
+diff --git a/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java b/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java
+index 8067f15..899d0aa 100644
+--- a/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java
++++ b/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java
+@@ -6,13 +6,15 @@ import net.minecraft.init.SoundEvents;
+ import net.minecraft.util.ITickable;
+ import net.minecraft.util.SoundCategory;
+ 
+-public class TileEntityEnderChest extends TileEntity implements ITickable {
++public class TileEntityEnderChest extends TileEntity { // Paper - Remove ITickable
+     public float lidAngle;
+     public float prevLidAngle;
+     public int numPlayersUsing;
+     private int ticksSinceSync;
+ 
+     public void update() {
++        // Paper start - Moved out of loop
++        /*
+         if (++this.ticksSinceSync % 20 * 4 == 0) {
+             this.world.addBlockEvent(this.pos, Blocks.ENDER_CHEST, 1, this.numPlayersUsing);
+         }
+@@ -70,6 +72,8 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
+                 this.lidAngle = 0.0F;
+             }
+         }
++        */
++        // Paper end
+     }
+ 
+     public boolean receiveClientEvent(int id, int type) {
+@@ -88,11 +92,33 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
+ 
+     public void openChest() {
+         ++this.numPlayersUsing;
++
++        // Paper start - Move open out of the tick loop
++        if (this.numPlayersUsing > 0 && this.lidAngle == 0.0F) {
++            this.lidAngle = 0.7F;
++            double var5 = (double) pos.getX() + 0.5D;
++            double var7 = (double) pos.getZ() + 0.5D;
++            this.world.playSound((EntityPlayer) null, var5, (double) pos.getY() + 0.5D, var7, SoundEvents.BLOCK_ENDERCHEST_OPEN,
++                    SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
++        }
++        // Paper end
++
+         this.world.addBlockEvent(this.pos, Blocks.ENDER_CHEST, 1, this.numPlayersUsing);
+     }
+ 
+     public void closeChest() {
+         --this.numPlayersUsing;
++
++        // Paper start - Move close out of the tick loop
++        if (this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F) {
++            double var12 = (double) pos.getX() + 0.5D;
++            double var9 = (double) pos.getZ() + 0.5D;
++            this.world.playSound((EntityPlayer) null, var12, (double) pos.getY() + 0.5D, var9, SoundEvents.BLOCK_ENDERCHEST_CLOSE,
++                    SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
++            this.lidAngle = 0.0F;
++        }
++        // Paper end
++
+         this.world.addBlockEvent(this.pos, Blocks.ENDER_CHEST, 1, this.numPlayersUsing);
+     }
+ 
+-- 
+2.18.0
+

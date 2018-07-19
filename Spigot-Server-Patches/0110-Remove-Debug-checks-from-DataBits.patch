@@ -1,0 +1,46 @@
+From 7615b7467cef737969c91addf6b84b9b50080cc6 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 7 Oct 2017 21:39:28 -0400
+Subject: [PATCH] Remove Debug checks from DataBits
+
+These are super hot and causing noticeable hits
+
+Before: http://i.imgur.com/nQsMzAE.png
+After: http://i.imgur.com/nJ46crB.png
+
+diff --git a/src/main/java/net/minecraft/util/BitArray.java b/src/main/java/net/minecraft/util/BitArray.java
+index 4557557..c39907d 100644
+--- a/src/main/java/net/minecraft/util/BitArray.java
++++ b/src/main/java/net/minecraft/util/BitArray.java
+@@ -10,7 +10,7 @@ public class BitArray {
+     private final int arraySize;
+ 
+     public BitArray(int bitsPerEntryIn, int arraySizeIn) {
+-        Validate.inclusiveBetween(1L, 32L, (long) bitsPerEntryIn);
++        //Validate.inclusiveBetween(1L, 32L, (long) bitsPerEntryIn); // Paper
+         this.arraySize = arraySizeIn;
+         this.bitsPerEntry = bitsPerEntryIn;
+         this.maxEntryValue = (1L << bitsPerEntryIn) - 1L;
+@@ -18,8 +18,8 @@ public class BitArray {
+     }
+ 
+     public void setAt(int index, int value) {
+-        Validate.inclusiveBetween(0L, (long) (this.arraySize - 1), (long) index);
+-        Validate.inclusiveBetween(0L, this.maxEntryValue, (long) value);
++        //Validate.inclusiveBetween(0L, (long) (this.arraySize - 1), (long) index); // Paper
++        //Validate.inclusiveBetween(0L, this.maxEntryValue, (long) value); // Paper
+         int var3 = index * this.bitsPerEntry;
+         int var4 = var3 / 64;
+         int var5 = ((index + 1) * this.bitsPerEntry - 1) / 64;
+@@ -34,7 +34,7 @@ public class BitArray {
+     }
+ 
+     public int getAt(int index) {
+-        Validate.inclusiveBetween(0L, (long) (this.arraySize - 1), (long) index);
++        //Validate.inclusiveBetween(0L, (long) (this.arraySize - 1), (long) index); // Paper
+         int var2 = index * this.bitsPerEntry;
+         int var3 = var2 / 64;
+         int var4 = ((index + 1) * this.bitsPerEntry - 1) / 64;
+-- 
+2.18.0
+

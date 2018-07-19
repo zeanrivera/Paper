@@ -1,0 +1,36 @@
+From e703f74d8c1c4524f61f7a34b9bd1f4fc62e7222 Mon Sep 17 00:00:00 2001
+From: Shane Freeder <theboyetronic@gmail.com>
+Date: Thu, 16 Nov 2017 12:12:41 +0000
+Subject: [PATCH] Use CB BlockState implementations for captured blocks
+
+When modifying the world, CB will store a copy of the affected
+blocks in order to restore their state in the case that the event
+is cancelled. This change only modifies the collection of blocks
+in the world by normal means, e.g. not during tree population,
+as the potentially marginal overheads would serve no advantage.
+
+CB was using a CraftBlockState for all blocks, which causes issues
+should any block that uses information beyond a data ID would suffer
+from missing information, e.g. Skulls.
+
+By using CBs CraftBlock#getState(), we will maintain a proper copy of
+the blockstate that will be valid for restoration, as opposed to dropping
+information on restoration when the event is cancelled.
+
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 546aa8e..c5be4eb 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -441,7 +441,8 @@ public abstract class World implements IBlockAccess {
+             BlockState blockstate = null;
+ 
+             if (this.captureBlockStates) {
+-                blockstate = CraftBlockState.getBlockState(this, pos.getX(), pos.getY(), pos.getZ(), flags);
++                //blockstate = CraftBlockState.getBlockState(this, pos.getX(), pos.getY(), pos.getZ(), flags); // Paper
++                blockstate = world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getState(); // Paper - use CB getState to get a suitable snapshot
+                 this.capturedBlockStates.add(blockstate);
+             }
+ 
+-- 
+2.18.0
+

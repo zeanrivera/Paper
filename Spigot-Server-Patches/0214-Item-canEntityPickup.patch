@@ -1,0 +1,58 @@
+From 0fba63f6a91757c4806f84340036f57c2ffaa990 Mon Sep 17 00:00:00 2001
+From: BillyGalbreath <Blake.Galbreath@GMail.com>
+Date: Sun, 29 Oct 2017 20:10:02 -0400
+Subject: [PATCH] Item#canEntityPickup
+
+
+diff --git a/src/main/java/net/minecraft/entity/EntityLiving.java b/src/main/java/net/minecraft/entity/EntityLiving.java
+index 49a34ae..b9287b7 100644
+--- a/src/main/java/net/minecraft/entity/EntityLiving.java
++++ b/src/main/java/net/minecraft/entity/EntityLiving.java
+@@ -544,6 +544,13 @@ public abstract class EntityLiving extends EntityLivingBase {
+         if (!this.world.isRemote && this.canPickUpLoot() && !this.dead && this.world.getGameRules().getBoolean("mobGriefing")) {
+             for (EntityItem entityitem :
+                     this.world.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().grow(1.0D, 0.0D, 1.0D))) {
++
++                // Paper Start
++                if (!entityitem.canMobPickup) {
++                    continue;
++                }
++                // Paper End
++
+                 if (!entityitem.isDead && !entityitem.getItem().isEmpty() && !entityitem.cannotPickup()) {
+                     this.updateEquipmentIfNeeded(entityitem);
+                 }
+diff --git a/src/main/java/net/minecraft/entity/item/EntityItem.java b/src/main/java/net/minecraft/entity/item/EntityItem.java
+index 739ae0b..9f30ede 100644
+--- a/src/main/java/net/minecraft/entity/item/EntityItem.java
++++ b/src/main/java/net/minecraft/entity/item/EntityItem.java
+@@ -51,6 +51,7 @@ public class EntityItem extends Entity implements HopperPusher {
+     private String owner;
+     public float hoverStart;
+     private int lastTick;
++    public boolean canMobPickup = true; // Paper
+ 
+     public EntityItem(World worldIn, double x, double y, double z) {
+         super(worldIn);
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftItem.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftItem.java
+index fd9e3c5..38c89c4 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftItem.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftItem.java
+@@ -43,4 +43,14 @@ public class CraftItem extends CraftEntity implements Item {
+     public EntityType getType() {
+         return EntityType.DROPPED_ITEM;
+     }
++
++    // Paper Start
++    public boolean canMobPickup() {
++        return item.canMobPickup;
++    }
++
++    public void setCanMobPickup(boolean canMobPickup) {
++        item.canMobPickup = canMobPickup;
++    }
++    // Paper End
+ }
+-- 
+2.18.0
+

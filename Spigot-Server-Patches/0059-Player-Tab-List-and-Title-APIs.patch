@@ -1,0 +1,182 @@
+From 3f7341a01a9e48829c64dce3991192aa999da96e Mon Sep 17 00:00:00 2001
+From: Techcable <Techcable@outlook.com>
+Date: Wed, 27 Sep 2017 17:27:16 -0400
+Subject: [PATCH] Player Tab List and Title APIs
+
+
+diff --git a/src/main/java/net/minecraft/network/play/server/SPacketPlayerListHeaderFooter.java b/src/main/java/net/minecraft/network/play/server/SPacketPlayerListHeaderFooter.java
+index 335f65d..6430d4f 100644
+--- a/src/main/java/net/minecraft/network/play/server/SPacketPlayerListHeaderFooter.java
++++ b/src/main/java/net/minecraft/network/play/server/SPacketPlayerListHeaderFooter.java
+@@ -7,6 +7,7 @@ import net.minecraft.network.play.INetHandlerPlayClient;
+ import net.minecraft.util.text.ITextComponent;
+ 
+ public class SPacketPlayerListHeaderFooter implements Packet<INetHandlerPlayClient> {
++    public net.md_5.bungee.api.chat.BaseComponent[] headerComponent, footerComponent; // Paper
+     private ITextComponent header;
+     private ITextComponent footer;
+ 
+@@ -16,8 +17,19 @@ public class SPacketPlayerListHeaderFooter implements Packet<INetHandlerPlayClie
+     }
+ 
+     public void writePacketData(PacketBuffer buf) throws IOException {
+-        buf.writeTextComponent(this.header);
+-        buf.writeTextComponent(this.footer);
++        // Paper start - Player tab list and titles API
++        if (headerComponent != null) {
++            buf.writeString(net.md_5.bungee.chat.ComponentSerializer.toString(this.headerComponent));
++        } else {
++            buf.writeTextComponent(this.header);
++        }
++
++        if (footerComponent != null) {
++            buf.writeString(net.md_5.bungee.chat.ComponentSerializer.toString(this.footerComponent));
++        } else {
++            buf.writeTextComponent(this.footer);
++        }
++        // Paper end
+     }
+ 
+     public void processPacket(INetHandlerPlayClient handler) {
+diff --git a/src/main/java/net/minecraft/network/play/server/SPacketTitle.java b/src/main/java/net/minecraft/network/play/server/SPacketTitle.java
+index 2a43ec6..24cdbc7 100644
+--- a/src/main/java/net/minecraft/network/play/server/SPacketTitle.java
++++ b/src/main/java/net/minecraft/network/play/server/SPacketTitle.java
+@@ -14,6 +14,16 @@ public class SPacketTitle implements Packet<INetHandlerPlayClient> {
+     private int fadeInTime;
+     private int displayTime;
+     private int fadeOutTime;
++    // Paper start
++    public net.md_5.bungee.api.chat.BaseComponent[] components;
++
++    public SPacketTitle(SPacketTitle.Type typeIn, net.md_5.bungee.api.chat.BaseComponent[] componentsIn, int displayTimeIn, int fadeInTime, int fadeOutTimeIn) {
++        this.type = typeIn;
++        this.components = componentsIn;
++        this.displayTime = displayTimeIn;
++        this.fadeInTime = fadeInTime;
++        this.fadeOutTime = fadeOutTimeIn;
++    }
+ 
+     public SPacketTitle() {}
+ 
+@@ -52,7 +62,13 @@ public class SPacketTitle implements Packet<INetHandlerPlayClient> {
+         buf.writeEnumValue(this.type);
+ 
+         if (this.type == SPacketTitle.Type.TITLE || this.type == SPacketTitle.Type.SUBTITLE || this.type == SPacketTitle.Type.ACTIONBAR) {
+-            buf.writeTextComponent(this.message);
++            // Paper start - Player tab list and titles API
++            if (this.components != null) {
++                buf.writeString(net.md_5.bungee.chat.ComponentSerializer.toString(this.components));
++            } else {
++                buf.writeTextComponent(this.message);
++            }
++            // Paper end
+         }
+ 
+         if (this.type == SPacketTitle.Type.TIMES) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 70ff32a..30a49b7 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -1,5 +1,6 @@
+ package org.bukkit.craftbukkit.entity;
+ 
++import com.destroystokyo.paper.Title;
+ import com.google.common.base.Preconditions;
+ import com.google.common.collect.ImmutableSet;
+ import com.google.common.io.BaseEncoding;
+@@ -52,6 +53,7 @@ import net.minecraft.network.play.server.SPacketEffect;
+ import net.minecraft.network.play.server.SPacketEntityProperties;
+ import net.minecraft.network.play.server.SPacketMaps;
+ import net.minecraft.network.play.server.SPacketParticles;
++import net.minecraft.network.play.server.SPacketPlayerListHeaderFooter;
+ import net.minecraft.network.play.server.SPacketPlayerListItem;
+ import net.minecraft.network.play.server.SPacketSoundEffect;
+ import net.minecraft.network.play.server.SPacketSpawnPosition;
+@@ -1645,6 +1647,83 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     public void setViewDistance(int viewDistance) {
+         ((WorldServer) getHandle().world).getPlayerChunkMap().updateViewDistance(getHandle(), viewDistance);
+     }
++
++    @Override
++    public void setPlayerListHeaderFooter(BaseComponent[] header, BaseComponent[] footer) {
++        SPacketPlayerListHeaderFooter packet = new SPacketPlayerListHeaderFooter();
++        packet.headerComponent = header;
++        packet.footerComponent = footer;
++        getHandle().connection.sendPacket(packet);
++    }
++
++    @Override
++    public void setPlayerListHeaderFooter(BaseComponent header, BaseComponent footer) {
++        this.setPlayerListHeaderFooter(header == null ? null : new BaseComponent[]{header},
++                footer == null ? null : new BaseComponent[]{footer});
++    }
++
++
++    @Override
++    public void setTitleTimes(int fadeInTicks, int stayTicks, int fadeOutTicks) {
++        getHandle().connection.sendPacket(new SPacketTitle(SPacketTitle.Type.TIMES, (BaseComponent[]) null, fadeInTicks, stayTicks, fadeOutTicks));
++    }
++
++    @Override
++    public void setSubtitle(BaseComponent[] subtitle) {
++        getHandle().connection.sendPacket(new SPacketTitle(SPacketTitle.Type.SUBTITLE, subtitle, 0, 0, 0));
++    }
++
++    @Override
++    public void setSubtitle(BaseComponent subtitle) {
++        setSubtitle(new BaseComponent[]{subtitle});
++    }
++
++    @Override
++    public void showTitle(BaseComponent[] title) {
++        getHandle().connection.sendPacket(new SPacketTitle(SPacketTitle.Type.TITLE, title, 0, 0, 0));
++    }
++
++    @Override
++    public void showTitle(BaseComponent title) {
++        showTitle(new BaseComponent[]{title});
++    }
++
++    @Override
++    public void showTitle(BaseComponent[] title, BaseComponent[] subtitle, int fadeInTicks, int stayTicks, int fadeOutTicks) {
++        setTitleTimes(fadeInTicks, stayTicks, fadeOutTicks);
++        setSubtitle(subtitle);
++        showTitle(title);
++    }
++
++    @Override
++    public void showTitle(BaseComponent title, BaseComponent subtitle, int fadeInTicks, int stayTicks, int fadeOutTicks) {
++        setTitleTimes(fadeInTicks, stayTicks, fadeOutTicks);
++        setSubtitle(subtitle);
++        showTitle(title);
++    }
++
++    @Override
++    public void sendTitle(Title title) {
++        Preconditions.checkNotNull(title, "Title is null");
++        setTitleTimes(title.getFadeIn(), title.getStay(), title.getFadeOut());
++        setSubtitle(title.getSubtitle() == null ? new BaseComponent[0] : title.getSubtitle());
++        showTitle(title.getTitle());
++    }
++
++    @Override
++    public void updateTitle(Title title) {
++        Preconditions.checkNotNull(title, "Title is null");
++        setTitleTimes(title.getFadeIn(), title.getStay(), title.getFadeOut());
++        if (title.getSubtitle() != null) {
++            setSubtitle(title.getSubtitle());
++        }
++        showTitle(title.getTitle());
++    }
++
++    @Override
++    public void hideTitle() {
++        getHandle().connection.sendPacket(new SPacketTitle(SPacketTitle.Type.CLEAR, (BaseComponent[]) null, 0, 0, 0));
++    }
+     // Paper end
+ 
+     public Player.Spigot spigot() { // Paper - Decompile fix
+-- 
+2.18.0
+

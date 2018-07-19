@@ -1,0 +1,22 @@
+From 076b719c86497dffd6dec0816d255be1e6cae339 Mon Sep 17 00:00:00 2001
+From: Jedediah Smith <jedediah@silencegreys.com>
+Date: Sun, 1 Oct 2017 01:02:10 -0400
+Subject: [PATCH] Fix cooked fish legacy import
+
+
+diff --git a/src/main/java/net/minecraft/util/datafix/fixes/ItemIntIDToString.java b/src/main/java/net/minecraft/util/datafix/fixes/ItemIntIDToString.java
+index 0f34cb0..2e2f31b 100644
+--- a/src/main/java/net/minecraft/util/datafix/fixes/ItemIntIDToString.java
++++ b/src/main/java/net/minecraft/util/datafix/fixes/ItemIntIDToString.java
+@@ -261,7 +261,7 @@ public class ItemIntIDToString implements IFixableData {
+         ID_MAP[347] = "minecraft:clock";
+         ID_MAP[348] = "minecraft:glowstone_dust";
+         ID_MAP[349] = "minecraft:fish";
+-        ID_MAP[350] = "minecraft:cooked_fished";
++        ID_MAP[350] = "minecraft:cooked_fish"; // Paper - cooked_fished -> cooked_fish
+         ID_MAP[351] = "minecraft:dye";
+         ID_MAP[352] = "minecraft:bone";
+         ID_MAP[353] = "minecraft:sugar";
+-- 
+2.18.0
+

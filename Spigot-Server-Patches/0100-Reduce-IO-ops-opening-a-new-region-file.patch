@@ -1,0 +1,54 @@
+From dd61ac875ab0ef2d984fc7a8bb06e6aff7a14759 Mon Sep 17 00:00:00 2001
+From: Antony Riley <antony@cyberiantiger.org>
+Date: Sat, 7 Oct 2017 20:31:22 -0400
+Subject: [PATCH] Reduce IO ops opening a new region file
+
+
+diff --git a/src/main/java/net/minecraft/world/chunk/storage/RegionFile.java b/src/main/java/net/minecraft/world/chunk/storage/RegionFile.java
+index 835f4d6..5ce1e3d 100644
+--- a/src/main/java/net/minecraft/world/chunk/storage/RegionFile.java
++++ b/src/main/java/net/minecraft/world/chunk/storage/RegionFile.java
+@@ -8,9 +8,12 @@ import java.io.ByteArrayInputStream;
+ import java.io.ByteArrayOutputStream;
+ import java.io.DataInputStream;
+ import java.io.DataOutputStream;
++import java.io.EOFException;
+ import java.io.File;
+ import java.io.IOException;
+ import java.io.RandomAccessFile;
++import java.nio.ByteBuffer;
++import java.nio.IntBuffer;
+ import java.util.List;
+ import java.util.zip.DeflaterOutputStream;
+ import java.util.zip.GZIPInputStream;
+@@ -62,8 +65,17 @@ public class RegionFile {
+             this.sectorFree.set(1, Boolean.valueOf(false));
+             this.dataFile.seek(0L);
+ 
++            // Paper Start
++            ByteBuffer header = ByteBuffer.allocate(8192);
++            while (header.hasRemaining())  {
++                if (this.dataFile.getChannel().read(header) == -1) throw new EOFException();
++            }
++            header.clear();
++            IntBuffer headerAsInts = header.asIntBuffer();
++            // Paper End
++
+             for (int var8 = 0; var8 < 1024; ++var8) {
+-                int var4 = this.dataFile.readInt();
++                int var4 = headerAsInts.get(); // Paper
+                 this.offsets[var8] = var4;
+ 
+                 if (var4 != 0 && (var4 >> 8) + (var4 & 255) <= this.sectorFree.size()) {
+@@ -74,7 +86,7 @@ public class RegionFile {
+             }
+ 
+             for (int var9 = 0; var9 < 1024; ++var9) {
+-                int var10 = this.dataFile.readInt();
++                int var10 = headerAsInts.get(); // Paper
+                 this.chunkTimestamps[var9] = var10;
+             }
+         } catch (IOException var6) {
+-- 
+2.18.0
+

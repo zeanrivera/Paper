@@ -1,0 +1,36 @@
+From 5be0c445cba92f4542390b9e224c4d8e517337e5 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 1 Oct 2017 00:37:29 -0400
+Subject: [PATCH] Configurable spawn chance for skeleton horses
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index 107a3c3..1e91623 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -257,4 +257,9 @@ public class PaperWorldConfig {
+         }
+         log("Non Player Arrow Despawn Rate: " + nonPlayerArrowDespawnRate);
+     }
++
++    public double skeleHorseSpawnChance;
++    private void skeleHorseSpawnChance() {
++        skeleHorseSpawnChance = getDouble("skeleton-horse-thunder-spawn-chance", 0.01D);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
+index b53c02c..b44560a 100644
+--- a/src/main/java/net/minecraft/world/WorldServer.java
++++ b/src/main/java/net/minecraft/world/WorldServer.java
+@@ -566,7 +566,7 @@ public class WorldServer extends World implements IThreadListener {
+                             DifficultyInstance difficultydamagescaler = this.getDifficultyForLocation(blockposition);
+ 
+                             if (this.getGameRules().getBoolean("doMobSpawning")
+-                                    && this.rand.nextDouble() < (double) difficultydamagescaler.getAdditionalDifficulty() * 0.01D) {
++                                    && this.rand.nextDouble() < (double) difficultydamagescaler.getAdditionalDifficulty() * paperConfig.skeleHorseSpawnChance) {
+                                 EntitySkeletonHorse entityhorseskeleton = new EntitySkeletonHorse(this);
+                                 entityhorseskeleton.setTrap(true);
+                                 entityhorseskeleton.setGrowingAge(0);
+-- 
+2.18.0
+

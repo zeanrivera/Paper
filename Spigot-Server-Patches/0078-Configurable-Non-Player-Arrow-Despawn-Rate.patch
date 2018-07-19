@@ -1,0 +1,41 @@
+From 85a93118da7fe9bdbf3f85f573b7129cce23d2fe Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 30 Sep 2017 23:06:50 -0400
+Subject: [PATCH] Configurable Non Player Arrow Despawn Rate
+
+Can set a much shorter despawn rate for arrows that players can not pick up.
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+index c4c6838..107a3c3 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
+@@ -248,4 +248,13 @@ public class PaperWorldConfig {
+     private void allowLeashingUndeadHorse() {
+         allowLeashingUndeadHorse = getBoolean("allow-leashing-undead-horse", false);
+     }
++
++    public int nonPlayerArrowDespawnRate = -1;
++    private void nonPlayerArrowDespawnRate() {
++        nonPlayerArrowDespawnRate = getInt("non-player-arrow-despawn-rate", -1);
++        if (nonPlayerArrowDespawnRate == -1) {
++            nonPlayerArrowDespawnRate = spigotConfig.arrowDespawnRate;
++        }
++        log("Non Player Arrow Despawn Rate: " + nonPlayerArrowDespawnRate);
++    }
+ }
+diff --git a/src/main/java/net/minecraft/entity/projectile/EntityArrow.java b/src/main/java/net/minecraft/entity/projectile/EntityArrow.java
+index 5c79988..a0646ee 100644
+--- a/src/main/java/net/minecraft/entity/projectile/EntityArrow.java
++++ b/src/main/java/net/minecraft/entity/projectile/EntityArrow.java
+@@ -188,7 +188,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
+             } else {
+                 ++this.ticksInGround;
+ 
+-                if (this.ticksInGround >= this.world.spigotConfig.arrowDespawnRate) {
++                if (this.ticksInGround >= (pickupStatus != PickupStatus.DISALLOWED ? this.world.spigotConfig.arrowDespawnRate : world.paperConfig.nonPlayerArrowDespawnRate)) { // Paper
+                     this.setDead();
+                 }
+             }
+-- 
+2.18.0
+

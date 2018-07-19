@@ -1,0 +1,22 @@
+From bff2d4090d1f0494df899c9c5b5906d7c8720079 Mon Sep 17 00:00:00 2001
+From: Brokkonaut <hannos17@gmx.de>
+Date: Sun, 29 Oct 2017 18:05:24 -0400
+Subject: [PATCH] Make targetSize more aggressive in the chunk unload queue
+
+
+diff --git a/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java b/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
+index 3d2d00c..127559d 100644
+--- a/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
++++ b/src/main/java/net/minecraft/world/gen/ChunkProviderServer.java
+@@ -309,7 +309,7 @@ public class ChunkProviderServer implements IChunkProvider {
+             if (!this.droppedChunksSet.isEmpty()) {
+                 SlackActivityAccountant activityAccountant = this.world.getMinecraftServer().slackActivityAccountant;
+                 activityAccountant.startActivity(0.5D);
+-                int targetSize = (int) ((double) this.droppedChunksSet.size() * 0.96D);
++                int targetSize = Math.min(this.droppedChunksSet.size() - 100,  (int) (this.droppedChunksSet.size() * UNLOAD_QUEUE_RESIZE_FACTOR)); // Paper - Make more aggressive
+                 Iterator iterator = this.droppedChunksSet.iterator();
+ 
+                 while (iterator.hasNext()) {
+-- 
+2.18.0
+

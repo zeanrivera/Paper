@@ -1,0 +1,68 @@
+From 251d3577872c652984131e4b73534f91197bbdc0 Mon Sep 17 00:00:00 2001
+From: Byteflux <byte@byteflux.net>
+Date: Wed, 27 Sep 2017 14:38:39 -0400
+Subject: [PATCH] Add BeaconEffectEvent
+
+
+diff --git a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
+index f4ad831..f134d9a 100644
+--- a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
++++ b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.tileentity;
+ 
++import com.destroystokyo.paper.event.block.BeaconEffectEvent; // Paper
+ import com.google.common.collect.Lists;
+ import com.google.common.collect.Sets;
+ import java.util.ArrayList;
+@@ -33,6 +34,11 @@ import net.minecraft.util.math.AxisAlignedBB;
+ import net.minecraft.util.math.BlockPos;
+ import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+ import org.bukkit.craftbukkit.potion.CraftPotionUtil;
++// Paper start
++import org.bukkit.craftbukkit.event.CraftEventFactory;
++import org.bukkit.entity.Player;
++import org.bukkit.potion.PotionData;
++// Paper end
+ import org.bukkit.entity.HumanEntity;
+ import org.bukkit.potion.PotionEffect;
+ 
+@@ -131,9 +137,21 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
+     }
+ 
+     private void applyEffect(List<EntityPlayer> list, Potion effects, int i, int b0) {
++        // Paper start - BeaconEffectEvent
++        applyEffect(list, effects, i, b0, true);
++    }
++
++    private void applyEffect(List<EntityPlayer> list, Potion effects, int duration, int amplifier, boolean isPrimary) {
+         for (EntityPlayer entityhuman : list) {
+-            entityhuman.addPotionEffect(new net.minecraft.potion.PotionEffect(effects, i, b0, true, true));
++            org.bukkit.block.Block block = world.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
++            PotionEffect effect = CraftPotionUtil.toBukkit(new net.minecraft.potion.PotionEffect(effects, duration, amplifier, true, true));
++
++            BeaconEffectEvent event = new BeaconEffectEvent(block, effect, (Player) entityhuman.getBukkitEntity(), isPrimary);
++            if (CraftEventFactory.callEvent(event).isCancelled()) continue;
++            PotionEffect eventEffect = event.getEffect();
++            entityhuman.getBukkitEntity().addPotionEffect(eventEffect, true);
+         }
++        // Paper end
+     }
+ 
+     private boolean hasSecondaryEffect() {
+@@ -145,10 +163,10 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
+             byte b0 = this.getAmplification();
+             int i = this.getLevel();
+             List list = this.getHumansInRange();
+-            this.applyEffect(list, this.primaryEffect, i, b0);
++            this.applyEffect(list, this.primaryEffect, i, b0, true); // Paper - BeaconEffectEvent
+ 
+             if (this.hasSecondaryEffect()) {
+-                this.applyEffect(list, this.secondaryEffect, i, 0);
++                this.applyEffect(list, this.secondaryEffect, i, 0, false); // Paper - BeaconEffectEvent
+             }
+         }
+     }
+-- 
+2.18.0
+

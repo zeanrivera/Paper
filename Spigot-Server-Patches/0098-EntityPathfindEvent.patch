@@ -1,0 +1,39 @@
+From 7988a154c747554f5e8228d70ced468832814f46 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sat, 7 Oct 2017 20:09:20 -0400
+Subject: [PATCH] EntityPathfindEvent
+
+Fires when an Entity decides to start moving to a location.
+
+diff --git a/src/main/java/net/minecraft/pathfinding/PathNavigate.java b/src/main/java/net/minecraft/pathfinding/PathNavigate.java
+index 2848c5f..6a6aa2e 100644
+--- a/src/main/java/net/minecraft/pathfinding/PathNavigate.java
++++ b/src/main/java/net/minecraft/pathfinding/PathNavigate.java
+@@ -1,6 +1,8 @@
+ package net.minecraft.pathfinding;
+ 
+ import javax.annotation.Nullable;
++
++import com.destroystokyo.paper.util.MCUtil;
+ import net.minecraft.block.Block;
+ import net.minecraft.block.state.IBlockState;
+ import net.minecraft.entity.Entity;
+@@ -82,6 +84,7 @@ public abstract class PathNavigate {
+         } else if (this.currentPath != null && !this.currentPath.isFinished() && pos.equals(this.targetPos)) {
+             return this.currentPath;
+         } else {
++            if (!new com.destroystokyo.paper.event.entity.EntityPathfindEvent(entity.getBukkitEntity(), MCUtil.toLocation(entity.world, pos), null).callEvent()) { return null; } // Paper
+             this.targetPos = pos;
+             float var2 = this.getPathSearchRange();
+             this.world.profiler.startSection("pathfind");
+@@ -104,6 +107,7 @@ public abstract class PathNavigate {
+             if (this.currentPath != null && !this.currentPath.isFinished() && var2.equals(this.targetPos)) {
+                 return this.currentPath;
+             } else {
++                if (!new com.destroystokyo.paper.event.entity.EntityPathfindEvent(entity.getBukkitEntity(), MCUtil.toLocation(entity.world, var2), entity.getBukkitEntity()).callEvent()) { return null; } // Paper
+                 this.targetPos = var2;
+                 float var3 = this.getPathSearchRange();
+                 this.world.profiler.startSection("pathfind");
+-- 
+2.18.0
+

@@ -1,0 +1,68 @@
+From d8f7113d772df9b2866eeb8b7f73fc5ad36ff66f Mon Sep 17 00:00:00 2001
+From: Nick Conde <nick@budgiehouse.com>
+Date: Wed, 18 Jul 2018 23:46:37 -0500
+Subject: [PATCH] Use transforming classloader for entire server
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
+index f21b820..7c230ed 100644
+--- a/src/main/java/org/bukkit/craftbukkit/Main.java
++++ b/src/main/java/org/bukkit/craftbukkit/Main.java
+@@ -20,9 +20,40 @@ import org.fusesource.jansi.AnsiConsole;
+ public class Main {
+     public static boolean useJline = true;
+     public static boolean useConsole = true;
++    public static com.destroystokyo.paper.transformer.TransformingClassLoader classloader; // Paper
+ 
+     public static void main(String[] args) {
+         com.destroystokyo.paper.srg.SrgParser.init(); // Paper MCP
++        // Paper start
++        final java.net.URLClassLoader systemclassloader = (java.net.URLClassLoader) Main.class.getClassLoader();
++        classloader = new com.destroystokyo.paper.transformer.TransformingClassLoader(systemclassloader.getURLs(), systemclassloader);
++
++        classloader.addClassloaderExclusion("org.bukkit.craftbukkit.Main");
++        classloader.addClassloaderExclusion("com.destroystokyo.paper.transformer.");
++
++        classloader.addClassloaderExclusion("java.");
++        classloader.addClassloaderExclusion("javax.");
++        classloader.addClassloaderExclusion("sun.");
++        classloader.addClassloaderExclusion("joptsimple.");
++        classloader.addClassloaderExclusion("org.apache.logging.");
++        classloader.addClassloaderExclusion("jline.");
++        classloader.addClassloaderExclusion("org.fusesource.");
++        classloader.addClassloaderExclusion("com.mojang.util.QueueLogAppender");
++
++        classloader.addTransformerExclusion("com.google.");
++        classloader.addTransformerExclusion("org.apache.");
++        classloader.addTransformerExclusion("com.avaje.");
++        classloader.addTransformerExclusion("org.objectweb.asm.");
++        classloader.addTransformerExclusion("org.yaml.");
++        classloader.addTransformerExclusion("io.netty.");
++        classloader.addTransformerExclusion("it.unimi.dsi.fastutil.");
++
++        Thread.currentThread().setContextClassLoader(classloader);
++        launch(args);
++    }
++
++    private static void launch(final String[] args) {
++        // Paper end
+         OptionParser parser =
+                 new OptionParser() {
+                     {
+@@ -167,7 +198,12 @@ public class Main {
+                     }
+ 
+                     System.out.println("Loading libraries, please wait...");
+-                    MinecraftServer.main(options);
++                    // Paper start
++                    //MinecraftServer.main(options);
++                    final Class<?> mcserver = classloader.loadClass("net.minecraft.server.MinecraftServer");
++                    final java.lang.reflect.Method mainMethod = mcserver.getMethod("main", OptionSet.class);
++                    mainMethod.invoke(null, options);
++                    // Paper end
+                 } catch (Throwable var8) {
+                     var8.printStackTrace();
+                 }
+-- 
+2.18.0
+

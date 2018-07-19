@@ -1,0 +1,70 @@
+From 888bf2b4a5473d81e0fcaf1d00176daaef1f16a9 Mon Sep 17 00:00:00 2001
+From: Alfie Cleveland <alfeh@me.com>
+Date: Tue, 10 Oct 2017 17:42:51 -0400
+Subject: [PATCH] Optimize player entityRemoveQueue
+
+Brings removeQueue operations back to O(n) instead of O(n^2).
+
+diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+index a56d769..f6ca53e 100644
+--- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
++++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -4,11 +4,8 @@ import com.google.common.base.Preconditions;
+ import com.google.common.collect.Lists;
+ import com.mojang.authlib.GameProfile;
+ import io.netty.buffer.Unpooled;
+-import java.util.ArrayList;
+-import java.util.Collection;
+-import java.util.EnumSet;
+-import java.util.Iterator;
+-import java.util.List;
++
++import java.util.*;
+ import javax.annotation.Nullable;
+ import net.minecraft.advancements.CriteriaTriggers;
+ import net.minecraft.advancements.PlayerAdvancements;
+@@ -146,7 +143,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+     public final PlayerInteractionManager interactionManager;
+     public double managedPosX;
+     public double managedPosZ;
+-    public final List<Integer> entityRemoveQueue = Lists.<Integer>newLinkedList();
++    public final Deque<Integer> entityRemoveQueue = new ArrayDeque<>(); // Paper
+     private final PlayerAdvancements advancements;
+     private final StatisticsManagerServer statsFile;
+     private float lastHealthScore = Float.MIN_VALUE;
+@@ -408,10 +405,18 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+             Iterator iterator = this.entityRemoveQueue.iterator();
+             int j = 0;
+ 
++            // Paper start
++            /*
+             while (iterator.hasNext() && j < i) {
+                 aint[j++] = ((Integer) iterator.next()).intValue();
+                 iterator.remove();
+             }
++            */
++            Integer integer;
++            while (j < i && (integer = this.entityRemoveQueue.poll()) != null) {
++                aint[j++] = integer.intValue();
++            }
++            // Paper end
+ 
+             this.connection.sendPacket(new SPacketDestroyEntities(aint));
+         }
+@@ -1203,7 +1208,12 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+         this.lastExperience = -1;
+         this.lastHealth = -1.0F;
+         this.lastFoodLevel = -1;
+-        this.entityRemoveQueue.addAll(that.entityRemoveQueue);
++        // Paper start - Optimize remove queue
++        //this.entityRemoveQueue.addAll(that.entityRemoveQueue);
++        if (this.entityRemoveQueue != that.entityRemoveQueue) {
++            this.entityRemoveQueue.addAll(that.entityRemoveQueue);
++        }
++        // Paper end
+         this.seenCredits = that.seenCredits;
+         this.enteredNetherPosition = that.enteredNetherPosition;
+         this.setLeftShoulderEntity(that.getLeftShoulderEntity());
+-- 
+2.18.0
+

@@ -1,0 +1,85 @@
+From 07c391240c8bc227b0ec7ab8a7c00dc56a1caa11 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Fri, 20 Oct 2017 19:40:03 -0400
+Subject: [PATCH] Vanished players don't have rights
+
+
+diff --git a/src/main/java/net/minecraft/item/ItemBlock.java b/src/main/java/net/minecraft/item/ItemBlock.java
+index d2c7dd1..cb9e3cc 100644
+--- a/src/main/java/net/minecraft/item/ItemBlock.java
++++ b/src/main/java/net/minecraft/item/ItemBlock.java
+@@ -39,7 +39,7 @@ public class ItemBlock extends Item {
+ 
+         if (!itemstack.isEmpty()
+                 && player.canPlayerEdit(pos, facing, itemstack)
+-                && worldIn.mayPlace(this.block, pos, false, facing, (Entity) null)) {
++                && worldIn.mayPlace(this.block, pos, false, facing, player)) { // Paper - Pass player instead of null
+             int i = this.getMetadata(itemstack.getMetadata());
+             IBlockState iblockdata1 = this.block.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, i, player);
+ 
+diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
+index 8a626a1..b8a6d71 100644
+--- a/src/main/java/net/minecraft/world/World.java
++++ b/src/main/java/net/minecraft/world/World.java
+@@ -1819,6 +1819,31 @@ public abstract class World implements IBlockAccess {
+         return true;
+     }
+ 
++    // Paper start - Based on the above, func_72917_a
++    public boolean checkNoVisibleEntityCollision(AxisAlignedBB bb, @Nullable Entity entityIn) {
++        List list = this.getEntitiesWithinAABBExcludingEntity((Entity) null, bb);
++
++        for (int i = 0; i < list.size(); ++i) {
++            Entity entity1 = (Entity) list.get(i);
++
++            if (entityIn instanceof EntityPlayerMP && entity1 instanceof EntityPlayerMP) {
++               if (!((EntityPlayerMP) entityIn).getBukkitEntity().canSee(((EntityPlayerMP) entity1).getBukkitEntity())) {
++                    continue;
++               }
++            }
++
++            if (!entity1.isDead
++                    && entity1.preventEntitySpawning
++                    && entity1 != entityIn
++                    && (entityIn == null || entity1.isRidingSameEntity(entityIn))) {
++                return false;
++            }
++        }
++
++        return true;
++    }
++    // Paper end
++
+     public boolean checkBlockCollision(AxisAlignedBB bb) {
+         int i = MathHelper.floor(bb.minX);
+         int j = MathHelper.ceil(bb.maxX);
+@@ -2660,7 +2685,7 @@ public abstract class World implements IBlockAccess {
+         IBlockState iblockdata = this.getBlockState(pos);
+         AxisAlignedBB axisalignedbb = skipCollisionCheck ? null : blockIn.getDefaultState().getCollisionBoundingBox(this, pos);
+         boolean defaultReturn =
+-                axisalignedbb != Block.NULL_AABB && !this.checkNoEntityCollision(axisalignedbb.offset(pos), placer)
++                axisalignedbb != Block.NULL_AABB && !this.checkNoVisibleEntityCollision(axisalignedbb.offset(pos), placer) // Paper - Use our check
+                         ? false
+                         : (iblockdata.getMaterial() == Material.CIRCUITS && blockIn == Blocks.ANVIL
+                                 ? true
+diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+index b666b2e..4eea96d 100644
+--- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+@@ -963,6 +963,13 @@ public class CraftEventFactory {
+         Projectile projectile = (Projectile) entity.getBukkitEntity();
+         org.bukkit.entity.Entity collided = position.entityHit.getBukkitEntity();
+         com.destroystokyo.paper.event.entity.ProjectileCollideEvent event = new com.destroystokyo.paper.event.entity.ProjectileCollideEvent(projectile, collided);
++
++        if (projectile.getShooter() instanceof Player && collided instanceof Player) {
++            if (!((Player) projectile.getShooter()).canSee((Player) collided)) {
++                event.setCancelled(true);
++            }
++        }
++
+         Bukkit.getPluginManager().callEvent(event);
+         return event;
+     }
+-- 
+2.18.0
+
