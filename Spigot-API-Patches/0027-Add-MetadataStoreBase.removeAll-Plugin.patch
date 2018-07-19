@@ -1,4 +1,4 @@
-From 9d49c37d77994569649eae3f67db61db50eb966c Mon Sep 17 00:00:00 2001
+From b16bbc72485a5f577092423448b3c89cadd96102 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 16 Jul 2013 21:26:50 -0400
 Subject: [PATCH] Add MetadataStoreBase.removeAll(Plugin)

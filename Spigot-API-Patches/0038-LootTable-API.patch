@@ -1,4 +1,4 @@
-From 364267c57679e26c11ec4c2dffb9c93d0d807555 Mon Sep 17 00:00:00 2001
+From ee67eb46d12e74af71290c22ae1ef142f89ca297 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 May 2016 15:19:49 -0400
 Subject: [PATCH] LootTable API

@@ -1,4 +1,4 @@
-From da79215644cd97757c057eb6cddbf94d87b00026 Mon Sep 17 00:00:00 2001
+From b6b0fd65981e2c7f27ad165ea09314c15c1c51cb Mon Sep 17 00:00:00 2001
 From: BillyGalbreath <Blake.Galbreath@GMail.com>
 Date: Mon, 31 Jul 2017 02:08:55 -0500
 Subject: [PATCH] Make /plugins list alphabetical

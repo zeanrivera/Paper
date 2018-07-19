@@ -1,4 +1,4 @@
-From 0b8c0a928b776f94272b608fbca7c2a81296d08d Mon Sep 17 00:00:00 2001
+From ca37f9a078f4d8a0c30fd3e84d4450938d687dba Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 20 Dec 2017 17:38:07 -0500
 Subject: [PATCH] Ability to apply mending to XP API

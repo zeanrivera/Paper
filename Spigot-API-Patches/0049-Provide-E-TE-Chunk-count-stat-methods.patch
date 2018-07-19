@@ -1,4 +1,4 @@
-From a64585c48361c53743623db35700348906b47e4b Mon Sep 17 00:00:00 2001
+From 0f38e98307c2b8683a711da4d4c192b3a085e5ca Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Jan 2017 15:23:03 -0500
 Subject: [PATCH] Provide E/TE/Chunk count stat methods

@@ -1,4 +1,4 @@
-From 9d6778962d9ff374c3ef82dcde6a916f29c4ee26 Mon Sep 17 00:00:00 2001
+From 90e8510df4d6738ef00e4d870e2fb6181ede1384 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 29 Feb 2016 20:24:35 -0600
 Subject: [PATCH] Add exception reporting event

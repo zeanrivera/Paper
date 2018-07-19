@@ -1,4 +1,4 @@
-From 105ea914915592fe49ccb0bc3eb814dfc64a7732 Mon Sep 17 00:00:00 2001
+From 1462023e97090bc0ec73be8fceec71133db04097 Mon Sep 17 00:00:00 2001
 From: Nick Conde <nick@budgiehouse.com>
 Date: Wed, 18 Jul 2018 23:27:52 -0500
 Subject: [PATCH] Add class transformer system.
@@ -21,10 +21,10 @@ index 00000000..ee026130
 +}
 diff --git a/src/main/java/com/destroystokyo/paper/transformer/TransformingClassLoader.java b/src/main/java/com/destroystokyo/paper/transformer/TransformingClassLoader.java
 new file mode 100644
-index 00000000..8e0d4049
+index 00000000..1915cd82
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/transformer/TransformingClassLoader.java
-@@ -0,0 +1,196 @@
+@@ -0,0 +1,187 @@
 +package com.destroystokyo.paper.transformer;
 +
 +import java.io.IOException;
@@ -91,7 +91,7 @@ index 00000000..8e0d4049
 +            throw new ClassNotFoundException(name);
 +        }
 +
-+        for (String ex : this.classloaderExclusions) {
++        for (final String ex : this.classloaderExclusions) {
 +            if (name.startsWith(ex)) {
 +                return this.parent.loadClass(name);
 +            }
@@ -102,7 +102,7 @@ index 00000000..8e0d4049
 +            return clz;
 +        }
 +
-+        for (String ex : this.transformerExclusions) {
++        for (final String ex : this.transformerExclusions) {
 +            if (name.startsWith(ex)) {
 +                try {
 +                    clz = super.findClass(name);
@@ -117,14 +117,14 @@ index 00000000..8e0d4049
 +
 +        try {
 +            byte[] classBytes = loadClassBytes(name);
-+            for (ClassTransformer transformer : this.transformers) {
++            for (final ClassTransformer transformer : this.transformers) {
 +                classBytes = transformer.transform(name, classBytes);
 +            }
 +
 +            final int lastDot = name.lastIndexOf('.');
 +            final String packageName = lastDot == -1 ? "" : name.substring(0, lastDot);
 +            final String fileName = name.replace('.', '/').concat(".class");
-+            URLConnection urlConnection = getResource(fileName).openConnection();
++            final URLConnection urlConnection = getResource(fileName).openConnection();
 +
 +            CodeSigner[] signers = null;
 +
@@ -137,24 +137,24 @@ index 00000000..8e0d4049
 +                        final Manifest manifest = jarFile.getManifest();
 +                        final JarEntry entry = jarFile.getJarEntry(fileName);
 +
-+                        Package pkg = getPackage(packageName);
++                        final Package pkg = getPackage(packageName);
 +                        signers = entry.getCodeSigners();
 +                        if (pkg == null) {
-+                            pkg = definePackage(packageName, manifest, jarURLConnection.getJarFileURL());
++                            definePackage(packageName, manifest, jarURLConnection.getJarFileURL());
 +                        }
 +                    }
 +                } else {
-+                    Package pkg = getPackage(packageName);
++                    final Package pkg = getPackage(packageName);
 +                    if (pkg == null) {
-+                        pkg = definePackage(packageName, null, null, null, null, null, null, null);
++                        definePackage(packageName, null, null, null, null, null, null, null);
 +                    }
 +                }
 +            }
-+            CodeSource codeSource = new CodeSource(urlConnection.getURL(), signers);
++            final CodeSource codeSource = new CodeSource(urlConnection.getURL(), signers);
 +            clz = defineClass(name, classBytes, 0, classBytes.length, codeSource);
 +            this.classes.put(name, clz);
 +            return clz;
-+        } catch (Throwable e) {
++        } catch (final Throwable e) {
 +            this.invalid.add(name);
 +            throw new ClassNotFoundException(name, e);
 +        }
@@ -174,9 +174,9 @@ index 00000000..8e0d4049
 +
 +    public void addClassTransformer(String clz) {
 +        try {
-+            ClassTransformer transformer = (ClassTransformer) loadClass(clz).newInstance();
++            final ClassTransformer transformer = (ClassTransformer) loadClass(clz).newInstance();
 +            this.transformers.add(transformer);
-+        } catch (Exception e) {
++        } catch (final Exception e) {
 +            System.err.println("Error loading class transformer: " + clz);
 +            e.printStackTrace();
 +        }
@@ -184,10 +184,8 @@ index 00000000..8e0d4049
 +
 +    private byte[] loadClassBytes(final String name) throws IOException {
 +        // TODO: do we need to cache these resources?
-+        String path = name.replace('.', '/') + ".class";
-+        InputStream resource = null;
-+        try {
-+            resource = findResource(path).openStream();
++        final String path = name.replace('.', '/') + ".class";
++        try (final InputStream resource = findResource(path).openStream()) {
 +            byte[] buffer = this.loadCache.get();
 +            if (buffer == null) {
 +                buffer = new byte[BUFFER_SIZE];
@@ -203,16 +201,9 @@ index 00000000..8e0d4049
 +                }
 +            }
 +
-+            byte[] classBytes = new byte[length];
++            final byte[] classBytes = new byte[length];
 +            System.arraycopy(buffer, 0, classBytes, 0, length);
 +            return classBytes;
-+        } finally {
-+            if (resource != null) {
-+                try {
-+                    resource.close();
-+                } catch (IOException ignored) {
-+                }
-+            }
 +        }
 +    }
 +

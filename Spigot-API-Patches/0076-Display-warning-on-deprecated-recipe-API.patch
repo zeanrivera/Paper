@@ -1,4 +1,4 @@
-From b21a4187a50110db76887c980eb2264855a49df1 Mon Sep 17 00:00:00 2001
+From ae15f39bb9bbbd4d28c89e0048a618626f04e7f2 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 9 Dec 2017 12:40:25 -0500
 Subject: [PATCH] Display warning on deprecated recipe API
