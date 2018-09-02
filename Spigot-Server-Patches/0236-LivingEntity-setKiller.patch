@@ -1,11 +1,11 @@
-From 6c81f14739d8634d2616aeb26f93124666df45cf Mon Sep 17 00:00:00 2001
+From cba592b32060e9407794e81c901d92d940ccdfea Mon Sep 17 00:00:00 2001
 From: BillyGalbreath <Blake.Galbreath@GMail.com>
 Date: Sun, 29 Oct 2017 21:41:04 -0400
 Subject: [PATCH] LivingEntity#setKiller
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 4b95979..3389c08 100644
+index 1865d79..9ab77f8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -253,6 +253,16 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {

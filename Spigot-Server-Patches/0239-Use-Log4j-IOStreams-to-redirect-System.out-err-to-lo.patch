@@ -1,4 +1,4 @@
-From e65eb85cdb068d06782e31b04b98df213d6e18d7 Mon Sep 17 00:00:00 2001
+From b7c7ca7a8155ae251ac7eb7eb536f6d0e7962bed Mon Sep 17 00:00:00 2001
 From: Minecrell <dev@minecrell.net>
 Date: Tue, 31 Oct 2017 20:16:55 -0400
 Subject: [PATCH] Use Log4j IOStreams to redirect System.out/err to logger
@@ -24,7 +24,7 @@ index ae697fe..d834e2c 100644
      /*
        Required to add the missing Log4j2Plugins.dat file from log4j-core
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 58c5c07..059772a 100644
+index e0e49fc..b2ee113 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -163,8 +163,10 @@ public class DedicatedServer extends MinecraftServer implements IServer {

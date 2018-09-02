@@ -1,4 +1,4 @@
-From 449264ff8caa569b75a970e9beae4743c1b1e2df Mon Sep 17 00:00:00 2001
+From 51badd3a3440c7b7bc4c285273f61f61139ec4d8 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 24 Sep 2017 15:39:35 -0400
 Subject: [PATCH] Configurable top of nether void damage
@@ -20,10 +20,10 @@ index 413fc57..aa38baf 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index 5b839b7..6cd2d97 100644
+index c013f6a..f73ef3f 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
-@@ -483,7 +483,7 @@ public abstract class Entity implements ICommandSender {
+@@ -477,7 +477,7 @@ public abstract class Entity implements ICommandSender {
              this.fallDistance *= 0.5F;
          }
  
@@ -32,7 +32,7 @@ index 5b839b7..6cd2d97 100644
              this.outOfWorld();
          }
  
-@@ -495,6 +495,14 @@ public abstract class Entity implements ICommandSender {
+@@ -489,6 +489,14 @@ public abstract class Entity implements ICommandSender {
          this.world.profiler.endSection();
      }
  
@@ -48,10 +48,10 @@ index 5b839b7..6cd2d97 100644
          if (this.timeUntilPortal > 0) {
              --this.timeUntilPortal;
 diff --git a/src/main/java/net/minecraft/entity/item/EntityMinecart.java b/src/main/java/net/minecraft/entity/item/EntityMinecart.java
-index fc1d434..cc5ca50 100644
+index f325633..c13f798 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityMinecart.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityMinecart.java
-@@ -243,7 +243,7 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
+@@ -240,7 +240,7 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable {
              this.setDamage(this.getDamage() - 1.0F);
          }
  

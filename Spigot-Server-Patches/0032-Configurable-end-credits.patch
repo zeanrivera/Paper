@@ -1,4 +1,4 @@
-From ba3e1184c9999f17ff6f89af936b757a9f078e69 Mon Sep 17 00:00:00 2001
+From 0f4c7786040008a93bfbe2b2c78586b11d1874fb Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 24 Sep 2017 16:29:18 -0400
 Subject: [PATCH] Configurable end credits
@@ -20,10 +20,10 @@ index b46f505..2026b83 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-index 760269e..fc405f6 100644
+index c722c96..27c96e3 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-@@ -713,6 +713,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+@@ -697,6 +697,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
  
                  if (!this.queuedEndExit) {
                      this.queuedEndExit = true;

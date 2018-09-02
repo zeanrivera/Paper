@@ -1,4 +1,4 @@
-From b3c2f87450c91980e170a61455d1eb02f8d9881e Mon Sep 17 00:00:00 2001
+From a5a3de7c5bafde16ac70f8358f0936f625389dd8 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 20:29:16 -0400
 Subject: [PATCH] Profile Lookup Events
@@ -6,7 +6,7 @@ Subject: [PATCH] Profile Lookup Events
 Adds a Pre Lookup Event and a Post Lookup Event so that plugins may prefill in profile data, and cache the responses from profiles that had to be looked up.
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 74c7bd5..25e734d 100644
+index 43a43a0..fc7c0fb 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -986,6 +986,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre

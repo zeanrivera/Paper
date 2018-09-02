@@ -1,4 +1,4 @@
-From 4e005b013c51a307f912cfcc7972a33f1351731f Mon Sep 17 00:00:00 2001
+From 0521fb9e9a0b4ed024cd09f26cc0fe22b47aaf51 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 18:41:48 -0400
 Subject: [PATCH] Add option to make parrots stay on shoulders despite movement
@@ -25,10 +25,10 @@ index 33f097c..c05afe0 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-index f54cb68..7737dae 100644
+index d50be00..bbf5be1 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-@@ -496,7 +496,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -490,7 +490,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
          this.playShoulderEntityAmbientSound(this.getRightShoulderEntity());
  
          if (!this.world.isRemote && (this.fallDistance > 0.5F || this.isInWater() || this.isRiding()) || this.capabilities.isFlying) {
@@ -38,10 +38,10 @@ index f54cb68..7737dae 100644
      }
  
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 929312b..f842427 100644
+index fb17aa9..08571e4 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -1690,6 +1690,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1661,6 +1661,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
              this.player.markPlayerActive();
              switch (packetIn.getAction()) {
                  case START_SNEAKING:

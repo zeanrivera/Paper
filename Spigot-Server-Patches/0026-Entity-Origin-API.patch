@@ -1,14 +1,14 @@
-From 1046400d478f4f534fdcb959735328e1d2c17bb5 Mon Sep 17 00:00:00 2001
+From a9e100c418a8daa9ac2cc67e890a7ab213957bc6 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sun, 24 Sep 2017 15:24:34 -0400
 Subject: [PATCH] Entity Origin API
 
 
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index 66ded81..5b839b7 100644
+index f489678..c013f6a 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
-@@ -211,6 +211,7 @@ public abstract class Entity implements ICommandSender {
+@@ -210,6 +210,7 @@ public abstract class Entity implements ICommandSender {
      public final boolean defaultActivationState;
      public long activatedTick = -2147483648L;
      public boolean fromMobSpawner;
@@ -16,7 +16,7 @@ index 66ded81..5b839b7 100644
  
      static boolean isLevelAtLeast(NBTTagCompound tag, int level) {
          return tag.hasKey("Bukkit.updateLevel") && tag.getInteger("Bukkit.updateLevel") >= level;
-@@ -1589,6 +1590,12 @@ public abstract class Entity implements ICommandSender {
+@@ -1562,6 +1563,12 @@ public abstract class Entity implements ICommandSender {
                  }
              }
  
@@ -29,7 +29,7 @@ index 66ded81..5b839b7 100644
              return compound;
          } catch (Throwable var6) {
              CrashReport crashreport = CrashReport.makeCrashReport(var6, "Saving entity NBT");
-@@ -1710,6 +1717,13 @@ public abstract class Entity implements ICommandSender {
+@@ -1683,6 +1690,13 @@ public abstract class Entity implements ICommandSender {
  
                  this.setWorld(bworld == null ? null : ((CraftWorld) bworld).getHandle());
              }
@@ -44,10 +44,10 @@ index 66ded81..5b839b7 100644
              CrashReport crashreport = CrashReport.makeCrashReport(var9, "Loading entity NBT");
              CrashReportCategory crashreportsystemdetails = crashreport.makeCategory("Entity being loaded");
 diff --git a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
-index ede979a..9743533 100644
+index 98a9146..c2db0e4 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
-@@ -301,6 +301,15 @@ public class EntityFallingBlock extends Entity {
+@@ -297,6 +297,15 @@ public class EntityFallingBlock extends Entity {
          if (block == null || block.getDefaultState().getMaterial() == Material.AIR) {
              this.fallTile = Blocks.SAND.getDefaultState();
          }
@@ -64,10 +64,10 @@ index ede979a..9743533 100644
  
      public void setHurtEntities(boolean p_145806_1_) {
 diff --git a/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java b/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
-index 6bc1980..d243cb8 100644
+index 2d175a6..a908be8 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
-@@ -119,6 +119,14 @@ public class EntityTNTPrimed extends Entity {
+@@ -118,6 +118,14 @@ public class EntityTNTPrimed extends Entity {
  
      protected void writeEntityToNBT(NBTTagCompound compound) {
          compound.setShort("Fuse", (short) this.getFuse());
@@ -83,10 +83,10 @@ index 6bc1980..d243cb8 100644
  
      protected void readEntityFromNBT(NBTTagCompound compound) {
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 80927f5..7fb6216 100644
+index 857a43c..f386cb2 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -1192,6 +1192,12 @@ public abstract class World implements IBlockAccess {
+@@ -1153,6 +1153,12 @@ public abstract class World implements IBlockAccess {
                  int j = MathHelper.floor(entity.posZ / 16.0D);
                  boolean flag = entity.forceSpawn;
  
@@ -100,10 +100,10 @@ index 80927f5..7fb6216 100644
                      flag = true;
                  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index d8bc158..34ef33d 100644
+index 17d16ec..8b7c0a4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1048,6 +1048,14 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1041,6 +1041,14 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return perm;
      }
  

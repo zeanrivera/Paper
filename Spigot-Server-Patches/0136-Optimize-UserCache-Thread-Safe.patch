@@ -1,4 +1,4 @@
-From 02a460899655dabb10b6c79714b70b0c45f8e525 Mon Sep 17 00:00:00 2001
+From b44631531f8166f09628c9da012fe6fc2242d21a Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 9 Oct 2017 18:27:35 -0400
 Subject: [PATCH] Optimize UserCache / Thread Safe
@@ -10,7 +10,7 @@ Additionally, move Saving of the User cache to be done async, incase
 the user never changed the default setting for Spigot's save on stop only.
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 03b83b2..e06bc5b 100644
+index 4519f6e..8acaa34 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -568,7 +568,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -23,7 +23,7 @@ index 03b83b2..e06bc5b 100644
      }
  
 diff --git a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
-index 4a1fa01..be40e36 100644
+index 278d3a9..df126ac 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
 @@ -1,5 +1,6 @@
@@ -33,7 +33,7 @@ index 4a1fa01..be40e36 100644
  import com.google.common.collect.Iterators;
  import com.google.common.collect.Lists;
  import com.google.common.collect.Maps;
-@@ -115,7 +116,7 @@ public class PlayerProfileCache {
+@@ -113,7 +114,7 @@ public class PlayerProfileCache {
          this.addEntry(gameProfile, (Date) null);
      }
  
@@ -42,9 +42,9 @@ index 4a1fa01..be40e36 100644
          UUID uuid = gameProfile.getId();
  
          if (expirationDate == null) {
-@@ -129,8 +130,9 @@ public class PlayerProfileCache {
-         PlayerProfileCache.ProfileEntry usercache_usercacheentry =
-                 new PlayerProfileCache.ProfileEntry(gameProfile, expirationDate, (Object) null);
+@@ -126,8 +127,9 @@ public class PlayerProfileCache {
+         String s = gameProfile.getName().toLowerCase(Locale.ROOT);
+         PlayerProfileCache.ProfileEntry usercache_usercacheentry = new PlayerProfileCache.ProfileEntry(gameProfile, expirationDate, (Object) null);
  
 -        if (this.uuidToProfileEntryMap.containsKey(uuid)) {
 +        //if (this.uuidToProfileEntryMap.containsKey(uuid)) { // Paper
@@ -53,7 +53,7 @@ index 4a1fa01..be40e36 100644
              this.usernameToProfileEntryMap.remove(usercache_usercacheentry1.getGameProfile().getName().toLowerCase(Locale.ROOT));
              this.gameProfiles.remove(gameProfile);
          }
-@@ -145,7 +147,7 @@ public class PlayerProfileCache {
+@@ -142,7 +144,7 @@ public class PlayerProfileCache {
      }
  
      @Nullable
@@ -62,7 +62,7 @@ index 4a1fa01..be40e36 100644
          String s1 = username.toLowerCase(Locale.ROOT);
          PlayerProfileCache.ProfileEntry usercache_usercacheentry = this.usernameToProfileEntryMap.get(s1);
  
-@@ -176,7 +178,7 @@ public class PlayerProfileCache {
+@@ -173,7 +175,7 @@ public class PlayerProfileCache {
          return usercache_usercacheentry == null ? null : usercache_usercacheentry.getGameProfile();
      }
  
@@ -71,7 +71,7 @@ index 4a1fa01..be40e36 100644
          ArrayList arraylist = Lists.newArrayList(this.usernameToProfileEntryMap.keySet());
          return (String[]) arraylist.toArray(new String[arraylist.size()]);
      }
-@@ -226,8 +228,16 @@ public class PlayerProfileCache {
+@@ -223,8 +225,16 @@ public class PlayerProfileCache {
          }
      }
  
@@ -88,7 +88,7 @@ index 4a1fa01..be40e36 100644
          BufferedWriter bufferedwriter = null;
  
          try {
-@@ -240,6 +250,15 @@ public class PlayerProfileCache {
+@@ -237,6 +247,15 @@ public class PlayerProfileCache {
          } finally {
              IOUtils.closeQuietly((Writer) bufferedwriter);
          }

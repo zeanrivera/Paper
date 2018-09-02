@@ -1,14 +1,14 @@
-From 628760744fd9f54c39d61da79f4d28f9c25c7528 Mon Sep 17 00:00:00 2001
+From 3a8fc80774d8a18f5a919d43d1dbbdbcda0b86bd Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 13 Jan 2018 12:26:37 -0500
 Subject: [PATCH] Fix SPIGOT-3764
 
 
 diff --git a/src/main/java/net/minecraft/item/ItemSkull.java b/src/main/java/net/minecraft/item/ItemSkull.java
-index 8c8bf9c..5bcbfe1 100644
+index cf50724..4783d0d 100644
 --- a/src/main/java/net/minecraft/item/ItemSkull.java
 +++ b/src/main/java/net/minecraft/item/ItemSkull.java
-@@ -160,7 +160,7 @@ public class ItemSkull extends Item {
+@@ -159,7 +159,7 @@ public class ItemSkull extends Item {
                              nbt.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), gameprofile));
                              return false;
                          }
@@ -18,10 +18,10 @@ index 8c8bf9c..5bcbfe1 100644
          } else {
              NBTTagList textures = nbt.getCompoundTag("SkullOwner").getCompoundTag("Properties").getTagList("textures", 10);
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntitySkull.java b/src/main/java/net/minecraft/tileentity/TileEntitySkull.java
-index 14f6a8a..1624a7e 100644
+index 99dcf70..65f7346 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntitySkull.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntitySkull.java
-@@ -180,10 +180,11 @@ public class TileEntitySkull extends TileEntity { // Paper - Remove ITickable
+@@ -176,10 +176,11 @@ public class TileEntitySkull extends TileEntity { // Paper - Remove ITickable
  
                          return false;
                      }
@@ -35,7 +35,7 @@ index 14f6a8a..1624a7e 100644
          if (gameprofile != null && !StringUtils.isNullOrEmpty(gameprofile.getName())) {
              if (gameprofile.isComplete() && gameprofile.getProperties().containsKey("textures")) {
                  callback.apply(gameprofile);
-@@ -196,6 +197,7 @@ public class TileEntitySkull extends TileEntity { // Paper - Remove ITickable
+@@ -192,6 +193,7 @@ public class TileEntitySkull extends TileEntity { // Paper - Remove ITickable
                          return Futures.<GameProfile>immediateFuture(profile);
                      }
  
@@ -43,7 +43,7 @@ index 14f6a8a..1624a7e 100644
                      return executor.submit(
                              new Callable<GameProfile>() {
                                  public GameProfile call() {
-@@ -216,6 +218,15 @@ public class TileEntitySkull extends TileEntity { // Paper - Remove ITickable
+@@ -212,6 +214,15 @@ public class TileEntitySkull extends TileEntity { // Paper - Remove ITickable
                                      return profile;
                                  }
                              });

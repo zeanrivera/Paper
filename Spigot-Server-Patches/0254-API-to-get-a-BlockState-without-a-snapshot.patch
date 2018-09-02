@@ -1,4 +1,4 @@
-From cb1dba6e3e89902d83f8a86f351053249d8b7257 Mon Sep 17 00:00:00 2001
+From faeb218baed5d1af20c397a0a197c00224cfce34 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 4 Jan 2018 20:27:28 -0600
 Subject: [PATCH] API to get a BlockState without a snapshot
@@ -36,7 +36,7 @@ index 4d55bb9..92d2d0e 100644
              }
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-index 5d59651..9fd6fea 100644
+index a833b21..13fca67 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
 @@ -280,6 +280,22 @@ public class CraftBlock implements Block {

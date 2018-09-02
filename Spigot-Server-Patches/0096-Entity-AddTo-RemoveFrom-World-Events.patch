@@ -1,14 +1,14 @@
-From f69e11b50020eb84cfc8fcc665d8d51339c10c08 Mon Sep 17 00:00:00 2001
+From 9be47e6eef49aa4216b9fe2c285c08c4c3f714c5 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 01:15:37 -0400
 Subject: [PATCH] Entity AddTo/RemoveFrom World Events
 
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 623825e..1250f27 100644
+index a3a4a71..0f23cd7 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -1205,6 +1205,7 @@ public abstract class World implements IBlockAccess {
+@@ -1166,6 +1166,7 @@ public abstract class World implements IBlockAccess {
          }
  
          entityIn.valid = true;
@@ -16,7 +16,7 @@ index 623825e..1250f27 100644
      }
  
      protected void onEntityRemoved(Entity entityIn) {
-@@ -1212,6 +1213,7 @@ public abstract class World implements IBlockAccess {
+@@ -1173,6 +1174,7 @@ public abstract class World implements IBlockAccess {
              ((IWorldEventListener) this.eventListeners.get(i)).onEntityRemoved(entityIn);
          }
  

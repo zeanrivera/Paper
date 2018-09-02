@@ -1,4 +1,4 @@
-From 5df1b3505eebd601924ba3c7324026e6a7058a43 Mon Sep 17 00:00:00 2001
+From 6381b81cf134a43ecbdfe60ad644a1b7cb32596c Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 23:56:33 -0400
 Subject: [PATCH] Prevent Fire from loading chunks
@@ -7,7 +7,7 @@ This causes the nether to spam unload/reload chunks, plus overall
 bad behavior.
 
 diff --git a/src/main/java/net/minecraft/block/BlockFire.java b/src/main/java/net/minecraft/block/BlockFire.java
-index b05d28e..8bfca30 100644
+index b61d69a..dec3abd 100644
 --- a/src/main/java/net/minecraft/block/BlockFire.java
 +++ b/src/main/java/net/minecraft/block/BlockFire.java
 @@ -191,6 +191,7 @@ public class BlockFire extends Block {
@@ -18,7 +18,7 @@ index b05d28e..8bfca30 100644
                                  int j1 = this.getNeighborEncouragement(worldIn, blockposition1);
  
                                  if (j1 > 0) {
-@@ -270,10 +271,13 @@ public class BlockFire extends Block {
+@@ -265,10 +266,13 @@ public class BlockFire extends Block {
      }
  
      private void a(World world, BlockPos blockposition, int i, Random random, int j, BlockPos sourceposition) {
@@ -31,9 +31,9 @@ index b05d28e..8bfca30 100644
 -            IBlockState iblockdata = world.getBlockState(blockposition);
 +            //IBlockState iblockdata = world.getBlockState(blockposition); // Paper
              org.bukkit.block.Block theBlock = world.getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ());
-             org.bukkit.block.Block sourceBlock =
-                     world.getWorld().getBlockAt(sourceposition.getX(), sourceposition.getY(), sourceposition.getZ());
-@@ -319,6 +323,8 @@ public class BlockFire extends Block {
+             org.bukkit.block.Block sourceBlock = world.getWorld().getBlockAt(sourceposition.getX(), sourceposition.getY(), sourceposition.getZ());
+             BlockBurnEvent event = new BlockBurnEvent(theBlock, sourceBlock);
+@@ -313,6 +317,8 @@ public class BlockFire extends Block {
              int i = 0;
  
              for (EnumFacing enumdirection : EnumFacing.values()) {

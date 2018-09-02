@@ -1,4 +1,4 @@
-From 0c3a32eec6629aeceea200fe9086e620617a5e43 Mon Sep 17 00:00:00 2001
+From 489cc9eddd9b31958887e95ed950692fcce0f216 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 8 Oct 2017 00:46:45 -0400
 Subject: [PATCH] Remove null possibility for getServer singleton
@@ -6,7 +6,7 @@ Subject: [PATCH] Remove null possibility for getServer singleton
 to stop IDE complaining about potential NPE
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 9fb54a9..03b83b2 100644
+index 00ee8c1..4519f6e 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -110,6 +110,7 @@ import org.spigotmc.SpigotConfig;
@@ -25,7 +25,7 @@ index 9fb54a9..03b83b2 100644
          ResourceLeakDetector.setEnabled(false);
          this.serverProxy = p_i35_2_;
          this.authService = p_i35_4_;
-@@ -1524,6 +1526,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
+@@ -1521,6 +1523,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
  
      @Deprecated
      public static MinecraftServer getServer() {

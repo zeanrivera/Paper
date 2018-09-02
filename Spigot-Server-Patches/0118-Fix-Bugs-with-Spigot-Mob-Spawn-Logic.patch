@@ -1,4 +1,4 @@
-From f22fadb6105b3012cc84a1d437ab89434a2eaa1d Mon Sep 17 00:00:00 2001
+From deb6ae935c6e20e1e22782d0ca90d0d745f19b5a Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 23:44:27 -0400
 Subject: [PATCH] Fix Bugs with Spigot Mob Spawn Logic
@@ -29,7 +29,7 @@ index 25b2893..ff6afd0 100644
          return block == Blocks.WATER || block == Blocks.FLOWING_WATER;
          // Paper end
 diff --git a/src/main/java/net/minecraft/world/WorldEntitySpawner.java b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
-index 69d281a..019eb87 100644
+index 48b77f9..0ff4616 100644
 --- a/src/main/java/net/minecraft/world/WorldEntitySpawner.java
 +++ b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
 @@ -32,6 +32,14 @@ public final class WorldEntitySpawner {
@@ -47,7 +47,7 @@ index 69d281a..019eb87 100644
          int i = 0;
  
          // Paper - Decompile fix start
-@@ -119,7 +127,7 @@ public final class WorldEntitySpawner {
+@@ -118,7 +126,7 @@ public final class WorldEntitySpawner {
                          worldServerIn.countEntities(enumcreaturetype.getCreatureClass());
                          int l1 = limit * i / MOB_COUNT_DIV;
  
@@ -57,10 +57,10 @@ index 69d281a..019eb87 100644
                              Iterator iterator1 = this.eligibleChunksForSpawning.iterator();
                              int moblimit = limit * i / 256 - mobcnt + 1;
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index a0e0699..8ceeb3d 100644
+index c451005..aad4f45 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -706,7 +706,7 @@ public class Chunk {
+@@ -703,7 +703,7 @@ public class Chunk {
              index = this.entityLists.length - 1;
          }
  

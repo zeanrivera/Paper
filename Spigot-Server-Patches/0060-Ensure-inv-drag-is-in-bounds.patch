@@ -1,11 +1,11 @@
-From 368eda806687897b8985580c0ea9d559b4754d41 Mon Sep 17 00:00:00 2001
+From 598b734cba42b9b11a3dd66e34a05bbf28fe67d3 Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Wed, 27 Sep 2017 17:31:58 -0400
 Subject: [PATCH] Ensure inv drag is in bounds
 
 
 diff --git a/src/main/java/net/minecraft/inventory/Container.java b/src/main/java/net/minecraft/inventory/Container.java
-index adef02b..fa7fcb8 100644
+index e29becc..fd8a725 100644
 --- a/src/main/java/net/minecraft/inventory/Container.java
 +++ b/src/main/java/net/minecraft/inventory/Container.java
 @@ -148,7 +148,7 @@ public abstract class Container {

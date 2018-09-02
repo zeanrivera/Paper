@@ -1,4 +1,4 @@
-From c1eaa7cafd1e5a511d8eb3e48b3587cbc41592aa Mon Sep 17 00:00:00 2001
+From 74b3c5b06220bd7c456b052b3961f91994a548bf Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 22:48:41 -0400
 Subject: [PATCH] Remove Metadata on reload
@@ -7,10 +7,10 @@ Metadata is not meant to persist reload as things break badly with non primitive
 This will remove metadata on reload so it does not crash everything if a plugin uses it.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 1e53b2c..73674ad 100644
+index 930afbc..26aee08 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -827,8 +827,18 @@ public final class CraftServer implements Server {
+@@ -815,8 +815,18 @@ public final class CraftServer implements Server {
              world.paperConfig.init(); // Paper
          }
  

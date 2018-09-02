@@ -1,14 +1,14 @@
-From eb0bde3f717657966bf19330423f3e2e4b7a6c91 Mon Sep 17 00:00:00 2001
+From 8aafccd8145510aca42c48f3df6d2f261b9b997b Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Sat, 7 Oct 2017 21:24:43 -0400
 Subject: [PATCH] Fix reducedDebugInfo not initialzied on client
 
 
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
-index e1669c4..f0b6e75 100644
+index 9d26080..0240f75 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerList.java
-@@ -202,6 +202,7 @@ public abstract class PlayerList {
+@@ -201,6 +201,7 @@ public abstract class PlayerList {
          playerconnection.sendPacket(new SPacketServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
          playerconnection.sendPacket(new SPacketPlayerAbilities(playerIn.capabilities));
          playerconnection.sendPacket(new SPacketHeldItemChange(playerIn.inventory.currentItem));

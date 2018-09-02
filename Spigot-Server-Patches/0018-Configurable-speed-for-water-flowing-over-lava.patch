@@ -1,4 +1,4 @@
-From 14b67859e72b3e78e0a236f62d9cb37d13729bdb Mon Sep 17 00:00:00 2001
+From b5721082efdca4295b978ab3642c61d16b2e8472 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sat, 23 Sep 2017 21:18:01 -0400
 Subject: [PATCH] Configurable speed for water flowing over lava
@@ -20,10 +20,10 @@ index ec5a812..413fc57 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
-index 4197fa9..4a8d0b7 100644
+index 1d9c688..0633640 100644
 --- a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
 +++ b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
-@@ -35,7 +35,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+@@ -34,7 +34,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
              b0 = 2;
          }
  
@@ -32,7 +32,7 @@ index 4197fa9..4a8d0b7 100644
  
          if (i > 0) {
              int l = -100;
-@@ -252,7 +252,21 @@ public class BlockDynamicLiquid extends BlockLiquid {
+@@ -251,7 +251,21 @@ public class BlockDynamicLiquid extends BlockLiquid {
  
      public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
          if (!this.checkForMixing(worldIn, pos, state)) {

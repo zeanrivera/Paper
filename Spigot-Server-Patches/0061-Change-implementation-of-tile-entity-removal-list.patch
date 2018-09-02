@@ -1,11 +1,11 @@
-From 2704ac1a2988d3812c0fd410d3382aa7a3712ce4 Mon Sep 17 00:00:00 2001
+From a53a766a0572eee903c42e2577ddccd0d789881b Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 16:46:53 -0400
 Subject: [PATCH] Change implementation of (tile)entity removal list
 
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 1174eef..8097b4c 100644
+index 55b992e..1460d6d 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -9,6 +9,8 @@ import com.google.common.collect.Maps;
@@ -31,7 +31,7 @@ index 1174eef..8097b4c 100644
      public final List<EntityPlayer> playerEntities = Lists.<EntityPlayer>newArrayList();
      public final List<Entity> weatherEffects = Lists.<Entity>newArrayList();
      protected final IntHashMap<Entity> entitiesById = new IntHashMap<Entity>();
-@@ -1511,8 +1513,8 @@ public abstract class World implements IBlockAccess {
+@@ -1471,8 +1473,8 @@ public abstract class World implements IBlockAccess {
          timings.entityRemoval.startTiming(); // Paper
          this.loadedEntityList.removeAll(this.unloadedEntityList);
  
@@ -42,7 +42,7 @@ index 1174eef..8097b4c 100644
              int k = entity.chunkCoordX;
              int j = entity.chunkCoordZ;
  
-@@ -1521,9 +1523,10 @@ public abstract class World implements IBlockAccess {
+@@ -1481,9 +1483,10 @@ public abstract class World implements IBlockAccess {
              }
          }
  

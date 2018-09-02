@@ -1,4 +1,4 @@
-From bf02d00b43e994cd7aa9425a66bc2a62a993798f Mon Sep 17 00:00:00 2001
+From 5f9709ce4a4986754a4914f9bd1020a9a1dcda47 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 20:56:59 -0400
 Subject: [PATCH] Fix Anvil Level sync to client
@@ -27,7 +27,7 @@ index f7dbb89..171ef3c 100644
  
          this.lastLevelCost = this.maximumCost;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index a708215..7f5451a 100644
+index 1715917..d6a10d7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -41,6 +41,7 @@ import net.minecraft.entity.ai.attributes.RangedAttribute;
@@ -38,7 +38,7 @@ index a708215..7f5451a 100644
  import net.minecraft.nbt.NBTTagCompound;
  import net.minecraft.network.NetHandlerPlayServer;
  import net.minecraft.network.Packet;
-@@ -1325,10 +1326,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1310,10 +1311,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
          if (container.getBukkitView().getType() != prop.getType()) {
              return false;

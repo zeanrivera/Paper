@@ -1,4 +1,4 @@
-From 202656030fd52d4f53ac3a5455a9e39f05bc810f Mon Sep 17 00:00:00 2001
+From 2bc849e6e2b3b9cd3dde8923622880ef8148665a Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 23:24:14 -0400
 Subject: [PATCH] Add World Util Methods
@@ -6,7 +6,7 @@ Subject: [PATCH] Add World Util Methods
 Methods that can be used for other patches to help improve logic.
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index bf006cb..123594a 100644
+index 7ee539a..3d0cf8f 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -7,11 +7,6 @@ import com.google.common.base.MoreObjects;
@@ -74,7 +74,7 @@ index bf006cb..123594a 100644
  public abstract class World implements IBlockAccess {
      private int seaLevel = 63;
      protected boolean scheduledUpdatesAreImmediate;
-@@ -3218,4 +3200,65 @@ public abstract class World implements IBlockAccess {
+@@ -3171,4 +3153,65 @@ public abstract class World implements IBlockAccess {
      public BlockPos findNearestStructure(String p_190528_1_, BlockPos p_190528_2_, boolean p_190528_3_) {
          return null;
      }

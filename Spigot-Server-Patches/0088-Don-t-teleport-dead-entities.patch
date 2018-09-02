@@ -1,4 +1,4 @@
-From efcec6d891a94fe3c6ab14940169260e9b9fb959 Mon Sep 17 00:00:00 2001
+From eeb13a444792d5e2a82c0a6c0c91fd8b49781eb4 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:30:17 -0400
 Subject: [PATCH] Don't teleport dead entities
@@ -7,10 +7,10 @@ Had some issue with this in past, and this is the vanilla logic.
 Potentially an old CB change that's no longer needed.
 
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index f9b9542..8911dd2 100644
+index f50c760..6dfd069 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
-@@ -2375,7 +2375,9 @@ public abstract class Entity implements ICommandSender {
+@@ -2343,7 +2343,9 @@ public abstract class Entity implements ICommandSender {
          }
      }
  

@@ -1,4 +1,4 @@
-From 6b04eb16aa18c7cd678ecb863fe024f8112d9057 Mon Sep 17 00:00:00 2001
+From dcc915c0f5305c322ca0453267c15d03387ef43f Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 21:00:41 -0400
 Subject: [PATCH] Allow nerfed mobs to jump
@@ -19,7 +19,7 @@ index 78e87cd..b8cea7f 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/EntityLiving.java b/src/main/java/net/minecraft/entity/EntityLiving.java
-index 87aa3d1..69b1dc9 100644
+index 1dd4179..40929d4 100644
 --- a/src/main/java/net/minecraft/entity/EntityLiving.java
 +++ b/src/main/java/net/minecraft/entity/EntityLiving.java
 @@ -90,6 +90,7 @@ public abstract class EntityLiving extends EntityLivingBase {
@@ -30,7 +30,7 @@ index 87aa3d1..69b1dc9 100644
  
      public EntityLiving(World worldIn) {
          super(worldIn);
-@@ -708,6 +709,13 @@ public abstract class EntityLiving extends EntityLivingBase {
+@@ -704,6 +705,13 @@ public abstract class EntityLiving extends EntityLivingBase {
              this.jumpHelper.doJump();
              this.world.profiler.endSection();
              this.world.profiler.endSection();

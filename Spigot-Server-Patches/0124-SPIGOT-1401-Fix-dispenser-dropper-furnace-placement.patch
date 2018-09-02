@@ -1,14 +1,14 @@
-From a92ae17eed074ef90c54cb346e7d1575f3d54d61 Mon Sep 17 00:00:00 2001
+From 51aa660081a309042c28f2afb1a03a1e22230c00 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 8 Oct 2017 00:30:17 -0400
 Subject: [PATCH] SPIGOT-1401: Fix dispenser, dropper, furnace placement
 
 
 diff --git a/src/main/java/net/minecraft/block/BlockDispenser.java b/src/main/java/net/minecraft/block/BlockDispenser.java
-index a301853..d640fa2 100644
+index 5e045ae..a93370e 100644
 --- a/src/main/java/net/minecraft/block/BlockDispenser.java
 +++ b/src/main/java/net/minecraft/block/BlockDispenser.java
-@@ -51,6 +51,9 @@ public class BlockDispenser extends BlockContainer {
+@@ -50,6 +50,9 @@ public class BlockDispenser extends BlockContainer {
          return 4;
      }
  
@@ -18,7 +18,7 @@ index a301853..d640fa2 100644
      public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
          super.onBlockAdded(worldIn, pos, state);
          this.setDefaultDirection(worldIn, pos, state);
-@@ -80,6 +83,8 @@ public class BlockDispenser extends BlockContainer {
+@@ -79,6 +82,8 @@ public class BlockDispenser extends BlockContainer {
              worldIn.setBlockState(pos, state.withProperty(FACING, enumdirection).withProperty(TRIGGERED, Boolean.valueOf(false)), 2);
          }
      }

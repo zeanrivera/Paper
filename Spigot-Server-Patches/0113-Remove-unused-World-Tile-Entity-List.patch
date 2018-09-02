@@ -1,4 +1,4 @@
-From f75a4d53a57aa78c5b914ec41384d9468d4d5eef Mon Sep 17 00:00:00 2001
+From 9483d974bc301838f57158dfc2bd0a1cba341f93 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 22:34:08 -0400
 Subject: [PATCH] Remove unused World Tile Entity List
@@ -6,7 +6,7 @@ Subject: [PATCH] Remove unused World Tile Entity List
 Massive hit to performance and it is completely unnecessary.
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 0b39f2e..ad190ac 100644
+index 9668b10..81a77c7 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -99,7 +99,7 @@ public abstract class World implements IBlockAccess {
@@ -18,7 +18,7 @@ index 0b39f2e..ad190ac 100644
      public final List<TileEntity> tickableTileEntities = Lists.<TileEntity>newArrayList();
      private final List<TileEntity> addedTileEntityList = Lists.<TileEntity>newArrayList();
      private final Set<TileEntity> tileEntitiesToBeRemoved = Sets.newHashSet(); // Paper
-@@ -1594,7 +1594,7 @@ public abstract class World implements IBlockAccess {
+@@ -1554,7 +1554,7 @@ public abstract class World implements IBlockAccess {
  
          if (!this.tileEntitiesToBeRemoved.isEmpty()) {
              this.tickableTileEntities.removeAll(this.tileEntitiesToBeRemoved);
@@ -27,7 +27,7 @@ index 0b39f2e..ad190ac 100644
              this.tileEntitiesToBeRemoved.clear();
          }
  
-@@ -1642,7 +1642,7 @@ public abstract class World implements IBlockAccess {
+@@ -1602,7 +1602,7 @@ public abstract class World implements IBlockAccess {
                  if (tileentity.isInvalid()) {
                      --tilesThisCycle;
                      this.tickableTileEntities.remove(this.tileTickPosition--);
@@ -36,7 +36,7 @@ index 0b39f2e..ad190ac 100644
  
                      if (this.isBlockLoaded(tileentity.getPos())) {
                          this.getChunkFromBlockCoords(tileentity.getPos()).removeTileEntity(tileentity.getPos());
-@@ -1669,7 +1669,7 @@ public abstract class World implements IBlockAccess {
+@@ -1629,7 +1629,7 @@ public abstract class World implements IBlockAccess {
                      chunk.addTileEntity(tileentity1.getPos(), tileentity1);
                      this.notifyBlockUpdate(tileentity1.getPos(), iblockdata, iblockdata, 3);
  
@@ -45,7 +45,7 @@ index 0b39f2e..ad190ac 100644
                          this.addTileEntity(tileentity1);
                      }
                  }
-@@ -1687,9 +1687,9 @@ public abstract class World implements IBlockAccess {
+@@ -1647,9 +1647,9 @@ public abstract class World implements IBlockAccess {
      protected void tickPlayers() {}
  
      public boolean addTileEntity(TileEntity tile) {
@@ -57,7 +57,7 @@ index 0b39f2e..ad190ac 100644
              this.tickableTileEntities.add(tile);
          }
  
-@@ -2106,7 +2106,7 @@ public abstract class World implements IBlockAccess {
+@@ -2064,7 +2064,7 @@ public abstract class World implements IBlockAccess {
          } else {
              if (tileentity != null) {
                  this.addedTileEntityList.remove(tileentity);

@@ -1,4 +1,4 @@
-From a3aa1e0cc36444b74634c5e6849692956469b54a Mon Sep 17 00:00:00 2001
+From a6fd3de8a0f8760055d81fcf2f76f74113deba91 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Sun, 8 Oct 2017 00:26:03 -0400
 Subject: [PATCH] Add ability to configure frosted_ice properties

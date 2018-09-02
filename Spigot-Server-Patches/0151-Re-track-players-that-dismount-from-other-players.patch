@@ -1,14 +1,14 @@
-From 6c17bd9c60f4b7e9723ab8813873f5ea890631a1 Mon Sep 17 00:00:00 2001
+From 8663add5c9d3eafa20a0f1b43c395e2eddc58b1a Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 10 Oct 2017 15:43:14 -0400
 Subject: [PATCH] Re-track players that dismount from other players
 
 
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-index d13cc0a..3b47f9d 100644
+index fda6b56..faf6f48 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-@@ -822,6 +822,14 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+@@ -806,6 +806,14 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
          if (entity1 != entity && this.connection != null) {
              this.connection.setPlayerLocation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
          }

@@ -1,4 +1,4 @@
-From 34fd411c62abd70f00e63298d6489bbfbabd4cc3 Mon Sep 17 00:00:00 2001
+From 2fa33d79810c6fd0809807dd15760b02fed4bee9 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 20 Oct 2017 20:12:10 -0400
 Subject: [PATCH] Add option to remove invalid statistics
@@ -23,7 +23,7 @@ index da0984a..28917f6 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/stats/StatisticsManagerServer.java b/src/main/java/net/minecraft/stats/StatisticsManagerServer.java
-index 5b94d77..ae97a10 100644
+index 0eca19a..999facd 100644
 --- a/src/main/java/net/minecraft/stats/StatisticsManagerServer.java
 +++ b/src/main/java/net/minecraft/stats/StatisticsManagerServer.java
 @@ -87,6 +87,7 @@ public class StatisticsManagerServer extends StatisticsManager {
@@ -34,7 +34,7 @@ index 5b94d77..ae97a10 100644
  
              for (Entry entry : jsonobject.entrySet()) {
                  StatBase statistic = StatList.getOneShotStat((String) entry.getKey());
-@@ -121,9 +122,17 @@ public class StatisticsManagerServer extends StatisticsManager {
+@@ -120,9 +121,17 @@ public class StatisticsManagerServer extends StatisticsManager {
                      hashmap.put(statistic, statisticwrapper);
                  } else {
                      LOGGER.warn("Invalid statistic in {}: Don't know what {} is", this.statsFile, entry.getKey());

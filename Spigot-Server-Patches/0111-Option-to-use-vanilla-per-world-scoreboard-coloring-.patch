@@ -1,4 +1,4 @@
-From cb306b62b882acab5f03bb484eb73c456586b6b1 Mon Sep 17 00:00:00 2001
+From 53e650976d9317f1f17511d0c710b9a4af368a9c Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 7 Oct 2017 22:25:05 -0400
 Subject: [PATCH] Option to use vanilla per-world scoreboard coloring on names
@@ -19,7 +19,7 @@ index 33bc34f..93d478d 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 08fc8e9..c80ccf7 100644
+index 2184ec1..25ecba2 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 @@ -98,6 +98,8 @@ import net.minecraft.network.play.server.SPacketPlayerPosLook;
@@ -31,7 +31,7 @@ index 08fc8e9..c80ccf7 100644
  import net.minecraft.server.MinecraftServer;
  import net.minecraft.tileentity.CommandBlockBaseLogic;
  import net.minecraft.tileentity.TileEntity;
-@@ -1567,7 +1569,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1539,7 +1541,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                          return;
                      }
  

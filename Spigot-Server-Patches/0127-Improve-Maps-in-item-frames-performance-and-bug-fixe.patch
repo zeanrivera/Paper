@@ -1,4 +1,4 @@
-From fe1481b00f396135aa34a65f741ac233b8125119 Mon Sep 17 00:00:00 2001
+From eb8551f0c2de7eed3c4aa6f857c87b6773de4204 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 8 Oct 2017 01:06:09 -0400
 Subject: [PATCH] Improve Maps (in item frames) performance and bug fixes
@@ -13,10 +13,10 @@ custom renderers are in use, defaulting to the much simpler Vanilla system.
 Additionally, numerous issues to player position tracking on maps has been fixed.
 
 diff --git a/src/main/java/net/minecraft/entity/EntityTrackerEntry.java b/src/main/java/net/minecraft/entity/EntityTrackerEntry.java
-index 7548865..133f4e1 100644
+index d2b5211..600c9e3 100644
 --- a/src/main/java/net/minecraft/entity/EntityTrackerEntry.java
 +++ b/src/main/java/net/minecraft/entity/EntityTrackerEntry.java
-@@ -150,11 +150,11 @@ public class EntityTrackerEntry {
+@@ -149,11 +149,11 @@ public class EntityTrackerEntry {
              this.sendToTrackingAndSelf(new SPacketSetPassengers(this.trackedEntity));
          }
  
@@ -31,10 +31,10 @@ index 7548865..133f4e1 100644
  
                  for (EntityPlayer entityhuman : this.trackingPlayers) {
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-index 4233ff6..f54cb68 100644
+index 74dbedf..d50be00 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-@@ -630,6 +630,13 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -624,6 +624,13 @@ public abstract class EntityPlayer extends EntityLivingBase {
              this.world.getServer().getPluginManager().callEvent(event);
  
              if (!event.isCancelled()) {
@@ -49,10 +49,10 @@ index 4233ff6..f54cb68 100644
  
                  if (traceItem) {
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index ad190ac..0d14804 100644
+index 81a77c7..15b3453 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -1243,6 +1243,7 @@ public abstract class World implements IBlockAccess {
+@@ -1204,6 +1204,7 @@ public abstract class World implements IBlockAccess {
  
                      while (iter.hasNext()) {
                          if ((iter.next()).player == entityIn) {
@@ -61,7 +61,7 @@ index ad190ac..0d14804 100644
                          }
                      }
 diff --git a/src/main/java/net/minecraft/world/storage/MapData.java b/src/main/java/net/minecraft/world/storage/MapData.java
-index 0b5202d..c910ac4 100644
+index 995bae0..5621353 100644
 --- a/src/main/java/net/minecraft/world/storage/MapData.java
 +++ b/src/main/java/net/minecraft/world/storage/MapData.java
 @@ -41,9 +41,11 @@ public class MapData extends WorldSavedData {
@@ -84,7 +84,7 @@ index 0b5202d..c910ac4 100644
  
          this.dimension = dimension;
          this.xCenter = nbt.getInteger("xCenter");
-@@ -331,10 +334,31 @@ public class MapData extends WorldSavedData {
+@@ -329,10 +332,31 @@ public class MapData extends WorldSavedData {
              this.player = player;
          }
  

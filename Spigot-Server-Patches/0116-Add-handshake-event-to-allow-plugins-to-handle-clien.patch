@@ -1,4 +1,4 @@
-From e15fad0311abc9181cac77833b2d08f1cc4efd1d Mon Sep 17 00:00:00 2001
+From fb379d6fc7e6e0856611c244a7d7e9547d2fe92a Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Sat, 7 Oct 2017 23:31:14 -0400
 Subject: [PATCH] Add handshake event to allow plugins to handle client
@@ -6,10 +6,10 @@ Subject: [PATCH] Add handshake event to allow plugins to handle client
 
 
 diff --git a/src/main/java/net/minecraft/server/network/NetHandlerHandshakeTCP.java b/src/main/java/net/minecraft/server/network/NetHandlerHandshakeTCP.java
-index 943ceba..26afaf2 100644
+index 46af174..cdc771c 100644
 --- a/src/main/java/net/minecraft/server/network/NetHandlerHandshakeTCP.java
 +++ b/src/main/java/net/minecraft/server/network/NetHandlerHandshakeTCP.java
-@@ -90,7 +90,33 @@ public class NetHandlerHandshakeTCP implements INetHandlerHandshakeServer {
+@@ -88,7 +88,33 @@ public class NetHandlerHandshakeTCP implements INetHandlerHandshakeServer {
                  } else {
                      this.networkManager.setNetHandler(new NetHandlerLoginServer(this.server, this.networkManager));
  

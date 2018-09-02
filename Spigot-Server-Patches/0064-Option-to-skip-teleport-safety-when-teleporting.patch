@@ -1,4 +1,4 @@
-From b154918ea3869ceadc0901cdc9a80db49c681bd8 Mon Sep 17 00:00:00 2001
+From 5359b511f8c6e463649061151590a24a7a1f7f3f Mon Sep 17 00:00:00 2001
 From: Sudzzy <originmc@outlook.com>
 Date: Sat, 30 Sep 2017 17:28:35 -0400
 Subject: [PATCH] Option to skip teleport safety when teleporting
@@ -28,10 +28,10 @@ index d904700..278f2d6 100644
 +    }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 30a49b7..1bd1a43 100644
+index b640c3a..b1182f4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -701,7 +701,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -689,7 +689,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                      if (fromWorld == toWorld) {
                          entity.connection.teleport(to);
                      } else {

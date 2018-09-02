@@ -1,14 +1,14 @@
-From 4b68b491555e1f01c54245a5b4f7c56e55e4771d Mon Sep 17 00:00:00 2001
+From 0c3d88c99d488cee4773362207515b920dbdb524 Mon Sep 17 00:00:00 2001
 From: Iceee <andrew@opticgaming.tv>
 Date: Sun, 24 Sep 2017 17:23:50 -0400
 Subject: [PATCH] Stop updating flowing block if material has changed
 
 
 diff --git a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
-index 4a8d0b7..3c34353 100644
+index 0633640..6c0e602 100644
 --- a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
 +++ b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
-@@ -93,6 +93,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+@@ -92,6 +92,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
              this.placeStaticBlock(worldIn, pos, state);
          }
  

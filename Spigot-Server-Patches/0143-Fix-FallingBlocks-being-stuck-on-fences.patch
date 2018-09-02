@@ -1,4 +1,4 @@
-From 91a6f8c9b6e9edbc4288af6846bb203eedba9c7a Mon Sep 17 00:00:00 2001
+From f19e0153ee1bc2be21a4b13cf8884db4bbc8f020 Mon Sep 17 00:00:00 2001
 From: Martin Panzer <postremus1996@googlemail.com>
 Date: Mon, 9 Oct 2017 18:56:29 -0400
 Subject: [PATCH] Fix FallingBlocks being stuck on fences
@@ -25,7 +25,7 @@ index e34d5fd..4cf01a9 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
-index 9743533..eddb849 100644
+index c2db0e4..759777b 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
 @@ -2,6 +2,7 @@ package net.minecraft.entity.item;
@@ -48,7 +48,7 @@ index 9743533..eddb849 100644
  import net.minecraft.world.World;
  import org.bukkit.craftbukkit.event.CraftEventFactory;
  
-@@ -152,10 +150,9 @@ public class EntityFallingBlock extends Entity {
+@@ -150,10 +148,9 @@ public class EntityFallingBlock extends Entity {
                  } else {
                      IBlockState iblockdata = this.world.getBlockState(blockposition);
  
@@ -61,7 +61,7 @@ index 9743533..eddb849 100644
                      }
  
                      this.motionX *= 0.699999988079071D;
-@@ -334,4 +331,25 @@ public class EntityFallingBlock extends Entity {
+@@ -330,4 +327,25 @@ public class EntityFallingBlock extends Entity {
      public boolean ignoreItemEntityData() {
          return true;
      }

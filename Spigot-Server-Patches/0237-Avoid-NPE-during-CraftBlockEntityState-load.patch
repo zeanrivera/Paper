@@ -1,14 +1,14 @@
-From d23e186ba740e28413af3f14e4788cb74fb48f72 Mon Sep 17 00:00:00 2001
+From a637918a4052b6de42a58b2f75449cf68bebea7d Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Sun, 29 Oct 2017 21:42:50 -0400
 Subject: [PATCH] Avoid NPE during CraftBlockEntityState load
 
 
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntitySign.java b/src/main/java/net/minecraft/tileentity/TileEntitySign.java
-index 10a1d20..e1b6b9c 100644
+index b697913..e28a5b7 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntitySign.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntitySign.java
-@@ -81,7 +81,7 @@ public class TileEntitySign extends TileEntity {
+@@ -79,7 +79,7 @@ public class TileEntitySign extends TileEntity {
                      }
  
                      public MinecraftServer getMcpServer() {

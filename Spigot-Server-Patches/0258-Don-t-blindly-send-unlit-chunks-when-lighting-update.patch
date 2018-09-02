@@ -1,4 +1,4 @@
-From 08462b5c5ff5bc93746fb455fa1ae43ff1c79786 Mon Sep 17 00:00:00 2001
+From 27372b85edc367433ab433df2d5c7b2368bf1032 Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Thu, 4 Jan 2018 21:21:14 -0600
 Subject: [PATCH] Don't blindly send unlit chunks when lighting updates are
@@ -18,10 +18,10 @@ only send chunks which are actually ready to be sent, otherwise, we
 will always send chunks.
 
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 4756884..e861f3b 100644
+index bac3f0d..fb1310c 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -1122,7 +1122,11 @@ public class Chunk {
+@@ -1117,7 +1117,11 @@ public class Chunk {
      }
  
      public boolean isPopulated() {

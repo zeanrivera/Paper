@@ -1,4 +1,4 @@
-From 506760248f2760394d50c28f299d2bd23f3102df Mon Sep 17 00:00:00 2001
+From 64b85a183c0929b82e490a624fec64949d9cd1c3 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 19:54:39 -0400
 Subject: [PATCH] Configurable Chunk Inhabited Timer
@@ -23,10 +23,10 @@ index ed860b1..09e9fe4 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 4012467..a0e0699 100644
+index f9690c3..c451005 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -1391,7 +1391,7 @@ public class Chunk {
+@@ -1381,7 +1381,7 @@ public class Chunk {
      }
  
      public long getInhabitedTime() {

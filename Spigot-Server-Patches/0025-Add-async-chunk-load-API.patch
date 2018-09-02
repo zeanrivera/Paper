@@ -1,14 +1,14 @@
-From d7736d44c3044044eec4c14859104ed9744830b6 Mon Sep 17 00:00:00 2001
+From 9a788d480edeff6b9091a8ddb16f467f58ef7826 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 1 Mar 2016 23:19:01 -0600
 Subject: [PATCH] Add async chunk load API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 22bbf5a..c14d3e1 100644
+index 5b4834a..e771453 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -266,6 +266,21 @@ public class CraftWorld implements World {
+@@ -261,6 +261,21 @@ public class CraftWorld implements World {
          }
      }
  

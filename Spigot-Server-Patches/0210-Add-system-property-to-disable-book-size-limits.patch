@@ -1,4 +1,4 @@
-From 2db404310629c1e3a76eebfae7c2a4e050ace5ae Mon Sep 17 00:00:00 2001
+From 7a1bb87321073401354accdde4986c11b57fe616 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 18:37:19 -0400
 Subject: [PATCH] Add system property to disable book size limits
@@ -11,7 +11,7 @@ to make books with as much data as they want. Do not use this without
 limiting incoming data from packets in some other way.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
-index b047b4b..fc8439f 100644
+index 9421444..0d0e900 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
 @@ -32,6 +32,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
@@ -22,7 +22,7 @@ index b047b4b..fc8439f 100644
      protected String title;
      protected String author;
      public List<ITextComponent> pages;
-@@ -361,7 +362,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -358,7 +359,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
          if (title == null) {
              this.title = null;
              return true;
@@ -31,7 +31,7 @@ index b047b4b..fc8439f 100644
              return false;
          } else {
              this.title = title;
-@@ -394,7 +395,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -391,7 +392,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
          if (!this.isValidPage(page)) {
              throw new IllegalArgumentException("Invalid page number " + page + "/" + this.pages.size());
          } else {
@@ -40,7 +40,7 @@ index b047b4b..fc8439f 100644
              this.pages.set(page - 1, CraftChatMessage.fromString(newText, true)[0]);
          }
      }
-@@ -406,14 +407,14 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -403,14 +404,14 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
  
      public void addPage(String... pages) {
          for (String page : pages) {

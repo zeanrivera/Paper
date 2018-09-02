@@ -1,4 +1,4 @@
-From 3f4c348ec83a1ecf74ecdbcdc5aa5415db0394a9 Mon Sep 17 00:00:00 2001
+From 30ce1050dd0c3716e809a1bf9ad40e4160864c74 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 16:40:48 -0400
 Subject: [PATCH] Disable Vanilla Chunk GC
@@ -6,10 +6,10 @@ Subject: [PATCH] Disable Vanilla Chunk GC
 Bukkit has its own system for this.
 
 diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
-index f3af5ee..ae78dc9 100644
+index 5904468..65c5128 100644
 --- a/src/main/java/net/minecraft/world/WorldServer.java
 +++ b/src/main/java/net/minecraft/world/WorldServer.java
-@@ -1121,11 +1121,15 @@ public class WorldServer extends World implements IThreadListener {
+@@ -1107,11 +1107,15 @@ public class WorldServer extends World implements IThreadListener {
              chunkproviderserver.saveChunks(all);
              timings.worldSaveChunks.stopTiming(); // Paper
  

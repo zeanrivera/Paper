@@ -1,11 +1,11 @@
-From ce17f87fd3b9c31f4f8dd178d67951a7ba3acdcc Mon Sep 17 00:00:00 2001
+From a84c5cf110e47702ff0c1e498175794b4990f506 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 24 Sep 2017 15:43:23 -0400
 Subject: [PATCH] Check online mode before converting and renaming player data
 
 
 diff --git a/src/main/java/net/minecraft/world/storage/SaveHandler.java b/src/main/java/net/minecraft/world/storage/SaveHandler.java
-index 7b8c227..b27f8bc 100644
+index 7439516..79344b4 100644
 --- a/src/main/java/net/minecraft/world/storage/SaveHandler.java
 +++ b/src/main/java/net/minecraft/world/storage/SaveHandler.java
 @@ -178,7 +178,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData {

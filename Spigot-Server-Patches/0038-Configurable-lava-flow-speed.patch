@@ -1,4 +1,4 @@
-From 2536f32af04b4f06f448ed75ae58208d1c57ad31 Mon Sep 17 00:00:00 2001
+From 36f3a39ee609def5398a2cc27b4b2d2cb3a42607 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sun, 24 Sep 2017 17:52:09 -0400
 Subject: [PATCH] Configurable lava flow speed
@@ -21,10 +21,10 @@ index 8a28def..53597a5 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
-index 3bf9c78..fd1a3cd 100644
+index 2215ab2..e42db27 100644
 --- a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
 +++ b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
-@@ -261,6 +261,9 @@ public class BlockDynamicLiquid extends BlockLiquid {
+@@ -260,6 +260,9 @@ public class BlockDynamicLiquid extends BlockLiquid {
       * Paper - Get flow speed. Throttle if its water and flowing adjacent to lava
       */
      private int getFlowSpeed(World world, BlockPos pos) {

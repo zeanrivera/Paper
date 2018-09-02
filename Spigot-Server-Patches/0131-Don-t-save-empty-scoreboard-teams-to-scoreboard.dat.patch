@@ -1,4 +1,4 @@
-From c4ef17a8d1fa98d9c24701dcf9dc9a22182ad795 Mon Sep 17 00:00:00 2001
+From 1be084222b24c9b4b872b76887a08bdde07db657 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 9 Oct 2017 17:46:39 -0400
 Subject: [PATCH] Don't save empty scoreboard teams to scoreboard.dat

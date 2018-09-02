@@ -1,4 +1,4 @@
-From 50414683eef539be4783cc32fc40032efdfeaf3c Mon Sep 17 00:00:00 2001
+From 8ec276aa28b59b4c154c7d73f9e0b93533f816d0 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 18:29:50 -0400
 Subject: [PATCH] Properly handle async calls to restart the server
@@ -30,7 +30,7 @@ will have plugins and worlds saving to the disk has a high potential to result
 in corruption/dataloss.
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 897a16d..2fd8d81 100644
+index acb0846..558fd9b 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -128,6 +128,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -74,10 +74,10 @@ index 897a16d..2fd8d81 100644
      public void applyServerIconToResponse(ServerStatusResponse response) {
          File file = this.getFile("server-icon.png");
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
-index bbc7b1d..72f8838 100644
+index 1a06f02..abdc897 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerList.java
-@@ -1256,9 +1256,15 @@ public abstract class PlayerList {
+@@ -1242,9 +1242,15 @@ public abstract class PlayerList {
          target.interactionManager.initializeGameType(worldIn.getWorldInfo().getGameType());
      }
  

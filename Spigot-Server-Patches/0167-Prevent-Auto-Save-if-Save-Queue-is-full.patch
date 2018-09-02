@@ -1,4 +1,4 @@
-From e788772dbbfe9aa44340b33c33b5974d8a55d360 Mon Sep 17 00:00:00 2001
+From efbaa60443cce3f543d6e3981fd54fb7e5477bf1 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 17:01:59 -0400
 Subject: [PATCH] Prevent Auto Save if Save Queue is full
@@ -21,10 +21,10 @@ index c8ecada..de6d542 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-index 711fb47..1eca92d 100644
+index 653229c..191909d 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-@@ -559,6 +559,13 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+@@ -557,6 +557,13 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
          }
      }
  

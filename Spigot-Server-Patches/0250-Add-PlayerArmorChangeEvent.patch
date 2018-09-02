@@ -1,11 +1,11 @@
-From 731e4e738d32836b59ebe3caa97b4fdb269531e6 Mon Sep 17 00:00:00 2001
+From 8a46470ebcbc8d40d44e0ebd73c6d5c203f6b8fb Mon Sep 17 00:00:00 2001
 From: pkt77 <parkerkt77@gmail.com>
 Date: Fri, 10 Nov 2017 23:46:34 -0500
 Subject: [PATCH] Add PlayerArmorChangeEvent
 
 
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index c5098df..0308dc1 100644
+index 2bda267..007806c 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
 @@ -1,5 +1,6 @@
@@ -15,7 +15,7 @@ index c5098df..0308dc1 100644
  import com.google.common.base.Function;
  import com.google.common.base.Objects;
  import com.google.common.collect.Lists;
-@@ -1992,6 +1993,13 @@ public abstract class EntityLivingBase extends Entity {
+@@ -1978,6 +1979,13 @@ public abstract class EntityLivingBase extends Entity {
                  ItemStack itemstack1 = this.getItemStackFromSlot(enumitemslot);
  
                  if (!ItemStack.areItemStacksEqual(itemstack1, itemstack)) {

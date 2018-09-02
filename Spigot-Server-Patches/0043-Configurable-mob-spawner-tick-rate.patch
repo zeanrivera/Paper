@@ -1,4 +1,4 @@
-From 087c1a67336f320509fe2983ccd4f850c2a9e4eb Mon Sep 17 00:00:00 2001
+From ab5e291d0ffff1bdfa1fb98a22cd3bdb80868872 Mon Sep 17 00:00:00 2001
 From: Sudzzy <originmc@outlook.com>
 Date: Wed, 27 Sep 2017 14:07:39 -0400
 Subject: [PATCH] Configurable mob spawner tick rate
@@ -19,7 +19,7 @@ index f52952e..5c643cd 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java b/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
-index 0945ebf..258d9b0 100644
+index 4afc96a..affb248 100644
 --- a/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
 +++ b/src/main/java/net/minecraft/tileentity/MobSpawnerBaseLogic.java
 @@ -33,6 +33,7 @@ public abstract class MobSpawnerBaseLogic {

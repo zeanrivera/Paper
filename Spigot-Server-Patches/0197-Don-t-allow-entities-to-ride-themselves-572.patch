@@ -1,14 +1,14 @@
-From fb6120bd2734edaf4eb4294d394b3f43013a2348 Mon Sep 17 00:00:00 2001
+From 03e2db7001b0519472a4ae3e457a3a39a3da9b90 Mon Sep 17 00:00:00 2001
 From: Alfie Cleveland <alfeh@me.com>
 Date: Fri, 20 Oct 2017 22:06:53 -0400
 Subject: [PATCH] Don't allow entities to ride themselves - #572
 
 
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index d6b805c..a9d1306 100644
+index 997e977..d545b59 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
-@@ -1929,6 +1929,7 @@ public abstract class Entity implements ICommandSender {
+@@ -1902,6 +1902,7 @@ public abstract class Entity implements ICommandSender {
      }
  
      protected void addPassenger(Entity passenger) {

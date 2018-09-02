@@ -1,4 +1,4 @@
-From 213e14fdbc302073e77cdad5008806ffdd7aab5f Mon Sep 17 00:00:00 2001
+From 65346fa6c628062611b798d7d4fb72534b9c3368 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 21:17:53 -0400
 Subject: [PATCH] Implement getI18NDisplayName
@@ -8,10 +8,10 @@ Currently the server only supports the English language. To override this,
 You must replace the language file embedded in the server jar.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
-index 09a82c1..4fd5b53 100644
+index 21cf0ac..7165e14 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
-@@ -182,6 +182,19 @@ public final class CraftItemFactory implements ItemFactory {
+@@ -178,6 +178,19 @@ public final class CraftItemFactory implements ItemFactory {
      public ItemStack ensureServerConversions(ItemStack item) {
          return CraftItemStack.asCraftMirror(CraftItemStack.asNMSCopy(item));
      }

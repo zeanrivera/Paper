@@ -1,4 +1,4 @@
-From a2afd55a3a61abc518f9619e5b657bde60ba6e3b Mon Sep 17 00:00:00 2001
+From b59d23dbb48a594c40897c01daad5b772e1e7efa Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 10 Oct 2017 16:03:24 -0400
 Subject: [PATCH] Configurable packet in spam threshold
@@ -23,10 +23,10 @@ index cf06f8a..2001175 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 04361e3..838194c 100644
+index b74d494..491c2e0 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -279,6 +279,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -278,6 +278,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                              Integer.valueOf(144)));
      private int limitedPackets;
      private long lastLimitedPacket = -1L;
@@ -34,7 +34,7 @@ index 04361e3..838194c 100644
  
      public NetHandlerPlayServer(MinecraftServer server, NetworkManager networkManagerIn, EntityPlayerMP playerIn) {
          this.serverController = server;
-@@ -1112,9 +1113,9 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1092,9 +1093,9 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
      }
  
      private boolean checkLimit(long timestamp) {

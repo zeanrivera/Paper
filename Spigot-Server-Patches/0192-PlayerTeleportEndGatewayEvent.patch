@@ -1,4 +1,4 @@
-From a2e3e28457f3729da257ab794fb80911c9dab075 Mon Sep 17 00:00:00 2001
+From e43bee288bc81562fef301b7488a50899274b750 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 21:49:54 -0400
 Subject: [PATCH] PlayerTeleportEndGatewayEvent
@@ -6,7 +6,7 @@ Subject: [PATCH] PlayerTeleportEndGatewayEvent
 Allows you to access the Gateway being used in a teleport event
 
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityEndGateway.java b/src/main/java/net/minecraft/tileentity/TileEntityEndGateway.java
-index 93dffda..292327d 100644
+index c05bf84..e4071ca 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityEndGateway.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityEndGateway.java
 @@ -3,6 +3,8 @@ package net.minecraft.tileentity;
@@ -18,12 +18,12 @@ index 93dffda..292327d 100644
  import net.minecraft.block.state.IBlockState;
  import net.minecraft.entity.Entity;
  import net.minecraft.entity.player.EntityPlayerMP;
-@@ -141,7 +143,7 @@ public class TileEntityEndGateway extends TileEntityEndPortal implements ITickab
+@@ -140,7 +142,7 @@ public class TileEntityEndGateway extends TileEntityEndPortal implements ITickab
+                                     (double) blockposition.getZ() + 0.5D);
                      location.setPitch(player.getLocation().getPitch());
                      location.setYaw(player.getLocation().getYaw());
-                     PlayerTeleportEvent teleEvent =
--                            new PlayerTeleportEvent(player, player.getLocation(), location, TeleportCause.END_GATEWAY);
-+                            new com.destroystokyo.paper.event.player.PlayerTeleportEndGatewayEvent(player, player.getLocation(), location, new org.bukkit.craftbukkit.block.CraftEndGateway(MCUtil.toLocation(world, this.getPos()).getBlock())); // Paper
+-                    PlayerTeleportEvent teleEvent = new PlayerTeleportEvent(player, player.getLocation(), location, TeleportCause.END_GATEWAY);
++                    PlayerTeleportEvent teleEvent = new com.destroystokyo.paper.event.player.PlayerTeleportEndGatewayEvent(player, player.getLocation(), location, new org.bukkit.craftbukkit.block.CraftEndGateway(MCUtil.toLocation(world, this.getPos()).getBlock())); // Paper
                      Bukkit.getPluginManager().callEvent(teleEvent);
  
                      if (teleEvent.isCancelled()) {

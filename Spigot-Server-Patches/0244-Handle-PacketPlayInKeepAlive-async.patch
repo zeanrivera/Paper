@@ -1,4 +1,4 @@
-From fe2b4cc5ed871c44aff684e07af6d94d097ccd9b Mon Sep 17 00:00:00 2001
+From 506352f782e6f5462cc07752a885fdd84e98cae9 Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Tue, 31 Oct 2017 20:49:29 -0400
 Subject: [PATCH] Handle PacketPlayInKeepAlive async
@@ -15,10 +15,10 @@ also adding some additional logging in order to help work out what is causing
 random disconnections for clients.
 
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index b745ec1..a3a1701 100644
+index 2b932ab..7448993 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -2475,14 +2475,18 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -2434,14 +2434,18 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
      }
  
      public void processKeepAlive(CPacketKeepAlive packetIn) {

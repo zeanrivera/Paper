@@ -1,4 +1,4 @@
-From 10b57c0f65031b8b9c84d5061a8804d1fed1bfad Mon Sep 17 00:00:00 2001
+From ab0186945ed6d0d9e26f4b8440b3e73a7482c321 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 20:00:26 -0400
 Subject: [PATCH] Optimize ItemStack.isEmpty()
@@ -6,7 +6,7 @@ Subject: [PATCH] Optimize ItemStack.isEmpty()
 Remove hashMap lookup every check, simplify code to remove ternary
 
 diff --git a/src/main/java/net/minecraft/item/ItemStack.java b/src/main/java/net/minecraft/item/ItemStack.java
-index 33438ef..d75f8da 100644
+index 65638ba..4b9005d 100644
 --- a/src/main/java/net/minecraft/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/item/ItemStack.java
 @@ -182,13 +182,15 @@ public final class ItemStack {

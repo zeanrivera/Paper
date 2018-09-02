@@ -1,4 +1,4 @@
-From bba4108e6db21b8d8f12b833d25751615ef38751 Mon Sep 17 00:00:00 2001
+From 647269b9eaf62bd67aeeea57ecd3ded29b6a656f Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 4 Jan 2018 21:43:52 -0600
 Subject: [PATCH] Configurable Chunks Sends per Tick setting
@@ -26,10 +26,10 @@ index ab188f7..66019b9 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
-index 1981502..becfdeb 100644
+index b77d379..0920d30 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
-@@ -203,7 +203,7 @@ public class PlayerChunkMap {
+@@ -202,7 +202,7 @@ public class PlayerChunkMap {
          }
  
          if (!this.pendingSendToPlayers.isEmpty()) {

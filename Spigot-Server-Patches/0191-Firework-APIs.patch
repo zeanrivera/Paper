@@ -1,11 +1,11 @@
-From c36ac9914f66ec4cf6a71d7efdaee09d7a8d4fce Mon Sep 17 00:00:00 2001
+From a1a6c6fad88cff5ce4c1ca2ad19cc87e9841b030 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 21:47:49 -0400
 Subject: [PATCH] Firework APIs
 
 
 diff --git a/src/main/java/net/minecraft/entity/item/EntityFireworkRocket.java b/src/main/java/net/minecraft/entity/item/EntityFireworkRocket.java
-index c6f7223..fdd5979 100644
+index 0fb5150..e0bfc16 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityFireworkRocket.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityFireworkRocket.java
 @@ -23,6 +23,8 @@ import net.minecraft.util.math.Vec3d;
@@ -25,7 +25,7 @@ index c6f7223..fdd5979 100644
  
      public EntityFireworkRocket(World worldIn) {
          super(worldIn);
-@@ -238,6 +241,12 @@ public class EntityFireworkRocket extends Entity {
+@@ -230,6 +233,12 @@ public class EntityFireworkRocket extends Entity {
          if (!itemstack.isEmpty()) {
              compound.setTag("FireworksItem", itemstack.writeToNBT(new NBTTagCompound()));
          }
@@ -38,7 +38,7 @@ index c6f7223..fdd5979 100644
      }
  
      public void readEntityFromNBT(NBTTagCompound compound) {
-@@ -252,6 +261,12 @@ public class EntityFireworkRocket extends Entity {
+@@ -244,6 +253,12 @@ public class EntityFireworkRocket extends Entity {
                  this.dataManager.set(FIREWORK_ITEM, itemstack);
              }
          }

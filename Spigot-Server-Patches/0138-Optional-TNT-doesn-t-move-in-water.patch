@@ -1,4 +1,4 @@
-From 0554dbed5a8c02c15f57343ea36c1e4720cb85a2 Mon Sep 17 00:00:00 2001
+From b50a31332d2b7edde5b83d7aaf0e9d2c43cbfc70 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 9 Oct 2017 18:36:35 -0400
 Subject: [PATCH] Optional TNT doesn't move in water
@@ -32,7 +32,7 @@ index b7515b5..e34d5fd 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java b/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
-index d243cb8..311deea 100644
+index a908be8..f63436c 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
 @@ -3,14 +3,18 @@ package net.minecraft.entity.item;
@@ -54,7 +54,7 @@ index d243cb8..311deea 100644
  import org.bukkit.craftbukkit.CraftServer;
  import org.bukkit.craftbukkit.entity.CraftEntity;
  import org.bukkit.entity.Explosive;
-@@ -160,4 +164,49 @@ public class EntityTNTPrimed extends Entity {
+@@ -159,4 +163,49 @@ public class EntityTNTPrimed extends Entity {
      public int getFuse() {
          return this.fuse;
      }

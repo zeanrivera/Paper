@@ -1,4 +1,4 @@
-From 0eb444098aa366ee34af9ae59936fe76a80e423b Mon Sep 17 00:00:00 2001
+From 3eca53f2b229221610ee9868f81dc72388b95734 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 4 Jan 2018 21:42:15 -0600
 Subject: [PATCH] Ability to apply mending to XP API
@@ -10,7 +10,7 @@ of giving the player experience points.
 Both an API To standalone mend, and apply mending logic to .giveExp has been added.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index abcb405..b681c43 100644
+index 286cd16..0a225e6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -30,6 +30,7 @@ import net.md_5.bungee.api.ChatMessageType;
@@ -35,7 +35,7 @@ index abcb405..b681c43 100644
  import net.minecraft.nbt.NBTTagCompound;
  import net.minecraft.network.NetHandlerPlayServer;
  import net.minecraft.network.Packet;
-@@ -942,7 +946,39 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -930,7 +934,39 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return GameMode.getByValue(this.getHandle().interactionManager.getGameType().getID());
      }
  

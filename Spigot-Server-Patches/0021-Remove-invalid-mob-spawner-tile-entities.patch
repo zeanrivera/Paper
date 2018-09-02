@@ -1,11 +1,11 @@
-From b427c34956df54b40d853e78d5c0814e2d460192 Mon Sep 17 00:00:00 2001
+From 538dc22585ba5009dd9d039e403b8e45fe45dcd6 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Tue, 1 Mar 2016 15:08:03 -0600
 Subject: [PATCH] Remove invalid mob spawner tile entities
 
 
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index d4edee6..1a062b5 100644
+index a2a368d..33b7382 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -30,6 +30,7 @@ import net.minecraft.init.Blocks;
@@ -16,7 +16,7 @@ index d4edee6..1a062b5 100644
  import net.minecraft.util.EnumFacing;
  import net.minecraft.util.ReportedException;
  import net.minecraft.util.math.AxisAlignedBB;
-@@ -752,6 +753,10 @@ public class Chunk {
+@@ -749,6 +750,10 @@ public class Chunk {
  
              tileEntityIn.validate();
              this.tileEntities.put(pos, tileEntityIn);

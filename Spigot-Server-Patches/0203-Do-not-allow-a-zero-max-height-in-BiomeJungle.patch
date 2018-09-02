@@ -1,14 +1,14 @@
-From 913d3c2bec1f50ee67da9ae39dbfe636590b7797 Mon Sep 17 00:00:00 2001
+From 03f79e2e10bf1cd27ad0c93809e08d4a5557acb5 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 17:51:04 -0400
 Subject: [PATCH] Do not allow a zero max height in BiomeJungle
 
 
 diff --git a/src/main/java/net/minecraft/world/biome/BiomeJungle.java b/src/main/java/net/minecraft/world/biome/BiomeJungle.java
-index a3c7086..e1e9045 100644
+index 4aa199c..640547c 100644
 --- a/src/main/java/net/minecraft/world/biome/BiomeJungle.java
 +++ b/src/main/java/net/minecraft/world/biome/BiomeJungle.java
-@@ -81,7 +81,11 @@ public class BiomeJungle extends Biome {
+@@ -78,7 +78,11 @@ public class BiomeJungle extends Biome {
          super.decorate(worldIn, rand, pos);
          int var4 = rand.nextInt(16) + 8;
          int var5 = rand.nextInt(16) + 8;

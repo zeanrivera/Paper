@@ -1,4 +1,4 @@
-From a5190a2deb53cd580dec86eb765ff2702fd2b578 Mon Sep 17 00:00:00 2001
+From 04b77d2c409da52adb3da1bafb0d925ebed1157d Mon Sep 17 00:00:00 2001
 From: CullanP <cullanpage@gmail.com>
 Date: Wed, 27 Sep 2017 15:35:42 -0400
 Subject: [PATCH] Avoid hopper searches if there are no items
@@ -16,7 +16,7 @@ of searching there.
 Combined, this adds up a lot.
 
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 912d746..2dae9cd 100644
+index b32f93c..06ff25e 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -32,6 +32,7 @@ import net.minecraft.inventory.IInventory;
@@ -40,7 +40,7 @@ index 912d746..2dae9cd 100644
  
      public boolean areNeighborsLoaded(int radius) {
          switch (radius) {
-@@ -650,6 +657,13 @@ public class Chunk {
+@@ -647,6 +654,13 @@ public class Chunk {
          entityIn.chunkCoordY = k;
          entityIn.chunkCoordZ = this.z;
          this.entityLists[k].add(entityIn);
@@ -54,7 +54,7 @@ index 912d746..2dae9cd 100644
  
          if (entityIn instanceof EntityLiving) {
              EntityLiving entityinsentient = (EntityLiving) entityIn;
-@@ -681,6 +695,14 @@ public class Chunk {
+@@ -678,6 +692,14 @@ public class Chunk {
  
          this.entityLists[index].remove(entityIn);
  
@@ -69,7 +69,7 @@ index 912d746..2dae9cd 100644
          if (entityIn instanceof EntityLiving) {
              EntityLiving entityinsentient = (EntityLiving) entityIn;
  
-@@ -861,6 +883,16 @@ public class Chunk {
+@@ -858,6 +880,16 @@ public class Chunk {
          for (int k = i; k <= j; ++k) {
              if (!this.entityLists[k].isEmpty()) {
                  for (Entity entity1 : this.entityLists[k]) {
@@ -86,7 +86,7 @@ index 912d746..2dae9cd 100644
                      if (entity1.getEntityBoundingBox().intersects(aabb) && entity1 != entityIn) {
                          if (filter == null || filter.apply(entity1)) {
                              listToFill.add(entity1);
-@@ -890,7 +922,18 @@ public class Chunk {
+@@ -887,7 +919,18 @@ public class Chunk {
          i = MathHelper.clamp(i, 0, this.entityLists.length - 1);
          j = MathHelper.clamp(j, 0, this.entityLists.length - 1);
  
@@ -103,8 +103,8 @@ index 912d746..2dae9cd 100644
          for (int k = i; k <= j; ++k) {
 +            if (counts != null && counts[k] <= 0) continue; // Paper - Don't check a chunk if it doesn't have the type we are looking for
              for (Entity entity : this.entityLists[k]) {
-                 if (entityClass.isInstance(entity)
-                         && entity.getEntityBoundingBox().intersects(aabb)
+                 if (entityClass.isInstance(entity) && entity.getEntityBoundingBox().intersects(aabb) && (filter == null || filter.apply((T) entity))) {
+                     listToFill.add((T) entity);
 -- 
 2.18.0
 

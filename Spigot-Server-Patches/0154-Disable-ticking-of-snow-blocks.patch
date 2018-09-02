@@ -1,11 +1,11 @@
-From 93cc2330b8f5b435aca9f674df6d987fd1cf181a Mon Sep 17 00:00:00 2001
+From bdf0ef4cfbae7ca81c584e7a42c31230f6548f58 Mon Sep 17 00:00:00 2001
 From: killme <killme-git@ibts.me>
 Date: Tue, 10 Oct 2017 15:57:11 -0400
 Subject: [PATCH] Disable ticking of snow blocks
 
 
 diff --git a/src/main/java/net/minecraft/block/BlockSnowBlock.java b/src/main/java/net/minecraft/block/BlockSnowBlock.java
-index cfaf162..8dfa2e7 100644
+index c989f16..9ef9cfb 100644
 --- a/src/main/java/net/minecraft/block/BlockSnowBlock.java
 +++ b/src/main/java/net/minecraft/block/BlockSnowBlock.java
 @@ -15,7 +15,7 @@ import org.bukkit.craftbukkit.event.CraftEventFactory;
@@ -25,8 +25,8 @@ index cfaf162..8dfa2e7 100644
 +    /*
      public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
          if (worldIn.getLightFor(EnumSkyBlock.BLOCK, pos) > 11) {
-             if (CraftEventFactory.callBlockFadeEvent(worldIn.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ()), Blocks.AIR)
-@@ -38,4 +40,6 @@ public class BlockSnowBlock extends Block {
+             if (CraftEventFactory.callBlockFadeEvent(worldIn.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ()), Blocks.AIR).isCancelled()) {
+@@ -37,4 +39,6 @@ public class BlockSnowBlock extends Block {
              worldIn.setBlockToAir(pos);
          }
      }

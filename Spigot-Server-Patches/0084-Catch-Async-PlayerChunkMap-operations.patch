@@ -1,14 +1,14 @@
-From 89ccbdac760552483e5c4c5f046c70ae6dba0990 Mon Sep 17 00:00:00 2001
+From 09638142ecb8d56c4d11bf4d33f05d709a6cfef5 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:17:42 -0400
 Subject: [PATCH] Catch Async PlayerChunkMap operations
 
 
 diff --git a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
-index f605080..b9755d4 100644
+index cfc5f89..8d16753 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerChunkMap.java
-@@ -473,10 +473,12 @@ public class PlayerChunkMap {
+@@ -472,10 +472,12 @@ public class PlayerChunkMap {
      }
  
      public void entryChanged(PlayerChunkMapEntry entry) {

@@ -1,4 +1,4 @@
-From 1e6daf725a2090919edcfe2b720e149f0be813c1 Mon Sep 17 00:00:00 2001
+From 523cee6ce787a298e0e945462985e5629ddb7936 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 19:57:48 -0400
 Subject: [PATCH] Configurable Cartographer Treasure Maps
@@ -28,10 +28,10 @@ index e516144..1b993d7 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-index 761aa63..aec4acc 100644
+index 8488d88..54a0596 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-@@ -1193,7 +1193,8 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
+@@ -1178,7 +1178,8 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
          public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
              int i = this.value.getPrice(random);
              World world = merchant.getWorld();
@@ -40,7 +40,7 @@ index 761aa63..aec4acc 100644
 +            BlockPos blockposition = world.findNearestStructure(this.destination, merchant.getPos(), world.paperConfig.treasureMapsAlreadyDiscovered); // Paper - pass false to return first structure, regardless of if its been discovered. true returns only undiscovered.
  
              if (blockposition != null) {
-                 ItemStack itemstack =
+                 ItemStack itemstack = ItemMap.setupNewMap(world, (double) blockposition.getX(), (double) blockposition.getZ(), (byte) 2, true, true);
 -- 
 2.18.0
 

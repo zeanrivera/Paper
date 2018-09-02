@@ -1,4 +1,4 @@
-From b3b05f9795c7be911784b0ec7eb433c408e3ea20 Mon Sep 17 00:00:00 2001
+From 7a56da7e1c9dff53cd90794c9dd6eabea372f613 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 22:17:04 -0400
 Subject: [PATCH] Chunk save queue improvements
@@ -41,7 +41,7 @@ index 36689db..3898ad8 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-index 374dee0..108687c 100644
+index 8f84785..854d54e 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 @@ -7,6 +7,7 @@ import java.util.Iterator;
@@ -61,7 +61,7 @@ index 374dee0..108687c 100644
      private static final Logger LOGGER = LogManager.getLogger();
      private final Map<ChunkPos, Supplier<NBTTagCompound>> chunksToSave = Maps.<ChunkPos, Supplier<NBTTagCompound>>newConcurrentMap();
      private final File chunkSaveLocation;
-@@ -160,7 +163,13 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+@@ -158,7 +161,13 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
      }
  
      protected void a(ChunkPos chunkcoordintpair, Supplier<NBTTagCompound> nbttagcompound) {
@@ -76,7 +76,7 @@ index 374dee0..108687c 100644
          ThreadedFileIOBase.getThreadedIOInstance().queueIO(this);
      }
  
-@@ -169,22 +178,21 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+@@ -167,22 +176,21 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
      }
  
      private synchronized boolean processSaveQueueEntry(boolean logCompletion) {
@@ -105,7 +105,7 @@ index 374dee0..108687c 100644
  
                  if (nbttagcompound != null) {
                      try {
-@@ -193,10 +201,17 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+@@ -191,10 +199,17 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
                          LOGGER.error("Failed to save chunk", (Throwable) var12);
                      }
                  }
@@ -124,7 +124,7 @@ index 374dee0..108687c 100644
              }
  
              return flag;
-@@ -523,4 +538,16 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+@@ -521,4 +536,16 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
              return entity;
          }
      }

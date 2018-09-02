@@ -1,4 +1,4 @@
-From 888bf2b4a5473d81e0fcaf1d00176daaef1f16a9 Mon Sep 17 00:00:00 2001
+From 310364d1027e4d240eb23443527c48c3be0d45b7 Mon Sep 17 00:00:00 2001
 From: Alfie Cleveland <alfeh@me.com>
 Date: Tue, 10 Oct 2017 17:42:51 -0400
 Subject: [PATCH] Optimize player entityRemoveQueue
@@ -6,7 +6,7 @@ Subject: [PATCH] Optimize player entityRemoveQueue
 Brings removeQueue operations back to O(n) instead of O(n^2).
 
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-index a56d769..f6ca53e 100644
+index fb42a9a..58c2b1a 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 @@ -4,11 +4,8 @@ import com.google.common.base.Preconditions;
@@ -32,7 +32,7 @@ index a56d769..f6ca53e 100644
      private final PlayerAdvancements advancements;
      private final StatisticsManagerServer statsFile;
      private float lastHealthScore = Float.MIN_VALUE;
-@@ -408,10 +405,18 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+@@ -403,10 +400,18 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
              Iterator iterator = this.entityRemoveQueue.iterator();
              int j = 0;
  
@@ -51,7 +51,7 @@ index a56d769..f6ca53e 100644
  
              this.connection.sendPacket(new SPacketDestroyEntities(aint));
          }
-@@ -1203,7 +1208,12 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+@@ -1176,7 +1181,12 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
          this.lastExperience = -1;
          this.lastHealth = -1.0F;
          this.lastFoodLevel = -1;

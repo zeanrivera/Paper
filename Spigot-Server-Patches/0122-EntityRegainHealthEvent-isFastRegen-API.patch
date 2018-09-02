@@ -1,4 +1,4 @@
-From f8ec1e67124b127f14a881da0ea798a4c751289d Mon Sep 17 00:00:00 2001
+From cd31b3632354169c782f4134e88b49ac3699ad53 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 8 Oct 2017 00:25:24 -0400
 Subject: [PATCH] EntityRegainHealthEvent isFastRegen API
@@ -6,10 +6,10 @@ Subject: [PATCH] EntityRegainHealthEvent isFastRegen API
 Don't even get me started
 
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index e77b982..8145d70 100644
+index 8ea2d4a..ef7b46d 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-@@ -834,10 +834,16 @@ public abstract class EntityLivingBase extends Entity {
+@@ -831,10 +831,16 @@ public abstract class EntityLivingBase extends Entity {
      }
  
      public void heal(float f, RegainReason regainReason) {
@@ -28,10 +28,10 @@ index e77b982..8145d70 100644
  
              if (!event.isCancelled()) {
 diff --git a/src/main/java/net/minecraft/util/FoodStats.java b/src/main/java/net/minecraft/util/FoodStats.java
-index ee371cd..b455e0d 100644
+index e0eba6a..7040e08 100644
 --- a/src/main/java/net/minecraft/util/FoodStats.java
 +++ b/src/main/java/net/minecraft/util/FoodStats.java
-@@ -79,7 +79,7 @@ public class FoodStats {
+@@ -75,7 +75,7 @@ public class FoodStats {
  
              if (this.foodTimer >= 10) {
                  float f = Math.min(this.foodSaturationLevel, 6.0F);

@@ -1,4 +1,4 @@
-From 5d5cd7a37524e82fec8f20d48f0872c5ac25a27e Mon Sep 17 00:00:00 2001
+From d6c45df1b960fa7307fbb3e577406b11930f836c Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 27 Sep 2017 15:26:10 -0400
 Subject: [PATCH] Optimize Pathfinding
@@ -7,7 +7,7 @@ Prevents pathfinding from spamming failures for things such as arrow
 attacks
 
 diff --git a/src/main/java/net/minecraft/pathfinding/PathNavigate.java b/src/main/java/net/minecraft/pathfinding/PathNavigate.java
-index 1dde9f3..2848c5f 100644
+index 503e50c..8f3dcb6 100644
 --- a/src/main/java/net/minecraft/pathfinding/PathNavigate.java
 +++ b/src/main/java/net/minecraft/pathfinding/PathNavigate.java
 @@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLiving;

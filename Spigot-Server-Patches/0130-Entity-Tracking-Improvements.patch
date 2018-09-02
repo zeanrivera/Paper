@@ -1,4 +1,4 @@
-From 4a08fdddf99be5494465ad6d9846f0cb5eb62bb4 Mon Sep 17 00:00:00 2001
+From c70a130a6b96e0ea9a4f04c7a15d5fa8453c41de Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 9 Oct 2017 17:35:19 -0400
 Subject: [PATCH] Entity Tracking Improvements
@@ -7,10 +7,10 @@ If any part of a Vehicle/Passenger relationship is visible to a player,
 send all passenger/vehicles to the player in the chain.
 
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index 8911dd2..fa06c44 100644
+index 6dfd069..0730afd 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
-@@ -213,6 +213,7 @@ public abstract class Entity implements ICommandSender {
+@@ -212,6 +212,7 @@ public abstract class Entity implements ICommandSender {
      public boolean fromMobSpawner;
      public Location origin; // Paper
      public static final Random SHARED_RANDOM = new Random(); // Paper
@@ -19,7 +19,7 @@ index 8911dd2..fa06c44 100644
      static boolean isLevelAtLeast(NBTTagCompound tag, int level) {
          return tag.hasKey("Bukkit.updateLevel") && tag.getInteger("Bukkit.updateLevel") >= level;
 diff --git a/src/main/java/net/minecraft/entity/EntityTrackerEntry.java b/src/main/java/net/minecraft/entity/EntityTrackerEntry.java
-index 133f4e1..6a81ba9 100644
+index 600c9e3..65f1666 100644
 --- a/src/main/java/net/minecraft/entity/EntityTrackerEntry.java
 +++ b/src/main/java/net/minecraft/entity/EntityTrackerEntry.java
 @@ -105,6 +105,7 @@ public class EntityTrackerEntry {
@@ -30,7 +30,7 @@ index 133f4e1..6a81ba9 100644
          this.trackedEntity = entityIn;
          this.range = rangeIn;
          this.maxRange = maxRangeIn;
-@@ -504,16 +505,58 @@ public class EntityTrackerEntry {
+@@ -492,16 +493,58 @@ public class EntityTrackerEntry {
  
                      this.trackedEntity.addTrackingPlayer(playerMP);
                      playerMP.addEntity(this.trackedEntity);
@@ -89,7 +89,7 @@ index 133f4e1..6a81ba9 100644
          double d0 = playerMP.posX - (double) this.encodedPosX / 4096.0D;
          double d1 = playerMP.posZ - (double) this.encodedPosZ / 4096.0D;
          int i = Math.min(this.range, this.maxRange);
-@@ -645,6 +688,7 @@ public class EntityTrackerEntry {
+@@ -626,6 +669,7 @@ public class EntityTrackerEntry {
              this.trackingPlayers.remove(playerMP);
              this.trackedEntity.removeTrackingPlayer(playerMP);
              playerMP.removeEntity(this.trackedEntity);

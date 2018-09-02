@@ -1,4 +1,4 @@
-From 7d3ba03e3cc11b850bb2668701bc87e89e48f522 Mon Sep 17 00:00:00 2001
+From 9f16a5d11e16d6b72cd961cd17d5d33bb7f47ff1 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 19 Dec 2017 16:31:46 -0500
 Subject: [PATCH] ExperienceOrbs API for Reason/Source/Triggering player
@@ -8,7 +8,7 @@ Adds lots of information about why this orb exists.
 Replaces isFromBottle() with logic that persists entity reloads too.
 
 diff --git a/src/main/java/net/minecraft/block/Block.java b/src/main/java/net/minecraft/block/Block.java
-index c571e05..b137bc3 100644
+index 073b752..45c7cd9 100644
 --- a/src/main/java/net/minecraft/block/Block.java
 +++ b/src/main/java/net/minecraft/block/Block.java
 @@ -20,6 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
@@ -19,7 +19,7 @@ index c571e05..b137bc3 100644
  import net.minecraft.init.Blocks;
  import net.minecraft.init.Enchantments;
  import net.minecraft.init.Items;
-@@ -444,13 +445,13 @@ public class Block {
+@@ -441,12 +442,12 @@ public class Block {
          }
      }
  
@@ -29,17 +29,16 @@ index c571e05..b137bc3 100644
              while (amount > 0) {
                  int j = EntityXPOrb.getXPSplit(amount);
                  amount -= j;
-                 worldIn.spawnEntity(
--                        new EntityXPOrb(worldIn, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, j));
-+                        new EntityXPOrb(worldIn, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, j, org.bukkit.entity.ExperienceOrb.SpawnReason.BLOCK_BREAK, player)); // Paper
+-                worldIn.spawnEntity(new EntityXPOrb(worldIn, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, j));
++                worldIn.spawnEntity(new EntityXPOrb(worldIn, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, j, org.bukkit.entity.ExperienceOrb.SpawnReason.BLOCK_BREAK, player)); // Paper
              }
          }
      }
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index 5685b4b..fafd6ab 100644
+index 3cca03e..7bc3e25 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-@@ -431,7 +431,8 @@ public abstract class EntityLivingBase extends Entity {
+@@ -428,7 +428,8 @@ public abstract class EntityLivingBase extends Entity {
              while (i > 0) {
                  int j = EntityXPOrb.getXPSplit(i);
                  i -= j;
@@ -50,10 +49,10 @@ index 5685b4b..fafd6ab 100644
  
              this.expToDrop = 0;
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
-index bca298a..f8ac78d 100644
+index aebd762..12f54f5 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
-@@ -129,7 +129,7 @@ public class EntityAIMate extends EntityAIBase {
+@@ -128,7 +128,7 @@ public class EntityAIMate extends EntityAIBase {
              }
  
              if (this.world.getGameRules().getBoolean("doMobLoot") && experience > 0) {
@@ -63,10 +62,10 @@ index bca298a..f8ac78d 100644
          }
      }
 diff --git a/src/main/java/net/minecraft/entity/boss/EntityDragon.java b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
-index 84ac723..73a2aae 100644
+index 9217665..5c2408f 100644
 --- a/src/main/java/net/minecraft/entity/boss/EntityDragon.java
 +++ b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
-@@ -737,7 +737,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
+@@ -732,7 +732,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
          while (p_184668_1_ > 0) {
              int j = EntityXPOrb.getXPSplit(p_184668_1_);
              p_184668_1_ -= j;
@@ -89,7 +88,7 @@ index daba9d6..3bfb2f5 100644
  
              this.setDead();
 diff --git a/src/main/java/net/minecraft/entity/item/EntityXPOrb.java b/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
-index 7198306..3ee4c2f 100644
+index 7ed00dd..910246b 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityXPOrb.java
 @@ -29,8 +29,55 @@ public class EntityXPOrb extends Entity {
@@ -165,10 +164,10 @@ index 7198306..3ee4c2f 100644
  
      public void onCollideWithPlayer(EntityPlayer entityIn) {
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-index aec4acc..4a999df 100644
+index 54a0596..4a5505a 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-@@ -721,7 +721,7 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
+@@ -711,7 +711,7 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
          }
  
          if (recipe.getRewardsExp()) {
@@ -209,10 +208,10 @@ index b7c4be5..08b9520 100644
          }
  
 diff --git a/src/main/java/net/minecraft/server/management/PlayerInteractionManager.java b/src/main/java/net/minecraft/server/management/PlayerInteractionManager.java
-index 7b507b1..8b2f882 100644
+index f86e585..4b8b8ae 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerInteractionManager.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerInteractionManager.java
-@@ -394,7 +394,7 @@ public class PlayerInteractionManager {
+@@ -389,7 +389,7 @@ public class PlayerInteractionManager {
                  }
  
                  if (flag && event != null) {
@@ -222,10 +221,10 @@ index 7b507b1..8b2f882 100644
  
                  return flag;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index b051881..12a0c55 100644
+index 520f842..bb9a96d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -1371,7 +1371,7 @@ public class CraftWorld implements World {
+@@ -1357,7 +1357,7 @@ public class CraftWorld implements World {
          } else if (TNTPrimed.class.isAssignableFrom(param2)) {
              entity = new EntityTNTPrimed(world, x, y, z, null);
          } else if (ExperienceOrb.class.isAssignableFrom(param2)) {

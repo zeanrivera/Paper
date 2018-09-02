@@ -1,4 +1,4 @@
-From b88b14700d69908bd88eb52c08939922772745fb Mon Sep 17 00:00:00 2001
+From 2f8b69b4c1a3af6b42aa3cf72195f45519c83c97 Mon Sep 17 00:00:00 2001
 From: Gabriele C <sgdc3.mail@gmail.com>
 Date: Tue, 10 Oct 2017 15:52:46 -0400
 Subject: [PATCH] Add setting for proxy online mode status
@@ -19,7 +19,7 @@ index 011cbf5..cf06f8a 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java b/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
-index 6818ce9..9ca2d7e 100644
+index 2544da8..4f96adb 100644
 --- a/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
 +++ b/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
 @@ -75,7 +75,7 @@ public class PreYggdrasilConverter {
@@ -32,10 +32,10 @@ index 6818ce9..9ca2d7e 100644
                  UUID uuid = EntityPlayer.getUUID(new GameProfile((UUID) null, s));
                  GameProfile gameprofile = new GameProfile(uuid, s);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index a60ce20..6620ef8 100644
+index a32550a..ccfbd6f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1437,7 +1437,8 @@ public final class CraftServer implements Server {
+@@ -1411,7 +1411,8 @@ public final class CraftServer implements Server {
          if (result == null) {
              GameProfile profile = null;
  

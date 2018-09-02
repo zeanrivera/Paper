@@ -1,4 +1,4 @@
-From bf8cb3f2f2c87d0ecb58da93838fe9b941abb7d5 Mon Sep 17 00:00:00 2001
+From 209205b1b78d0d37203316a2c96a8b3e5593d7cf Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 23 Sep 2017 22:54:04 -0400
 Subject: [PATCH] Further improve server tick loop
@@ -12,7 +12,7 @@ Previous implementation did not calculate TPS correctly.
 Switch to a realistic rolling average and factor in std deviation as an extra reporting variable
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 96fe79b..985fdfd 100644
+index e8f09f1..6d3be77 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -169,13 +169,10 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -154,10 +154,10 @@ index 96fe79b..985fdfd 100644
              } else {
                  this.finalTick((CrashReport) null);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 4d1932a..1fea7b2 100644
+index d9372cf..e5a1680 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1852,5 +1852,14 @@ public final class CraftServer implements Server {
+@@ -1823,5 +1823,14 @@ public final class CraftServer implements Server {
              return false;
          }
      }

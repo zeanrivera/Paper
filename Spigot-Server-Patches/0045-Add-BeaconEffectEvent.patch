@@ -1,11 +1,11 @@
-From 251d3577872c652984131e4b73534f91197bbdc0 Mon Sep 17 00:00:00 2001
+From 50aa044c21db5b7bbb71c8952155e1b0a4631dd0 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Wed, 27 Sep 2017 14:38:39 -0400
 Subject: [PATCH] Add BeaconEffectEvent
 
 
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
-index f4ad831..f134d9a 100644
+index 83149db..fa80568 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
 @@ -1,5 +1,6 @@
@@ -27,7 +27,7 @@ index f4ad831..f134d9a 100644
  import org.bukkit.entity.HumanEntity;
  import org.bukkit.potion.PotionEffect;
  
-@@ -131,9 +137,21 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
+@@ -128,9 +134,21 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
      }
  
      private void applyEffect(List<EntityPlayer> list, Potion effects, int i, int b0) {
@@ -50,7 +50,7 @@ index f4ad831..f134d9a 100644
      }
  
      private boolean hasSecondaryEffect() {
-@@ -145,10 +163,10 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
+@@ -142,10 +160,10 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
              byte b0 = this.getAmplification();
              int i = this.getLevel();
              List list = this.getHumansInRange();

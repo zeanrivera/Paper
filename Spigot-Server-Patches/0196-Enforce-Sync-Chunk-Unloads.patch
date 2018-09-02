@@ -1,4 +1,4 @@
-From 93a3f5f23c86a190dd123cfcf7853c794c17acf6 Mon Sep 17 00:00:00 2001
+From df68eb1f9641fecc6efb51ba6f6d05fa6ecbd1e2 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 22:05:05 -0400
 Subject: [PATCH] Enforce Sync Chunk Unloads
@@ -7,7 +7,7 @@ Unloading Chunks async is extremely dangerous. This will force it to main
 the same way we handle async chunk loads.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index bfb38de..b051881 100644
+index 1264e3f..520f842 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -1,5 +1,6 @@
@@ -17,7 +17,7 @@ index bfb38de..b051881 100644
  import com.google.common.base.Preconditions;
  import com.google.common.base.Predicate;
  import it.unimi.dsi.fastutil.objects.ObjectIterator;
-@@ -371,8 +372,10 @@ public class CraftWorld implements World {
+@@ -366,8 +367,10 @@ public class CraftWorld implements World {
      }
  
      private boolean unloadChunk0(int x, int z, boolean save) {

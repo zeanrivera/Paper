@@ -1,14 +1,14 @@
-From 0fcf4eebae45440dad5f390a38d9e673daf60c45 Mon Sep 17 00:00:00 2001
+From 8b72aaffa02f442bd8150e0e066fa735f497a1c5 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:14:27 -0400
 Subject: [PATCH] Handle NaN health/absorb values and repair bad data
 
 
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index e908050..e77b982 100644
+index 48e5255..8ea2d4a 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-@@ -564,7 +564,13 @@ public abstract class EntityLivingBase extends Entity {
+@@ -561,7 +561,13 @@ public abstract class EntityLivingBase extends Entity {
      }
  
      public void readEntityFromNBT(NBTTagCompound compound) {
@@ -23,7 +23,7 @@ index e908050..e77b982 100644
  
          if (compound.hasKey("Attributes", 9) && this.world != null && !this.world.isRemote) {
              SharedMonsterAttributes.setAttributeModifiers(this.getAttributeMap(), compound.getTagList("Attributes", 10));
-@@ -847,6 +853,14 @@ public abstract class EntityLivingBase extends Entity {
+@@ -844,6 +850,14 @@ public abstract class EntityLivingBase extends Entity {
      }
  
      public void setHealth(float health) {
@@ -38,7 +38,7 @@ index e908050..e77b982 100644
          if (this instanceof EntityPlayerMP) {
              CraftPlayer player = ((EntityPlayerMP) this).getBukkitEntity();
  
-@@ -2329,7 +2343,7 @@ public abstract class EntityLivingBase extends Entity {
+@@ -2313,7 +2327,7 @@ public abstract class EntityLivingBase extends Entity {
      }
  
      public void setAbsorptionAmount(float amount) {
@@ -48,10 +48,10 @@ index e908050..e77b982 100644
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 0dc6fde..fa21f8c 100644
+index 3e47b09..f2e7c52 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1459,6 +1459,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1444,6 +1444,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      }
  
      public void setRealHealth(double health) {

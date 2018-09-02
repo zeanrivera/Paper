@@ -1,4 +1,4 @@
-From 080d3c320d6e039383aba47a7d4bd3597b0fe8a7 Mon Sep 17 00:00:00 2001
+From 97b0408f5e3a5165e0be57b6b5e80595a66d0193 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 22:02:47 -0400
 Subject: [PATCH] Enforce Sync Player Saves
@@ -7,7 +7,7 @@ Saving players async is extremely dangerous. This will force it to main
 the same way we handle async chunk loads.
 
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
-index 45dbda8..bbc7b1d 100644
+index 0635076..1a06f02 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerList.java
 @@ -1,6 +1,7 @@
@@ -18,7 +18,7 @@ index 45dbda8..bbc7b1d 100644
  import com.google.common.base.Predicate;
  import com.google.common.collect.Iterables;
  import com.google.common.collect.Lists;
-@@ -1139,6 +1140,7 @@ public abstract class PlayerList {
+@@ -1127,6 +1128,7 @@ public abstract class PlayerList {
      }
  
      public void saveAllPlayerData(@Nullable Integer interval) {
@@ -26,7 +26,7 @@ index 45dbda8..bbc7b1d 100644
          long now = MinecraftServer.currentTick;
          MinecraftTimings.savePlayers.startTiming(); // Paper
          for (int i = 0; i < this.playerEntityList.size(); ++i) {
-@@ -1148,6 +1150,7 @@ public abstract class PlayerList {
+@@ -1136,6 +1138,7 @@ public abstract class PlayerList {
              }
          }
          MinecraftTimings.savePlayers.stopTiming(); // Paper

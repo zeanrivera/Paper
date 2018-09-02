@@ -1,11 +1,11 @@
-From 4d58f6897385291bc0c1951b55afefa188cda0f0 Mon Sep 17 00:00:00 2001
+From f8f4ed9ff3874ea3759368254337e48a0d91ae4c Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 29 Oct 2017 18:07:12 -0400
 Subject: [PATCH] Do not let armorstands drown
 
 
 diff --git a/src/main/java/net/minecraft/entity/item/EntityArmorStand.java b/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
-index c7bbfd2..bd22601 100644
+index 1ab5671..606f681 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityArmorStand.java
 @@ -135,6 +135,13 @@ public class EntityArmorStand extends EntityLivingBase {

@@ -1,4 +1,4 @@
-From 85a93118da7fe9bdbf3f85f573b7129cce23d2fe Mon Sep 17 00:00:00 2001
+From 9556f3975e555f0b6a73a4f5b9d4cf826efc9763 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 23:06:50 -0400
 Subject: [PATCH] Configurable Non Player Arrow Despawn Rate
@@ -24,10 +24,10 @@ index c4c6838..107a3c3 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityArrow.java b/src/main/java/net/minecraft/entity/projectile/EntityArrow.java
-index 5c79988..a0646ee 100644
+index 07f9f83..705607d 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityArrow.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityArrow.java
-@@ -188,7 +188,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
+@@ -187,7 +187,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
              } else {
                  ++this.ticksInGround;
  

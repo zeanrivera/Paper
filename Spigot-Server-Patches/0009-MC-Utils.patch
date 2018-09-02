@@ -1,4 +1,4 @@
-From adfce37e115aa5c36f9b3c3e6037fd7cefcd062a Mon Sep 17 00:00:00 2001
+From 9bf7501a3986441a5f2c9f2cfaf9a6db1ef8730f Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 28 Mar 2016 20:55:47 -0400
 Subject: [PATCH] MC Utils
@@ -269,10 +269,10 @@ index 8d5e2a0..a92a371 100644
          return (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
      }
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 70a954b..6553927 100644
+index 3545a43..0bffb2c 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -700,6 +700,12 @@ public class Chunk {
+@@ -697,6 +697,12 @@ public class Chunk {
                  : ((ITileEntityProvider) block).createNewTileEntity(this.world, iblockdata.getBlock().getMetaFromState(iblockdata));
      }
  

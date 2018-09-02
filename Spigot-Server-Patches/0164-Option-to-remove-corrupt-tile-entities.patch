@@ -1,4 +1,4 @@
-From abfed3824cd5f7a4df0f66cac750e4e90348c368 Mon Sep 17 00:00:00 2001
+From 675db59369463876202bb44c7170785871dc7e54 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 10 Oct 2017 16:42:05 -0400
 Subject: [PATCH] Option to remove corrupt tile entities
@@ -19,10 +19,10 @@ index 4b12112..c8ecada 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 6b9ce17..83b5abe 100644
+index b45d4ee..9501f0a 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -814,6 +814,11 @@ public class Chunk {
+@@ -811,6 +811,11 @@ public class Chunk {
                      + "Chunk coordinates: " + (this.x * 16) + "," + (this.z * 16));
              e.printStackTrace();
              ServerInternalException.reportInternalException(e);

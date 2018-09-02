@@ -1,4 +1,4 @@
-From 2983485093a06e39ee6925f8c20221ce76305c92 Mon Sep 17 00:00:00 2001
+From 5ffa3c389b167f4240fda0d00c1d0f206a79b7c4 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sun, 24 Sep 2017 17:08:31 -0400
 Subject: [PATCH] Generator Settings
@@ -40,10 +40,10 @@ index 2026b83..188a276 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/biome/Biome.java b/src/main/java/net/minecraft/world/biome/Biome.java
-index 745785b..f9a312b 100644
+index 0fd0f00..f621fdb 100644
 --- a/src/main/java/net/minecraft/world/biome/Biome.java
 +++ b/src/main/java/net/minecraft/world/biome/Biome.java
-@@ -201,7 +201,7 @@ public abstract class Biome {
+@@ -200,7 +200,7 @@ public abstract class Biome {
          BlockPos.MutableBlockPos var15 = new BlockPos.MutableBlockPos();
  
          for (int var16 = 255; var16 >= 0; --var16) {
@@ -53,10 +53,10 @@ index 745785b..f9a312b 100644
              } else {
                  IBlockState var17 = chunkPrimerIn.getBlockState(var14, var16, var13);
 diff --git a/src/main/java/net/minecraft/world/biome/BiomeMesa.java b/src/main/java/net/minecraft/world/biome/BiomeMesa.java
-index 63e478b..ffa3d7c 100644
+index 69818b4..0ba9bc6 100644
 --- a/src/main/java/net/minecraft/world/biome/BiomeMesa.java
 +++ b/src/main/java/net/minecraft/world/biome/BiomeMesa.java
-@@ -108,7 +108,7 @@ public class BiomeMesa extends Biome {
+@@ -105,7 +105,7 @@ public class BiomeMesa extends Biome {
                  chunkPrimerIn.setBlockState(var26, var20, var25, STONE);
              }
  
@@ -66,7 +66,7 @@ index 63e478b..ffa3d7c 100644
              } else if (var19 < 15 || this.brycePillars) {
                  IBlockState var21 = chunkPrimerIn.getBlockState(var26, var20, var25);
 diff --git a/src/main/java/net/minecraft/world/gen/ChunkGeneratorFlat.java b/src/main/java/net/minecraft/world/gen/ChunkGeneratorFlat.java
-index 6e672e0..de191c8 100644
+index 35d8a5b..dd4e3ff 100644
 --- a/src/main/java/net/minecraft/world/gen/ChunkGeneratorFlat.java
 +++ b/src/main/java/net/minecraft/world/gen/ChunkGeneratorFlat.java
 @@ -43,7 +43,7 @@ public class ChunkGeneratorFlat implements IChunkGenerator {
@@ -112,10 +112,10 @@ index 6e672e0..de191c8 100644
          int var14 = 0;
          boolean var8 = true;
 diff --git a/src/main/java/net/minecraft/world/gen/ChunkGeneratorHell.java b/src/main/java/net/minecraft/world/gen/ChunkGeneratorHell.java
-index 5d8a93d..77ec8ff 100644
+index e5764bc..4c8ac8e 100644
 --- a/src/main/java/net/minecraft/world/gen/ChunkGeneratorHell.java
 +++ b/src/main/java/net/minecraft/world/gen/ChunkGeneratorHell.java
-@@ -167,7 +167,10 @@ public class ChunkGeneratorHell implements IChunkGenerator {
+@@ -165,7 +165,10 @@ public class ChunkGeneratorHell implements IChunkGenerator {
                  IBlockState var14 = NETHERRACK;
  
                  for (int var15 = 127; var15 >= 0; --var15) {
@@ -127,7 +127,7 @@ index 5d8a93d..77ec8ff 100644
                          IBlockState var16 = primer.getBlockState(var8, var15, var7);
  
                          if (var16.getBlock() != null && var16.getMaterial() != Material.AIR) {
-@@ -441,6 +444,6 @@ public class ChunkGeneratorHell implements IChunkGenerator {
+@@ -418,6 +421,6 @@ public class ChunkGeneratorHell implements IChunkGenerator {
      }
  
      public void recreateStructures(Chunk chunkIn, int x, int z) {
@@ -136,10 +136,10 @@ index 5d8a93d..77ec8ff 100644
      }
  }
 diff --git a/src/main/java/net/minecraft/world/gen/ChunkGeneratorOverworld.java b/src/main/java/net/minecraft/world/gen/ChunkGeneratorOverworld.java
-index 5759aa5..c992431 100644
+index 3a900f7..8e1d27d 100644
 --- a/src/main/java/net/minecraft/world/gen/ChunkGeneratorOverworld.java
 +++ b/src/main/java/net/minecraft/world/gen/ChunkGeneratorOverworld.java
-@@ -167,36 +167,36 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
+@@ -165,36 +165,36 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
          this.biomesForGeneration = this.world.getBiomeProvider().getBiomes(this.biomesForGeneration, x * 16, z * 16, 16, 16);
          this.replaceBiomeBlocks(x, z, chunksnapshot, this.biomesForGeneration);
  
@@ -184,7 +184,7 @@ index 5759aa5..c992431 100644
                  this.woodlandMansionGenerator.generate(this.world, x, z, chunksnapshot);
              }
          }
-@@ -355,27 +355,27 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
+@@ -353,27 +353,27 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
          ChunkPos chunkcoordintpair = new ChunkPos(x, z);
  
          if (this.mapFeaturesEnabled) {
@@ -218,7 +218,7 @@ index 5759aa5..c992431 100644
                  this.woodlandMansionGenerator.generateStructure(this.world, this.rand, chunkcoordintpair);
              }
          }
-@@ -401,7 +401,7 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
+@@ -399,7 +399,7 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
              }
          }
  
@@ -227,7 +227,7 @@ index 5759aa5..c992431 100644
              for (int k1 = 0; k1 < this.settings.dungeonChance; ++k1) {
                  int l1 = this.rand.nextInt(16) + 8;
                  int i2 = this.rand.nextInt(256);
-@@ -500,27 +500,27 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
+@@ -498,27 +498,27 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
  
      public void recreateStructures(Chunk chunkIn, int x, int z) {
          if (this.mapFeaturesEnabled) {

@@ -1,14 +1,14 @@
-From 5063490ad66e79572c6fdbc379a4d45a65c1c7a3 Mon Sep 17 00:00:00 2001
+From 5307ee46a4345bdcc94a9d5b0154d54d58dbdf2b Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Tue, 1 Mar 2016 14:47:52 -0600
 Subject: [PATCH] Affects spawning API
 
 
 diff --git a/src/main/java/net/minecraft/entity/EntityLiving.java b/src/main/java/net/minecraft/entity/EntityLiving.java
-index 6cd6b17..49a34ae 100644
+index b0dd705..6f23756 100644
 --- a/src/main/java/net/minecraft/entity/EntityLiving.java
 +++ b/src/main/java/net/minecraft/entity/EntityLiving.java
-@@ -652,7 +652,7 @@ public abstract class EntityLiving extends EntityLivingBase {
+@@ -648,7 +648,7 @@ public abstract class EntityLiving extends EntityLivingBase {
          } else {
              EntityPlayer entityhuman = this.world.getClosestPlayerToEntity(this, -1.0D);
  
@@ -18,7 +18,7 @@ index 6cd6b17..49a34ae 100644
                  double d1 = entityhuman.posY - this.posY;
                  double d2 = entityhuman.posZ - this.posZ;
 diff --git a/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java b/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java
-index 81e317d..e5c0b5c 100644
+index 7fe0c70..0fdcc81 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntitySilverfish.java
 @@ -123,7 +123,7 @@ public class EntitySilverfish extends EntityMob {
@@ -31,10 +31,10 @@ index 81e317d..e5c0b5c 100644
              return false;
          }
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayer.java b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-index 5e317ee..4233ff6 100644
+index ef2bca2..74dbedf 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayer.java
-@@ -153,6 +153,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
+@@ -151,6 +151,7 @@ public abstract class EntityPlayer extends EntityLivingBase {
      public boolean fauxSleeping;
      public String spawnWorld = "";
      public int oldLevel = -1;
@@ -43,10 +43,10 @@ index 5e317ee..4233ff6 100644
      public CraftHumanEntity getBukkitEntity() {
          return (CraftHumanEntity) super.getBukkitEntity();
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 26c35c5..80927f5 100644
+index 39094b6..857a43c 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -2804,7 +2804,7 @@ public abstract class World implements IBlockAccess {
+@@ -2758,7 +2758,7 @@ public abstract class World implements IBlockAccess {
          for (int i = 0; i < this.playerEntities.size(); ++i) {
              EntityPlayer entityhuman = this.playerEntities.get(i);
  
@@ -56,10 +56,10 @@ index 26c35c5..80927f5 100644
  
                  if (range < 0.0D || d4 < range * range) {
 diff --git a/src/main/java/net/minecraft/world/WorldEntitySpawner.java b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
-index 0294aae..6a92597 100644
+index f60d787..522244e 100644
 --- a/src/main/java/net/minecraft/world/WorldEntitySpawner.java
 +++ b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
-@@ -57,7 +57,7 @@ public final class WorldEntitySpawner {
+@@ -56,7 +56,7 @@ public final class WorldEntitySpawner {
              int i = 0;
  
              for (EntityPlayer entityhuman : worldServerIn.playerEntities) {
@@ -69,10 +69,10 @@ index 0294aae..6a92597 100644
                      int j = MathHelper.floor(entityhuman.posZ / 16.0D);
                      boolean flag3 = true;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 6ff4ec7..62fd7f3 100644
+index 1df7db7..fc45a6b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1624,6 +1624,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1599,6 +1599,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.getHandle().language;
      }
  

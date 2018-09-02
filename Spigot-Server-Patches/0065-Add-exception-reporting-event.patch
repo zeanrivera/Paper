@@ -1,4 +1,4 @@
-From e2e1b71c8b460a1664f8168e5167191245e6269c Mon Sep 17 00:00:00 2001
+From 7c752f20acd62a4a8f8cec1aeb96c0dd33e58fc3 Mon Sep 17 00:00:00 2001
 From: Joseph Hirschfeld <joe@ibj.io>
 Date: Sat, 30 Sep 2017 18:09:33 -0400
 Subject: [PATCH] Add exception reporting event
@@ -50,7 +50,7 @@ index 0000000..9339718
 +}
 \ No newline at end of file
 diff --git a/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java b/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
-index 1359ce9..6818ce9 100644
+index 198d060..2544da8 100644
 --- a/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
 +++ b/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
 @@ -1,5 +1,6 @@
@@ -60,7 +60,7 @@ index 1359ce9..6818ce9 100644
  import com.google.common.base.Predicate;
  import com.google.common.collect.Iterators;
  import com.google.common.collect.Lists;
-@@ -373,6 +374,7 @@ public class PreYggdrasilConverter {
+@@ -361,6 +362,7 @@ public class PreYggdrasilConverter {
                                      root = CompressedStreamTools.readCompressed(new FileInputStream(file1));
                                  } catch (Exception var10) {
                                      var10.printStackTrace();
@@ -68,7 +68,7 @@ index 1359ce9..6818ce9 100644
                                  }
  
                                  if (root != null) {
-@@ -387,6 +389,7 @@ public class PreYggdrasilConverter {
+@@ -375,6 +377,7 @@ public class PreYggdrasilConverter {
                                          CompressedStreamTools.writeCompressed(root, new FileOutputStream(file2));
                                      } catch (Exception var9) {
                                          var9.printStackTrace();
@@ -77,7 +77,7 @@ index 1359ce9..6818ce9 100644
                                  }
  
 diff --git a/src/main/java/net/minecraft/village/VillageSiege.java b/src/main/java/net/minecraft/village/VillageSiege.java
-index b863867..39488e7 100644
+index 08574eb..2d5f7eb 100644
 --- a/src/main/java/net/minecraft/village/VillageSiege.java
 +++ b/src/main/java/net/minecraft/village/VillageSiege.java
 @@ -3,6 +3,8 @@ package net.minecraft.village;
@@ -98,7 +98,7 @@ index b863867..39488e7 100644
              }
  
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 8097b4c..bf006cb 100644
+index 1460d6d..7ee539a 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -1,5 +1,7 @@
@@ -109,7 +109,7 @@ index 8097b4c..bf006cb 100644
  import com.google.common.base.Function;
  import com.google.common.base.MoreObjects;
  import com.google.common.base.Predicate;
-@@ -1569,8 +1571,10 @@ public abstract class World implements IBlockAccess {
+@@ -1529,8 +1531,10 @@ public abstract class World implements IBlockAccess {
                      } catch (Throwable var18) {
                          entity.tickTimer.stopTiming();
                          // Paper start - Prevent tile entity and entity crashes
@@ -121,7 +121,7 @@ index 8097b4c..bf006cb 100644
                          entity.isDead = true;
                          continue;
                          // Paper end
-@@ -1639,8 +1643,10 @@ public abstract class World implements IBlockAccess {
+@@ -1599,8 +1603,10 @@ public abstract class World implements IBlockAccess {
                              this.profiler.endSection();
                          } catch (Throwable var16) {
                              // Paper start - Prevent tile entity and entity crashes
@@ -134,7 +134,7 @@ index 8097b4c..bf006cb 100644
                              this.tickableTileEntities.remove(tileTickPosition--);
                              continue;
 diff --git a/src/main/java/net/minecraft/world/WorldEntitySpawner.java b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
-index 6a92597..fab3723 100644
+index 522244e..bf68e1d 100644
 --- a/src/main/java/net/minecraft/world/WorldEntitySpawner.java
 +++ b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
 @@ -3,6 +3,8 @@ package net.minecraft.world;
@@ -146,7 +146,7 @@ index 6a92597..fab3723 100644
  import net.minecraft.block.Block;
  import net.minecraft.block.BlockRailBase;
  import net.minecraft.block.material.Material;
-@@ -178,6 +180,7 @@ public final class WorldEntitySpawner {
+@@ -176,6 +178,7 @@ public final class WorldEntitySpawner {
                                                                          .newInstance(worldServerIn);
                                                      } catch (Exception var41) {
                                                          var41.printStackTrace();
@@ -154,7 +154,7 @@ index 6a92597..fab3723 100644
                                                          return j1;
                                                      }
  
-@@ -293,6 +296,7 @@ public final class WorldEntitySpawner {
+@@ -285,6 +288,7 @@ public final class WorldEntitySpawner {
                                  entityinsentient = biomebase_biomemeta.entityClass.getConstructor(World.class).newInstance(worldIn);
                              } catch (Exception var21) {
                                  var21.printStackTrace();
@@ -163,7 +163,7 @@ index 6a92597..fab3723 100644
                              }
  
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 2dae9cd..4a41e4d 100644
+index 06ff25e..d653ca1 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -1,5 +1,6 @@
@@ -173,7 +173,7 @@ index 2dae9cd..4a41e4d 100644
  import com.destroystokyo.paper.lighting.PaperLightingQueue; // Paper
  import com.google.common.base.Predicate;
  import com.google.common.collect.Lists;
-@@ -791,20 +792,15 @@ public class Chunk {
+@@ -788,20 +789,15 @@ public class Chunk {
              this.tileEntities.remove(pos);
              // Paper end
          } else {
@@ -204,7 +204,7 @@ index 2dae9cd..4a41e4d 100644
      }
  
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/RegionFile.java b/src/main/java/net/minecraft/world/chunk/storage/RegionFile.java
-index aec6e9a..2e811e2 100644
+index f7d4400..c0b5e7b 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/RegionFile.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/RegionFile.java
 @@ -1,5 +1,6 @@
@@ -222,7 +222,7 @@ index aec6e9a..2e811e2 100644
          }
      }
  
-@@ -203,6 +205,7 @@ public class RegionFile {
+@@ -202,6 +204,7 @@ public class RegionFile {
              this.setChunkTimestamp(x, z, (int) (MinecraftServer.getCurrentTimeMillis() / 1000L));
          } catch (IOException var12) {
              var12.printStackTrace();
@@ -318,7 +318,7 @@ index 569614b..c49fdd1 100644
          }
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
-index 6007faa..15713c5 100644
+index b041c74..5e4aef8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
 @@ -1,6 +1,9 @@
@@ -331,7 +331,7 @@ index 6007faa..15713c5 100644
  import com.google.common.util.concurrent.ThreadFactoryBuilder;
  import java.util.ArrayList;
  import java.util.Comparator;
-@@ -355,14 +358,15 @@ public class CraftScheduler implements BukkitScheduler {
+@@ -355,20 +358,21 @@ public class CraftScheduler implements BukkitScheduler {
                      try {
                          task.run();
                      } catch (Throwable var6) {
@@ -355,10 +355,8 @@ index 6007faa..15713c5 100644
                      }
  
                      this.parsePending();
-@@ -370,7 +374,7 @@ public class CraftScheduler implements BukkitScheduler {
-                     this.debugTail =
-                             this.debugTail.setNext(
-                                     new CraftAsyncDebugger(currentTick + RECENT_TICKS, task.getOwner(), task.getTaskClass()));
+                 } else {
+                     this.debugTail = this.debugTail.setNext(new CraftAsyncDebugger(currentTick + RECENT_TICKS, task.getOwner(), task.getTaskClass()));
 -                    this.executor.execute(task);
 +                    this.executor.execute(new ServerSchedulerReportingWrapper(task)); // Paper
                  }

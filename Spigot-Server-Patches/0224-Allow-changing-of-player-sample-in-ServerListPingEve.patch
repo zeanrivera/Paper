@@ -1,11 +1,11 @@
-From 31698c46583d9f62cf38950a606474c6d7286380 Mon Sep 17 00:00:00 2001
+From 020624b62cac14ffc082c80b1578a2dabeead4b1 Mon Sep 17 00:00:00 2001
 From: willies952002 <admin@domnian.com>
 Date: Sun, 29 Oct 2017 21:08:41 -0400
 Subject: [PATCH] Allow changing of player sample in ServerListPingEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java b/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java
-index 95f63b1..8261b68 100644
+index 2825b30..e4bf271 100644
 --- a/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java
 +++ b/src/main/java/net/minecraft/server/network/NetHandlerStatusServer.java
 @@ -2,11 +2,8 @@ package net.minecraft.server.network;

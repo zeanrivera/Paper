@@ -1,4 +1,4 @@
-From b31396ad201dd5c6bb287e05ddc53dac5c0a84fd Mon Sep 17 00:00:00 2001
+From d24afb09077942e20679621f23bc8e220a025e48 Mon Sep 17 00:00:00 2001
 From: BillyGalbreath <Blake.Galbreath@GMail.com>
 Date: Fri, 10 Nov 2017 23:03:12 -0500
 Subject: [PATCH] Option for maximum exp value when merging orbs
@@ -20,10 +20,10 @@ index 6c03ee7..ab188f7 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 82e3c8e..546aa8e 100644
+index f850efe..fda53b5 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -1163,18 +1163,33 @@ public abstract class World implements IBlockAccess {
+@@ -1125,17 +1125,31 @@ public abstract class World implements IBlockAccess {
                  double radius = this.spigotConfig.expMerge;
  
                  if (radius > 0.0D) {
@@ -32,9 +32,7 @@ index 82e3c8e..546aa8e 100644
 +                    final boolean mergeUnconditionally = maxValue <= 0;
 +                    if (mergeUnconditionally || xp.xpValue < maxValue) { // Paper - Skip iteration if unnecessary
 +
-+
-                     for (Entity e :
-                             this.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().grow(radius, radius, radius))) {
+                     for (Entity e : this.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().grow(radius, radius, radius))) {
                          if (e instanceof EntityXPOrb) {
                              EntityXPOrb loopItem = (EntityXPOrb) e;
  

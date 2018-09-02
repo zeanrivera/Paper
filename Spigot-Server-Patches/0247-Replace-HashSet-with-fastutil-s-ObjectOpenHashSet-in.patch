@@ -1,4 +1,4 @@
-From 8bb0ce0add1250b064419442ce822a969cfa8c85 Mon Sep 17 00:00:00 2001
+From d299587329644b59c5d1d11aca0424aa9f970ab6 Mon Sep 17 00:00:00 2001
 From: Brokkonaut <hannos17@gmx.de>
 Date: Fri, 20 Oct 2017 04:33:45 +0200
 Subject: [PATCH] Replace HashSet with fastutil's ObjectOpenHashSet in

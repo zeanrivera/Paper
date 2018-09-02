@@ -1,4 +1,4 @@
-From fa12bedb4b361369447607fabd4467b7194d9951 Mon Sep 17 00:00:00 2001
+From c4f56a326d40013a9468a3f72e15de7da99d8d1a Mon Sep 17 00:00:00 2001
 From: Minecrell <dev@minecrell.net>
 Date: Tue, 31 Oct 2017 20:21:01 -0400
 Subject: [PATCH] Include Log4J2 SLF4J implementation

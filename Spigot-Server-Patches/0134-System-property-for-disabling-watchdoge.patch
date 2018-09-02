@@ -1,11 +1,11 @@
-From 43223de18e2e40e45fa842f8a58da1a4c556e589 Mon Sep 17 00:00:00 2001
+From b3725395bfa74b668f71d5708a7a3af23fbc208f Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Mon, 9 Oct 2017 18:18:20 -0400
 Subject: [PATCH] System property for disabling watchdoge
 
 
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index d669c05..07ce350 100644
+index 09e581a..22d1b84 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
 @@ -41,7 +41,7 @@ public class WatchdogThread extends Thread {

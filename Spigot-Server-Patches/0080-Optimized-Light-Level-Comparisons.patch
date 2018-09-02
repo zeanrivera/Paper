@@ -1,4 +1,4 @@
-From 3a12a9aec08bac10de2a0c1812f4263cdd2139de Mon Sep 17 00:00:00 2001
+From 154cb7317822b5d3e3e9c2da78eb09540842b034 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 23:53:03 -0400
 Subject: [PATCH] Optimized Light Level Comparisons
@@ -8,7 +8,7 @@ Use an optimized method to test if a block position meets a desired light level.
 This method benefits from returning as soon as the desired light level matches.
 
 diff --git a/src/main/java/net/minecraft/block/BlockCrops.java b/src/main/java/net/minecraft/block/BlockCrops.java
-index bf955f6..1633022 100644
+index 63c2cd9..258ab88 100644
 --- a/src/main/java/net/minecraft/block/BlockCrops.java
 +++ b/src/main/java/net/minecraft/block/BlockCrops.java
 @@ -71,7 +71,7 @@ public class BlockCrops extends BlockBush implements IGrowable {
@@ -21,7 +21,7 @@ index bf955f6..1633022 100644
  
              if (i < this.getMaxAge()) {
 diff --git a/src/main/java/net/minecraft/block/BlockGrass.java b/src/main/java/net/minecraft/block/BlockGrass.java
-index 81ba1ca..6362b05 100644
+index af1f323..9dcf66f 100644
 --- a/src/main/java/net/minecraft/block/BlockGrass.java
 +++ b/src/main/java/net/minecraft/block/BlockGrass.java
 @@ -35,7 +35,8 @@ public class BlockGrass extends Block implements IGrowable {
@@ -67,9 +67,9 @@ index 81ba1ca..6362b05 100644
 +                            && iblockdata1.getLightOpacity() <= 2
 +                            && worldIn.isLightLevel(blockposition1.up(), 4)) { // Paper - move last check before isLightLevel to avoid unneeded light checks
                          org.bukkit.World bworld = worldIn.getWorld();
-                         BlockState blockState =
-                                 bworld.getBlockAt(blockposition1.getX(), blockposition1.getY(), blockposition1.getZ()).getState();
-@@ -75,6 +84,7 @@ public class BlockGrass extends Block implements IGrowable {
+                         BlockState blockState = bworld.getBlockAt(blockposition1.getX(), blockposition1.getY(), blockposition1.getZ()).getState();
+                         blockState.setType(CraftMagicNumbers.getMaterial(Blocks.GRASS));
+@@ -73,6 +82,7 @@ public class BlockGrass extends Block implements IGrowable {
                      }
                  }
              }
@@ -78,10 +78,10 @@ index 81ba1ca..6362b05 100644
      }
  
 diff --git a/src/main/java/net/minecraft/block/BlockSapling.java b/src/main/java/net/minecraft/block/BlockSapling.java
-index 5672f75..28b9bb2 100644
+index 475f1a8..3b3e941 100644
 --- a/src/main/java/net/minecraft/block/BlockSapling.java
 +++ b/src/main/java/net/minecraft/block/BlockSapling.java
-@@ -59,7 +59,7 @@ public class BlockSapling extends BlockBush implements IGrowable {
+@@ -56,7 +56,7 @@ public class BlockSapling extends BlockBush implements IGrowable {
          if (!worldIn.isRemote) {
              super.updateTick(worldIn, pos, state, rand);
  
@@ -104,10 +104,10 @@ index c53e3ea..41e90b0 100644
  
              if (rand.nextInt(
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityMob.java b/src/main/java/net/minecraft/entity/monster/EntityMob.java
-index d4ba8fd..344424b 100644
+index 6afbf70..8237f10 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityMob.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityMob.java
-@@ -143,16 +143,19 @@ public abstract class EntityMob extends EntityCreature implements IMob {
+@@ -139,16 +139,19 @@ public abstract class EntityMob extends EntityCreature implements IMob {
          if (this.world.getLightFor(EnumSkyBlock.SKY, blockposition) > this.rand.nextInt(32)) {
              return false;
          } else {
@@ -131,10 +131,10 @@ index d4ba8fd..344424b 100644
      }
  
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityZombie.java b/src/main/java/net/minecraft/entity/monster/EntityZombie.java
-index 8999e3e..ce428fb 100644
+index 9681ded..b475959 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityZombie.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityZombie.java
-@@ -234,7 +234,7 @@ public class EntityZombie extends EntityMob {
+@@ -230,7 +230,7 @@ public class EntityZombie extends EntityMob {
                      int k1 = k + MathHelper.getInt(this.rand, 7, 40) * MathHelper.getInt(this.rand, -1, 1);
  
                      if (this.world.getBlockState(new BlockPos(i1, j1 - 1, k1)).isTopSolid()

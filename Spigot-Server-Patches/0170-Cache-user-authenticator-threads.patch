@@ -1,11 +1,11 @@
-From d580f50d9722dcc267cd037eebd715567eab0a7a Mon Sep 17 00:00:00 2001
+From b9758ff6fe6a13b0d114eaab4528a565d8929d52 Mon Sep 17 00:00:00 2001
 From: vemacs <d@nkmem.es>
 Date: Tue, 10 Oct 2017 17:31:56 -0400
 Subject: [PATCH] Cache user authenticator threads
 
 
 diff --git a/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java b/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
-index 3e4405c..8ba7ea5 100644
+index 639c5ae..6db3909 100644
 --- a/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
 +++ b/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
 @@ -103,6 +103,13 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
@@ -22,7 +22,7 @@ index 3e4405c..8ba7ea5 100644
      public void initUUID() {
          UUID uuid;
  
-@@ -175,7 +182,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
+@@ -174,7 +181,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
              this.currentLoginState = NetHandlerLoginServer.LoginState.KEY;
              this.networkManager.sendPacket(new SPacketEncryptionRequest("", this.server.getKeyPair().getPublic(), this.verifyToken));
          } else {
@@ -31,7 +31,7 @@ index 3e4405c..8ba7ea5 100644
                          public void run() {
                              try {
                                  NetHandlerLoginServer.this.initUUID();
-@@ -193,8 +200,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
+@@ -192,8 +199,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
                                                  (Throwable) var2);
                              }
                          }
@@ -41,7 +41,7 @@ index 3e4405c..8ba7ea5 100644
          }
      }
  
-@@ -208,7 +214,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
+@@ -207,7 +213,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
              this.secretKey = packetIn.getSecretKey(privatekey);
              this.currentLoginState = NetHandlerLoginServer.LoginState.AUTHENTICATING;
              this.networkManager.enableEncryption(this.secretKey);
@@ -50,7 +50,7 @@ index 3e4405c..8ba7ea5 100644
                          public void run() {
                              GameProfile gameprofile = NetHandlerLoginServer.this.loginGameProfile;
  
-@@ -270,8 +276,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
+@@ -268,8 +274,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable
                                      ? ((InetSocketAddress) socketaddress).getAddress()
                                      : null;
                          }

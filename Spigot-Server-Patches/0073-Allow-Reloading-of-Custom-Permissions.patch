@@ -1,4 +1,4 @@
-From 364c5798acee7179650a9dd5dfaf6e3f8c709070 Mon Sep 17 00:00:00 2001
+From 4a352e8bb3ba7a3ffac5cf21f4496242635bb1aa Mon Sep 17 00:00:00 2001
 From: William <admin@domnian.com>
 Date: Sat, 30 Sep 2017 22:45:22 -0400
 Subject: [PATCH] Allow Reloading of Custom Permissions
@@ -6,10 +6,10 @@ Subject: [PATCH] Allow Reloading of Custom Permissions
 https://github.com/PaperMC/Paper/issues/49
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 4a09904..1e53b2c 100644
+index 34260f7..930afbc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1887,5 +1887,20 @@ public final class CraftServer implements Server {
+@@ -1858,5 +1858,20 @@ public final class CraftServer implements Server {
                  console.tps15.getAverage()
          };
      }

@@ -1,4 +1,4 @@
-From 964b8b4f820ef10be4586ff96338071906602ba9 Mon Sep 17 00:00:00 2001
+From c5c89964628f3bab11499aa12563f43ffafc906e Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sat, 23 Sep 2017 21:13:20 -0400
 Subject: [PATCH] Drop falling block and tnt entities at the specified height
@@ -24,7 +24,7 @@ index 18f1fad..ec5a812 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
-index a8b5785..ede979a 100644
+index d68f7ee..98a9146 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
 @@ -110,6 +110,16 @@ public class EntityFallingBlock extends Entity {
@@ -45,7 +45,7 @@ index a8b5785..ede979a 100644
                  BlockPos blockposition = new BlockPos(this);
                  boolean flag = this.fallTile.getBlock() == Blocks.CONCRETE_POWDER;
 diff --git a/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java b/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
-index 8cc289f..6bc1980 100644
+index ed65daf..2d175a6 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityTNTPrimed.java
 @@ -4,6 +4,7 @@ import javax.annotation.Nullable;

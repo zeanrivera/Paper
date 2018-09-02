@@ -1,4 +1,4 @@
-From 79202ab31575a029db2799aab4d3c5d31e35ccbe Mon Sep 17 00:00:00 2001
+From bfb63fd68111808232ea623b71c74e0b37bd0d56 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 17:45:22 -0400
 Subject: [PATCH] Paper Metrics
@@ -671,7 +671,7 @@ index 3d8ee9e..5ab2cf6 100644
  
      static void readConfig(Class<?> clazz, Object instance) {
 diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
-index 1eca998..004db76 100644
+index 8a4826c..bba9707 100644
 --- a/src/main/java/org/spigotmc/SpigotConfig.java
 +++ b/src/main/java/org/spigotmc/SpigotConfig.java
 @@ -99,6 +99,7 @@ public class SpigotConfig {

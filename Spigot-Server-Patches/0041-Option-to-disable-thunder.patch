@@ -1,4 +1,4 @@
-From 0be7b94024b627b05ef37f97bb38987d673a071a Mon Sep 17 00:00:00 2001
+From e1749df15db4f4c9343f5fac06c0221419299ed9 Mon Sep 17 00:00:00 2001
 From: Sudzzy <originmc@outlook.com>
 Date: Sun, 24 Sep 2017 18:29:53 -0400
 Subject: [PATCH] Option to disable thunder
@@ -19,10 +19,10 @@ index 214dd1c..9f632a4 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
-index 0320c9d..e352ef2 100644
+index f040299..2fd47f8 100644
 --- a/src/main/java/net/minecraft/world/WorldServer.java
 +++ b/src/main/java/net/minecraft/world/WorldServer.java
-@@ -557,7 +557,7 @@ public class WorldServer extends World implements IThreadListener {
+@@ -550,7 +550,7 @@ public class WorldServer extends World implements IThreadListener {
                  if (chunk.areNeighborsLoaded(1)) {
                      this.profiler.endStartSection("thunder");
  

@@ -1,4 +1,4 @@
-From 7b0eb4e9d392e1f46d9e74d250bf2677b098d375 Mon Sep 17 00:00:00 2001
+From e1d30b9ec6e31c63383ccbb11d49f0ec211fe646 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Mon, 9 Oct 2017 17:11:52 -0400
 Subject: [PATCH] LootTable API & Replenishable Lootables Feature
@@ -527,7 +527,7 @@ index b34fc4a..316a3b4 100644
 +    // Paper end
  }
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityLockableLoot.java b/src/main/java/net/minecraft/tileentity/TileEntityLockableLoot.java
-index f021d53..d8c7e91 100644
+index dabf1b5..254fd41 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityLockableLoot.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityLockableLoot.java
 @@ -1,34 +1,43 @@
@@ -596,7 +596,7 @@ index f021d53..d8c7e91 100644
              Random var3;
  
              if (this.lootTableSeed == 0L) {
-@@ -146,4 +155,41 @@ public abstract class TileEntityLockableLoot extends TileEntityLockable implemen
+@@ -145,4 +154,41 @@ public abstract class TileEntityLockableLoot extends TileEntityLockable implemen
      }
  
      protected abstract NonNullList<ItemStack> getItems();
@@ -659,7 +659,7 @@ index 1f63508..46265e9 100644
          super(block, TileEntityChest.class);
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftDispenser.java b/src/main/java/org/bukkit/craftbukkit/block/CraftDispenser.java
-index 143a217..6c8b2d6 100644
+index e709a6a..2800839 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftDispenser.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftDispenser.java
 @@ -1,5 +1,6 @@

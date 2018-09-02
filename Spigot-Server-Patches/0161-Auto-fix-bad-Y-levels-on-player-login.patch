@@ -1,4 +1,4 @@
-From 1ee7bed4a8d38652302f931a1945429b85e7b20e Mon Sep 17 00:00:00 2001
+From 07586a828bb4b794a26a09f021aa3994ddada5ce Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 16:36:33 -0400
 Subject: [PATCH] Auto fix bad Y levels on player login
@@ -6,10 +6,10 @@ Subject: [PATCH] Auto fix bad Y levels on player login
 Bring down to a saner Y level if super high, as this can cause the server to crash
 
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-index 0bb0378..a56d769 100644
+index fb89317..fb42a9a 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-@@ -244,6 +244,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+@@ -241,6 +241,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
  
      public void readEntityFromNBT(NBTTagCompound compound) {
          super.readEntityFromNBT(compound);

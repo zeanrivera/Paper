@@ -1,4 +1,4 @@
-From c164705634a1b37cc6f13097ba43dab042fcb2e1 Mon Sep 17 00:00:00 2001
+From 8c54a4e184ac310783fd126a14900ebf5eab26d1 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 15:37:11 -0400
 Subject: [PATCH] Fix Old Sign Conversion
@@ -21,10 +21,10 @@ index baafd88..4d55bb9 100644
      private static final RegistryNamespaced<ResourceLocation, Class<? extends TileEntity>> REGISTRY =
              new RegistryNamespaced<ResourceLocation, Class<? extends TileEntity>>();
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntitySign.java b/src/main/java/net/minecraft/tileentity/TileEntitySign.java
-index cb51ab2..10a1d20 100644
+index 876bedb..b697913 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntitySign.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntitySign.java
-@@ -94,11 +94,12 @@ public class TileEntitySign extends TileEntity {
+@@ -92,11 +92,12 @@ public class TileEntitySign extends TileEntity {
              }
  
              try {
@@ -40,10 +40,10 @@ index cb51ab2..10a1d20 100644
                          this.signText[i] = TextComponentUtils.processComponent(icommandlistener, ichatbasecomponent, (Entity) null);
                      } catch (CommandException var8) {
 diff --git a/src/main/java/net/minecraft/world/gen/structure/template/Template.java b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
-index 060182b..d8cba4f 100644
+index 94fa35f..9ae957e 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/template/Template.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
-@@ -228,9 +228,11 @@ public class Template {
+@@ -219,9 +219,11 @@ public class Template {
                                  var11.tileentityData.setInteger("x", var10.getX());
                                  var11.tileentityData.setInteger("y", var10.getY());
                                  var11.tileentityData.setInteger("z", var10.getZ());

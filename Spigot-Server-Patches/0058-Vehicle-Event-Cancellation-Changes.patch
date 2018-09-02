@@ -1,14 +1,14 @@
-From 1160ef82a6afa834cb8b6664f753027d8e6c4da8 Mon Sep 17 00:00:00 2001
+From ca65f5e6d3d7b42094dc9e03ad879a5753042480 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Wed, 27 Sep 2017 16:36:26 -0400
 Subject: [PATCH] Vehicle Event Cancellation Changes
 
 
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index 6cd2d97..37cd0bd 100644
+index f73ef3f..31b057d 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
-@@ -1953,6 +1953,7 @@ public abstract class Entity implements ICommandSender {
+@@ -1924,6 +1924,7 @@ public abstract class Entity implements ICommandSender {
          if (passenger.getRidingEntity() == this) {
              throw new IllegalStateException("Use x.stopRiding(y), not y.removePassenger(x)");
          } else {
@@ -16,7 +16,7 @@ index 6cd2d97..37cd0bd 100644
              CraftEntity craft = (CraftEntity) passenger.getBukkitEntity().getVehicle();
              Entity orig = craft == null ? null : craft.getHandle();
  
-@@ -1967,7 +1968,12 @@ public abstract class Entity implements ICommandSender {
+@@ -1938,7 +1939,12 @@ public abstract class Entity implements ICommandSender {
                  }
              }
  

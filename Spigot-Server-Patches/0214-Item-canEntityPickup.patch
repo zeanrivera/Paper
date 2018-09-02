@@ -1,17 +1,17 @@
-From 0fba63f6a91757c4806f84340036f57c2ffaa990 Mon Sep 17 00:00:00 2001
+From 6386354deaa872b28a1bae2108bee8f6461cc96a Mon Sep 17 00:00:00 2001
 From: BillyGalbreath <Blake.Galbreath@GMail.com>
 Date: Sun, 29 Oct 2017 20:10:02 -0400
 Subject: [PATCH] Item#canEntityPickup
 
 
 diff --git a/src/main/java/net/minecraft/entity/EntityLiving.java b/src/main/java/net/minecraft/entity/EntityLiving.java
-index 49a34ae..b9287b7 100644
+index 6f23756..d0f0c9d 100644
 --- a/src/main/java/net/minecraft/entity/EntityLiving.java
 +++ b/src/main/java/net/minecraft/entity/EntityLiving.java
-@@ -544,6 +544,13 @@ public abstract class EntityLiving extends EntityLivingBase {
+@@ -542,6 +542,13 @@ public abstract class EntityLiving extends EntityLivingBase {
+ 
          if (!this.world.isRemote && this.canPickUpLoot() && !this.dead && this.world.getGameRules().getBoolean("mobGriefing")) {
-             for (EntityItem entityitem :
-                     this.world.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().grow(1.0D, 0.0D, 1.0D))) {
+             for (EntityItem entityitem : this.world.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().grow(1.0D, 0.0D, 1.0D))) {
 +
 +                // Paper Start
 +                if (!entityitem.canMobPickup) {
@@ -23,10 +23,10 @@ index 49a34ae..b9287b7 100644
                      this.updateEquipmentIfNeeded(entityitem);
                  }
 diff --git a/src/main/java/net/minecraft/entity/item/EntityItem.java b/src/main/java/net/minecraft/entity/item/EntityItem.java
-index 739ae0b..9f30ede 100644
+index 526900c..18d35ad 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityItem.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityItem.java
-@@ -51,6 +51,7 @@ public class EntityItem extends Entity implements HopperPusher {
+@@ -50,6 +50,7 @@ public class EntityItem extends Entity implements HopperPusher {
      private String owner;
      public float hoverStart;
      private int lastTick;

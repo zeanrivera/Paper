@@ -1,4 +1,4 @@
-From fbf98cd18d6c191b2e6e520e393f42805a4247ac Mon Sep 17 00:00:00 2001
+From 0715230c6e996bebdcac69e92aa829ad4064c170 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 01:14:19 -0400
 Subject: [PATCH] Option to disable BlockPhysicsEvent for Redstone
@@ -25,10 +25,10 @@ index 1e91623..ed860b1 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index e7ed8ca..623825e 100644
+index dc8769d..a3a4a71 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -604,7 +604,7 @@ public abstract class World implements IBlockAccess {
+@@ -601,7 +601,7 @@ public abstract class World implements IBlockAccess {
              try {
                  CraftWorld world = ((WorldServer) this).getWorld();
  
@@ -38,7 +38,7 @@ index e7ed8ca..623825e 100644
                              new BlockPhysicsEvent(world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), CraftMagicNumbers.getId(blockIn));
                      this.getServer().getPluginManager().callEvent(event);
 diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
-index b44560a..8d47390 100644
+index 675faf5..5d6019a 100644
 --- a/src/main/java/net/minecraft/world/WorldServer.java
 +++ b/src/main/java/net/minecraft/world/WorldServer.java
 @@ -17,10 +17,7 @@ import java.util.stream.Collectors;
@@ -61,7 +61,7 @@ index b44560a..8d47390 100644
  
      public WorldServer(
              MinecraftServer p_i74_1_,
-@@ -849,12 +847,15 @@ public class WorldServer extends World implements IThreadListener {
+@@ -835,12 +833,15 @@ public class WorldServer extends World implements IThreadListener {
                      if (iblockdata.getMaterial() != net.minecraft.block.material.Material.AIR
                              && Block.isEqualTo(iblockdata.getBlock(), nextticklistentry.getBlock())) {
                          try {

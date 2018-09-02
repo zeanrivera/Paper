@@ -1,4 +1,4 @@
-From 83288074c1b127774af816259870341dcb0ac57d Mon Sep 17 00:00:00 2001
+From 946a876e9900dc20b4a86fc342910d5091253757 Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Thu, 4 Jan 2018 20:33:52 -0600
 Subject: [PATCH] Do not use a snapshot for hoppers
@@ -18,10 +18,10 @@ ontop, I managed to log 380 cases per second where a snapshot would have been
 taken in cases where the snapshot is redundant.
 
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityHopper.java b/src/main/java/net/minecraft/tileentity/TileEntityHopper.java
-index 9da7ede..900487e 100644
+index 0fda59b..e7f69f9 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityHopper.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityHopper.java
-@@ -223,12 +223,16 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
+@@ -222,12 +222,16 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
  
                          if (iinventory instanceof InventoryLargeChest) {
                              destinationInventory = new CraftInventoryDoubleChest((InventoryLargeChest) iinventory);
@@ -39,7 +39,7 @@ index 9da7ede..900487e 100644
                          this.getWorld().getServer().getPluginManager().callEvent(event);
  
                          if (event.isCancelled()) {
-@@ -369,12 +373,23 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
+@@ -367,11 +371,22 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
  
              if (inventoryIn instanceof InventoryLargeChest) {
                  sourceInventory = new CraftInventoryDoubleChest((InventoryLargeChest) inventoryIn);
@@ -50,6 +50,7 @@ index 9da7ede..900487e 100644
                  sourceInventory = inventoryIn.getOwner().getInventory();
              }
  
+-            InventoryMoveItemEvent event = new InventoryMoveItemEvent(sourceInventory, oitemstack.clone(), hopper.getOwner().getInventory(), false);
 +            Inventory destination;
 +            if (hopper instanceof TileEntity) {
 +                destination = ((TileEntity) hopper).getOwner(false).getInventory();
@@ -57,9 +58,7 @@ index 9da7ede..900487e 100644
 +                destination = hopper.getOwner().getInventory();
 +            }
 +
-             InventoryMoveItemEvent event =
--                    new InventoryMoveItemEvent(sourceInventory, oitemstack.clone(), hopper.getOwner().getInventory(), false);
-+                    new InventoryMoveItemEvent(sourceInventory, oitemstack.clone(), destination, false);
++            InventoryMoveItemEvent event = new InventoryMoveItemEvent(sourceInventory, oitemstack.clone(), destination, false);
 +            // Paper end - avoid redundant snapshot creation of a TE
              hopper.getWorld().getServer().getPluginManager().callEvent(event);
  

@@ -1,4 +1,4 @@
-From 2dba13c01188ef69a80c828e7d60628bed4e0aad Mon Sep 17 00:00:00 2001
+From ff1e39b0b1ee2391c36870262da0183b18787dbd Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 17:05:36 -0400
 Subject: [PATCH] Chunk Save Stats Debug Option
@@ -8,10 +8,10 @@ Adds a command line flag to enable stats on how chunk saves are processing.
 Stats on current queue, how many was processed and how many were queued.
 
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-index 1eca92d..9bbd780 100644
+index 191909d..f3d593d 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-@@ -168,6 +168,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+@@ -166,6 +166,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
          synchronized (lock) {
              this.chunksToSave.put(chunkcoordintpair, nbttagcompound);
          }
@@ -19,7 +19,7 @@ index 1eca92d..9bbd780 100644
          queue.add(new QueuedChunk(chunkcoordintpair, nbttagcompound));
          // Paper end
  
-@@ -190,6 +191,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+@@ -188,6 +189,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
              return false;
          } else {
              ChunkPos chunkcoordintpair = chunk.coords; // Paper - Chunk queue improvements
@@ -27,7 +27,7 @@ index 1eca92d..9bbd780 100644
  
              boolean flag;
              try {
-@@ -566,6 +568,17 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+@@ -564,6 +566,17 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
          return queue.size();
      }
  

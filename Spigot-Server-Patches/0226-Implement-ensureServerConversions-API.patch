@@ -1,4 +1,4 @@
-From 3af1c6bb4a92ed96d43af0076c542a71db6f5dff Mon Sep 17 00:00:00 2001
+From 84ea2784d1d72c6094fb23289b3c64ad0e400bce Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 21:11:56 -0400
 Subject: [PATCH] Implement ensureServerConversions API
@@ -7,10 +7,10 @@ This will take a Bukkit ItemStack and run it through any conversions a server pr
 to ensure it meets latest minecraft expectations.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
-index c7fce37..09a82c1 100644
+index faae88f..21cf0ac 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
-@@ -177,6 +177,13 @@ public final class CraftItemFactory implements ItemFactory {
+@@ -173,6 +173,13 @@ public final class CraftItemFactory implements ItemFactory {
          return DEFAULT_LEATHER_COLOR;
      }
  

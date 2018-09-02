@@ -1,4 +1,4 @@
-From 344fbd11230ccdb8d805a016a2ec1c2bdfa6d6ed Mon Sep 17 00:00:00 2001
+From 534ffdbcf94e85b80556a56d46a14f2a31912daa Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Sun, 15 Oct 2017 00:29:07 +0100
 Subject: [PATCH] revert serverside behavior of keepalives
@@ -20,10 +20,10 @@ Fields that are currently unmapped are commented while we wait on MCP
 https://github.com/ModCoderPack/MCPBot-Issues/issues/563
 
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index a3a1701..72504d1 100644
+index 7448993..9f65f36 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -224,6 +224,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -223,6 +223,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
      private int movePacketCounter;
      private int lastMovePacketCounter;
      private ServerRecipeBookHelper field_194309_H = new ServerRecipeBookHelper();
@@ -31,7 +31,7 @@ index a3a1701..72504d1 100644
      private final CraftServer server;
      private boolean processedDisconnect;
      private int lastTick = MinecraftServer.currentTick;
-@@ -342,18 +343,24 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -340,18 +341,24 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
          }
  
          this.serverController.profiler.startSection("keepAlive");

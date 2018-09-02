@@ -1,11 +1,11 @@
-From 8c5cc32904f5e42616c1682fb5ca0b1ec11eb9ef Mon Sep 17 00:00:00 2001
+From 442585a866d57cf11bff6c6c8d28f6e92e7267f2 Mon Sep 17 00:00:00 2001
 From: vemacs <d@nkmem.es>
 Date: Tue, 10 Oct 2017 17:33:15 -0400
 Subject: [PATCH] Optimize Network Queue
 
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index db4ab61..897a16d 100644
+index f1952d4..acb0846 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -161,7 +161,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre

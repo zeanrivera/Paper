@@ -1,4 +1,4 @@
-From b6d3c65fcac59f0b6934a6b35d9055d44c011ce4 Mon Sep 17 00:00:00 2001
+From e0d65b605285b626c1fca4b8b6c5769649a6aa39 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 24 Sep 2017 15:31:41 -0400
 Subject: [PATCH] Prevent tile entity and entity crashes
@@ -23,10 +23,10 @@ index bf02111..6b87083 100644
                      "Actual block type",
                      new ICrashReportDetail() {
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 7fb6216..b8d09c3 100644
+index f386cb2..ba02dbf 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -1571,10 +1571,12 @@ public abstract class World implements IBlockAccess {
+@@ -1531,10 +1531,12 @@ public abstract class World implements IBlockAccess {
                          entity.tickTimer.stopTiming(); // Paper
                      } catch (Throwable var18) {
                          entity.tickTimer.stopTiming();
@@ -43,7 +43,7 @@ index 7fb6216..b8d09c3 100644
                      }
                  }
  
-@@ -1639,10 +1641,13 @@ public abstract class World implements IBlockAccess {
+@@ -1599,10 +1601,13 @@ public abstract class World implements IBlockAccess {
                              ((ITickable) tileentity).update();
                              this.profiler.endSection();
                          } catch (Throwable var16) {

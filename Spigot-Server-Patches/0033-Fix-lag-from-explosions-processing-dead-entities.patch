@@ -1,11 +1,11 @@
-From 2572528c5f8264156f675813c303211729e6abb7 Mon Sep 17 00:00:00 2001
+From e0d610d72c971f5a850efd69f3e6b64f1207da31 Mon Sep 17 00:00:00 2001
 From: Iceee <andrew@opticgaming.tv>
 Date: Sun, 24 Sep 2017 16:45:55 -0400
 Subject: [PATCH] Fix lag from explosions processing dead entities
 
 
 diff --git a/src/main/java/net/minecraft/world/Explosion.java b/src/main/java/net/minecraft/world/Explosion.java
-index 1a1b473..19dfc82 100644
+index 72b0041..3e6bb38 100644
 --- a/src/main/java/net/minecraft/world/Explosion.java
 +++ b/src/main/java/net/minecraft/world/Explosion.java
 @@ -1,5 +1,6 @@

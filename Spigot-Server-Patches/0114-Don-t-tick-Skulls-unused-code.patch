@@ -1,11 +1,11 @@
-From a5a2dcd3d9dec44dfaec0dbc6ab6d90e6f2374ad Mon Sep 17 00:00:00 2001
+From 2549cb227bca0a1846201b4756da77a632ac48f6 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 22:34:59 -0400
 Subject: [PATCH] Don't tick Skulls - unused code
 
 
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntitySkull.java b/src/main/java/net/minecraft/tileentity/TileEntitySkull.java
-index d42ee6e..14f6a8a 100644
+index 6bfcbaa..99dcf70 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntitySkull.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntitySkull.java
 @@ -33,7 +33,7 @@ import net.minecraft.util.Mirror;

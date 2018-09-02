@@ -1,4 +1,4 @@
-From 32e622a9c35cdb7102b39cf2926c4866c54fb59b Mon Sep 17 00:00:00 2001
+From 606bc04b5f5757a0f0b83e0a7db9945805659c70 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Tue, 10 Oct 2017 16:06:17 -0400
 Subject: [PATCH] Configurable flying kick messages
@@ -21,10 +21,10 @@ index 2001175..621c585 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 838194c..b843515 100644
+index 491c2e0..5d14ec1 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -305,7 +305,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -303,7 +303,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
          if (this.floating) {
              if (++this.floatingTickCount > 80) {
                  LOGGER.warn("{} was kicked for floating too long!", (Object) this.player.getName());
@@ -33,7 +33,7 @@ index 838194c..b843515 100644
                  return;
              }
          } else {
-@@ -326,7 +326,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -324,7 +324,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
              if (this.vehicleFloating && this.player.getLowestRidingEntity().getControllingPassenger() == this.player) {
                  if (++this.vehicleFloatingTickCount > 80) {
                      LOGGER.warn("{} was kicked for floating a vehicle too long!", (Object) this.player.getName());

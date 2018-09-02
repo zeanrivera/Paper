@@ -1,4 +1,4 @@
-From dbf2118f915ffacb255ef1169723156f36dcd13e Mon Sep 17 00:00:00 2001
+From 044d87004e7e7810ddda2e8c0766a70c55a710bc Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 21:26:45 -0400
 Subject: [PATCH] Configurable Grass Spread Tick Rate
@@ -20,7 +20,7 @@ index 09e9fe4..06be217 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/block/BlockGrass.java b/src/main/java/net/minecraft/block/BlockGrass.java
-index 6362b05..4a01e77 100644
+index 9dcf66f..b1eba4f 100644
 --- a/src/main/java/net/minecraft/block/BlockGrass.java
 +++ b/src/main/java/net/minecraft/block/BlockGrass.java
 @@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;

@@ -1,4 +1,4 @@
-From 3f7341a01a9e48829c64dce3991192aa999da96e Mon Sep 17 00:00:00 2001
+From e823279785b770d9ad247b5fdf3d758864bc6962 Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Wed, 27 Sep 2017 17:27:16 -0400
 Subject: [PATCH] Player Tab List and Title APIs
@@ -39,7 +39,7 @@ index 335f65d..6430d4f 100644
  
      public void processPacket(INetHandlerPlayClient handler) {
 diff --git a/src/main/java/net/minecraft/network/play/server/SPacketTitle.java b/src/main/java/net/minecraft/network/play/server/SPacketTitle.java
-index 2a43ec6..24cdbc7 100644
+index 5cea4a8..7035102 100644
 --- a/src/main/java/net/minecraft/network/play/server/SPacketTitle.java
 +++ b/src/main/java/net/minecraft/network/play/server/SPacketTitle.java
 @@ -14,6 +14,16 @@ public class SPacketTitle implements Packet<INetHandlerPlayClient> {
@@ -59,7 +59,7 @@ index 2a43ec6..24cdbc7 100644
  
      public SPacketTitle() {}
  
-@@ -52,7 +62,13 @@ public class SPacketTitle implements Packet<INetHandlerPlayClient> {
+@@ -51,7 +61,13 @@ public class SPacketTitle implements Packet<INetHandlerPlayClient> {
          buf.writeEnumValue(this.type);
  
          if (this.type == SPacketTitle.Type.TITLE || this.type == SPacketTitle.Type.SUBTITLE || this.type == SPacketTitle.Type.ACTIONBAR) {
@@ -75,7 +75,7 @@ index 2a43ec6..24cdbc7 100644
  
          if (this.type == SPacketTitle.Type.TIMES) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 70ff32a..30a49b7 100644
+index c50f4ce..b640c3a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1,5 +1,6 @@
@@ -93,7 +93,7 @@ index 70ff32a..30a49b7 100644
  import net.minecraft.network.play.server.SPacketPlayerListItem;
  import net.minecraft.network.play.server.SPacketSoundEffect;
  import net.minecraft.network.play.server.SPacketSpawnPosition;
-@@ -1645,6 +1647,83 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1620,6 +1622,83 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public void setViewDistance(int viewDistance) {
          ((WorldServer) getHandle().world).getPlayerChunkMap().updateViewDistance(getHandle(), viewDistance);
      }

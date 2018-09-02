@@ -1,4 +1,4 @@
-From 9eac728f059dc35dd5e8b8afc73ad6b29d1232e4 Mon Sep 17 00:00:00 2001
+From 8a8749fba1865bea6771792b8a25b4e290f4b3e2 Mon Sep 17 00:00:00 2001
 From: Kyle Wood <demonwav@gmail.com>
 Date: Mon, 16 Jul 2018 22:00:22 -0500
 Subject: [PATCH] Add Spigot -> SRG mapping loader
@@ -137,7 +137,7 @@ index 0000000..84aa9aa
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 2a6c4fc..f21b820 100644
+index 8365b1b..5a17d19 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -22,6 +22,7 @@ public class Main {

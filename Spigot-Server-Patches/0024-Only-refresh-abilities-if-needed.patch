@@ -1,14 +1,14 @@
-From bea3ba3b636cb77d6ca06a82b05628ce108bc922 Mon Sep 17 00:00:00 2001
+From 89506eb5f8017f384808d2229f77cf4a34ca1388 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 1 Mar 2016 23:12:03 -0600
 Subject: [PATCH] Only refresh abilities if needed
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 62fd7f3..7bff040 100644
+index fc45a6b..2680ce3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1333,11 +1333,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1318,11 +1318,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      }
  
      public void setFlying(boolean value) {

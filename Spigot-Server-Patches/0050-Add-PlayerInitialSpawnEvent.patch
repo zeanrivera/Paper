@@ -1,11 +1,11 @@
-From 19dc8673015b2b4eb58a64b77b62640cd918c0cb Mon Sep 17 00:00:00 2001
+From 6f6e86045acbb59f14edcea7473b28b0c36a0c39 Mon Sep 17 00:00:00 2001
 From: Steve Anton <anxuiz.nx@gmail.com>
 Date: Wed, 27 Sep 2017 14:58:44 -0400
 Subject: [PATCH] Add PlayerInitialSpawnEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
-index 9bdbdd9..e1669c4 100644
+index f2a3201..9d26080 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerList.java
 @@ -150,6 +150,21 @@ public abstract class PlayerList {

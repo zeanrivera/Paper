@@ -1,4 +1,4 @@
-From 03b8567743fb99860ccf04b25f57e6447afe3e4c Mon Sep 17 00:00:00 2001
+From 2395196e9f73370debc29b43eedca5564428b204 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 23:04:12 -0400
 Subject: [PATCH] Handle Item Meta Inconsistencies
@@ -18,7 +18,7 @@ For consistency, the old API methods now forward to use the
 ItemMeta API equivalents, and should deprecate the old API's.
 
 diff --git a/src/main/java/net/minecraft/item/ItemStack.java b/src/main/java/net/minecraft/item/ItemStack.java
-index e386a7e..33438ef 100644
+index d135dee..65638ba 100644
 --- a/src/main/java/net/minecraft/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/item/ItemStack.java
 @@ -102,6 +102,22 @@ public final class ItemStack {
@@ -52,7 +52,7 @@ index e386a7e..33438ef 100644
  
              if (this.item != null) {
                  this.item.updateItemStackNBT(this.stackTagCompound);
-@@ -650,6 +667,7 @@ public final class ItemStack {
+@@ -642,6 +659,7 @@ public final class ItemStack {
  
      public void setTagCompound(@Nullable NBTTagCompound nbt) {
          this.stackTagCompound = nbt;
@@ -60,7 +60,7 @@ index e386a7e..33438ef 100644
      }
  
      public String getDisplayName() {
-@@ -721,6 +739,7 @@ public final class ItemStack {
+@@ -713,6 +731,7 @@ public final class ItemStack {
          nbttagcompound.setShort("id", (short) Enchantment.getEnchantmentID(ench));
          nbttagcompound.setShort("lvl", (short) ((byte) level));
          nbttaglist.appendTag(nbttagcompound);
@@ -86,7 +86,7 @@ index b23a913..52cddec 100644
  
      void write(DataOutput output) throws IOException {
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
-index 0f8cd04..90cf90c 100644
+index 3b1156d..4148db5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
 @@ -2,6 +2,8 @@ package org.bukkit.craftbukkit.inventory;
@@ -98,7 +98,7 @@ index 0f8cd04..90cf90c 100644
  import java.util.Map;
  import net.minecraft.enchantment.EnchantmentHelper;
  import net.minecraft.item.Item;
-@@ -162,32 +164,11 @@ public final class CraftItemStack extends ItemStack {
+@@ -160,32 +162,11 @@ public final class CraftItemStack extends ItemStack {
  
      public void addUnsafeEnchantment(Enchantment ench, int level) {
          Validate.notNull(ench, "Cannot add null enchantment");
@@ -136,7 +136,7 @@ index 0f8cd04..90cf90c 100644
      }
  
      static boolean makeTag(net.minecraft.item.ItemStack item) {
-@@ -203,63 +184,32 @@ public final class CraftItemStack extends ItemStack {
+@@ -201,63 +182,32 @@ public final class CraftItemStack extends ItemStack {
      }
  
      public boolean containsEnchantment(Enchantment ench) {
@@ -215,7 +215,7 @@ index 0f8cd04..90cf90c 100644
  
      static Map<Enchantment, Integer> getEnchantments(net.minecraft.item.ItemStack item) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
-index a37245d..547087d 100644
+index c0d1032..8cf4a2a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 @@ -1,10 +1,7 @@
@@ -273,7 +273,7 @@ index a37245d..547087d 100644
              }
  
              this.repairCost = meta.repairCost;
-@@ -331,12 +319,12 @@ class CraftMetaItem implements ItemMeta, Repairable {
+@@ -325,12 +313,12 @@ class CraftMetaItem implements ItemMeta, Repairable {
          }
      }
  
@@ -288,7 +288,7 @@ index a37245d..547087d 100644
  
              for (int i = 0; i < ench.tagCount(); ++i) {
                  int id = 65535 & ench.getCompoundTagAt(i).getShort(ENCHANTMENTS_ID.NBT);
-@@ -410,13 +398,13 @@ class CraftMetaItem implements ItemMeta, Repairable {
+@@ -404,13 +392,13 @@ class CraftMetaItem implements ItemMeta, Repairable {
  
      void deserializeInternal(NBTTagCompound tag) {}
  
@@ -304,7 +304,7 @@ index a37245d..547087d 100644
  
              for (Entry<?, ?> entry : ench.entrySet()) {
                  String enchantKey = entry.getKey().toString();
-@@ -569,14 +557,14 @@ class CraftMetaItem implements ItemMeta, Repairable {
+@@ -563,14 +551,14 @@ class CraftMetaItem implements ItemMeta, Repairable {
      }
  
      public Map<Enchantment, Integer> getEnchants() {
@@ -321,7 +321,7 @@ index a37245d..547087d 100644
          }
  
          if (ignoreRestrictions || level >= ench.getStartLevel() && level <= ench.getMaxLevel()) {
-@@ -770,7 +758,7 @@ class CraftMetaItem implements ItemMeta, Repairable {
+@@ -762,7 +750,7 @@ class CraftMetaItem implements ItemMeta, Repairable {
              }
  
              if (this.enchantments != null) {
@@ -330,7 +330,7 @@ index a37245d..547087d 100644
              }
  
              clone.hideFlag = this.hideFlag;
-@@ -932,6 +920,23 @@ class CraftMetaItem implements ItemMeta, Repairable {
+@@ -923,6 +911,23 @@ class CraftMetaItem implements ItemMeta, Repairable {
          }
      }
  

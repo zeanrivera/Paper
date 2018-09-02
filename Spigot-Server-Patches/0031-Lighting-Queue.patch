@@ -1,4 +1,4 @@
-From b835e976e9daff35e4036f690bcac3c94e4fb620 Mon Sep 17 00:00:00 2001
+From 31fc50622762a26bf1fb03a6c79652128c414734 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sun, 24 Sep 2017 16:16:38 -0400
 Subject: [PATCH] Lighting Queue
@@ -144,7 +144,7 @@ index 0000000..aecdce1
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 985fdfd..4aa18db 100644
+index 6d3be77..4a9c59a 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1,5 +1,6 @@
@@ -179,12 +179,12 @@ index 985fdfd..4aa18db 100644
          co.aikar.timings.TimingsManager.FULL_SERVER_TICK.stopTiming(); // Paper
      }
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index b8d09c3..c7432c6 100644
+index ba02dbf..9799eaf 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -476,7 +476,7 @@ public abstract class World implements IBlockAccess {
-                 if (newState.getLightOpacity() != iblockdata1.getLightOpacity()
-                         || newState.getLightValue() != iblockdata1.getLightValue()) {
+@@ -474,7 +474,7 @@ public abstract class World implements IBlockAccess {
+             } else {
+                 if (newState.getLightOpacity() != iblockdata1.getLightOpacity() || newState.getLightValue() != iblockdata1.getLightValue()) {
                      this.profiler.startSection("checkLight");
 -                    this.checkLight(pos);
 +                    chunk.runOrQueueLightUpdate(() -> this.checkLight(pos)); // Paper - Queue light updates
@@ -192,7 +192,7 @@ index b8d09c3..c7432c6 100644
                  }
  
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 1a062b5..912d746 100644
+index 33b7382..b32f93c 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -1,5 +1,6 @@
@@ -234,15 +234,15 @@ index 1a062b5..912d746 100644
                      int j1 = state.getLightOpacity();
                      int k1 = iblockdata1.getLightOpacity();
  
-@@ -517,6 +527,7 @@ public class Chunk {
-                             && (j1 < k1 || this.getLightFor(EnumSkyBlock.SKY, pos) > 0 || this.getLightFor(EnumSkyBlock.BLOCK, pos) > 0)) {
+@@ -516,6 +526,7 @@ public class Chunk {
+                     if (j1 != k1 && (j1 < k1 || this.getLightFor(EnumSkyBlock.SKY, pos) > 0 || this.getLightFor(EnumSkyBlock.BLOCK, pos) > 0)) {
                          this.propagateSkylightOcclusion(i, k);
                      }
 +                    });
                  }
  
                  if (block1 instanceof ITileEntityProvider) {
-@@ -1336,6 +1347,15 @@ public class Chunk {
+@@ -1326,6 +1337,15 @@ public class Chunk {
          this.inhabitedTime = newInhabitedTime;
      }
  

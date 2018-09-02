@@ -1,4 +1,4 @@
-From 207b3720f0d6ce361d126a36477ebec5e90199dd Mon Sep 17 00:00:00 2001
+From 8180b97cd5b39486e14bc28b71493fe84ede3058 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Wed, 2 Mar 2016 11:59:48 -0600
 Subject: [PATCH] Optimize explosions
@@ -25,7 +25,7 @@ index 188a276..9734e6c 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 4aa18db..1dfcc57 100644
+index 4a9c59a..79c3304 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -904,6 +904,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -37,7 +37,7 @@ index 4aa18db..1dfcc57 100644
              this.profiler.endSection();
          }
 diff --git a/src/main/java/net/minecraft/world/Explosion.java b/src/main/java/net/minecraft/world/Explosion.java
-index 19dfc82..a8c66d8 100644
+index 3e6bb38..11f6877 100644
 --- a/src/main/java/net/minecraft/world/Explosion.java
 +++ b/src/main/java/net/minecraft/world/Explosion.java
 @@ -138,7 +138,7 @@ public class Explosion {
@@ -49,7 +49,7 @@ index 19dfc82..a8c66d8 100644
                              double d13 = (1.0D - d7) * d12;
                              CraftEventFactory.entityDamage = this.exploder;
                              entity.forceExplosionKnockback = false;
-@@ -317,4 +317,85 @@ public class Explosion {
+@@ -310,4 +310,85 @@ public class Explosion {
      public List<BlockPos> getAffectedBlockPositions() {
          return this.affectedBlockPositions;
      }
@@ -136,7 +136,7 @@ index 19dfc82..a8c66d8 100644
 +    // Paper end
  }
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index c7432c6..94c2089 100644
+index 9799eaf..48e84c1 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
 @@ -5,15 +5,8 @@ import com.google.common.base.MoreObjects;

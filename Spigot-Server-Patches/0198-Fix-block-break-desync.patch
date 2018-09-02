@@ -1,14 +1,14 @@
-From ce0d1e1acc58cada513bd227e5bd62423652b204 Mon Sep 17 00:00:00 2001
+From 1c581c3f138d2ec2cefb93288e3ab91cede76667 Mon Sep 17 00:00:00 2001
 From: Michael Himing <mhiming@gmail.com>
 Date: Fri, 20 Oct 2017 22:08:10 -0400
 Subject: [PATCH] Fix block break desync
 
 
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index b86b8fd..929312b 100644
+index 9eead06..fb17aa9 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -1070,6 +1070,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1050,6 +1050,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                      double d3 = d0 * d0 + d1 * d1 + d2 * d2;
  
                      if (d3 > 36.0D) {

@@ -1,4 +1,4 @@
-From 2d874f89d9727f9abeb55194f8c5849b23991957 Mon Sep 17 00:00:00 2001
+From 929721e19d70cabb5be0431dcb6100a38b81761a Mon Sep 17 00:00:00 2001
 From: killme <killme-git@ibts.me>
 Date: Sun, 12 Nov 2017 19:40:01 +0100
 Subject: [PATCH] Prevent logins from being processed when the player has
@@ -23,7 +23,7 @@ index 7eae351..45e9880 100644
  import org.bukkit.Location;
  import org.bukkit.craftbukkit.CraftWorld;
 diff --git a/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java b/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
-index 578d68c..293f4cf 100644
+index 60d43bf..33f695d 100644
 --- a/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
 +++ b/src/main/java/net/minecraft/server/network/NetHandlerLoginServer.java
 @@ -71,7 +71,11 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer, ITickable

@@ -1,4 +1,4 @@
-From 6970b3c3f9eb5a23bc36ac17c3df7d96a3b95f5e Mon Sep 17 00:00:00 2001
+From d95fd4f0ed079e639035a330b44953ad1541d180 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sat, 23 Sep 2017 22:24:50 -0400
 Subject: [PATCH] Disable chest ticking
@@ -92,7 +92,7 @@ index 4f3e850..96aadc7 100644
              this.world.notifyNeighborsOfStateChange(this.pos, this.getBlockType(), false);
  
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java b/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java
-index 8067f15..899d0aa 100644
+index 9f3add0..2fa5edd 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityEnderChest.java
 @@ -6,13 +6,15 @@ import net.minecraft.init.SoundEvents;

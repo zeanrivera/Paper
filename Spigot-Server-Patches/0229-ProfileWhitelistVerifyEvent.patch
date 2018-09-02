@@ -1,14 +1,14 @@
-From ec36f44e9a3083653caa30cceed71416ac1bc2b2 Mon Sep 17 00:00:00 2001
+From 42a8c99f797a5a9ac651229f51f215c231df9e8b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 21:25:37 -0400
 Subject: [PATCH] ProfileWhitelistVerifyEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
-index cb88426..4c9bdd7 100644
+index 549970a..929c21d 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerList.java
-@@ -562,8 +562,8 @@ public abstract class PlayerList {
+@@ -552,8 +552,8 @@ public abstract class PlayerList {
              if (!gameprofilebanentry.hasBanExpired()) {
                  event.disallow(Result.KICK_BANNED, s);
              }
@@ -19,7 +19,7 @@ index cb88426..4c9bdd7 100644
          } else if (this.getBannedIPs().isBanned(socketaddress) && !this.getBannedIPs().getBanEntry(socketaddress).hasBanExpired()) {
              UserListIPBansEntry ipbanentry = this.bannedIPs.getBanEntry(socketaddress);
              String s = "Your IP address is banned from this server!\nReason: " + ipbanentry.getBanReason();
-@@ -1093,8 +1093,24 @@ public abstract class PlayerList {
+@@ -1082,8 +1082,24 @@ public abstract class PlayerList {
          }
      }
  

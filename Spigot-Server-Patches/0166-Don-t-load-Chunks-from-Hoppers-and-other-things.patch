@@ -1,4 +1,4 @@
-From 3ad04b00beddc6668091f97dfb7ba0988fd09e5d Mon Sep 17 00:00:00 2001
+From d1f5acb6c54d5a1ef4e9aff17187cfd8c4d7d664 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 16:56:47 -0400
 Subject: [PATCH] Don't load Chunks from Hoppers and other things
@@ -13,10 +13,10 @@ This of course is undesirable, so just return the loaded side as "primary"
 and treat it as a single chest if the other sides are unloaded
 
 diff --git a/src/main/java/net/minecraft/block/BlockChest.java b/src/main/java/net/minecraft/block/BlockChest.java
-index a7da4ea..84c3ef9 100644
+index 9f6dac8..aed7cfc 100644
 --- a/src/main/java/net/minecraft/block/BlockChest.java
 +++ b/src/main/java/net/minecraft/block/BlockChest.java
-@@ -370,8 +370,13 @@ public class BlockChest extends BlockContainer {
+@@ -369,8 +369,13 @@ public class BlockChest extends BlockContainer {
              } else {
                  for (EnumFacing var7 : EnumFacing.Plane.HORIZONTAL) {
                      BlockPos var8 = pos.offset(var7);

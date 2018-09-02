@@ -1,20 +1,18 @@
-From 4b4cbae66ae1750316f6ec9c45df22ac2a779292 Mon Sep 17 00:00:00 2001
+From 81315ca85d0207cc169f7c90fee7dd79f7993f62 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Sat, 30 Sep 2017 21:49:16 -0400
 Subject: [PATCH] Complete resource pack API
 
 
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 78c2c7b..b04f4cb 100644
+index 0eebdb0..d743b6e 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -1265,9 +1265,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1245,7 +1245,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
  
      public void handleResourcePackStatus(CPacketResourcePackStatus packetIn) {
          PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.player.getServerWorld());
--        this.server
--                .getPluginManager()
--                .callEvent(new PlayerResourcePackStatusEvent(this.getPlayer(), Status.values()[packetIn.action.ordinal()]));
+-        this.server.getPluginManager().callEvent(new PlayerResourcePackStatusEvent(this.getPlayer(), Status.values()[packetIn.action.ordinal()]));
 +        // Paper start
 +        final PlayerResourcePackStatusEvent.Status status = PlayerResourcePackStatusEvent.Status.values()[packetIn.action.ordinal()];
 +        this.getPlayer().setResourcePackStatus(status);
@@ -24,10 +22,10 @@ index 78c2c7b..b04f4cb 100644
  
      public void processSteerBoat(CPacketSteerBoat packetIn) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 1bd1a43..0dc6fde 100644
+index b1182f4..3e47b09 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -289,6 +289,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -286,6 +286,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                      return getHandle().ping;
                  }
              };
@@ -38,7 +36,7 @@ index 1bd1a43..0dc6fde 100644
  
      public CraftPlayer(CraftServer server, EntityPlayerMP entity) {
          super(server, entity);
-@@ -1725,6 +1729,32 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1700,6 +1704,32 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public void hideTitle() {
          getHandle().connection.sendPacket(new SPacketTitle(SPacketTitle.Type.CLEAR, (BaseComponent[]) null, 0, 0, 0));
      }

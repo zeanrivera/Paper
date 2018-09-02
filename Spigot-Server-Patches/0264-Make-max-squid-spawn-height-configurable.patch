@@ -1,4 +1,4 @@
-From 0bce40426f0700d756ca65924c134d193ec4d3fa Mon Sep 17 00:00:00 2001
+From 6d25eefc6474f9fa5bc7f9bd42f7528220ccec12 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Thu, 11 Jan 2018 16:47:28 -0600
 Subject: [PATCH] Make max squid spawn height configurable
@@ -21,21 +21,20 @@ index 0e3079e..c7f576e 100644
 +
  }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntitySquid.java b/src/main/java/net/minecraft/entity/passive/EntitySquid.java
-index 03bea08..37b6d81 100644
+index 027a95f..be4ffbc 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntitySquid.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntitySquid.java
-@@ -156,8 +156,10 @@ public class EntitySquid extends EntityWaterMob {
+@@ -156,7 +156,9 @@ public class EntitySquid extends EntityWaterMob {
      }
  
      public boolean getCanSpawnHere() {
+-        return this.posY > this.world.spigotConfig.squidSpawnRangeMin && this.posY < (double) this.world.getSeaLevel() && super.getCanSpawnHere();
 +        // Paper - Make max spawn height configurable
 +        final double maxHeight = world.paperConfig.squidMaxSpawnHeight > 0 ? world.paperConfig.squidMaxSpawnHeight : world.getSeaLevel();
-         return this.posY > this.world.spigotConfig.squidSpawnRangeMin
--                && this.posY < (double) this.world.getSeaLevel()
-+                && this.posY < maxHeight
-                 && super.getCanSpawnHere();
++        return this.posY > this.world.spigotConfig.squidSpawnRangeMin && this.posY < maxHeight && super.getCanSpawnHere();
      }
  
+     public void setMovementVector(float randomMotionVecXIn, float randomMotionVecYIn, float randomMotionVecZIn) {
 -- 
 2.18.0
 

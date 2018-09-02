@@ -1,4 +1,4 @@
-From 245fc306dd140414b67ca4054680b092e05a9b65 Mon Sep 17 00:00:00 2001
+From e0cc70410dc75756aaf7d214246004fcd3fa29a4 Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Sun, 29 Oct 2017 21:04:23 -0400
 Subject: [PATCH] Add missing coverages for getTileEntity in order to attempt
@@ -6,7 +6,7 @@ Subject: [PATCH] Add missing coverages for getTileEntity in order to attempt
 
 
 diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
-index ae78dc9..d6f052e 100644
+index 65c5128..6975141 100644
 --- a/src/main/java/net/minecraft/world/WorldServer.java
 +++ b/src/main/java/net/minecraft/world/WorldServer.java
 @@ -3,18 +3,6 @@ package net.minecraft.world;
@@ -108,7 +108,7 @@ index ae78dc9..d6f052e 100644
  public class WorldServer extends World implements IThreadListener {
      private static final Logger LOGGER = LogManager.getLogger();
      private final MinecraftServer mcServer;
-@@ -223,101 +179,111 @@ public class WorldServer extends World implements IThreadListener {
+@@ -219,101 +175,111 @@ public class WorldServer extends World implements IThreadListener {
          TileEntity result = super.getTileEntity(pos);
          Block type = this.getBlockState(pos).getBlock();
  

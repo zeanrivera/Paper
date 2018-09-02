@@ -1,4 +1,4 @@
-From 93e8ddb0bdeedcec003ae010e5a58837027d5fed Mon Sep 17 00:00:00 2001
+From 9a2841928ae721e5d195255e5469f51469a65117 Mon Sep 17 00:00:00 2001
 From: Alfie Cleveland <alfeh@me.com>
 Date: Fri, 20 Oct 2017 20:19:22 -0400
 Subject: [PATCH] Stricter isDisconnected and isMovementBlocked checks
@@ -6,10 +6,10 @@ Subject: [PATCH] Stricter isDisconnected and isMovementBlocked checks
 Credit to prplz for figuring out specifics
 
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-index f6ca53e..7cfad60 100644
+index 58c2b1a..7c76846 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-@@ -1550,7 +1550,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+@@ -1521,7 +1521,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
      }
  
      public boolean isMovementBlocked() {
@@ -19,10 +19,10 @@ index f6ca53e..7cfad60 100644
  
      public Scoreboard getWorldScoreboard() {
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 42af5a6..b86b8fd 100644
+index e342e2d..9eead06 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -2887,6 +2887,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -2830,6 +2830,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
      }
  
      public final boolean isDisconnected() {

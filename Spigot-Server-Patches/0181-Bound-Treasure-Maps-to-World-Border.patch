@@ -1,4 +1,4 @@
-From 9deaf5f3dd258b5bf202807feab9a08ea83cd659 Mon Sep 17 00:00:00 2001
+From 6b18212d1e0c3bdb5b376bffa8c3adae8b6ef919 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 19:54:33 -0400
 Subject: [PATCH] Bound Treasure Maps to World Border

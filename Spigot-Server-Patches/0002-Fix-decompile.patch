@@ -1,33 +1,32 @@
-From 6d1f60b99915e08853c82c9a610b7395f576c091 Mon Sep 17 00:00:00 2001
+From 74b5616ad7669ee2d384ce19054c8404b2918d96 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Fri, 15 Sep 2017 22:45:59 -0400
 Subject: [PATCH] Fix decompile
 
 
 diff --git a/src/main/java/net/minecraft/advancements/Advancement.java b/src/main/java/net/minecraft/advancements/Advancement.java
-index 4ac91a5..342caf2 100644
+index c92b9d9..95c20ab 100644
 --- a/src/main/java/net/minecraft/advancements/Advancement.java
 +++ b/src/main/java/net/minecraft/advancements/Advancement.java
-@@ -224,7 +224,7 @@ public class Advancement {
+@@ -222,7 +222,7 @@ public class Advancement {
+             DisplayInfo advancementdisplay = json.has("display") ? DisplayInfo.deserialize(JsonUtils.getJsonObject(json, "display"), context) : null;
              AdvancementRewards advancementrewards =
-                     (AdvancementRewards)
-                             JsonUtils.deserializeClass(json, "rewards", AdvancementRewards.EMPTY, context, AdvancementRewards.class);
+                     (AdvancementRewards) JsonUtils.deserializeClass(json, "rewards", AdvancementRewards.EMPTY, context, AdvancementRewards.class);
 -            Map map = Criterion.criteriaFromJson(JsonUtils.getJsonObject(json, "criteria"), context);
 +            Map<String, Criterion> map = Criterion.criteriaFromJson(JsonUtils.getJsonObject(json, "criteria"), context);
  
              if (map.isEmpty()) {
                  throw new JsonSyntaxException("Advancement criteria cannot be empty");
 diff --git a/src/main/java/net/minecraft/advancements/AdvancementManager.java b/src/main/java/net/minecraft/advancements/AdvancementManager.java
-index fbd4c64..8b635d8 100644
+index ea29698..748fcfb 100644
 --- a/src/main/java/net/minecraft/advancements/AdvancementManager.java
 +++ b/src/main/java/net/minecraft/advancements/AdvancementManager.java
-@@ -54,12 +54,6 @@ public class AdvancementManager {
+@@ -54,11 +54,6 @@ public class AdvancementManager {
                                      JsonObject jsonobject = JsonUtils.getJsonObject(jsonelement, "advancement");
                                      return Advancement.Builder.deserialize(jsonobject, jsondeserializationcontext);
                                  }
 -
--                                public Object deserialize(
--                                        JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext)
+-                                public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext)
 -                                        throws JsonParseException {
 -                                    return this.deserialize(jsonelement, type, jsondeserializationcontext);
 -                                }
@@ -48,7 +47,7 @@ index 907bea9..63ca69f 100644
  
          while (var4.hasNext()) {
 diff --git a/src/main/java/net/minecraft/advancements/PlayerAdvancements.java b/src/main/java/net/minecraft/advancements/PlayerAdvancements.java
-index fb85378..b3988c7 100644
+index 7902064..1765312 100644
 --- a/src/main/java/net/minecraft/advancements/PlayerAdvancements.java
 +++ b/src/main/java/net/minecraft/advancements/PlayerAdvancements.java
 @@ -90,7 +90,7 @@ public class PlayerAdvancements {
@@ -96,10 +95,10 @@ index 82693b4..421c620 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((BrewedPotionTrigger.Instance) var4.getCriterionInstance()).test(potion)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java
-index df972d3..64ef837 100644
+index 4393eec..d6b9dc6 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/ChangeDimensionTrigger.java
-@@ -108,7 +108,7 @@ public class ChangeDimensionTrigger implements ICriterionTrigger<ChangeDimension
+@@ -107,7 +107,7 @@ public class ChangeDimensionTrigger implements ICriterionTrigger<ChangeDimension
          }
  
          public void trigger(DimensionType from, DimensionType to) {
@@ -109,10 +108,10 @@ index df972d3..64ef837 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((ChangeDimensionTrigger.Instance) var5.getCriterionInstance()).test(from, to)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java
-index 20037c5..44209e7 100644
+index 6c274c0..fa4e68f 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/ConstructBeaconTrigger.java
-@@ -99,7 +99,7 @@ public class ConstructBeaconTrigger implements ICriterionTrigger<ConstructBeacon
+@@ -98,7 +98,7 @@ public class ConstructBeaconTrigger implements ICriterionTrigger<ConstructBeacon
          }
  
          public void trigger(TileEntityBeacon beacon) {
@@ -135,10 +134,10 @@ index ca5db1c..f5d6a60 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((ConsumeItemTrigger.Instance) var4.getCriterionInstance()).test(item)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java b/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java
-index 9ecad92..150c128 100644
+index 383f4d7..a98d600 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/CuredZombieVillagerTrigger.java
-@@ -108,7 +108,7 @@ public class CuredZombieVillagerTrigger implements ICriterionTrigger<CuredZombie
+@@ -106,7 +106,7 @@ public class CuredZombieVillagerTrigger implements ICriterionTrigger<CuredZombie
          }
  
          public void trigger(EntityPlayerMP player, EntityZombie zombie, EntityVillager villager) {
@@ -148,10 +147,10 @@ index 9ecad92..150c128 100644
              for (ICriterionTrigger.Listener var6 : this.listeners) {
                  if (((CuredZombieVillagerTrigger.Instance) var6.getCriterionInstance()).test(player, zombie, villager)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java
-index 585af4d..b35a867 100644
+index 802e0a4..35e9fec 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/EffectsChangedTrigger.java
-@@ -98,7 +98,7 @@ public class EffectsChangedTrigger implements ICriterionTrigger<EffectsChangedTr
+@@ -97,7 +97,7 @@ public class EffectsChangedTrigger implements ICriterionTrigger<EffectsChangedTr
          }
  
          public void trigger(EntityPlayerMP player) {
@@ -161,10 +160,10 @@ index 585af4d..b35a867 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((EffectsChangedTrigger.Instance) var4.getCriterionInstance()).test(player)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java
-index 41f45e2..37a1d13 100644
+index f620424..f0c321f 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/EnchantedItemTrigger.java
-@@ -106,7 +106,7 @@ public class EnchantedItemTrigger implements ICriterionTrigger<EnchantedItemTrig
+@@ -105,7 +105,7 @@ public class EnchantedItemTrigger implements ICriterionTrigger<EnchantedItemTrig
          }
  
          public void trigger(ItemStack item, int levelsIn) {
@@ -174,10 +173,10 @@ index 41f45e2..37a1d13 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((EnchantedItemTrigger.Instance) var5.getCriterionInstance()).test(item, levelsIn)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java
-index 21e8afb..e0521d9 100644
+index 8846948..ec702b9 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/EnterBlockTrigger.java
-@@ -176,7 +176,7 @@ public class EnterBlockTrigger implements ICriterionTrigger<EnterBlockTrigger.In
+@@ -175,7 +175,7 @@ public class EnterBlockTrigger implements ICriterionTrigger<EnterBlockTrigger.In
          }
  
          public void trigger(IBlockState state) {
@@ -187,10 +186,10 @@ index 21e8afb..e0521d9 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((EnterBlockTrigger.Instance) var4.getCriterionInstance()).test(state)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java b/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java
-index 9ccb13b..596395c 100644
+index c1fbcf5..83197ca 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/EntityHurtPlayerTrigger.java
-@@ -100,7 +100,7 @@ public class EntityHurtPlayerTrigger implements ICriterionTrigger<EntityHurtPlay
+@@ -98,7 +98,7 @@ public class EntityHurtPlayerTrigger implements ICriterionTrigger<EntityHurtPlay
          }
  
          public void trigger(EntityPlayerMP player, DamageSource source, float amountDealt, float amountTaken, boolean wasBlocked) {
@@ -198,12 +197,12 @@ index 9ccb13b..596395c 100644
 +            ArrayList<Listener> var6 = null;
  
              for (ICriterionTrigger.Listener var8 : this.listeners) {
-                 if (((EntityHurtPlayerTrigger.Instance) var8.getCriterionInstance())
+                 if (((EntityHurtPlayerTrigger.Instance) var8.getCriterionInstance()).test(player, source, amountDealt, amountTaken, wasBlocked)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java b/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java
-index 0ed7ea4..6828673 100644
+index a28b814..d855045 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/InventoryChangeTrigger.java
-@@ -151,7 +151,7 @@ public class InventoryChangeTrigger implements ICriterionTrigger<InventoryChange
+@@ -150,7 +150,7 @@ public class InventoryChangeTrigger implements ICriterionTrigger<InventoryChange
          }
  
          public void trigger(InventoryPlayer inventory) {
@@ -213,10 +212,10 @@ index 0ed7ea4..6828673 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((InventoryChangeTrigger.Instance) var4.getCriterionInstance()).test(inventory)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java b/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java
-index 1416f29..9e23aee 100644
+index fba5073..dbc42ee 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/ItemDurabilityTrigger.java
-@@ -111,7 +111,7 @@ public class ItemDurabilityTrigger implements ICriterionTrigger<ItemDurabilityTr
+@@ -110,7 +110,7 @@ public class ItemDurabilityTrigger implements ICriterionTrigger<ItemDurabilityTr
          }
  
          public void trigger(ItemStack item, int newDurability) {
@@ -226,10 +225,10 @@ index 1416f29..9e23aee 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((ItemDurabilityTrigger.Instance) var5.getCriterionInstance()).test(item, newDurability)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java b/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java
-index 7e56b7a..2fd1d81 100644
+index f98b29d..cb35669 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/KilledTrigger.java
-@@ -105,7 +105,7 @@ public class KilledTrigger implements ICriterionTrigger<KilledTrigger.Instance>
+@@ -104,7 +104,7 @@ public class KilledTrigger implements ICriterionTrigger<KilledTrigger.Instance>
          }
  
          public void trigger(EntityPlayerMP player, Entity entity, DamageSource source) {
@@ -239,10 +238,10 @@ index 7e56b7a..2fd1d81 100644
              for (ICriterionTrigger.Listener var6 : this.listeners) {
                  if (((KilledTrigger.Instance) var6.getCriterionInstance()).test(player, entity, source)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java b/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java
-index a5b2f0b..f223969 100644
+index 76454c0..80b0243 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/LevitationTrigger.java
-@@ -105,7 +105,7 @@ public class LevitationTrigger implements ICriterionTrigger<LevitationTrigger.In
+@@ -104,7 +104,7 @@ public class LevitationTrigger implements ICriterionTrigger<LevitationTrigger.In
          }
  
          public void trigger(EntityPlayerMP player, Vec3d startPos, int durationIn) {
@@ -265,10 +264,10 @@ index 534eeda..4e1f91a 100644
              for (ICriterionTrigger.Listener var11 : this.listeners) {
                  if (((NetherTravelTrigger.Instance) var11.getCriterionInstance()).test(world, enteredNetherPosition, x, y, z)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java b/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java
-index 0e54368..962339f 100644
+index 729df50..fa93f2d 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/PlacedBlockTrigger.java
-@@ -194,7 +194,7 @@ public class PlacedBlockTrigger implements ICriterionTrigger<PlacedBlockTrigger.
+@@ -190,7 +190,7 @@ public class PlacedBlockTrigger implements ICriterionTrigger<PlacedBlockTrigger.
          }
  
          public void trigger(IBlockState state, BlockPos pos, WorldServer world, ItemStack item) {
@@ -278,10 +277,10 @@ index 0e54368..962339f 100644
              for (ICriterionTrigger.Listener var7 : this.listeners) {
                  if (((PlacedBlockTrigger.Instance) var7.getCriterionInstance()).test(state, pos, world, item)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java b/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java
-index cff603e..674f3a9 100644
+index bbe92d7..d96199e 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/PlayerHurtEntityTrigger.java
-@@ -109,7 +109,7 @@ public class PlayerHurtEntityTrigger implements ICriterionTrigger<PlayerHurtEnti
+@@ -106,7 +106,7 @@ public class PlayerHurtEntityTrigger implements ICriterionTrigger<PlayerHurtEnti
          }
  
          public void trigger(EntityPlayerMP player, Entity entity, DamageSource source, float dealt, float taken, boolean blocked) {
@@ -291,10 +290,10 @@ index cff603e..674f3a9 100644
              for (ICriterionTrigger.Listener var9 : this.listeners) {
                  if (((PlayerHurtEntityTrigger.Instance) var9.getCriterionInstance()).test(player, entity, source, dealt, taken, blocked)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java b/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java
-index c8ba441..5c5bda6 100644
+index 9053054..30f89e1 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/PositionTrigger.java
-@@ -102,7 +102,7 @@ public class PositionTrigger implements ICriterionTrigger<PositionTrigger.Instan
+@@ -101,7 +101,7 @@ public class PositionTrigger implements ICriterionTrigger<PositionTrigger.Instan
          }
  
          public void trigger(WorldServer world, double x, double y, double z) {
@@ -304,10 +303,10 @@ index c8ba441..5c5bda6 100644
              for (ICriterionTrigger.Listener var10 : this.listeners) {
                  if (((PositionTrigger.Instance) var10.getCriterionInstance()).test(world, x, y, z)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/RecipeUnlockedTrigger.java b/src/main/java/net/minecraft/advancements/critereon/RecipeUnlockedTrigger.java
-index 2541cc3..59c3ed2 100644
+index d82134d..3d7b2fe 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/RecipeUnlockedTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/RecipeUnlockedTrigger.java
-@@ -108,7 +108,7 @@ public class RecipeUnlockedTrigger implements ICriterionTrigger<RecipeUnlockedTr
+@@ -107,7 +107,7 @@ public class RecipeUnlockedTrigger implements ICriterionTrigger<RecipeUnlockedTr
          }
  
          public void trigger(IRecipe recipe) {
@@ -317,10 +316,10 @@ index 2541cc3..59c3ed2 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((RecipeUnlockedTrigger.Instance) var4.getCriterionInstance()).test(recipe)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java b/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java
-index 9151941..9dc3d77 100644
+index efb7783..930ef4b 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/SummonedEntityTrigger.java
-@@ -99,7 +99,7 @@ public class SummonedEntityTrigger implements ICriterionTrigger<SummonedEntityTr
+@@ -98,7 +98,7 @@ public class SummonedEntityTrigger implements ICriterionTrigger<SummonedEntityTr
          }
  
          public void trigger(EntityPlayerMP player, Entity entity) {
@@ -330,10 +329,10 @@ index 9151941..9dc3d77 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((SummonedEntityTrigger.Instance) var5.getCriterionInstance()).test(player, entity)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java b/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java
-index c67c0ef..81e719b 100644
+index 61bf66f..d3a25db 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/TameAnimalTrigger.java
-@@ -98,7 +98,7 @@ public class TameAnimalTrigger implements ICriterionTrigger<TameAnimalTrigger.In
+@@ -97,7 +97,7 @@ public class TameAnimalTrigger implements ICriterionTrigger<TameAnimalTrigger.In
          }
  
          public void trigger(EntityPlayerMP player, EntityAnimal entity) {
@@ -356,10 +355,10 @@ index 64d354c..e017820 100644
              for (ICriterionTrigger.Listener var5 : this.listeners) {
                  if (((UsedEnderEyeTrigger.Instance) var5.getCriterionInstance()).test(distanceSq)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java b/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java
-index 96f2169..488ee46 100644
+index 4c7626f..63ed6b9 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/UsedTotemTrigger.java
-@@ -98,7 +98,7 @@ public class UsedTotemTrigger implements ICriterionTrigger<UsedTotemTrigger.Inst
+@@ -97,7 +97,7 @@ public class UsedTotemTrigger implements ICriterionTrigger<UsedTotemTrigger.Inst
          }
  
          public void trigger(ItemStack item) {
@@ -369,10 +368,10 @@ index 96f2169..488ee46 100644
              for (ICriterionTrigger.Listener var4 : this.listeners) {
                  if (((UsedTotemTrigger.Instance) var4.getCriterionInstance()).test(item)) {
 diff --git a/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java b/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java
-index 0520dc2..97ba404 100644
+index ff00678..7aaa63f 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/VillagerTradeTrigger.java
-@@ -107,7 +107,7 @@ public class VillagerTradeTrigger implements ICriterionTrigger<VillagerTradeTrig
+@@ -106,7 +106,7 @@ public class VillagerTradeTrigger implements ICriterionTrigger<VillagerTradeTrig
          }
  
          public void trigger(EntityPlayerMP player, EntityVillager villager, ItemStack item) {
@@ -382,10 +381,10 @@ index 0520dc2..97ba404 100644
              for (ICriterionTrigger.Listener var6 : this.listeners) {
                  if (((VillagerTradeTrigger.Instance) var6.getCriterionInstance()).test(player, villager, item)) {
 diff --git a/src/main/java/net/minecraft/block/BlockCauldron.java b/src/main/java/net/minecraft/block/BlockCauldron.java
-index 6cda84e..d41cd23 100644
+index da91c5d..4076a28 100644
 --- a/src/main/java/net/minecraft/block/BlockCauldron.java
 +++ b/src/main/java/net/minecraft/block/BlockCauldron.java
-@@ -239,7 +239,7 @@ public class BlockCauldron extends Block {
+@@ -237,7 +237,7 @@ public class BlockCauldron extends Block {
      }
  
      private boolean changeLevel(World world, BlockPos blockposition, IBlockState iblockdata, int i, Entity entity, ChangeReason reason) {
@@ -395,10 +394,10 @@ index 6cda84e..d41cd23 100644
                  new CauldronLevelChangeEvent(
                          world.getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ()),
 diff --git a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
-index d4e426c..4197fa9 100644
+index adca1ef..1d9c688 100644
 --- a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
 +++ b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
-@@ -118,7 +118,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+@@ -117,7 +117,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
                  this.tryFlowInto(worldIn, pos.down(), iblockdata2, i + 8);
              }
          } else if (i >= 0 && (i == 0 || this.isBlocked(worldIn, pos.down(), iblockdata2))) {
@@ -408,10 +407,10 @@ index d4e426c..4197fa9 100644
  
              if (i >= 8) {
 diff --git a/src/main/java/net/minecraft/block/BlockRedstoneWire.java b/src/main/java/net/minecraft/block/BlockRedstoneWire.java
-index db2e0f8..c63eac1 100644
+index f5ad9f7..a66e62c 100644
 --- a/src/main/java/net/minecraft/block/BlockRedstoneWire.java
 +++ b/src/main/java/net/minecraft/block/BlockRedstoneWire.java
-@@ -157,7 +157,7 @@ public class BlockRedstoneWire extends Block {
+@@ -156,7 +156,7 @@ public class BlockRedstoneWire extends Block {
  
      private IBlockState updateSurroundingRedstone(World worldIn, BlockPos pos, IBlockState state) {
          state = this.calculateCurrentChanges(worldIn, pos, pos, state);
@@ -421,10 +420,10 @@ index db2e0f8..c63eac1 100644
  
          for (BlockPos blockposition1 : arraylist) {
 diff --git a/src/main/java/net/minecraft/block/BlockSapling.java b/src/main/java/net/minecraft/block/BlockSapling.java
-index e4716dc..5672f75 100644
+index d998aea..475f1a8 100644
 --- a/src/main/java/net/minecraft/block/BlockSapling.java
 +++ b/src/main/java/net/minecraft/block/BlockSapling.java
-@@ -66,8 +66,8 @@ public class BlockSapling extends BlockBush implements IGrowable {
+@@ -63,8 +63,8 @@ public class BlockSapling extends BlockBush implements IGrowable {
                  worldIn.captureTreeGeneration = false;
  
                  if (worldIn.capturedBlockStates.size() > 0) {
@@ -449,10 +448,10 @@ index b6f901a..d8e10f8 100644
          int var5 = 0;
  
 diff --git a/src/main/java/net/minecraft/block/BlockStairs.java b/src/main/java/net/minecraft/block/BlockStairs.java
-index 56398c5..05b7fd9 100644
+index 64c2279..4e628f2 100644
 --- a/src/main/java/net/minecraft/block/BlockStairs.java
 +++ b/src/main/java/net/minecraft/block/BlockStairs.java
-@@ -278,7 +278,7 @@ public class BlockStairs extends Block {
+@@ -272,7 +272,7 @@ public class BlockStairs extends Block {
  
      @Nullable
      public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
@@ -462,7 +461,7 @@ index 56398c5..05b7fd9 100644
          for (AxisAlignedBB var8 : getCollisionBoxList(this.getActualState(blockState, worldIn, pos))) {
              var6.add(this.rayTrace(pos, start, end, var8));
 diff --git a/src/main/java/net/minecraft/block/BlockTripWire.java b/src/main/java/net/minecraft/block/BlockTripWire.java
-index 630d0fe..4c990de 100644
+index c6cb2ae..1af4c3d 100644
 --- a/src/main/java/net/minecraft/block/BlockTripWire.java
 +++ b/src/main/java/net/minecraft/block/BlockTripWire.java
 @@ -141,7 +141,7 @@ public class BlockTripWire extends Block {
@@ -488,7 +487,7 @@ index c6086f2..4b70166 100644
      }
  
 diff --git a/src/main/java/net/minecraft/block/state/BlockStateContainer.java b/src/main/java/net/minecraft/block/state/BlockStateContainer.java
-index 10cecac..b11d604 100644
+index a4f420a..4ffd1a4 100644
 --- a/src/main/java/net/minecraft/block/state/BlockStateContainer.java
 +++ b/src/main/java/net/minecraft/block/state/BlockStateContainer.java
 @@ -66,7 +66,7 @@ public class BlockStateContainer {
@@ -509,7 +508,7 @@ index 10cecac..b11d604 100644
  
                  if (!NAME_PATTERN.matcher(var5).matches()) {
                      throw new IllegalArgumentException(
-@@ -220,9 +220,9 @@ public class BlockStateContainer {
+@@ -218,9 +218,9 @@ public class BlockStateContainer {
                      Entry var4 = (Entry) var3.next();
                      IProperty var5 = (IProperty) var4.getKey();
  
@@ -535,10 +534,10 @@ index 62e1fdd..79a69bf 100644
                      }
                  }
 diff --git a/src/main/java/net/minecraft/command/CommandBase.java b/src/main/java/net/minecraft/command/CommandBase.java
-index 5349348..2df6bc0 100644
+index eab2b89..2906f64 100644
 --- a/src/main/java/net/minecraft/command/CommandBase.java
 +++ b/src/main/java/net/minecraft/command/CommandBase.java
-@@ -466,7 +466,7 @@ public abstract class CommandBase implements ICommand {
+@@ -459,7 +459,7 @@ public abstract class CommandBase implements ICommand {
              }
          } catch (RuntimeException var7) {
              try {
@@ -547,7 +546,7 @@ index 5349348..2df6bc0 100644
                  IBlockState var3 = p_190794_0_.getDefaultState();
  
                  for (Entry var5 : var2.entrySet()) {
-@@ -497,7 +497,7 @@ public abstract class CommandBase implements ICommand {
+@@ -489,7 +489,7 @@ public abstract class CommandBase implements ICommand {
                      }
                  };
              } catch (RuntimeException var3) {
@@ -596,10 +595,10 @@ index 020c6c8..f3a212a 100644
                              if (var40 != null) {
                                  for (NextTickListEntry var48 : var40) {
 diff --git a/src/main/java/net/minecraft/command/CommandDebug.java b/src/main/java/net/minecraft/command/CommandDebug.java
-index c2c36be..b78cc8b 100644
+index 40315f1..84178fe 100644
 --- a/src/main/java/net/minecraft/command/CommandDebug.java
 +++ b/src/main/java/net/minecraft/command/CommandDebug.java
-@@ -177,8 +177,4 @@ public class CommandDebug extends CommandBase {
+@@ -172,8 +172,4 @@ public class CommandDebug extends CommandBase {
      public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
          return args.length == 1 ? getListOfStringsMatchingLastWord(args, new String[] {"start", "stop"}) : Collections.emptyList();
      }
@@ -609,10 +608,10 @@ index c2c36be..b78cc8b 100644
 -    }
  }
 diff --git a/src/main/java/net/minecraft/command/CommandExecuteAt.java b/src/main/java/net/minecraft/command/CommandExecuteAt.java
-index ae0ddec..61b5aad 100644
+index 4259898..eec8aa8 100644
 --- a/src/main/java/net/minecraft/command/CommandExecuteAt.java
 +++ b/src/main/java/net/minecraft/command/CommandExecuteAt.java
-@@ -107,8 +107,4 @@ public class CommandExecuteAt extends CommandBase {
+@@ -105,8 +105,4 @@ public class CommandExecuteAt extends CommandBase {
      public boolean isUsernameIndex(String[] args, int index) {
          return index == 0;
      }
@@ -622,10 +621,10 @@ index ae0ddec..61b5aad 100644
 -    }
  }
 diff --git a/src/main/java/net/minecraft/command/CommandFill.java b/src/main/java/net/minecraft/command/CommandFill.java
-index 27e895e..d10220d 100644
+index 86bc6b8..6ee71bb 100644
 --- a/src/main/java/net/minecraft/command/CommandFill.java
 +++ b/src/main/java/net/minecraft/command/CommandFill.java
-@@ -81,7 +81,7 @@ public class CommandFill extends CommandBase {
+@@ -77,7 +77,7 @@ public class CommandFill extends CommandBase {
                      }
                  }
  
@@ -635,10 +634,10 @@ index 27e895e..d10220d 100644
  
                  for (int var15 = var8.getZ(); var15 <= var9.getZ(); ++var15) {
 diff --git a/src/main/java/net/minecraft/command/CommandGameMode.java b/src/main/java/net/minecraft/command/CommandGameMode.java
-index 9f3287b..67ac3f9 100644
+index 741560e..cb1e969 100644
 --- a/src/main/java/net/minecraft/command/CommandGameMode.java
 +++ b/src/main/java/net/minecraft/command/CommandGameMode.java
-@@ -68,8 +68,4 @@ public class CommandGameMode extends CommandBase {
+@@ -66,8 +66,4 @@ public class CommandGameMode extends CommandBase {
      public boolean isUsernameIndex(String[] args, int index) {
          return index == 1;
      }
@@ -661,7 +660,7 @@ index 5912ba7..9ae797c 100644
 -    }
  }
 diff --git a/src/main/java/net/minecraft/command/CommandHandler.java b/src/main/java/net/minecraft/command/CommandHandler.java
-index 89d2a73..dcd8471 100644
+index 2916629..6131df2 100644
 --- a/src/main/java/net/minecraft/command/CommandHandler.java
 +++ b/src/main/java/net/minecraft/command/CommandHandler.java
 @@ -45,7 +45,7 @@ public abstract class CommandHandler implements ICommandManager {
@@ -674,10 +673,10 @@ index 89d2a73..dcd8471 100644
                      sender.setCommandStat(CommandResultStats.Type.AFFECTED_ENTITIES, var16.size());
  
 diff --git a/src/main/java/net/minecraft/command/CommandSpreadPlayers.java b/src/main/java/net/minecraft/command/CommandSpreadPlayers.java
-index f9f858b..7fcecd2 100644
+index b600662..aeca542 100644
 --- a/src/main/java/net/minecraft/command/CommandSpreadPlayers.java
 +++ b/src/main/java/net/minecraft/command/CommandSpreadPlayers.java
-@@ -271,10 +271,6 @@ public class CommandSpreadPlayers extends CommandBase {
+@@ -267,10 +267,6 @@ public class CommandSpreadPlayers extends CommandBase {
          return args.length >= 1 && args.length <= 2 ? getTabCompletionCoordinateXZ(args, 0, targetPos) : Collections.emptyList();
      }
  
@@ -689,10 +688,10 @@ index f9f858b..7fcecd2 100644
          double x;
          double z;
 diff --git a/src/main/java/net/minecraft/command/CommandStats.java b/src/main/java/net/minecraft/command/CommandStats.java
-index dff2a45..f7b94b2 100644
+index 73f08ca..5a8b67c 100644
 --- a/src/main/java/net/minecraft/command/CommandStats.java
 +++ b/src/main/java/net/minecraft/command/CommandStats.java
-@@ -161,7 +161,7 @@ public class CommandStats extends CommandBase {
+@@ -159,7 +159,7 @@ public class CommandStats extends CommandBase {
      }
  
      protected List<String> getObjectiveNames(MinecraftServer server) {
@@ -702,10 +701,10 @@ index dff2a45..f7b94b2 100644
  
          for (ScoreObjective var5 : var2) {
 diff --git a/src/main/java/net/minecraft/command/CommandTP.java b/src/main/java/net/minecraft/command/CommandTP.java
-index 3e6455d..cd3b7b5 100644
+index 1bc618d..3bcbd7f 100644
 --- a/src/main/java/net/minecraft/command/CommandTP.java
 +++ b/src/main/java/net/minecraft/command/CommandTP.java
-@@ -154,8 +154,4 @@ public class CommandTP extends CommandBase {
+@@ -150,8 +150,4 @@ public class CommandTP extends CommandBase {
      public boolean isUsernameIndex(String[] args, int index) {
          return index == 0;
      }
@@ -715,10 +714,10 @@ index 3e6455d..cd3b7b5 100644
 -    }
  }
 diff --git a/src/main/java/net/minecraft/command/EntitySelector.java b/src/main/java/net/minecraft/command/EntitySelector.java
-index d343306..e7bb3bf 100644
+index 12b7bfd..38c05f3 100644
 --- a/src/main/java/net/minecraft/command/EntitySelector.java
 +++ b/src/main/java/net/minecraft/command/EntitySelector.java
-@@ -107,7 +107,7 @@ public class EntitySelector {
+@@ -105,7 +105,7 @@ public class EntitySelector {
  
      @Nullable
      public static ITextComponent matchEntitiesToTextComponent(ICommandSender sender, String token) throws CommandException {
@@ -727,7 +726,7 @@ index d343306..e7bb3bf 100644
  
          if (var2.isEmpty()) {
              return null;
-@@ -135,12 +135,12 @@ public class EntitySelector {
+@@ -133,12 +133,12 @@ public class EntitySelector {
                  String var5 = var3.group(1);
                  BlockPos var6 = getBlockPosFromArguments(var4, sender.getPosition());
                  Vec3d var7 = getPosFromArguments(var4, sender.getPositionVector());
@@ -742,7 +741,7 @@ index d343306..e7bb3bf 100644
                          var12.addAll(getTypePredicates(var4, var5));
                          var12.addAll(getXpLevelPredicates(var4));
                          var12.addAll(getGamemodePredicates(var4));
-@@ -174,13 +174,13 @@ public class EntitySelector {
+@@ -170,13 +170,13 @@ public class EntitySelector {
                                      }
                                  }
  
@@ -758,7 +757,7 @@ index d343306..e7bb3bf 100644
                      }
                  }
  
-@@ -281,7 +281,7 @@ public class EntitySelector {
+@@ -277,7 +277,7 @@ public class EntitySelector {
                  var2 = var2.substring(1);
              }
  
@@ -767,7 +766,7 @@ index d343306..e7bb3bf 100644
              try {
                  int var5 = Integer.parseInt(var2);
                  var4 = GameType.parseGameTypeWithDefault(var5, GameType.NOT_SET);
-@@ -289,6 +289,7 @@ public class EntitySelector {
+@@ -285,6 +285,7 @@ public class EntitySelector {
                  var4 = GameType.parseGameTypeWithDefault(var2, GameType.NOT_SET);
              }
  
@@ -775,7 +774,7 @@ index d343306..e7bb3bf 100644
              var1.add(
                      new Predicate<Entity>() {
                          public boolean apply(@Nullable Entity var1) {
-@@ -297,7 +298,7 @@ public class EntitySelector {
+@@ -293,7 +294,7 @@ public class EntitySelector {
                              } else {
                                  EntityPlayerMP var2 = (EntityPlayerMP) var1;
                                  GameType var3x = var2.interactionManager.getGameType();
@@ -784,7 +783,7 @@ index d343306..e7bb3bf 100644
                              }
                          }
                      });
-@@ -307,7 +308,7 @@ public class EntitySelector {
+@@ -303,7 +304,7 @@ public class EntitySelector {
  
      private static List<Predicate<Entity>> getTeamPredicates(Map<String, String> params) {
          ArrayList var1 = Lists.newArrayList();
@@ -793,7 +792,7 @@ index d343306..e7bb3bf 100644
          final boolean var3 = var2 != null && var2.startsWith("!");
  
          if (var3) {
-@@ -315,6 +316,7 @@ public class EntitySelector {
+@@ -311,6 +312,7 @@ public class EntitySelector {
          }
  
          if (var2 != null) {
@@ -801,7 +800,7 @@ index d343306..e7bb3bf 100644
              var1.add(
                      new Predicate<Entity>() {
                          public boolean apply(@Nullable Entity var1) {
-@@ -324,7 +326,7 @@ public class EntitySelector {
+@@ -320,7 +322,7 @@ public class EntitySelector {
                                  EntityLivingBase var2x = (EntityLivingBase) var1;
                                  Team var3x = var2x.getTeam();
                                  String var4 = var3x == null ? "" : var3x.getName();
@@ -810,7 +809,7 @@ index d343306..e7bb3bf 100644
                              }
                          }
                      });
-@@ -334,7 +336,7 @@ public class EntitySelector {
+@@ -330,7 +332,7 @@ public class EntitySelector {
      }
  
      private static List<Predicate<Entity>> getScorePredicates(final ICommandSender sender, Map<String, String> params) {
@@ -819,7 +818,7 @@ index d343306..e7bb3bf 100644
          return (List<Predicate<Entity>>)
                  (var2.isEmpty()
                          ? Collections.emptyList()
-@@ -388,18 +390,19 @@ public class EntitySelector {
+@@ -383,18 +385,19 @@ public class EntitySelector {
  
      private static List<Predicate<Entity>> getNamePredicates(Map<String, String> params) {
          ArrayList var1 = Lists.newArrayList();
@@ -841,7 +840,7 @@ index d343306..e7bb3bf 100644
                          }
                      });
          }
-@@ -409,23 +412,24 @@ public class EntitySelector {
+@@ -404,23 +407,24 @@ public class EntitySelector {
  
      private static List<Predicate<Entity>> getTagPredicates(Map<String, String> params) {
          ArrayList var1 = Lists.newArrayList();
@@ -869,10 +868,10 @@ index d343306..e7bb3bf 100644
                              }
                          }
                      });
-@@ -602,7 +606,7 @@ public class EntitySelector {
-                 && var6 == 1
-                 && matchingEntities.contains(var7)
-                 && !"r".equals(type)) {
+@@ -593,7 +597,7 @@ public class EntitySelector {
+         Entity var7 = sender.getCommandSenderEntity();
+ 
+         if (var7 != null && targetClass.isAssignableFrom(var7.getClass()) && var6 == 1 && matchingEntities.contains(var7) && !"r".equals(type)) {
 -            matchingEntities = Lists.newArrayList(var7);
 +            matchingEntities = Lists.newArrayList((T[]) new Entity[] { var7 });
          }
@@ -892,7 +891,7 @@ index 50cd95b..5624a80 100644
          int var8 = 0;
  
 diff --git a/src/main/java/net/minecraft/command/server/CommandScoreboard.java b/src/main/java/net/minecraft/command/server/CommandScoreboard.java
-index ed5b656..576ef0e 100644
+index a9f3b73..98f1eb1 100644
 --- a/src/main/java/net/minecraft/command/server/CommandScoreboard.java
 +++ b/src/main/java/net/minecraft/command/server/CommandScoreboard.java
 @@ -226,7 +226,7 @@ public class CommandScoreboard extends CommandBase {
@@ -904,7 +903,7 @@ index ed5b656..576ef0e 100644
              String var6 = args[var4];
              ArrayList var7 = Lists.newArrayList();
  
-@@ -489,7 +489,7 @@ public class CommandScoreboard extends CommandBase {
+@@ -481,7 +481,7 @@ public class CommandScoreboard extends CommandBase {
              sender.sendMessage(var8);
              sender.sendMessage(new TextComponentString(joinNiceString(var7.toArray())));
          } else {
@@ -913,7 +912,7 @@ index ed5b656..576ef0e 100644
              sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, var10.size());
  
              if (var10.isEmpty()) {
-@@ -626,7 +626,7 @@ public class CommandScoreboard extends CommandBase {
+@@ -616,7 +616,7 @@ public class CommandScoreboard extends CommandBase {
          ScorePlayerTeam var6 = this.convertToTeam(args[startIndex], server);
  
          if (var6 != null) {
@@ -922,7 +921,7 @@ index ed5b656..576ef0e 100644
              sender.setCommandStat(CommandResultStats.Type.AFFECTED_ENTITIES, var7.size());
  
              if (var7.isEmpty()) {
-@@ -650,7 +650,7 @@ public class CommandScoreboard extends CommandBase {
+@@ -640,7 +640,7 @@ public class CommandScoreboard extends CommandBase {
  
      protected void listObjectives(ICommandSender sender, MinecraftServer server) throws CommandException {
          Scoreboard var3 = this.getScoreboard(server);
@@ -931,7 +930,7 @@ index ed5b656..576ef0e 100644
  
          if (var4.isEmpty()) {
              throw new CommandException("commands.scoreboard.objectives.list.empty", new Object[0]);
-@@ -706,7 +706,7 @@ public class CommandScoreboard extends CommandBase {
+@@ -694,7 +694,7 @@ public class CommandScoreboard extends CommandBase {
  
          if (args.length > startIndex) {
              String var6 = getEntityName(server, sender, args[startIndex]);
@@ -940,7 +939,7 @@ index ed5b656..576ef0e 100644
              sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, var7.size());
  
              if (var7.isEmpty()) {
-@@ -1116,7 +1116,7 @@ public class CommandScoreboard extends CommandBase {
+@@ -1096,7 +1096,7 @@ public class CommandScoreboard extends CommandBase {
      }
  
      protected List<String> getObjectiveNames(boolean writableOnly, MinecraftServer server) {
@@ -949,7 +948,7 @@ index ed5b656..576ef0e 100644
          ArrayList var4 = Lists.newArrayList();
  
          for (ScoreObjective var6 : var3) {
-@@ -1129,7 +1129,7 @@ public class CommandScoreboard extends CommandBase {
+@@ -1109,7 +1109,7 @@ public class CommandScoreboard extends CommandBase {
      }
  
      protected List<String> getTriggerNames(MinecraftServer server) {
@@ -959,10 +958,10 @@ index ed5b656..576ef0e 100644
  
          for (ScoreObjective var5 : var2) {
 diff --git a/src/main/java/net/minecraft/command/server/CommandTeleport.java b/src/main/java/net/minecraft/command/server/CommandTeleport.java
-index 1ed4117..c273cc1 100644
+index f44dcd2..fc43fbf 100644
 --- a/src/main/java/net/minecraft/command/server/CommandTeleport.java
 +++ b/src/main/java/net/minecraft/command/server/CommandTeleport.java
-@@ -131,8 +131,4 @@ public class CommandTeleport extends CommandBase {
+@@ -129,8 +129,4 @@ public class CommandTeleport extends CommandBase {
      public boolean isUsernameIndex(String[] args, int index) {
          return index == 0;
      }
@@ -972,10 +971,10 @@ index 1ed4117..c273cc1 100644
 -    }
  }
 diff --git a/src/main/java/net/minecraft/crash/CrashReport.java b/src/main/java/net/minecraft/crash/CrashReport.java
-index a2e71b4..4db50e2 100644
+index de74eae..9b3eed2 100644
 --- a/src/main/java/net/minecraft/crash/CrashReport.java
 +++ b/src/main/java/net/minecraft/crash/CrashReport.java
-@@ -113,7 +113,7 @@ public class CrashReport {
+@@ -109,7 +109,7 @@ public class CrashReport {
                  new ICrashReportDetail() {
                      public String call() {
                          RuntimeMXBean runtimemxbean = ManagementFactory.getRuntimeMXBean();
@@ -984,7 +983,7 @@ index a2e71b4..4db50e2 100644
                          int i = 0;
                          StringBuilder stringbuilder = new StringBuilder();
  
-@@ -145,7 +145,7 @@ public class CrashReport {
+@@ -141,7 +141,7 @@ public class CrashReport {
                          return this.call();
                      }
                  });
@@ -994,10 +993,10 @@ index a2e71b4..4db50e2 100644
  
      public String getDescription() {
 diff --git a/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java b/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
-index d75cc78..68a883f 100644
+index 638d276..8ad2875 100644
 --- a/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
 +++ b/src/main/java/net/minecraft/enchantment/EnchantmentHelper.java
-@@ -161,7 +161,7 @@ public class EnchantmentHelper {
+@@ -160,7 +160,7 @@ public class EnchantmentHelper {
      }
  
      public static int getMaxEnchantmentLevel(Enchantment p_185284_0_, EntityLivingBase p_185284_1_) {
@@ -1006,7 +1005,7 @@ index d75cc78..68a883f 100644
  
          if (var2 == null) {
              return 0;
-@@ -229,7 +229,7 @@ public class EnchantmentHelper {
+@@ -228,7 +228,7 @@ public class EnchantmentHelper {
      }
  
      public static ItemStack getEnchantedItem(Enchantment p_92099_0_, EntityLivingBase p_92099_1_) {
@@ -1015,7 +1014,7 @@ index d75cc78..68a883f 100644
  
          if (var2.isEmpty()) {
              return ItemStack.EMPTY;
-@@ -268,7 +268,7 @@ public class EnchantmentHelper {
+@@ -267,7 +267,7 @@ public class EnchantmentHelper {
      }
  
      public static ItemStack addRandomEnchantment(Random random, ItemStack stack, int level, boolean allowTreasure) {
@@ -1025,10 +1024,10 @@ index d75cc78..68a883f 100644
  
          if (var5) {
 diff --git a/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java b/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java
-index 8f6086d..e3891e4 100644
+index 97430c5..0a736e5 100644
 --- a/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java
 +++ b/src/main/java/net/minecraft/entity/EntityAreaEffectCloud.java
-@@ -315,7 +315,7 @@ public class EntityAreaEffectCloud extends Entity {
+@@ -308,7 +308,7 @@ public class EntityAreaEffectCloud extends Entity {
                      }
                  }
  
@@ -1038,10 +1037,10 @@ index 8f6086d..e3891e4 100644
                  for (PotionEffect mobeffect : this.potion.getEffects()) {
                      arraylist.add(
 diff --git a/src/main/java/net/minecraft/entity/EntityLeashKnot.java b/src/main/java/net/minecraft/entity/EntityLeashKnot.java
-index 46dfb27..eb2f7ea 100644
+index 911d8ba..6b73cb7 100644
 --- a/src/main/java/net/minecraft/entity/EntityLeashKnot.java
 +++ b/src/main/java/net/minecraft/entity/EntityLeashKnot.java
-@@ -83,8 +83,7 @@ public class EntityLeashKnot extends EntityHanging {
+@@ -81,8 +81,7 @@ public class EntityLeashKnot extends EntityHanging {
          } else {
              boolean flag = false;
              double d0 = 7.0D;
@@ -1050,7 +1049,7 @@ index 46dfb27..eb2f7ea 100644
 +            List<EntityLiving> list = this.world.getEntitiesWithinAABB(
                              EntityLiving.class,
                              new AxisAlignedBB(
-                                     this.posX - 7.0D,
+                                     this.posX - 7.0D, this.posY - 7.0D, this.posZ - 7.0D, this.posX + 7.0D, this.posY + 7.0D, this.posZ + 7.0D));
 diff --git a/src/main/java/net/minecraft/entity/EntityList.java b/src/main/java/net/minecraft/entity/EntityList.java
 index a878ff8..ee64344 100644
 --- a/src/main/java/net/minecraft/entity/EntityList.java
@@ -1065,7 +1064,7 @@ index a878ff8..ee64344 100644
  
              OLD_NAMES.set(id, oldName);
 diff --git a/src/main/java/net/minecraft/entity/EntityTracker.java b/src/main/java/net/minecraft/entity/EntityTracker.java
-index 68b1fa2..ddbf59f 100644
+index 9b2bd3e..4cda706 100644
 --- a/src/main/java/net/minecraft/entity/EntityTracker.java
 +++ b/src/main/java/net/minecraft/entity/EntityTracker.java
 @@ -140,7 +140,7 @@ public class EntityTracker {
@@ -1077,7 +1076,7 @@ index 68b1fa2..ddbf59f 100644
          AsyncCatcher.catchOp("entity track");
          trackingRange = TrackingRange.getEntityTrackingRange(entityIn, trackingRange);
  
-@@ -159,13 +159,14 @@ public class EntityTracker {
+@@ -158,13 +158,14 @@ public class EntityTracker {
              CrashReport crashreport = CrashReport.makeCrashReport(var11, "Adding entity to track");
              CrashReportCategory crashreportsystemdetails = crashreport.makeCategory("Entity To Track");
              crashreportsystemdetails.addCrashSection("Tracking range", trackingRange + " blocks");
@@ -1094,7 +1093,7 @@ index 68b1fa2..ddbf59f 100644
                                  s = "Maximum (" + s + ")";
                              }
  
-@@ -267,8 +268,8 @@ public class EntityTracker {
+@@ -266,8 +267,8 @@ public class EntityTracker {
      }
  
      public void sendLeashedEntitiesInChunk(EntityPlayerMP player, Chunk chunkIn) {
@@ -1106,10 +1105,10 @@ index 68b1fa2..ddbf59f 100644
          for (EntityTrackerEntry entitytrackerentry : this.entries) {
              Entity entity = entitytrackerentry.getTrackedEntity();
 diff --git a/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java b/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java
-index 06fa0ed..43a4efa 100644
+index 012382a..0e99254 100644
 --- a/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java
 +++ b/src/main/java/net/minecraft/entity/SharedMonsterAttributes.java
-@@ -59,7 +59,7 @@ public class SharedMonsterAttributes {
+@@ -56,7 +56,7 @@ public class SharedMonsterAttributes {
          IAttribute iattribute = instance.getAttribute();
          nbttagcompound.setString("Name", iattribute.getName());
          nbttagcompound.setDouble("Base", instance.getBaseValue());
@@ -1119,10 +1118,10 @@ index 06fa0ed..43a4efa 100644
          if (collection != null && !collection.isEmpty()) {
              NBTTagList nbttaglist = new NBTTagList();
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java b/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
-index 00cb710..bdbc061 100644
+index 43abb4d..74e9af0 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIAvoidEntity.java
-@@ -63,7 +63,7 @@ public class EntityAIAvoidEntity<T extends Entity> extends EntityAIBase {
+@@ -62,7 +62,7 @@ public class EntityAIAvoidEntity<T extends Entity> extends EntityAIBase {
          if (var1.isEmpty()) {
              return false;
          } else {
@@ -1132,7 +1131,7 @@ index 00cb710..bdbc061 100644
                      RandomPositionGenerator.findRandomTargetBlockAwayFrom(
                              this.entity,
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
-index b68d6bb..22b87a2 100644
+index c867abd..8e84bd3 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollow.java
 @@ -40,7 +40,7 @@ public class EntityAIFollow extends EntityAIBase {
@@ -1145,18 +1144,18 @@ index b68d6bb..22b87a2 100644
                          EntityLiving.class, this.entity.getEntityBoundingBox().grow((double) this.areaSize), this.followPredicate);
  
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
-index 447f231..729f46f 100644
+index 3f57660..5470372 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIFollowGolem.java
 @@ -21,7 +21,7 @@ public class EntityAIFollowGolem extends EntityAIBase {
          } else if (!this.villager.world.isDaytime()) {
              return false;
          } else {
--            List var1 =
-+            List<EntityIronGolem> var1 =
-                     this.villager.world.getEntitiesWithinAABB(
-                             EntityIronGolem.class, this.villager.getEntityBoundingBox().grow(6.0D, 2.0D, 6.0D));
+-            List var1 = this.villager.world.getEntitiesWithinAABB(EntityIronGolem.class, this.villager.getEntityBoundingBox().grow(6.0D, 2.0D, 6.0D));
++            List<EntityIronGolem> var1 = this.villager.world.getEntitiesWithinAABB(EntityIronGolem.class, this.villager.getEntityBoundingBox().grow(6.0D, 2.0D, 6.0D));
  
+             if (var1.isEmpty()) {
+                 return false;
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java b/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
 index a40e3c1..ee6774f 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIFollowParent.java
@@ -1171,20 +1170,20 @@ index a40e3c1..ee6774f 100644
                              this.childAnimal.getClass(), this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D));
              EntityAnimal var2 = null;
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java b/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
-index c56359b..6e2bdea 100644
+index 8592c4c..fac9ecd 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAILlamaFollowCaravan.java
 @@ -17,7 +17,7 @@ public class EntityAILlamaFollowCaravan extends EntityAIBase {
  
      public boolean shouldExecute() {
          if (!this.llama.getLeashed() && !this.llama.inCaravan()) {
--            List var1 =
-+            List<EntityLlama> var1 =
-                     this.llama.world.getEntitiesWithinAABB(this.llama.getClass(), this.llama.getEntityBoundingBox().grow(9.0D, 4.0D, 9.0D));
+-            List var1 = this.llama.world.getEntitiesWithinAABB(this.llama.getClass(), this.llama.getEntityBoundingBox().grow(9.0D, 4.0D, 9.0D));
++            List<EntityLlama> var1 = this.llama.world.getEntitiesWithinAABB(this.llama.getClass(), this.llama.getEntityBoundingBox().grow(9.0D, 4.0D, 9.0D));
              EntityLlama var2 = null;
              double var3 = Double.MAX_VALUE;
+ 
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
-index 26550f9..bca298a 100644
+index e0d7698..aebd762 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIMate.java
 @@ -64,7 +64,7 @@ public class EntityAIMate extends EntityAIBase {
@@ -1197,7 +1196,7 @@ index 26550f9..bca298a 100644
          EntityAnimal entityanimal = null;
  
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
-index 7c7f3fc..25cc7cb 100644
+index 14aa8d7..7f86d51 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAINearestAttackableTarget.java
 @@ -49,21 +49,7 @@ public class EntityAINearestAttackableTarget<T extends EntityLivingBase> extends
@@ -1248,18 +1247,18 @@ index 7c7f3fc..25cc7cb 100644
          }
      }
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java b/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
-index 6daf2c3..d9c8300 100644
+index 2dae2a4..01a9f02 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAIPlay.java
 @@ -23,7 +23,7 @@ public class EntityAIPlay extends EntityAIBase {
          } else if (this.villager.getRNG().nextInt(400) != 0) {
              return false;
          } else {
--            List var1 =
-+            List<EntityVillager> var1 =
-                     this.villager.world.getEntitiesWithinAABB(
-                             EntityVillager.class, this.villager.getEntityBoundingBox().grow(6.0D, 3.0D, 6.0D));
+-            List var1 = this.villager.world.getEntitiesWithinAABB(EntityVillager.class, this.villager.getEntityBoundingBox().grow(6.0D, 3.0D, 6.0D));
++            List<EntityVillager> var1 = this.villager.world.getEntitiesWithinAABB(EntityVillager.class, this.villager.getEntityBoundingBox().grow(6.0D, 3.0D, 6.0D));
              double var2 = Double.MAX_VALUE;
+ 
+             for (EntityVillager var5 : var1) {
 diff --git a/src/main/java/net/minecraft/entity/ai/attributes/ModifiableAttributeInstance.java b/src/main/java/net/minecraft/entity/ai/attributes/ModifiableAttributeInstance.java
 index d9d05c6..958713f 100644
 --- a/src/main/java/net/minecraft/entity/ai/attributes/ModifiableAttributeInstance.java
@@ -1274,10 +1273,10 @@ index d9d05c6..958713f 100644
              if (var2 == null) {
                  var2 = Sets.newHashSet();
 diff --git a/src/main/java/net/minecraft/entity/boss/EntityDragon.java b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
-index 60ef30b..b8d8e0f 100644
+index f5eefdc..f12ca4d 100644
 --- a/src/main/java/net/minecraft/entity/boss/EntityDragon.java
 +++ b/src/main/java/net/minecraft/entity/boss/EntityDragon.java
-@@ -454,7 +454,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
+@@ -451,7 +451,7 @@ public class EntityDragon extends EntityLiving implements IEntityMultiPart, IMob
          }
  
          if (this.rand.nextInt(10) == 0) {
@@ -1287,10 +1286,10 @@ index 60ef30b..b8d8e0f 100644
              double d0 = Double.MAX_VALUE;
  
 diff --git a/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java b/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
-index c97b2b4..b642a85 100644
+index e4bc941..3596e9c 100644
 --- a/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
 +++ b/src/main/java/net/minecraft/entity/effect/EntityLightningBolt.java
-@@ -79,7 +79,7 @@ public class EntityLightningBolt extends EntityWeatherEffect {
+@@ -77,7 +77,7 @@ public class EntityLightningBolt extends EntityWeatherEffect {
              float pitch = 0.8F + this.rand.nextFloat() * 0.2F;
              int viewDistance = ((WorldServer) this.world).getServer().getViewDistance() * 16;
  
@@ -1300,23 +1299,23 @@ index c97b2b4..b642a85 100644
                  double deltaZ = this.posZ - player.posZ;
                  double distanceSquared = deltaX * deltaX + deltaZ * deltaZ;
 diff --git a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
-index 4111a18..a8b5785 100644
+index bfbdae8..d68f7ee 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityFallingBlock.java
-@@ -214,7 +214,7 @@ public class EntityFallingBlock extends Entity {
+@@ -212,7 +212,7 @@ public class EntityFallingBlock extends Entity {
              int i = MathHelper.ceil(distance - 1.0F);
  
              if (i > 0) {
--                ArrayList arraylist =
-+                ArrayList<Entity> arraylist =
-                         Lists.newArrayList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox()));
+-                ArrayList arraylist = Lists.newArrayList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox()));
++                ArrayList<Entity> arraylist = Lists.newArrayList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox()));
                  boolean flag = block == Blocks.ANVIL;
                  DamageSource damagesource = flag ? DamageSource.ANVIL : DamageSource.FALLING_BLOCK;
+ 
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityCreeper.java b/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
-index 634b5e2..0c45b37 100644
+index c0a5337..3f96555 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityCreeper.java
-@@ -258,7 +258,7 @@ public class EntityCreeper extends EntityMob {
+@@ -256,7 +256,7 @@ public class EntityCreeper extends EntityMob {
      }
  
      private void spawnLingeringCloud() {
@@ -1326,7 +1325,7 @@ index 634b5e2..0c45b37 100644
          if (!collection.isEmpty()) {
              EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java b/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
-index 8b5c08f..72616ac 100644
+index fb1dd61..e82048a 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityElderGuardian.java
 @@ -72,7 +72,7 @@ public class EntityElderGuardian extends EntityGuardian {
@@ -1339,10 +1338,10 @@ index 8b5c08f..72616ac 100644
                              EntityPlayerMP.class,
                              new Predicate<EntityPlayerMP>() {
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityShulker.java b/src/main/java/net/minecraft/entity/monster/EntityShulker.java
-index bd099b3..a23785d 100644
+index c37c45d..e452046 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityShulker.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityShulker.java
-@@ -345,7 +345,7 @@ public class EntityShulker extends EntityGolem implements IMob {
+@@ -315,7 +315,7 @@ public class EntityShulker extends EntityGolem implements IMob {
              }
  
              if (d2 > 0.0D) {
@@ -1352,10 +1351,10 @@ index bd099b3..a23785d 100644
                  if (!list.isEmpty()) {
                      for (Entity entity : list) {
 diff --git a/src/main/java/net/minecraft/entity/monster/EntityWitch.java b/src/main/java/net/minecraft/entity/monster/EntityWitch.java
-index a2de527..a8fdaef 100644
+index 38e1ad1..e0ddf77 100644
 --- a/src/main/java/net/minecraft/entity/monster/EntityWitch.java
 +++ b/src/main/java/net/minecraft/entity/monster/EntityWitch.java
-@@ -106,7 +106,7 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
+@@ -104,7 +104,7 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob {
                      this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
  
                      if (var5.getItem() == Items.POTIONITEM) {
@@ -1391,10 +1390,10 @@ index fcfbfab..6d58743 100644
 -    }
  }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java b/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java
-index 2b955b3..7d51461 100644
+index ab4fad1..f1b23d4 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityMooshroom.java
-@@ -100,12 +100,4 @@ public class EntityMooshroom extends EntityCow {
+@@ -90,12 +90,4 @@ public class EntityMooshroom extends EntityCow {
      protected ResourceLocation getLootTable() {
          return LootTableList.ENTITIES_MUSHROOM_COW;
      }
@@ -1408,10 +1407,10 @@ index 2b955b3..7d51461 100644
 -    }
  }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityOcelot.java b/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
-index fcd9683..d44dfa4 100644
+index 4288549..47eb7de 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityOcelot.java
-@@ -292,8 +292,4 @@ public class EntityOcelot extends EntityTameable {
+@@ -287,8 +287,4 @@ public class EntityOcelot extends EntityTameable {
  
          return livingdata;
      }
@@ -1434,10 +1433,10 @@ index 91a2cd0..6c24b67 100644
 -    }
  }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityRabbit.java b/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
-index 28b706f..9d25335 100644
+index 52fc388..c0fced4 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityRabbit.java
-@@ -390,10 +390,6 @@ public class EntityRabbit extends EntityAnimal {
+@@ -388,10 +388,6 @@ public class EntityRabbit extends EntityAnimal {
          this.carrotTicks = 40;
      }
  
@@ -1449,10 +1448,10 @@ index 28b706f..9d25335 100644
          private final EntityRabbit rabbit;
  
 diff --git a/src/main/java/net/minecraft/entity/passive/EntitySheep.java b/src/main/java/net/minecraft/entity/passive/EntitySheep.java
-index 4cde97f..652b68c 100644
+index 86f375b..182c923 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntitySheep.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntitySheep.java
-@@ -310,10 +310,6 @@ public class EntitySheep extends EntityAnimal {
+@@ -309,10 +309,6 @@ public class EntitySheep extends EntityAnimal {
          return 0.95F * this.height;
      }
  
@@ -1464,10 +1463,10 @@ index 4cde97f..652b68c 100644
          for (EnumDyeColor enumcolor : EnumDyeColor.values()) {
              DYE_TO_RGB.put(enumcolor, createSheepColor(enumcolor));
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-index 1e58dd9..de97aed 100644
+index f5fdf56..9f1d29d 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-@@ -1019,10 +1019,6 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
+@@ -1005,10 +1005,6 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
          }
      }
  
@@ -1479,10 +1478,10 @@ index 1e58dd9..de97aed 100644
          public Item buyingItem;
          public EntityVillager.PriceInfo price;
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityWolf.java b/src/main/java/net/minecraft/entity/passive/EntityWolf.java
-index 22c187f..261d6c1 100644
+index 33c4f9e..95aaeac 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityWolf.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityWolf.java
-@@ -473,10 +473,6 @@ public class EntityWolf extends EntityTameable {
+@@ -467,10 +467,6 @@ public class EntityWolf extends EntityTameable {
          return !this.isAngry() && super.canBeLeashedTo(player);
      }
  
@@ -1494,24 +1493,24 @@ index 22c187f..261d6c1 100644
          private final EntityWolf wolf;
  
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-index 3fe13ac..760269e 100644
+index 7e8e63a..c722c96 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-@@ -513,7 +513,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+@@ -505,7 +505,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+     }
  
      private void updateScorePoints(IScoreCriteria criteria, int points) {
-         for (Score scoreboardscore :
--                this.world.getServer().getScoreboardManager().getScoreboardScores(criteria, this.getName(), new ArrayList())) {
-+                this.world.getServer().getScoreboardManager().getScoreboardScores(criteria, this.getName(), new ArrayList<>())) {
+-        for (Score scoreboardscore : this.world.getServer().getScoreboardManager().getScoreboardScores(criteria, this.getName(), new ArrayList())) {
++        for (Score scoreboardscore : this.world.getServer().getScoreboardManager().getScoreboardScores(criteria, this.getName(), new ArrayList<>())) {
              scoreboardscore.setScorePoints(points);
          }
      }
-@@ -570,7 +570,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
-                     this.world
-                             .getServer()
-                             .getScoreboardManager()
--                            .getScoreboardScores(IScoreCriteria.DEATH_COUNT, this.getName(), new ArrayList())) {
-+                            .getScoreboardScores(IScoreCriteria.DEATH_COUNT, this.getName(), new ArrayList<>())) {
+@@ -559,7 +559,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
+             this.setSpectatingEntity(this);
+ 
+             for (Score scoreboardscore :
+-                    this.world.getServer().getScoreboardManager().getScoreboardScores(IScoreCriteria.DEATH_COUNT, this.getName(), new ArrayList())) {
++                    this.world.getServer().getScoreboardManager().getScoreboardScores(IScoreCriteria.DEATH_COUNT, this.getName(), new ArrayList<>())) {
                  scoreboardscore.incrementScore();
              }
  
@@ -1542,10 +1541,10 @@ index 3659da1..7b27c00 100644
                          this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D));
          double d0 = 0.0D;
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java b/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
-index e072f43..d19e0ce 100644
+index 992b1ec..637d394 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
-@@ -112,7 +112,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
+@@ -110,7 +110,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
      @Nullable
      private Entity getHitEntity(Vec3d p_190538_1_, Vec3d p_190538_2_) {
          Entity entity = null;
@@ -1555,10 +1554,10 @@ index e072f43..d19e0ce 100644
                          this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D));
          double d0 = 0.0D;
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityPotion.java b/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
-index aec69c2..8704b65 100644
+index 8c72b6e..22e3468 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityPotion.java
-@@ -132,7 +132,7 @@ public class EntityPotion extends EntityThrowable {
+@@ -131,7 +131,7 @@ public class EntityPotion extends EntityThrowable {
  
      private void applyWater() {
          AxisAlignedBB axisalignedbb = this.getEntityBoundingBox().grow(4.0D, 2.0D, 4.0D);
@@ -1567,7 +1566,7 @@ index aec69c2..8704b65 100644
  
          if (!list.isEmpty()) {
              for (EntityLivingBase entityliving : list) {
-@@ -147,7 +147,7 @@ public class EntityPotion extends EntityThrowable {
+@@ -146,7 +146,7 @@ public class EntityPotion extends EntityThrowable {
  
      private void applySplash(RayTraceResult p_190543_1_, List<PotionEffect> p_190543_2_) {
          AxisAlignedBB axisalignedbb = this.getEntityBoundingBox().grow(4.0D, 2.0D, 4.0D);
@@ -1577,10 +1576,10 @@ index aec69c2..8704b65 100644
  
          if (!list1.isEmpty()) {
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java b/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java
-index 2bcc843..745967c 100644
+index b0e80d2..24fd0f5 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityTippedArrow.java
-@@ -42,7 +42,7 @@ public class EntityTippedArrow extends EntityArrow {
+@@ -41,7 +41,7 @@ public class EntityTippedArrow extends EntityArrow {
      public void setPotionEffect(ItemStack stack) {
          if (stack.getItem() == Items.TIPPED_ARROW) {
              this.potion = PotionUtils.getPotionFromItem(stack);
@@ -1612,7 +1611,7 @@ index 5a857ec..f7dbb89 100644
                      boolean flag2 = false;
  
 diff --git a/src/main/java/net/minecraft/item/ItemMonsterPlacer.java b/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
-index ad85381..1105916 100644
+index 8f87c89..8690294 100644
 --- a/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
 +++ b/src/main/java/net/minecraft/item/ItemMonsterPlacer.java
 @@ -107,7 +107,7 @@ public class ItemMonsterPlacer extends Item {
@@ -1625,10 +1624,10 @@ index ad85381..1105916 100644
          if (list.isEmpty()) {
              return 0.0D;
 diff --git a/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java b/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java
-index a50d28f..d69d7dd 100644
+index 9c347e1..fb47b6f 100644
 --- a/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java
 +++ b/src/main/java/net/minecraft/item/crafting/ShapelessRecipes.java
-@@ -70,7 +70,7 @@ public class ShapelessRecipes implements IRecipe {
+@@ -69,7 +69,7 @@ public class ShapelessRecipes implements IRecipe {
      }
  
      public boolean matches(InventoryCrafting inv, World worldIn) {
@@ -1678,7 +1677,7 @@ index 559ef7c..932bad9 100644
  
          if (var5.isPresent()) {
 diff --git a/src/main/java/net/minecraft/network/EnumConnectionState.java b/src/main/java/net/minecraft/network/EnumConnectionState.java
-index b23ae9f..aae4dc6 100644
+index 8dbddef..57a0864 100644
 --- a/src/main/java/net/minecraft/network/EnumConnectionState.java
 +++ b/src/main/java/net/minecraft/network/EnumConnectionState.java
 @@ -282,7 +282,7 @@ public enum EnumConnectionState {
@@ -1698,21 +1697,21 @@ index b23ae9f..aae4dc6 100644
 +                for (Class var8 : (var3.directionMaps.get(var6)).values()) {
                      if (STATES_BY_CLASS.containsKey(var8) && STATES_BY_CLASS.get(var8) != var3) {
                          throw new Error(
-                                 "Packet "
+                                 "Packet " + var8 + " is already assigned to protocol " + STATES_BY_CLASS.get(var8) + " - can't reassign to " + var3);
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index 821e9da..b842f0d 100644
+index 926bc88..2a28c98 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -194,7 +194,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -193,7 +193,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+     private boolean field_194403_g;
      private long field_194404_h;
      private volatile int chatSpamThresholdCount;
-     private static final AtomicIntegerFieldUpdater chatSpamField =
--            AtomicIntegerFieldUpdater.newUpdater(NetHandlerPlayServer.class, "chatThrottle");
-+            AtomicIntegerFieldUpdater.newUpdater(NetHandlerPlayServer.class, "field_147374_l"); // chatSpamThresholdCount, SRG as reobf doesn't pick this field up
+-    private static final AtomicIntegerFieldUpdater chatSpamField = AtomicIntegerFieldUpdater.newUpdater(NetHandlerPlayServer.class, "chatThrottle");
++    private static final AtomicIntegerFieldUpdater chatSpamField = AtomicIntegerFieldUpdater.newUpdater(NetHandlerPlayServer.class, "field_147374_l"); // chatSpamThresholdCount, SRG as reobf doesn't pick this field up
      private int itemDropThreshold;
      private final IntHashMap<Short> pendingTransactions = new IntHashMap<Short>();
      private double firstGoodX;
-@@ -1378,8 +1378,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -1354,8 +1354,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
  
              if (!this.player.isDead && this.player.getChatVisibility() != EntityPlayer.EnumChatVisibility.HIDDEN) {
                  this.player.markPlayerActive();
@@ -1726,7 +1725,7 @@ index 821e9da..b842f0d 100644
  
                  for (int i = 0; i < s.length(); ++i) {
                      if (!ChatAllowedCharacters.isAllowedCharacter(s.charAt(i))) {
-@@ -2643,7 +2646,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -2593,7 +2596,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                                      2);
                              break;
                          case AUTO:
@@ -1735,7 +1734,7 @@ index 821e9da..b842f0d 100644
                              this.player.world.setBlockState(
                                      blockposition,
                                      iblockdata
-@@ -2652,7 +2655,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
+@@ -2602,7 +2605,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                                      2);
                              break;
                          case REDSTONE:
@@ -1745,10 +1744,10 @@ index 821e9da..b842f0d 100644
                                      blockposition,
                                      iblockdata
 diff --git a/src/main/java/net/minecraft/network/NetworkManager.java b/src/main/java/net/minecraft/network/NetworkManager.java
-index 6ee4f63..ddda859 100644
+index ab6507a..fd46f4a 100644
 --- a/src/main/java/net/minecraft/network/NetworkManager.java
 +++ b/src/main/java/net/minecraft/network/NetworkManager.java
-@@ -132,7 +132,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
+@@ -131,7 +131,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
          }
      }
  
@@ -1780,7 +1779,7 @@ index b64b1f1..6bc22c0 100644
          BlockPos var13 = new BlockPos(entitylivingIn);
          var12 = this.getPathNodeType(blockaccessIn, x, y, z, xSize, ySize, zSize, canBreakDoorsIn, canEnterDoorsIn, var11, var12, var13);
 diff --git a/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java b/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
-index 6574da1..ed89f2a 100644
+index 9f5f948..e13a17f 100644
 --- a/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
 +++ b/src/main/java/net/minecraft/pathfinding/WalkNodeProcessor.java
 @@ -65,7 +65,7 @@ public class WalkNodeProcessor extends NodeProcessor {
@@ -1792,7 +1791,7 @@ index 6574da1..ed89f2a 100644
              var4.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double) var1, this.entity.getEntityBoundingBox().minZ));
              var4.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double) var1, this.entity.getEntityBoundingBox().maxZ));
              var4.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, (double) var1, this.entity.getEntityBoundingBox().minZ));
-@@ -273,7 +273,7 @@ public class WalkNodeProcessor extends NodeProcessor {
+@@ -271,7 +271,7 @@ public class WalkNodeProcessor extends NodeProcessor {
              int zSize,
              boolean canBreakDoorsIn,
              boolean canEnterDoorsIn) {
@@ -1815,10 +1814,10 @@ index 9ac5e0b..93ec3cf 100644
  
          for (String var5 : var2) {
 diff --git a/src/main/java/net/minecraft/scoreboard/Scoreboard.java b/src/main/java/net/minecraft/scoreboard/Scoreboard.java
-index 3f0857a..7dd2635 100644
+index 2110744..816059e 100644
 --- a/src/main/java/net/minecraft/scoreboard/Scoreboard.java
 +++ b/src/main/java/net/minecraft/scoreboard/Scoreboard.java
-@@ -37,7 +37,7 @@ public class Scoreboard {
+@@ -36,7 +36,7 @@ public class Scoreboard {
                  throw new IllegalArgumentException("An objective with the name '" + name + "' already exists!");
              } else {
                  var3 = new ScoreObjective(this, name, criteria);
@@ -1827,7 +1826,7 @@ index 3f0857a..7dd2635 100644
  
                  if (var4 == null) {
                      var4 = Lists.newArrayList();
-@@ -72,7 +72,7 @@ public class Scoreboard {
+@@ -71,7 +71,7 @@ public class Scoreboard {
          if (username.length() > 40) {
              throw new IllegalArgumentException("The player name '" + username + "' is too long!");
          } else {
@@ -1836,7 +1835,7 @@ index 3f0857a..7dd2635 100644
  
              if (var3 == null) {
                  var3 = Maps.newHashMap();
-@@ -140,7 +140,7 @@ public class Scoreboard {
+@@ -139,7 +139,7 @@ public class Scoreboard {
      }
  
      public Collection<Score> getScores() {
@@ -1868,7 +1867,7 @@ index d45f937..cf751ae 100644
          for (EntityPlayerMP entityplayer : this.scoreboardMCServer.getPlayerList().getPlayers()) {
              if (entityplayer.getBukkitEntity().getScoreboard().getHandle() == this) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 3a2196b..ff0c405 100644
+index a8dceab..a19f5b4 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -36,7 +36,6 @@ import java.util.concurrent.Callable;
@@ -1889,10 +1888,10 @@ index 3a2196b..ff0c405 100644
                      world =
                              (WorldServer)
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index fdc8f55..84b159e 100644
+index 872724d..de35d6f 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -727,10 +727,6 @@ public class DedicatedServer extends MinecraftServer implements IServer {
+@@ -726,10 +726,6 @@ public class DedicatedServer extends MinecraftServer implements IServer {
          }
      }
  
@@ -1904,10 +1903,10 @@ index fdc8f55..84b159e 100644
          return this.settings;
      }
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
-index aff527d..123ea0b 100644
+index 56a9568..bb33113 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerList.java
-@@ -479,7 +479,7 @@ public abstract class PlayerList {
+@@ -471,7 +471,7 @@ public abstract class PlayerList {
  
      public EntityPlayerMP attemptLogin(NetHandlerLoginServer loginlistener, GameProfile gameprofile, String hostname) {
          UUID uuid = EntityPlayer.getUUID(gameprofile);
@@ -1917,10 +1916,10 @@ index aff527d..123ea0b 100644
          for (int i = 0; i < this.playerEntityList.size(); ++i) {
              EntityPlayerMP entityplayer = this.playerEntityList.get(i);
 diff --git a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
-index bc50081..4a1fa01 100644
+index 6c1ecf3..278d3a9 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
-@@ -204,7 +204,7 @@ public class PlayerProfileCache {
+@@ -201,7 +201,7 @@ public class PlayerProfileCache {
  
          try {
              bufferedreader = Files.newReader(this.usercacheFile, StandardCharsets.UTF_8);
@@ -1930,7 +1929,7 @@ index bc50081..4a1fa01 100644
              this.uuidToProfileEntryMap.clear();
              this.gameProfiles.clear();
 diff --git a/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java b/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
-index d225848..1359ce9 100644
+index 7b226c4..198d060 100644
 --- a/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
 +++ b/src/main/java/net/minecraft/server/management/PreYggdrasilConverter.java
 @@ -43,7 +43,7 @@ public class PreYggdrasilConverter {
@@ -1942,7 +1941,7 @@ index d225848..1359ce9 100644
  
          for (String s : list) {
              s = s.trim();
-@@ -160,7 +160,7 @@ public class PreYggdrasilConverter {
+@@ -156,7 +156,7 @@ public class PreYggdrasilConverter {
              }
  
              try {
@@ -1952,7 +1951,7 @@ index d225848..1359ce9 100644
  
                  for (String s : hashmap.keySet()) {
 diff --git a/src/main/java/net/minecraft/server/management/UserList.java b/src/main/java/net/minecraft/server/management/UserList.java
-index 48bfbe3..d8485b1 100644
+index 1a1caa2..644fd31 100644
 --- a/src/main/java/net/minecraft/server/management/UserList.java
 +++ b/src/main/java/net/minecraft/server/management/UserList.java
 @@ -155,7 +155,7 @@ public class UserList<K, V extends UserListEntry<K>> {
@@ -1974,10 +1973,10 @@ index 48bfbe3..d8485b1 100644
                  }
              }
 diff --git a/src/main/java/net/minecraft/stats/StatList.java b/src/main/java/net/minecraft/stats/StatList.java
-index 47b41f1..36cc1cf 100644
+index b09b911..b7bfe2e 100644
 --- a/src/main/java/net/minecraft/stats/StatList.java
 +++ b/src/main/java/net/minecraft/stats/StatList.java
-@@ -220,7 +220,7 @@ public class StatList {
+@@ -204,7 +204,7 @@ public class StatList {
      }
  
      private static void initCraftableStats() {
@@ -1987,10 +1986,10 @@ index 47b41f1..36cc1cf 100644
          for (IRecipe var2 : CraftingManager.REGISTRY) {
              ItemStack var3 = var2.getRecipeOutput();
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
-index d307815..f4ad831 100644
+index e10ebdb..83149db 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityBeacon.java
-@@ -130,7 +130,7 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
+@@ -127,7 +127,7 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
          return list;
      }
  
@@ -2000,10 +1999,10 @@ index d307815..f4ad831 100644
              entityhuman.addPotionEffect(new net.minecraft.potion.PotionEffect(effects, i, b0, true, true));
          }
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityPiston.java b/src/main/java/net/minecraft/tileentity/TileEntityPiston.java
-index bbeedfb..29f2535 100644
+index 9dd0761..ab0a013 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityPiston.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityPiston.java
-@@ -154,7 +154,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
+@@ -153,7 +153,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
                                      var11 * (double) var2.getFrontOffsetX(),
                                      var11 * (double) var2.getFrontOffsetY(),
                                      var11 * (double) var2.getFrontOffsetZ());
@@ -2012,7 +2011,7 @@ index bbeedfb..29f2535 100644
  
                              if (!this.extending && this.shouldHeadBeRendered) {
                                  this.fixEntityWithinPistonBase(var10, var2, var3);
-@@ -280,7 +280,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
+@@ -249,7 +249,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
                          var8 * (double) var7.getFrontOffsetX(),
                          var8 * (double) var7.getFrontOffsetY(),
                          var8 * (double) var7.getFrontOffsetZ());
@@ -2035,10 +2034,10 @@ index d51218e..b4eea62 100644
          }
  
 diff --git a/src/main/java/net/minecraft/util/EntitySelectors.java b/src/main/java/net/minecraft/util/EntitySelectors.java
-index e9331b6..b48b674 100644
+index e7fcbbb..6761c9d 100644
 --- a/src/main/java/net/minecraft/util/EntitySelectors.java
 +++ b/src/main/java/net/minecraft/util/EntitySelectors.java
-@@ -87,7 +87,6 @@ public final class EntitySelectors {
+@@ -85,7 +85,6 @@ public final class EntitySelectors {
                                  }
                              }
                          });
@@ -2138,10 +2137,10 @@ index a926724..e53beef 100644
      }
  
 diff --git a/src/main/java/net/minecraft/world/Teleporter.java b/src/main/java/net/minecraft/world/Teleporter.java
-index a7ad04f..27ee629 100644
+index c1fe323..ef01199 100644
 --- a/src/main/java/net/minecraft/world/Teleporter.java
 +++ b/src/main/java/net/minecraft/world/Teleporter.java
-@@ -502,9 +502,5 @@ public class Teleporter {
+@@ -478,9 +478,5 @@ public class Teleporter {
              super(pos.getX(), pos.getY(), pos.getZ());
              this.lastUpdateTime = lastUpdate;
          }
@@ -2152,10 +2151,10 @@ index a7ad04f..27ee629 100644
      }
  }
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 07f11d9..2a65e96 100644
+index 87a5a9f..9b2e660 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -2527,7 +2527,7 @@ public abstract class World implements IBlockAccess {
+@@ -2482,7 +2482,7 @@ public abstract class World implements IBlockAccess {
          ArrayList arraylist = Lists.newArrayList();
  
          for (Entity entity : this.loadedEntityList) {
@@ -2164,7 +2163,7 @@ index 07f11d9..2a65e96 100644
                  arraylist.add(entity);
              }
          }
-@@ -2539,7 +2539,7 @@ public abstract class World implements IBlockAccess {
+@@ -2494,7 +2494,7 @@ public abstract class World implements IBlockAccess {
          ArrayList arraylist = Lists.newArrayList();
  
          for (Entity entity : this.playerEntities) {
@@ -2174,7 +2173,7 @@ index 07f11d9..2a65e96 100644
              }
          }
 diff --git a/src/main/java/net/minecraft/world/WorldEntitySpawner.java b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
-index a813fb9..0294aae 100644
+index 42fd702..f60d787 100644
 --- a/src/main/java/net/minecraft/world/WorldEntitySpawner.java
 +++ b/src/main/java/net/minecraft/world/WorldEntitySpawner.java
 @@ -32,7 +32,11 @@ public final class WorldEntitySpawner {
@@ -2191,19 +2190,19 @@ index a813fb9..0294aae 100644
              int z = LongHash.lsw(coord.longValue());
  
 diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
-index 924696d..4552647 100644
+index 166dd5f..a3adefa 100644
 --- a/src/main/java/net/minecraft/world/WorldServer.java
 +++ b/src/main/java/net/minecraft/world/WorldServer.java
-@@ -464,7 +464,7 @@ public class WorldServer extends World implements IThreadListener {
+@@ -457,7 +457,7 @@ public class WorldServer extends World implements IThreadListener {
+     protected void wakeAllPlayers() {
          this.allPlayersSleeping = false;
  
-         for (EntityPlayer entityhuman :
--                (List) this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
-+                this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
+-        for (EntityPlayer entityhuman : (List) this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
++        for (EntityPlayer entityhuman : this.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).collect(Collectors.toList())) {
              entityhuman.wakeUpPlayer(false, false, true);
          }
  
-@@ -1510,10 +1510,6 @@ public class WorldServer extends World implements IThreadListener {
+@@ -1483,10 +1483,6 @@ public class WorldServer extends World implements IThreadListener {
          return this.functionManager;
      }
  
@@ -2215,10 +2214,10 @@ index 924696d..4552647 100644
          private ServerBlockEventList() {}
  
 diff --git a/src/main/java/net/minecraft/world/WorldServerDemo.java b/src/main/java/net/minecraft/world/WorldServerDemo.java
-index 03e0f8e..f27d4c0 100644
+index ff10d99..f27d4c0 100644
 --- a/src/main/java/net/minecraft/world/WorldServerDemo.java
 +++ b/src/main/java/net/minecraft/world/WorldServerDemo.java
-@@ -4,15 +4,16 @@ import net.minecraft.profiler.Profiler;
+@@ -4,14 +4,16 @@ import net.minecraft.profiler.Profiler;
  import net.minecraft.server.MinecraftServer;
  import net.minecraft.world.storage.ISaveHandler;
  import net.minecraft.world.storage.WorldInfo;
@@ -2230,8 +2229,7 @@ index 03e0f8e..f27d4c0 100644
      public static final WorldSettings DEMO_WORLD_SETTINGS =
              (new WorldSettings(DEMO_WORLD_SEED, GameType.SURVIVAL, true, false, WorldType.DEFAULT)).enableBonusChest();
  
--    public WorldServerDemo(
--            MinecraftServer server, ISaveHandler saveHandlerIn, WorldInfo worldInfoIn, int dimensionId, Profiler profilerIn) {
+-    public WorldServerDemo(MinecraftServer server, ISaveHandler saveHandlerIn, WorldInfo worldInfoIn, int dimensionId, Profiler profilerIn) {
 -        super(server, saveHandlerIn, worldInfoIn, dimensionId, profilerIn);
 +    public WorldServerDemo(MinecraftServer server, ISaveHandler saveHandlerIn, WorldInfo worldInfoIn, int dimensionId, Profiler profilerIn, World.Environment p_i75_6_, ChunkGenerator p_i75_7_) { // Paper - Decompile fix
 +        super(server, saveHandlerIn, worldInfoIn, dimensionId, profilerIn, p_i75_6_, p_i75_7_);
@@ -2239,25 +2237,25 @@ index 03e0f8e..f27d4c0 100644
      }
  }
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 8a8680f..70a954b 100644
+index 4d7c86f..3545a43 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -872,8 +872,8 @@ public class Chunk {
+@@ -867,8 +867,8 @@ public class Chunk {
+ 
+         for (int k = i; k <= j; ++k) {
              for (Entity entity : this.entityLists[k]) {
-                 if (entityClass.isInstance(entity)
-                         && entity.getEntityBoundingBox().intersects(aabb)
--                        && (filter == null || filter.apply(entity))) {
+-                if (entityClass.isInstance(entity) && entity.getEntityBoundingBox().intersects(aabb) && (filter == null || filter.apply(entity))) {
 -                    listToFill.add(entity);
-+                        && (filter == null || filter.apply((T) entity))) {
++                if (entityClass.isInstance(entity) && entity.getEntityBoundingBox().intersects(aabb) && (filter == null || filter.apply((T) entity))) {
 +                    listToFill.add((T) entity);
                  }
              }
          }
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-index dd8c773..e267353 100644
+index e18c8d0..16d8cc0 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-@@ -312,7 +312,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+@@ -310,7 +310,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
          }
  
          nbttagcompound.setTag("TileEntities", nbttaglist2);
@@ -2267,10 +2265,10 @@ index dd8c773..e267353 100644
          if (list != null) {
              long k = world.getTotalWorldTime();
 diff --git a/src/main/java/net/minecraft/world/end/DragonFightManager.java b/src/main/java/net/minecraft/world/end/DragonFightManager.java
-index da85143..341b685 100644
+index 6e1e636..c3b95bd 100644
 --- a/src/main/java/net/minecraft/world/end/DragonFightManager.java
 +++ b/src/main/java/net/minecraft/world/end/DragonFightManager.java
-@@ -324,7 +324,7 @@ public class DragonFightManager {
+@@ -323,7 +323,7 @@ public class DragonFightManager {
              var1.add(var3);
          }
  
@@ -2306,12 +2304,12 @@ index f2da85c..74aae33 100644
          var31 = GenLayerZoom.magnify(1000L, var31, var6);
          GenLayerRiver var33 = new GenLayerRiver(1L, var31);
 diff --git a/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java b/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java
-index 28dd30c..3021c6a 100644
+index a0966d1..e077b25 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/ComponentScatteredFeaturePieces.java
-@@ -1025,7 +1025,7 @@ public class ComponentScatteredFeaturePieces {
-                                             definedstructureinfo,
-                                             new BlockPos(3, 5, 7)));
+@@ -854,7 +854,7 @@ public class ComponentScatteredFeaturePieces {
+                                     definedstructure.calculateConnectedPos(
+                                             definedstructureinfo, new BlockPos(3, -1 - i * 3, 5), definedstructureinfo, new BlockPos(3, 5, 7)));
                      definedstructure2.addBlocksToWorldChunk(worldIn, blockposition2, definedstructureinfo);
 -                    Map map = definedstructure2.getDataBlocks(blockposition2, definedstructureinfo);
 +                    Map<BlockPos, String> map = definedstructure2.getDataBlocks(blockposition2, definedstructureinfo);
@@ -2332,10 +2330,10 @@ index 27e92f1..a303ded 100644
          for (Entry var6 : var4.entrySet()) {
              String var7 = (String) var6.getValue();
 diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java b/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
-index de95e61..753a2f3 100644
+index 3a2d35f..87da4de 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/StructureEndCityPieces.java
-@@ -404,7 +404,7 @@ public class StructureEndCityPieces {
+@@ -384,7 +384,7 @@ public class StructureEndCityPieces {
          if (p_191088_2_ > 8) {
              return false;
          } else {
@@ -2345,10 +2343,10 @@ index de95e61..753a2f3 100644
              if (p_191088_1_.generate(p_191088_0_, p_191088_2_, p_191088_3_, p_191088_4_, var7, p_191088_6_)) {
                  boolean var8 = false;
 diff --git a/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java b/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
-index 1b441d1..5ab02ca 100644
+index aeb9ce7..32b3940 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/StructureOceanMonumentPieces.java
-@@ -689,7 +689,7 @@ public class StructureOceanMonumentPieces {
+@@ -608,7 +608,7 @@ public class StructureOceanMonumentPieces {
                  this.boundingBox = new StructureBoundingBox(p_i45599_2_, 39, p_i45599_3_, p_i45599_2_ + 58 - 1, 61, p_i45599_3_ + 58 - 1);
              }
  
@@ -2357,7 +2355,7 @@ index 1b441d1..5ab02ca 100644
              this.sourceRoom.claimed = true;
              this.childPieces.add(new StructureOceanMonumentPieces.EntryRoom(var5, this.sourceRoom));
              this.childPieces.add(new StructureOceanMonumentPieces.MonumentCoreRoom(var5, this.coreRoom, p_i45599_1_));
-@@ -843,7 +843,7 @@ public class StructureOceanMonumentPieces {
+@@ -762,7 +762,7 @@ public class StructureOceanMonumentPieces {
                              .connections[EnumFacing.UP.getIndex()]
                              .claimed =
                      true;
@@ -2367,10 +2365,10 @@ index 1b441d1..5ab02ca 100644
              for (StructureOceanMonumentPieces.RoomDefinition var37 : var2) {
                  if (var37 != null) {
 diff --git a/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java b/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
-index 5cef6b0..e337b7e 100644
+index 7a159b2..9b56d79 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/WoodlandMansionPieces.java
-@@ -291,7 +291,7 @@ public class WoodlandMansionPieces {
+@@ -282,7 +282,7 @@ public class WoodlandMansionPieces {
          }
  
          private void identifyRooms(WoodlandMansionPieces.SimpleGrid p_191116_1_, WoodlandMansionPieces.SimpleGrid p_191116_2_) {
@@ -2380,10 +2378,10 @@ index 5cef6b0..e337b7e 100644
              for (int var4 = 0; var4 < p_191116_1_.height; ++var4) {
                  for (int var5 = 0; var5 < p_191116_1_.width; ++var5) {
 diff --git a/src/main/java/net/minecraft/world/gen/structure/template/Template.java b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
-index 7263c88..060182b 100644
+index 43e4b61..94fa35f 100644
 --- a/src/main/java/net/minecraft/world/gen/structure/template/Template.java
 +++ b/src/main/java/net/minecraft/world/gen/structure/template/Template.java
-@@ -109,7 +109,7 @@ public class Template {
+@@ -105,7 +105,7 @@ public class Template {
      }
  
      private void takeEntitiesFromWorld(World worldIn, BlockPos startPos, BlockPos endPos) {
@@ -2454,10 +2452,10 @@ index c9de65f..c8944a5 100644
              int var5 = 0;
  
 diff --git a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java
-index 3447f63..2b2dec8 100644
+index 7b919f6..e6a5fb9 100644
 --- a/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java
 +++ b/src/main/java/net/minecraft/world/storage/loot/conditions/EntityHasScore.java
-@@ -76,7 +76,7 @@ public class EntityHasScore implements LootCondition {
+@@ -74,7 +74,7 @@ public class EntityHasScore implements LootCondition {
          }
  
          public EntityHasScore deserialize(JsonObject json, JsonDeserializationContext context) {
@@ -2467,7 +2465,7 @@ index 3447f63..2b2dec8 100644
  
              for (Entry var6 : var3) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 5e13d98..22bbf5a 100644
+index 6856dfa..5b4834a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -4,30 +4,20 @@ import com.google.common.base.Preconditions;
@@ -2548,7 +2546,7 @@ index 5e13d98..22bbf5a 100644
  import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
  import org.bukkit.event.world.SpawnChangeEvent;
  import org.bukkit.generator.BlockPopulator;
-@@ -542,8 +527,8 @@ public class CraftWorld implements World {
+@@ -534,8 +519,8 @@ public class CraftWorld implements World {
                  gen = new WorldGenMegaJungle(true, 10, 20, iblockdata1, iblockdata2);
                  break;
              case SMALL_JUNGLE:
@@ -2559,7 +2557,7 @@ index 5e13d98..22bbf5a 100644
                          Blocks.LEAVES
                                  .getDefaultState()
                                  .withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE)
-@@ -551,8 +536,8 @@ public class CraftWorld implements World {
+@@ -543,8 +528,8 @@ public class CraftWorld implements World {
                  gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, false);
                  break;
              case COCOA_TREE:
@@ -2570,7 +2568,7 @@ index 5e13d98..22bbf5a 100644
                          Blocks.LEAVES
                                  .getDefaultState()
                                  .withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE)
-@@ -560,8 +545,8 @@ public class CraftWorld implements World {
+@@ -552,8 +537,8 @@ public class CraftWorld implements World {
                  gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, true);
                  break;
              case JUNGLE_BUSH:
@@ -2581,7 +2579,7 @@ index 5e13d98..22bbf5a 100644
                          Blocks.LEAVES
                                  .getDefaultState()
                                  .withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK)
-@@ -827,7 +812,7 @@ public class CraftWorld implements World {
+@@ -819,7 +804,7 @@ public class CraftWorld implements World {
  
      @Deprecated
      public <T extends Entity> Collection<T> getEntitiesByClass(Class<T>... classes) {
@@ -2590,7 +2588,7 @@ index 5e13d98..22bbf5a 100644
      }
  
      public <T extends Entity> Collection<T> getEntitiesByClass(Class<T> clazz) {
-@@ -841,7 +826,7 @@ public class CraftWorld implements World {
+@@ -833,7 +818,7 @@ public class CraftWorld implements World {
                      Class<?> bukkitClass = bukkitEntity.getClass();
  
                      if (clazz.isAssignableFrom(bukkitClass)) {
@@ -2599,7 +2597,7 @@ index 5e13d98..22bbf5a 100644
                      }
                  }
              }
-@@ -1062,7 +1047,316 @@ public class CraftWorld implements World {
+@@ -1048,7 +1033,316 @@ public class CraftWorld implements World {
          return this.spawnFallingBlock(location, Material.getMaterial(blockId), blockData);
      }
  
@@ -2917,7 +2915,7 @@ index 5e13d98..22bbf5a 100644
  
      public <T extends Entity> T addEntity(net.minecraft.entity.Entity entity, SpawnReason reason) throws IllegalArgumentException {
          return (T) this.addEntity(entity, reason, (Consumer) null);
-@@ -1078,7 +1372,7 @@ public class CraftWorld implements World {
+@@ -1063,7 +1357,7 @@ public class CraftWorld implements World {
          }
  
          if (function != null) {
@@ -2982,7 +2980,7 @@ index ede368b..4fa1f79 100644
      }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java
-index 80dac02..bf8a794 100644
+index 13b054e..3912967 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java
 @@ -24,11 +24,11 @@ public class CraftEvoker extends CraftSpellcaster implements Evoker {
@@ -2999,7 +2997,7 @@ index 80dac02..bf8a794 100644
 +    public void setCurrentSpell(Evoker.Spell spell) {
          this.getHandle()
                  .setSpellType(
-                         spell == null
+                         spell == null ? EntitySpellcasterIllager.SpellType.NONE : EntitySpellcasterIllager.SpellType.getFromId(spell.ordinal()));
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java
 index e0c4e88..40c9279 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLightningStrike.java
@@ -3025,7 +3023,7 @@ index e0c4e88..40c9279 100644
      }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 9025cd7..037cc01 100644
+index 55b8004..be09412 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -123,6 +123,14 @@ import org.bukkit.plugin.messaging.StandardMessenger;
@@ -3054,7 +3052,7 @@ index 9025cd7..037cc01 100644
                  public InetSocketAddress getRawAddress() {
                      return (InetSocketAddress) CraftPlayer.this.getHandle().connection.netManager.getRawAddress();
                  }
-@@ -246,7 +254,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -243,7 +251,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                  }
  
                  public void sendMessage(BaseComponent component) {
@@ -3063,7 +3061,7 @@ index 9025cd7..037cc01 100644
                  }
  
                  public void sendMessage(BaseComponent... components) {
-@@ -258,7 +266,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -255,7 +263,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
                  }
  
                  public void sendMessage(ChatMessageType position, BaseComponent component) {
@@ -3072,7 +3070,7 @@ index 9025cd7..037cc01 100644
                  }
  
                  public void sendMessage(ChatMessageType position, BaseComponent... components) {
-@@ -1611,7 +1619,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1586,7 +1594,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.getHandle().language;
      }
  
@@ -3082,7 +3080,7 @@ index 9025cd7..037cc01 100644
      }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
-index be71a29..c7fce37 100644
+index 66eaaa9..faae88f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
 @@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
@@ -3095,7 +3093,7 @@ index be71a29..c7fce37 100644
                      .add("generic.armorToughness")
                      .add("generic.attackDamage")
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
-index d3739a1..b047b4b 100644
+index 6619bf1..9421444 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
 @@ -36,13 +36,13 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
@@ -3114,7 +3112,7 @@ index d3739a1..b047b4b 100644
                      public BaseComponent[] getPage(int page) {
                          Validate.isTrue(CraftMetaBook.this.isValidPage(page), "Invalid page number");
                          return ComponentSerializer.parse(ITextComponent.Serializer.componentToJson(CraftMetaBook.this.pages.get(page - 1)));
-@@ -116,7 +116,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -115,7 +115,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
          super(tag);
          this.pages = new ArrayList<ITextComponent>();
          this.spigot =
@@ -3123,7 +3121,7 @@ index d3739a1..b047b4b 100644
                      public BaseComponent[] getPage(int page) {
                          Validate.isTrue(CraftMetaBook.this.isValidPage(page), "Invalid page number");
                          return ComponentSerializer.parse(ITextComponent.Serializer.componentToJson(CraftMetaBook.this.pages.get(page - 1)));
-@@ -214,7 +214,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -212,7 +212,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
          super(map);
          this.pages = new ArrayList<ITextComponent>();
          this.spigot =
@@ -3132,7 +3130,7 @@ index d3739a1..b047b4b 100644
                      public BaseComponent[] getPage(int page) {
                          Validate.isTrue(CraftMetaBook.this.isValidPage(page), "Invalid page number");
                          return ComponentSerializer.parse(ITextComponent.Serializer.componentToJson(CraftMetaBook.this.pages.get(page - 1)));
-@@ -565,7 +565,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -562,7 +562,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
          return builder;
      }
  
@@ -3142,7 +3140,7 @@ index d3739a1..b047b4b 100644
      }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
-index dfac15a..56f3713 100644
+index 4601359..7b61b71 100644
 --- a/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
 +++ b/src/main/java/org/bukkit/craftbukkit/potion/CraftPotionUtil.java
 @@ -11,7 +11,7 @@ import org.bukkit.potion.PotionType;

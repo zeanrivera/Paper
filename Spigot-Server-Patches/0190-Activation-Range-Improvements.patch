@@ -1,4 +1,4 @@
-From abb1a63f5bf6e04673f8f4201d20d9294b82b557 Mon Sep 17 00:00:00 2001
+From 4b20326823f661cb0791bb152f2dff761a6b041b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 20 Oct 2017 21:30:11 -0400
 Subject: [PATCH] Activation Range Improvements
@@ -6,7 +6,7 @@ Subject: [PATCH] Activation Range Improvements
 Fixes and adds new Immunities to improve gameplay behavior
 
 diff --git a/src/main/java/net/minecraft/entity/EntityCreature.java b/src/main/java/net/minecraft/entity/EntityCreature.java
-index 3468585..4dbd036 100644
+index 392b43f..6979368 100644
 --- a/src/main/java/net/minecraft/entity/EntityCreature.java
 +++ b/src/main/java/net/minecraft/entity/EntityCreature.java
 @@ -17,6 +17,7 @@ public abstract class EntityCreature extends EntityLiving {

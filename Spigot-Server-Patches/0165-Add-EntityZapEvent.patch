@@ -1,4 +1,4 @@
-From 972b3b06dcd5976755abfde0a11c791254ff5fb7 Mon Sep 17 00:00:00 2001
+From 16ef486c6b81941d279349cd5583019a975ca8be Mon Sep 17 00:00:00 2001
 From: AlphaBlend <whizkid3000@hotmail.com>
 Date: Tue, 10 Oct 2017 16:53:27 -0400
 Subject: [PATCH] Add EntityZapEvent
@@ -22,10 +22,10 @@ index 6c24b67..740365a 100644
                  return;
              }
 diff --git a/src/main/java/net/minecraft/entity/passive/EntityVillager.java b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-index de97aed..761aa63 100644
+index 9f1d29d..8488d88 100644
 --- a/src/main/java/net/minecraft/entity/passive/EntityVillager.java
 +++ b/src/main/java/net/minecraft/entity/passive/EntityVillager.java
-@@ -909,6 +909,13 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
+@@ -895,6 +895,13 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
      public void onStruckByLightning(EntityLightningBolt lightningBolt) {
          if (!this.world.isRemote && !this.isDead) {
              EntityWitch entitywitch = new EntityWitch(this.world);
@@ -39,7 +39,7 @@ index de97aed..761aa63 100644
              entitywitch.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
              entitywitch.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entitywitch)), (IEntityLivingData) null);
              entitywitch.setNoAI(this.isAIDisabled());
-@@ -918,7 +925,7 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
+@@ -904,7 +911,7 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant {
                  entitywitch.setAlwaysRenderNameTag(this.getAlwaysRenderNameTag());
              }
  
@@ -49,10 +49,10 @@ index de97aed..761aa63 100644
          }
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index ae4861d..4d555d3 100644
+index 84aa501..ee95d8d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -838,6 +838,14 @@ public class CraftEventFactory {
+@@ -821,6 +821,14 @@ public class CraftEventFactory {
          return event;
      }
  

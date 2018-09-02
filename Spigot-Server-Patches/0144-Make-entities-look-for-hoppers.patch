@@ -1,4 +1,4 @@
-From 1f89fee8e8bddba7f6ad8ab7ba0e9e560a56dec9 Mon Sep 17 00:00:00 2001
+From a145cee67e6a9c26d324832ea4c5d30976349a0e Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Mon, 9 Oct 2017 19:35:54 -0400
 Subject: [PATCH] Make entities look for hoppers
@@ -93,7 +93,7 @@ index 4cf01a9..d9b2031 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index fa06c44..d6b805c 100644
+index 0730afd..997e977 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
 @@ -136,6 +136,19 @@ public abstract class Entity implements ICommandSender {
@@ -116,7 +116,7 @@ index fa06c44..d6b805c 100644
      public double motionX;
      public double motionY;
      public double motionZ;
-@@ -2654,6 +2667,8 @@ public abstract class Entity implements ICommandSender {
+@@ -2620,6 +2633,8 @@ public abstract class Entity implements ICommandSender {
          return this.world;
      }
  
@@ -126,7 +126,7 @@ index fa06c44..d6b805c 100644
          return this;
      }
 diff --git a/src/main/java/net/minecraft/entity/item/EntityItem.java b/src/main/java/net/minecraft/entity/item/EntityItem.java
-index c190b2a..739ae0b 100644
+index 1eb6d4b..526900c 100644
 --- a/src/main/java/net/minecraft/entity/item/EntityItem.java
 +++ b/src/main/java/net/minecraft/entity/item/EntityItem.java
 @@ -1,6 +1,8 @@
@@ -160,9 +160,9 @@ index c190b2a..739ae0b 100644
 +    }
 +// Paper end
      private static final Logger LOGGER = LogManager.getLogger();
-     private static final DataParameter<ItemStack> ITEM =
-             EntityDataManager.<ItemStack>createKey(EntityItem.class, DataSerializers.ITEM_STACK);
-@@ -82,6 +92,7 @@ public class EntityItem extends Entity {
+     private static final DataParameter<ItemStack> ITEM = EntityDataManager.<ItemStack>createKey(EntityItem.class, DataSerializers.ITEM_STACK);
+     private int age;
+@@ -81,6 +91,7 @@ public class EntityItem extends Entity {
              this.setDead();
          } else {
              super.onUpdate();
@@ -170,7 +170,7 @@ index c190b2a..739ae0b 100644
              int elapsedTicks = MinecraftServer.currentTick - this.lastTick;
  
              if (this.pickupDelay != 32767) {
-@@ -179,6 +190,7 @@ public class EntityItem extends Entity {
+@@ -174,6 +185,7 @@ public class EntityItem extends Entity {
      }
  
      public void inactiveTick() {
@@ -226,7 +226,7 @@ index 316a3b4..785c332 100644
      private boolean dropContentsWhenDead = true;
      private ResourceLocation lootTable;
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityHopper.java b/src/main/java/net/minecraft/tileentity/TileEntityHopper.java
-index e404d7c..9da7ede 100644
+index a685103..0fda59b 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityHopper.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityHopper.java
 @@ -144,6 +144,7 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
@@ -260,7 +260,7 @@ index e404d7c..9da7ede 100644
      private boolean isInventoryEmpty() {
          for (ItemStack itemstack : this.inventory) {
              if (!itemstack.isEmpty()) {
-@@ -303,9 +313,15 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
+@@ -302,9 +312,15 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
          return true;
      }
  
@@ -277,7 +277,7 @@ index e404d7c..9da7ede 100644
          if (iinventory != null) {
              EnumFacing enumdirection = EnumFacing.DOWN;
  
-@@ -331,8 +347,8 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
+@@ -330,8 +346,8 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
                      }
                  }
              }
@@ -288,7 +288,7 @@ index e404d7c..9da7ede 100644
                  if (putDropInInventoryAllSlots((IInventory) null, hopper, entityitem)) {
                      return true;
                  }
-@@ -503,26 +519,51 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
+@@ -498,25 +514,50 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
  
      private IInventory getInventoryForHopperTransfer() {
          EnumFacing enumdirection = BlockHopper.getFacing(this.getBlockMetadata());
@@ -315,9 +315,8 @@ index e404d7c..9da7ede 100644
      public static List<EntityItem> getCaptureItems(World worldIn, double p_184292_1_, double p_184292_3_, double p_184292_5_) {
          return worldIn.<EntityItem>getEntitiesWithinAABB(
                  EntityItem.class,
-                 new AxisAlignedBB(
-+                        // Change getHopperLookupBoundingBox(double, double, double) if the bounding box calculation is ever changed
-                         p_184292_1_ - 0.5D, p_184292_3_, p_184292_5_ - 0.5D, p_184292_1_ + 0.5D, p_184292_3_ + 1.5D, p_184292_5_ + 0.5D),
++                // Change getHopperLookupBoundingBox(double, double, double) if the bounding box calculation is ever changed
+                 new AxisAlignedBB(p_184292_1_ - 0.5D, p_184292_3_, p_184292_5_ - 0.5D, p_184292_1_ + 0.5D, p_184292_3_ + 1.5D, p_184292_5_ + 0.5D),
                  EntitySelectors.IS_ALIVE);
      }
  
@@ -342,7 +341,7 @@ index e404d7c..9da7ede 100644
          Object object = null;
          int i = MathHelper.floor(x);
          int j = MathHelper.floor(y);
-@@ -546,7 +587,7 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
+@@ -540,7 +581,7 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
                  }
              }
  

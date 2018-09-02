@@ -1,4 +1,4 @@
-From cbf944ee0988160c46b6a2fea18bba35e6b916f3 Mon Sep 17 00:00:00 2001
+From 0d697095b37ffbb400eec1dace4acbd25116f2c8 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 17:45:45 -0400
 Subject: [PATCH] Cap Entity Collisions
@@ -27,10 +27,10 @@ index a02fa01..33f097c 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/Entity.java b/src/main/java/net/minecraft/entity/Entity.java
-index a9d1306..2e20d03 100644
+index d545b59..a1b5f7a 100644
 --- a/src/main/java/net/minecraft/entity/Entity.java
 +++ b/src/main/java/net/minecraft/entity/Entity.java
-@@ -227,6 +227,7 @@ public abstract class Entity implements ICommandSender {
+@@ -226,6 +226,7 @@ public abstract class Entity implements ICommandSender {
      public Location origin; // Paper
      public static final Random SHARED_RANDOM = new Random(); // Paper
      EntityTrackerEntry tracker; // Paper
@@ -39,10 +39,10 @@ index a9d1306..2e20d03 100644
      static boolean isLevelAtLeast(NBTTagCompound tag, int level) {
          return tag.hasKey("Bukkit.updateLevel") && tag.getInteger("Bukkit.updateLevel") >= level;
 diff --git a/src/main/java/net/minecraft/entity/EntityLivingBase.java b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-index fafd6ab..c5098df 100644
+index 7bc3e25..2bda267 100644
 --- a/src/main/java/net/minecraft/entity/EntityLivingBase.java
 +++ b/src/main/java/net/minecraft/entity/EntityLivingBase.java
-@@ -2257,8 +2257,11 @@ public abstract class EntityLivingBase extends Entity {
+@@ -2242,8 +2242,11 @@ public abstract class EntityLivingBase extends Entity {
                  }
              }
  

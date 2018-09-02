@@ -1,4 +1,4 @@
-From 44029b33af522d37dc3cd56482803b1ae73a8bd6 Mon Sep 17 00:00:00 2001
+From 69204dbcf3ff46683298af1e0bc554776462b9e6 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 29 Oct 2017 17:35:20 -0400
 Subject: [PATCH] Remove the Vanilla Method Profiler
@@ -11,7 +11,7 @@ added, so we do not want any risk of performance degredation.
 Paper has a proper Timings system that makes the Vanilla Method profiler obsolete and inferior.
 
 diff --git a/src/main/java/net/minecraft/command/CommandDebug.java b/src/main/java/net/minecraft/command/CommandDebug.java
-index b78cc8b..a3e22c9 100644
+index 84178fe..f2ae576 100644
 --- a/src/main/java/net/minecraft/command/CommandDebug.java
 +++ b/src/main/java/net/minecraft/command/CommandDebug.java
 @@ -36,6 +36,12 @@ public class CommandDebug extends CommandBase {
@@ -27,7 +27,7 @@ index b78cc8b..a3e22c9 100644
          Profiler var10000 = server.profiler;
  
          if (!Profiler.ENABLED) {
-@@ -77,6 +83,8 @@ public class CommandDebug extends CommandBase {
+@@ -76,6 +82,8 @@ public class CommandDebug extends CommandBase {
                  notifyCommandListener(mcpSender, this, "commands.debug.stop", new Object[] {String.format("%.2f", (float) k / 1000.0F), l});
              }
          }
@@ -37,7 +37,7 @@ index b78cc8b..a3e22c9 100644
  
      private void saveProfilerResults(long timeSpan, int tickSpan, MinecraftServer server) {
 diff --git a/src/main/java/net/minecraft/profiler/Profiler.java b/src/main/java/net/minecraft/profiler/Profiler.java
-index 0bb36f1..73a444f 100644
+index c172cb4..143401c 100644
 --- a/src/main/java/net/minecraft/profiler/Profiler.java
 +++ b/src/main/java/net/minecraft/profiler/Profiler.java
 @@ -10,7 +10,29 @@ import java.util.function.Supplier;
@@ -70,7 +70,7 @@ index 0bb36f1..73a444f 100644
      public static final boolean ENABLED = Boolean.getBoolean("enableDebugMethodProfiler");
      private static final Logger LOGGER = LogManager.getLogger();
      private final List<String> sectionList = Lists.<String>newArrayList();
-@@ -148,6 +170,8 @@ public class Profiler {
+@@ -142,6 +164,8 @@ public class Profiler {
              return this.sectionList.isEmpty() ? "[UNKNOWN]" : (String) this.sectionList.get(this.sectionList.size() - 1);
          }
      }

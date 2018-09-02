@@ -1,14 +1,14 @@
-From 4eb9b9020acec5b74cfc1b58e1fa8b54dd7b5333 Mon Sep 17 00:00:00 2001
+From f428d9b675ebb94aaa82a94f1a112c31205c9595 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Tue, 10 Oct 2017 15:38:50 -0400
 Subject: [PATCH] Don't lookup game profiles that have no UUID and no name
 
 
 diff --git a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
-index be40e36..709fe27 100644
+index df126ac..4dc9d7f 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerProfileCache.java
-@@ -95,7 +95,7 @@ public class PlayerProfileCache {
+@@ -93,7 +93,7 @@ public class PlayerProfileCache {
                  };
          profileRepoIn.findProfilesByNames(new String[] {name}, Agent.MINECRAFT, profilelookupcallback);
  

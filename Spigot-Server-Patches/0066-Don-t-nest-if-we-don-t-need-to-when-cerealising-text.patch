@@ -1,4 +1,4 @@
-From af4a3bb04349286ab5a0b0765d781d4dc09702a9 Mon Sep 17 00:00:00 2001
+From 980b6ee11706c62070ba6ba05683c759393f97e8 Mon Sep 17 00:00:00 2001
 From: kashike <kashike@vq.lc>
 Date: Sat, 30 Sep 2017 21:31:01 -0400
 Subject: [PATCH] Don't nest if we don't need to when cerealising text

@@ -1,14 +1,14 @@
-From 01acf423724c262d74768816dc026b7127bfe016 Mon Sep 17 00:00:00 2001
+From d2f1a3026370a6c51bb53e47e814ed1bcc2f10f5 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 1 Oct 2017 00:24:39 -0400
 Subject: [PATCH] Support offline mode in whitelist command as well
 
 
 diff --git a/src/main/java/net/minecraft/command/server/CommandWhitelist.java b/src/main/java/net/minecraft/command/server/CommandWhitelist.java
-index 77e3628..6a27eec 100644
+index d82c1ff..1c0ef46 100644
 --- a/src/main/java/net/minecraft/command/server/CommandWhitelist.java
 +++ b/src/main/java/net/minecraft/command/server/CommandWhitelist.java
-@@ -51,6 +51,8 @@ public class CommandWhitelist extends CommandBase {
+@@ -50,6 +50,8 @@ public class CommandWhitelist extends CommandBase {
                      throw new WrongUsageException("commands.whitelist.add.usage", new Object[0]);
                  }
  
@@ -17,7 +17,7 @@ index 77e3628..6a27eec 100644
                  GameProfile var5 = server.getPlayerProfileCache().getGameProfileForUsername(args[1]);
  
                  if (var5 == null) {
-@@ -58,12 +60,17 @@ public class CommandWhitelist extends CommandBase {
+@@ -57,12 +59,17 @@ public class CommandWhitelist extends CommandBase {
                  }
  
                  server.getPlayerList().addWhitelistedPlayer(var5);
@@ -35,7 +35,7 @@ index 77e3628..6a27eec 100644
                  GameProfile var6 = server.getPlayerList().getWhitelistedPlayers().getByName(args[1]);
  
                  if (var6 == null) {
-@@ -71,6 +78,9 @@ public class CommandWhitelist extends CommandBase {
+@@ -70,6 +77,9 @@ public class CommandWhitelist extends CommandBase {
                  }
  
                  server.getPlayerList().removePlayerFromWhitelist(var6);
@@ -45,7 +45,7 @@ index 77e3628..6a27eec 100644
                  notifyCommandListener(mcpSender, this, "commands.whitelist.remove.success", new Object[] {args[1]});
              } else if ("reload".equals(args[0])) {
                  server.getPlayerList().reloadWhitelist();
-@@ -96,4 +106,43 @@ public class CommandWhitelist extends CommandBase {
+@@ -95,4 +105,43 @@ public class CommandWhitelist extends CommandBase {
              return Collections.<String>emptyList();
          }
      }

@@ -1,4 +1,4 @@
-From 9a8a157c46c44edee05a80e494d775093b7d32d3 Mon Sep 17 00:00:00 2001
+From 960671f181fae59ec6436a46d554ba8f88333605 Mon Sep 17 00:00:00 2001
 From: willies952002 <admin@domnian.com>
 Date: Fri, 20 Oct 2017 18:30:08 -0400
 Subject: [PATCH] Allow reloading of Command Aliases
@@ -6,10 +6,10 @@ Subject: [PATCH] Allow reloading of Command Aliases
 Reload the aliases stored in commands.yml
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 6620ef8..5dba606 100644
+index ccfbd6f..d8b5339 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1913,5 +1913,26 @@ public final class CraftServer implements Server {
+@@ -1884,5 +1884,26 @@ public final class CraftServer implements Server {
              });
          }
      }

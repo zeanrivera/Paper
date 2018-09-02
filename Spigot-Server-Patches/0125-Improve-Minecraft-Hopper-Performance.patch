@@ -1,4 +1,4 @@
-From 5118254cf065ef0d8f01d28175a12953cbc0b90c Mon Sep 17 00:00:00 2001
+From 6c271b8bd0dad00462bc035f994a50fe307cd450 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 8 Oct 2017 00:41:37 -0400
 Subject: [PATCH] Improve Minecraft Hopper Performance
@@ -28,10 +28,10 @@ index 6b87083..baafd88 100644
              this.blockMetadata = iblockdata.getBlock().getMetaFromState(iblockdata);
              this.world.markChunkDirty(this.pos, this);
 diff --git a/src/main/java/net/minecraft/tileentity/TileEntityHopper.java b/src/main/java/net/minecraft/tileentity/TileEntityHopper.java
-index 9f18133..e404d7c 100644
+index 73ef35d..a685103 100644
 --- a/src/main/java/net/minecraft/tileentity/TileEntityHopper.java
 +++ b/src/main/java/net/minecraft/tileentity/TileEntityHopper.java
-@@ -227,12 +227,14 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
+@@ -226,12 +226,14 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
                              return false;
                          }
  
@@ -50,13 +50,12 @@ index 9f18133..e404d7c 100644
                                  iinventory.markDirty();
                              } else {
                                  this.setInventorySlotContents(i, itemstack);
-@@ -371,12 +373,14 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
+@@ -368,11 +370,14 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
                  return false;
              }
  
 -            int origCount = event.getItem().getAmount();
--            ItemStack itemstack2 =
--                    putStackInInventoryAllSlots(inventoryIn, hopper, CraftItemStack.asNMSCopy(event.getItem()), (EnumFacing) null);
+-            ItemStack itemstack2 = putStackInInventoryAllSlots(inventoryIn, hopper, CraftItemStack.asNMSCopy(event.getItem()), (EnumFacing) null);
 +            // Paper start
 +            org.bukkit.inventory.ItemStack eventStack = event.getItem();
 +            int origCount = eventStack.getAmount(); // Spigot
@@ -69,7 +68,7 @@ index 9f18133..e404d7c 100644
                      inventoryIn.markDirty();
                  } else {
                      inventoryIn.setInventorySlotContents(index, itemstack1);
-@@ -458,7 +462,9 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
+@@ -452,7 +457,9 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
              boolean flag1 = destination.isEmpty();
  
              if (itemstack1.isEmpty()) {

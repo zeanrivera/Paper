@@ -1,4 +1,4 @@
-From 49fd88e0cd2dcec4416f9c1d67cbd54f34ae8fcd Mon Sep 17 00:00:00 2001
+From 799ea49eb14a737442eba45f3e1363b16b05313a Mon Sep 17 00:00:00 2001
 From: Martin Panzer <postremus1996@googlemail.com>
 Date: Mon, 9 Oct 2017 18:39:56 -0400
 Subject: [PATCH] Faster redstone torch rapid clock removal

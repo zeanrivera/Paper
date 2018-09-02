@@ -1,4 +1,4 @@
-From a4a1cb00eec49c90f4346489e0ecad8ad6991333 Mon Sep 17 00:00:00 2001
+From deaad677befb087d467c2cc88a77360edb1b069b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sun, 1 Oct 2017 00:58:57 -0400
 Subject: [PATCH] Optimize isValidLocation, getType and getBlockData for inling
@@ -12,7 +12,7 @@ Replace all calls to the new place to the unnecessary forward.
 Optimize getType and getBlockData to manually inline and optimize the calls
 
 diff --git a/src/main/java/net/minecraft/util/math/BlockPos.java b/src/main/java/net/minecraft/util/math/BlockPos.java
-index f245a0b..eb851df 100644
+index 93b3e5d..9a31dc6 100644
 --- a/src/main/java/net/minecraft/util/math/BlockPos.java
 +++ b/src/main/java/net/minecraft/util/math/BlockPos.java
 @@ -254,6 +254,16 @@ public class BlockPos extends Vec3i {
@@ -52,10 +52,10 @@ index f3230c4..37bf6fb 100644
      public Vec3i(int xIn, int yIn, int zIn) {
          this.x = xIn;
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 123594a..e7ed8ca 100644
+index 3d0cf8f..dc8769d 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -317,16 +317,12 @@ public abstract class World implements IBlockAccess {
+@@ -316,16 +316,12 @@ public abstract class World implements IBlockAccess {
          return this.getBlockState(blockposition1);
      }
  
@@ -76,7 +76,7 @@ index 123594a..e7ed8ca 100644
      }
  
      public boolean isAirBlock(BlockPos pos) {
-@@ -430,7 +426,7 @@ public abstract class World implements IBlockAccess {
+@@ -429,7 +425,7 @@ public abstract class World implements IBlockAccess {
              blockstate.setRawData((byte) newState.getBlock().getMetaFromState(newState));
              this.capturedBlockStates.add(blockstate);
              return true;
@@ -85,7 +85,7 @@ index 123594a..e7ed8ca 100644
              return false;
          } else if (!this.isRemote && this.worldInfo.getTerrainType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
              return false;
-@@ -812,7 +808,7 @@ public abstract class World implements IBlockAccess {
+@@ -807,7 +803,7 @@ public abstract class World implements IBlockAccess {
              pos = new BlockPos(pos.getX(), 0, pos.getZ());
          }
  
@@ -94,7 +94,7 @@ index 123594a..e7ed8ca 100644
              return type.defaultLightValue;
          } else if (!this.isBlockLoaded(pos)) {
              return type.defaultLightValue;
-@@ -823,7 +819,7 @@ public abstract class World implements IBlockAccess {
+@@ -818,7 +814,7 @@ public abstract class World implements IBlockAccess {
      }
  
      public void setLightFor(EnumSkyBlock type, BlockPos pos, int lightValue) {
@@ -103,7 +103,7 @@ index 123594a..e7ed8ca 100644
              Chunk chunk = this.getChunkFromBlockCoords(pos);
              chunk.setLightFor(type, pos, lightValue);
              this.notifyLightSet(pos);
-@@ -849,7 +845,7 @@ public abstract class World implements IBlockAccess {
+@@ -844,7 +840,7 @@ public abstract class World implements IBlockAccess {
              }
          }
  
@@ -112,7 +112,7 @@ index 123594a..e7ed8ca 100644
              return Blocks.AIR.getDefaultState();
          } else {
              Chunk chunk = this.getChunkFromBlockCoords(pos);
-@@ -2030,7 +2026,7 @@ public abstract class World implements IBlockAccess {
+@@ -1988,7 +1984,7 @@ public abstract class World implements IBlockAccess {
  
      @Nullable
      public TileEntity getTileEntity(BlockPos pos) {
@@ -121,7 +121,7 @@ index 123594a..e7ed8ca 100644
              return null;
          } else if (this.capturedTileEntities.containsKey(pos)) {
              return this.capturedTileEntities.get(pos);
-@@ -2067,7 +2063,7 @@ public abstract class World implements IBlockAccess {
+@@ -2025,7 +2021,7 @@ public abstract class World implements IBlockAccess {
      }
  
      public void setTileEntity(BlockPos pos, @Nullable TileEntity tileEntityIn) {
@@ -130,7 +130,7 @@ index 123594a..e7ed8ca 100644
              if (this.captureBlockStates) {
                  tileEntityIn.setWorld(this);
                  tileEntityIn.setPos(pos);
-@@ -2124,7 +2120,7 @@ public abstract class World implements IBlockAccess {
+@@ -2082,7 +2078,7 @@ public abstract class World implements IBlockAccess {
      }
  
      public boolean isBlockNormalCube(BlockPos pos, boolean _default) {
@@ -139,7 +139,7 @@ index 123594a..e7ed8ca 100644
              return false;
          } else {
              Chunk chunk = this.chunkProvider.getLoadedChunk(pos.getX() >> 4, pos.getZ() >> 4);
-@@ -3209,7 +3205,7 @@ public abstract class World implements IBlockAccess {
+@@ -3162,7 +3158,7 @@ public abstract class World implements IBlockAccess {
  
      // Test if meets light level, return faster
      public boolean isLightLevel(BlockPos pos, int level) {
@@ -148,7 +148,7 @@ index 123594a..e7ed8ca 100644
              if (this.getBlockState(pos).useNeighborBrightness()) {
                  if (this.getLight(pos.up(), false) >= level) {
                      return true;
-@@ -3243,20 +3239,28 @@ public abstract class World implements IBlockAccess {
+@@ -3196,20 +3192,28 @@ public abstract class World implements IBlockAccess {
      // Reduces need to do isLoaded before getType
      @Nullable
      public IBlockState getStateIfLoaded(BlockPos pos) {
@@ -187,7 +187,7 @@ index 123594a..e7ed8ca 100644
          return null;
      }
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index 4a41e4d..4012467 100644
+index d653ca1..f9690c3 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
 @@ -425,11 +425,23 @@ public class Chunk {

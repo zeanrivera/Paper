@@ -1,17 +1,17 @@
-From c6a735f5f65e13c3df149e4ee12d48e72abceef0 Mon Sep 17 00:00:00 2001
+From 472bc5828f9507e1a29ba75df209b2d85dcc4bf6 Mon Sep 17 00:00:00 2001
 From: Jedediah Smith <jedediah@silencegreys.com>
 Date: Sat, 7 Oct 2017 21:08:48 -0400
 Subject: [PATCH] Add PlayerUseUnknownEntityEvent
 
 
 diff --git a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-index b04f4cb..08fc8e9 100644
+index d743b6e..2184ec1 100644
 --- a/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
 +++ b/src/main/java/net/minecraft/network/NetHandlerPlayServer.java
-@@ -1836,6 +1836,17 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
-                             }
+@@ -1801,6 +1801,17 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable {
                          }
                      }
+                 }
 +
 +                    // Paper start - fire event
 +                    else {
@@ -23,9 +23,9 @@ index b04f4cb..08fc8e9 100644
 +                        ));
 +                    }
 +                    // Paper end
-                 }
              }
          }
+     }
 -- 
 2.18.0
 

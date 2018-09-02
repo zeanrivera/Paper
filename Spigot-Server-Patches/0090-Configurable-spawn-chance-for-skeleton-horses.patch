@@ -1,4 +1,4 @@
-From 5be0c445cba92f4542390b9e224c4d8e517337e5 Mon Sep 17 00:00:00 2001
+From cfc42d4ebd3364d8485b4ad830ec206ed23fc6e0 Mon Sep 17 00:00:00 2001
 From: Zach Brown <zach.brown@destroystokyo.com>
 Date: Sun, 1 Oct 2017 00:37:29 -0400
 Subject: [PATCH] Configurable spawn chance for skeleton horses
@@ -19,10 +19,10 @@ index 107a3c3..1e91623 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
-index b53c02c..b44560a 100644
+index 16a044f..675faf5 100644
 --- a/src/main/java/net/minecraft/world/WorldServer.java
 +++ b/src/main/java/net/minecraft/world/WorldServer.java
-@@ -566,7 +566,7 @@ public class WorldServer extends World implements IThreadListener {
+@@ -559,7 +559,7 @@ public class WorldServer extends World implements IThreadListener {
                              DifficultyInstance difficultydamagescaler = this.getDifficultyForLocation(blockposition);
  
                              if (this.getGameRules().getBoolean("doMobSpawning")

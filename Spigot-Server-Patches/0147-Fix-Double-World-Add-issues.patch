@@ -1,4 +1,4 @@
-From c908b0569be624823c5e24ebc2eb28a739bc285d Mon Sep 17 00:00:00 2001
+From 56f72ac3de90cafa6d576a6ea1f90111bbd4f202 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 15:22:57 -0400
 Subject: [PATCH] Fix Double World Add issues
@@ -8,10 +8,10 @@ Vanilla will double add Spider Jockeys to the world, so ignore already added.
 Also add debug if something else tries to, and abort before world gets bad state
 
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 0d14804..ff50eca 100644
+index 15b3453..3ea785b 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -1123,6 +1123,11 @@ public abstract class World implements IBlockAccess {
+@@ -1085,6 +1085,11 @@ public abstract class World implements IBlockAccess {
  
          if (entity == null) {
              return false;
@@ -24,10 +24,10 @@ index 0d14804..ff50eca 100644
              Cancellable event = null;
  
 diff --git a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-index e4e54d5..711fb47 100644
+index ca64860..653229c 100644
 --- a/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
 +++ b/src/main/java/net/minecraft/world/chunk/storage/AnvilChunkLoader.java
-@@ -526,7 +526,8 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
+@@ -524,7 +524,8 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
      }
  
      public static void a(Entity entity, World world, SpawnReason reason) {

@@ -1,14 +1,14 @@
-From daa5fc2177b86a6a96c7535f3d7f2674cedb746e Mon Sep 17 00:00:00 2001
+From 47f49073ffed19a9bba6dcd67f6b2b9fc55962a6 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 4 Jan 2018 20:52:28 -0600
 Subject: [PATCH] Avoid NPE in EntityAITempt
 
 
 diff --git a/src/main/java/net/minecraft/entity/ai/EntityAITempt.java b/src/main/java/net/minecraft/entity/ai/EntityAITempt.java
-index 5d8d4ee..0724307 100644
+index 8731cda..099935d 100644
 --- a/src/main/java/net/minecraft/entity/ai/EntityAITempt.java
 +++ b/src/main/java/net/minecraft/entity/ai/EntityAITempt.java
-@@ -65,7 +65,7 @@ public class EntityAITempt extends EntityAIBase {
+@@ -64,7 +64,7 @@ public class EntityAITempt extends EntityAIBase {
                  this.temptingPlayer = event.getTarget() == null ? null : ((CraftLivingEntity) event.getTarget()).getHandle();
              }
  

@@ -1,4 +1,4 @@
-From d6f9a4b4d3cc9a19e8e02ac91e2d46e3c4b45818 Mon Sep 17 00:00:00 2001
+From 5a3e0dfc64df86804b9553450d236c2bed9a39c6 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 7 Oct 2017 21:33:22 -0400
 Subject: [PATCH] Configurable Keep Spawn Loaded range per world
@@ -21,7 +21,7 @@ index 06be217..33bc34f 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 1dfcc57..c5a3991 100644
+index 79c3304..a2798c8 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -415,8 +415,11 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -39,10 +39,10 @@ index 1dfcc57..c5a3991 100644
  
                          if (i1 - j > 1000L) {
 diff --git a/src/main/java/net/minecraft/world/World.java b/src/main/java/net/minecraft/world/World.java
-index 475f8db..79ee564 100644
+index 081ceeb..b9d7411 100644
 --- a/src/main/java/net/minecraft/world/World.java
 +++ b/src/main/java/net/minecraft/world/World.java
-@@ -3184,7 +3184,8 @@ public abstract class World implements IBlockAccess {
+@@ -3137,7 +3137,8 @@ public abstract class World implements IBlockAccess {
          int k = x * 16 + 8 - blockposition.getX();
          int l = z * 16 + 8 - blockposition.getZ();
          boolean flag = true;
@@ -53,11 +53,11 @@ index 475f8db..79ee564 100644
  
      public void sendPacketToServer(Packet<?> packetIn) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 73674ad..a60ce20 100644
+index 26aee08..a32550a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1069,7 +1069,7 @@ public final class CraftServer implements Server {
-                         "Preparing start region for level " + (this.console.worlds.size() - 1) + " (Seed: " + internal.getSeed() + ")");
+@@ -1048,7 +1048,7 @@ public final class CraftServer implements Server {
+                 System.out.println("Preparing start region for level " + (this.console.worlds.size() - 1) + " (Seed: " + internal.getSeed() + ")");
  
                  if (internal.getWorld().getKeepSpawnInMemory()) {
 -                    short short1 = 196;
@@ -66,10 +66,10 @@ index 73674ad..a60ce20 100644
  
                      for (int j = -short1; j <= short1; j += 16) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index c14d3e1..0380cc7 100644
+index e771453..0328fac 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -1434,8 +1434,11 @@ public class CraftWorld implements World {
+@@ -1418,8 +1418,11 @@ public class CraftWorld implements World {
          int chunkCoordX = chunkcoordinates.getX() >> 4;
          int chunkCoordZ = chunkcoordinates.getZ() >> 4;
  

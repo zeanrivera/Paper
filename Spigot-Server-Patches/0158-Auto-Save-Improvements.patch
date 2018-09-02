@@ -1,4 +1,4 @@
-From 837dcccc9d3d571166ac9887fb79330a7c316587 Mon Sep 17 00:00:00 2001
+From 1b24dd2c89a636ea7defd5882456138cb61cd935 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 10 Oct 2017 16:31:05 -0400
 Subject: [PATCH] Auto Save Improvements
@@ -58,7 +58,7 @@ index 98abb04..4b12112 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
-index 3b47f9d..0bb0378 100644
+index faf6f48..fb89317 100644
 --- a/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 +++ b/src/main/java/net/minecraft/entity/player/EntityPlayerMP.java
 @@ -200,6 +200,7 @@ public class EntityPlayerMP extends EntityPlayer implements IContainerListener {
@@ -70,7 +70,7 @@ index 3b47f9d..0bb0378 100644
      public EntityPlayerMP(MinecraftServer server, WorldServer worldIn, GameProfile profile, PlayerInteractionManager interactionManagerIn) {
          super(worldIn, profile);
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index e06bc5b..db4ab61 100644
+index 8acaa34..f1952d4 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -178,6 +178,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
@@ -113,10 +113,10 @@ index e06bc5b..db4ab61 100644
          this.profiler.startSection("tallying");
          long tickNanos;
 diff --git a/src/main/java/net/minecraft/server/management/PlayerList.java b/src/main/java/net/minecraft/server/management/PlayerList.java
-index 58b80ec..45dbda8 100644
+index 1abdf16..0635076 100644
 --- a/src/main/java/net/minecraft/server/management/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/management/PlayerList.java
-@@ -397,6 +397,7 @@ public abstract class PlayerList {
+@@ -391,6 +391,7 @@ public abstract class PlayerList {
      }
  
      protected void writePlayerData(EntityPlayerMP playerIn) {
@@ -124,7 +124,7 @@ index 58b80ec..45dbda8 100644
          this.playerDataManager.writePlayerData(playerIn);
          StatisticsManagerServer serverstatisticmanager = playerIn.getStatFile();
  
-@@ -1132,13 +1133,23 @@ public abstract class PlayerList {
+@@ -1120,13 +1121,23 @@ public abstract class PlayerList {
          }
      }
  
@@ -150,10 +150,10 @@ index 58b80ec..45dbda8 100644
      public void addWhitelistedPlayer(GameProfile profile) {
          this.whiteListedPlayers.addEntry(new UserListWhitelistEntry(profile));
 diff --git a/src/main/java/net/minecraft/world/WorldServer.java b/src/main/java/net/minecraft/world/WorldServer.java
-index 8d47390..f3af5ee 100644
+index 5d6019a..5904468 100644
 --- a/src/main/java/net/minecraft/world/WorldServer.java
 +++ b/src/main/java/net/minecraft/world/WorldServer.java
-@@ -1103,8 +1103,9 @@ public class WorldServer extends World implements IThreadListener {
+@@ -1089,8 +1089,9 @@ public class WorldServer extends World implements IThreadListener {
  
          timings.worldSave.startTiming(); // Paper
          if (chunkproviderserver.canSave()) {
@@ -164,7 +164,7 @@ index 8d47390..f3af5ee 100644
              if (progressCallback != null) {
                  progressCallback.displaySavingString("Saving level");
              }
-@@ -1114,6 +1115,7 @@ public class WorldServer extends World implements IThreadListener {
+@@ -1100,6 +1101,7 @@ public class WorldServer extends World implements IThreadListener {
              if (progressCallback != null) {
                  progressCallback.displayLoadingString("Saving chunks");
              }
@@ -173,10 +173,10 @@ index 8d47390..f3af5ee 100644
              timings.worldSaveChunks.startTiming(); // Paper
              chunkproviderserver.saveChunks(all);
 diff --git a/src/main/java/net/minecraft/world/chunk/Chunk.java b/src/main/java/net/minecraft/world/chunk/Chunk.java
-index eacd2b9..6b9ce17 100644
+index ac99df9..b45d4ee 100644
 --- a/src/main/java/net/minecraft/world/chunk/Chunk.java
 +++ b/src/main/java/net/minecraft/world/chunk/Chunk.java
-@@ -959,12 +959,9 @@ public class Chunk {
+@@ -954,12 +954,9 @@ public class Chunk {
              if (this.hasEntities && this.world.getTotalWorldTime() != this.lastSaveTime || this.dirty) {
                  return true;
              }

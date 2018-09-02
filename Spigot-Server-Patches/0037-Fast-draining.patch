@@ -1,4 +1,4 @@
-From 8dc47a3680bd2a330442ede17890def61d96431a Mon Sep 17 00:00:00 2001
+From 43c40184b9deb4bd5239b1d0bf9994dc1caa0981 Mon Sep 17 00:00:00 2001
 From: Byteflux <byte@byteflux.net>
 Date: Sun, 24 Sep 2017 17:48:50 -0400
 Subject: [PATCH] Fast draining
@@ -21,10 +21,10 @@ index 9734e6c..8a28def 100644
 +    }
  }
 diff --git a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
-index 3c34353..3bf9c78 100644
+index 6c0e602..2215ab2 100644
 --- a/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
 +++ b/src/main/java/net/minecraft/block/BlockDynamicLiquid.java
-@@ -71,7 +71,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+@@ -70,7 +70,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
                  }
              }
  
@@ -33,7 +33,7 @@ index 3c34353..3bf9c78 100644
                  j *= 4;
              }
  
-@@ -80,7 +80,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
+@@ -79,7 +79,7 @@ public class BlockDynamicLiquid extends BlockLiquid {
              } else {
                  i = i1;
  
@@ -42,7 +42,7 @@ index 3c34353..3bf9c78 100644
                      worldIn.setBlockToAir(pos);
                  } else {
                      state = state.withProperty(LEVEL, Integer.valueOf(i1));
-@@ -270,4 +270,59 @@ public class BlockDynamicLiquid extends BlockLiquid {
+@@ -269,4 +269,59 @@ public class BlockDynamicLiquid extends BlockLiquid {
          }
          return super.tickRate(world);
      }

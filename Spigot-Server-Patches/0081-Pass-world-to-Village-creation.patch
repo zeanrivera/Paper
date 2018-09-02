@@ -1,4 +1,4 @@
-From f91312eaf737b32b672cd7c68ef7c4cc11b55c4e Mon Sep 17 00:00:00 2001
+From 560579703e04b7b8c36f8bc4797d28c2561692f6 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Sat, 30 Sep 2017 23:55:22 -0400
 Subject: [PATCH] Pass world to Village creation
@@ -6,7 +6,7 @@ Subject: [PATCH] Pass world to Village creation
 Fixes https://github.com/PaperMC/Paper/issues/95
 
 diff --git a/src/main/java/net/minecraft/village/Village.java b/src/main/java/net/minecraft/village/Village.java
-index 7ac9baa..a80a255 100644
+index 896adf8..9922796 100644
 --- a/src/main/java/net/minecraft/village/Village.java
 +++ b/src/main/java/net/minecraft/village/Village.java
 @@ -41,7 +41,7 @@ public class Village {

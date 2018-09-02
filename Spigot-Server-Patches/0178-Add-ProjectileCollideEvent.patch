@@ -1,14 +1,14 @@
-From 2c0de3fc52764927833c3d9ac0bd6a493158e128 Mon Sep 17 00:00:00 2001
+From 5f2de154a74b9784015d46731c98a77ad736b928 Mon Sep 17 00:00:00 2001
 From: Techcable <Techcable@outlook.com>
 Date: Fri, 20 Oct 2017 19:29:09 -0400
 Subject: [PATCH] Add ProjectileCollideEvent
 
 
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityArrow.java b/src/main/java/net/minecraft/entity/projectile/EntityArrow.java
-index a0646ee..7963336 100644
+index 705607d..689ec3f 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityArrow.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityArrow.java
-@@ -221,6 +221,15 @@ public abstract class EntityArrow extends Entity implements IProjectile {
+@@ -220,6 +220,15 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                  }
              }
  
@@ -25,10 +25,10 @@ index a0646ee..7963336 100644
                  this.onHit(movingobjectposition);
              }
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityFireball.java b/src/main/java/net/minecraft/entity/projectile/EntityFireball.java
-index 6fa0c11..899a778 100644
+index 1929d5e..00d7271 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityFireball.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityFireball.java
-@@ -79,6 +79,15 @@ public abstract class EntityFireball extends Entity {
+@@ -78,6 +78,15 @@ public abstract class EntityFireball extends Entity {
              ++this.ticksInAir;
              RayTraceResult movingobjectposition = ProjectileHelper.forwardsRaycast(this, true, this.ticksInAir >= 25, this.shootingEntity);
  
@@ -65,10 +65,10 @@ index e86b45e..4f18929 100644
              vec3d1 = new Vec3d(movingobjectposition.hitVec.x, movingobjectposition.hitVec.y, movingobjectposition.hitVec.z);
          }
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java b/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
-index d19e0ce..37adc27 100644
+index 637d394..94a06ee 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityLlamaSpit.java
-@@ -50,6 +50,15 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
+@@ -48,6 +48,15 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
          vec3d = new Vec3d(this.posX, this.posY, this.posZ);
          vec3d1 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
  
@@ -85,10 +85,10 @@ index d19e0ce..37adc27 100644
              vec3d1 = new Vec3d(movingobjectposition.hitVec.x, movingobjectposition.hitVec.y, movingobjectposition.hitVec.z);
          }
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityShulkerBullet.java b/src/main/java/net/minecraft/entity/projectile/EntityShulkerBullet.java
-index 6cce682..32a297f 100644
+index 9fbca95..5c7b2ae 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityShulkerBullet.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityShulkerBullet.java
-@@ -272,6 +272,15 @@ public class EntityShulkerBullet extends Entity {
+@@ -269,6 +269,15 @@ public class EntityShulkerBullet extends Entity {
  
                  RayTraceResult movingobjectposition = ProjectileHelper.forwardsRaycast(this, true, false, this.owner);
  
@@ -105,10 +105,10 @@ index 6cce682..32a297f 100644
                      this.bulletHit(movingobjectposition);
                  }
 diff --git a/src/main/java/net/minecraft/entity/projectile/EntityThrowable.java b/src/main/java/net/minecraft/entity/projectile/EntityThrowable.java
-index 34dcc08..8bd289c 100644
+index eb2f764..8f82184 100644
 --- a/src/main/java/net/minecraft/entity/projectile/EntityThrowable.java
 +++ b/src/main/java/net/minecraft/entity/projectile/EntityThrowable.java
-@@ -180,6 +180,15 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
+@@ -179,6 +179,15 @@ public abstract class EntityThrowable extends Entity implements IProjectile {
              movingobjectposition = new RayTraceResult(entity);
          }
  
@@ -125,10 +125,10 @@ index 34dcc08..8bd289c 100644
              if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK
                      && this.world.getBlockState(movingobjectposition.getBlockPos()).getBlock() == Blocks.PORTAL) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index bd92f0d..b666b2e 100644
+index 582323e..7807e42 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -958,6 +958,16 @@ public class CraftEventFactory {
+@@ -938,6 +938,16 @@ public class CraftEventFactory {
          return CraftItemStack.asNMSCopy(bitem);
      }
  
